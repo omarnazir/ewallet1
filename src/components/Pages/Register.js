@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Input, CustomInput } from 'reactstrap';
 
-import FormValidator from '../Forms/FormValidator.js';
+import FormValidator from '../Common/FormValidator.js';
 
 class Register extends Component {
 
@@ -152,7 +152,7 @@ class Register extends Component {
                             <button className="btn btn-block btn-primary mt-3" type="submit">Create account</button>
                         </form>
                         <p className="pt-3 text-center">Have an account?</p>
-                        <Link to="login" className="btn btn-block btn-secondary">Signup</Link>
+                        <Link to="login" className="btn btn-block btn-secondary">Login</Link>
                     </div>
                 </div>
                 {/* END card */}
@@ -160,9 +160,9 @@ class Register extends Component {
                     <span className="mr-2">&copy;</span>
                     <span>2020</span>
                     <span className="mx-2">-</span>
-                    <span>Angle</span>
+                    <span>E-SMS</span>
                     <br/>
-                    <span>Bootstrap Admin Template</span>
+                    <span>Bulk SMS Platform</span>
                 </div>
             </div>
         );

@@ -1,24 +1,34 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Input, CustomInput } from 'reactstrap';
+import React, {Component} from 'react';
+import {Link, Redirect} from 'react-router-dom';
+import {Input, CustomInput} from 'reactstrap';
 
-import FormValidator from '../Forms/FormValidator.js';
+import FormValidator from '../Common/FormValidator.js';
+import axios from "axios";
 
 
 class Login extends Component {
 
     state = {
         formLogin: {
-            email: '',
+            username: '',
             password: ''
+        },
+        loginHasError: false,
+        redirect: null
+    }
+
+    componentDidMount() {
+        const token = localStorage.getItem('token');
+        if (token != null && token.length > 0) {
+            this.setState({redirect: '/dashboard'});
         }
     }
 
-     /**
-      * Validate input using onChange event
-      * @param  {String} formName The name of the form in the state object
-      * @return {Function} a function used for the event
-      */
+    /**
+     * Validate input using onChange event
+     * @param  {String} formName The name of the form in the state object
+     * @return {Function} a function used for the event
+     */
     validateOnChange = event => {
         const input = event.target;
         const form = input.form
@@ -43,7 +53,7 @@ class Login extends Component {
         const form = e.target;
         const inputs = [...form.elements].filter(i => ['INPUT', 'SELECT'].includes(i.nodeName))
 
-        const { errors, hasError } = FormValidator.bulkValidate(inputs)
+        const {errors, hasError} = FormValidator.bulkValidate(inputs)
 
         this.setState({
             [form.name]: {
@@ -55,17 +65,34 @@ class Login extends Component {
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
 
         e.preventDefault()
+
+        if (!hasError) {
+            axios.post('http://localhost:8085/api/v1/authenticate', {
+                username: this.state.formLogin.username,
+                password: this.state.formLogin.password
+            }).then(res => {
+                localStorage.setItem('token', res.data.token);
+                this.setState({redirect: '/dashboard'});
+            }).catch(error => {
+                console.log(error.response.data);
+                this.setState({loginHasError: true})
+            });
+        }
     }
 
     /* Simplify error check */
     hasError = (formName, inputName, method) => {
-        return  this.state[formName] &&
-                this.state[formName].errors &&
-                this.state[formName].errors[inputName] &&
-                this.state[formName].errors[inputName][method]
+        return this.state[formName] &&
+            this.state[formName].errors &&
+            this.state[formName].errors[inputName] &&
+            this.state[formName].errors[inputName][method]
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect}/>
+        }
+
         return (
             <div className="block-center mt-4 wd-xl">
                 <div className="card card-flat">
@@ -76,37 +103,39 @@ class Login extends Component {
                     </div>
                     <div className="card-body">
                         <p className="text-center py-2">SIGN IN TO CONTINUE.</p>
+                        {this.state.loginHasError ?
+                            <p className="text-danger">Invalid login, please try again</p> : null}
                         <form className="mb-3" name="formLogin" onSubmit={this.onSubmit}>
                             <div className="form-group">
                                 <div className="input-group with-focus">
-                                    <Input type="email"
-                                        name="email"
-                                        className="border-right-0"
-                                        placeholder="Enter email"
-                                        invalid={this.hasError('formLogin','email','required')||this.hasError('formLogin','email','email')}
-                                        onChange={this.validateOnChange}
-                                        data-validate='["required", "email"]'
-                                        value={this.state.formLogin.email}/>
+                                    <Input type="text"
+                                           name="username"
+                                           className="border-right-0"
+                                           placeholder="Enter username"
+                                           invalid={this.hasError('formLogin', 'username', 'required')}
+                                           onChange={this.validateOnChange}
+                                           data-validate='["required"]'
+                                           value={this.state.formLogin.username}/>
                                     <div className="input-group-append">
                                         <span className="input-group-text text-muted bg-transparent border-left-0">
                                             <em className="fa fa-envelope"></em>
                                         </span>
                                     </div>
-                                    { this.hasError('formLogin','email','required') && <span className="invalid-feedback">Field is required</span> }
-                                    { this.hasError('formLogin','email','email') && <span className="invalid-feedback">Field must be valid email</span> }
+                                    {this.hasError('formLogin', 'username', 'required') &&
+                                    <span className="invalid-feedback">Field is required</span>}
                                 </div>
                             </div>
                             <div className="form-group">
                                 <div className="input-group with-focus">
                                     <Input type="password"
-                                        id="id-password"
-                                        name="password"
-                                        className="border-right-0"
-                                        placeholder="Password"
-                                        invalid={this.hasError('formLogin','password','required')}
-                                        onChange={this.validateOnChange}
-                                        data-validate='["required"]'
-                                        value={this.state.formLogin.password}
+                                           id="id-password"
+                                           name="password"
+                                           className="border-right-0"
+                                           placeholder="Password"
+                                           invalid={this.hasError('formLogin', 'password', 'required')}
+                                           onChange={this.validateOnChange}
+                                           data-validate='["required"]'
+                                           value={this.state.formLogin.password}
                                     />
                                     <div className="input-group-append">
                                         <span className="input-group-text text-muted bg-transparent border-left-0">
@@ -118,9 +147,9 @@ class Login extends Component {
                             </div>
                             <div className="clearfix">
                                 <CustomInput type="checkbox" id="rememberme"
-                                    className="float-left mt-0"
-                                    name="remember"
-                                    label="Remember Me">
+                                             className="float-left mt-0"
+                                             name="remember"
+                                             label="Remember Me">
                                 </CustomInput>
                                 <div className="float-right">
                                     <Link to="recover" className="text-muted">Forgot your password?</Link>
@@ -136,9 +165,9 @@ class Login extends Component {
                     <span className="mr-2">&copy;</span>
                     <span>2020</span>
                     <span className="mx-2">-</span>
-                    <span>Angle</span>
+                    <span>E-SMS</span>
                     <br/>
-                    <span>Bootstrap Admin Template</span>
+                    <span>Bulk SMS Platform</span>
                 </div>
             </div>
         );

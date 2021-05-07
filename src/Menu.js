@@ -5,33 +5,21 @@ const Menu = [
     },
     {
         name: 'Dashboard',
-        path: '/dashboardv1',
+        path: '/dashboard',
         icon: 'icon-speedometer',
         translate: 'sidebar.nav.DASHBOARD'
     },
     {
-        name: 'Forms',
-        icon: 'icon-note',
-        translate: 'sidebar.nav.form.FORM',
-        path: '/form-standard'
-    },
-    {
-        name: 'Charts',
-        icon: 'icon-graph',
-        translate: 'sidebar.nav.chart.CHART',
-        path: '/chart-flot'
-    },
-    {
-        name: 'Tables',
+        name: 'Settings',
         icon: 'icon-grid',
-        translate: 'sidebar.nav.table.TABLE',
-        path: '/table-standard'
-    },
-    {
-        name: 'Maps',
-        icon: 'icon-map',
-        translate: 'idebar.nav.map.MAP',
-        path: '/map-google'
+        translate: 'sidebar.nav.setting.SETTINGS',
+        submenu: [
+            {
+                name: 'Operators',
+                path: '/operators-list',
+                translate: 'sidebar.nav.setting.OPERATORS'
+            }
+        ]
     }
 ];
 

@@ -26,7 +26,7 @@ const FormValidator = {
         const validations = JSON.parse(element.getAttribute('data-validate'));
 
         let result = []
-        if(validations && validations.length) {
+        if (validations && validations.length) {
             /*  Result of each validation must be true if the input is invalid
                 and false if valid. */
             validations.forEach(m => {
@@ -55,20 +55,20 @@ const FormValidator = {
                         result[m] = !validator.equals(value, value2)
                         break;
                     case 'minlen':
-                        result[m] = !validator.isLength(value, { min: param })
+                        result[m] = !validator.isLength(value, {min: param})
                         break;
                     case 'maxlen':
-                        result[m] = !validator.isLength(value, { max: param })
+                        result[m] = !validator.isLength(value, {max: param})
                         break;
                     case 'len':
                         const [min, max] = JSON.parse(param)
-                        result[m] = !validator.isLength(value, { min, max })
+                        result[m] = !validator.isLength(value, {min, max})
                         break;
                     case 'min':
-                        result[m] = !validator.isInt(value, { min: validator.toInt(param) })
+                        result[m] = !validator.isInt(value, {min: validator.toInt(param)})
                         break;
                     case 'max':
-                        result[m] = !validator.isInt(value, { max: validator.toInt(param) })
+                        result[m] = !validator.isInt(value, {max: validator.toInt(param)})
                         break;
                     case 'list':
                         const list = JSON.parse(param)
@@ -97,7 +97,7 @@ const FormValidator = {
 
         inputs.forEach(input => {
             let result = this.validate(input)
-            errors = { ...errors, [input.name]: result }
+            errors = {...errors, [input.name]: result}
             if (!hasError) hasError = Object.keys(result).some(val => result[val])
         })
 

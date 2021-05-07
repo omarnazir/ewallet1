@@ -42,9 +42,9 @@ class Lock extends Component {
                     <span className="mr-2">&copy;</span>
                     <span>2020</span>
                     <span className="mx-2">-</span>
-                    <span>Angle</span>
+                    <span>E-SMS</span>
                     <br/>
-                    <span>Bootstrap Admin Template</span>
+                    <span>Bulk SMS Platform</span>
                 </div>
             </div>
         );

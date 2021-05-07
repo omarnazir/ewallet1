@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import {withTranslation, Trans} from 'react-i18next';
 import ContentWrapper from '../Layout/ContentWrapper';
-import {Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import {Row, Col, Button} from 'reactstrap';
 import EasyPieChart from 'easy-pie-chart';
+import {Redirect} from 'react-router-dom';
 
 import CardTool from '../Common/CardTool'
 import Sparkline from '../Common/Sparklines';
 import FlotChart from '../Charts/Flot';
-import Now from '../Common/Now';
 
-class DashboardV1 extends Component {
+class Dashboard extends Component {
 
     state = {
         flotData: [{
@@ -66,11 +66,16 @@ class DashboardV1 extends Component {
             shadowSize: 0
         },
 
-        dropdownOpen: false
-
+        dropdownOpen: false,
+        redirect: null
     }
 
     componentDidMount() {
+        const token = localStorage.getItem('token');
+        if (token == null || token.length === 0) {
+            this.setState({redirect: '/login'});
+        }
+
         // Easy pie
         let pieOptions1 = {
             animate: {
@@ -87,19 +92,21 @@ class DashboardV1 extends Component {
         new EasyPieChart(this.refs.easypie, pieOptions1);
     }
 
-    changeLanguage = lng => {
-        this.props.i18n.changeLanguage(lng);
-    }
-
     toggle = () => {
         this.setState({
             dropdownOpen: !this.state.dropdownOpen
         });
     }
 
+    logout = () => {
+        localStorage.removeItem('token');
+        this.setState({redirect: '/login'});
+    }
+
     render() {
-        // Usse t function instead of Trans component
-        // const { t } = this.props;
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect}/>
+        }
 
         return (
             <ContentWrapper>
@@ -107,19 +114,9 @@ class DashboardV1 extends Component {
                     <div>Dashboard
                         <small><Trans i18nKey='dashboard.WELCOME'></Trans></small>
                     </div>
-                    { /* START Language list */}
                     <div className="ml-auto">
-                        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                            <DropdownToggle>
-                                English
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-right-forced animated fadeInUpShort">
-                                <DropdownItem onClick={() => this.changeLanguage('en')}>English</DropdownItem>
-                                <DropdownItem onClick={() => this.changeLanguage('es')}>Spanish</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
+                        <Button onClick={this.logout} color="danger" size="sm">Logout</Button>
                     </div>
-                    { /* END Language list */}
                 </div>
                 { /* START cards box */}
                 <Row>
@@ -240,4 +237,4 @@ class DashboardV1 extends Component {
     }
 }
 
-export default withTranslation('translations')(DashboardV1);
+export default withTranslation('translations')(Dashboard);
