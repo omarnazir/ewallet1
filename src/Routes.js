@@ -11,8 +11,9 @@ const waitFor = Tag => props => <Tag {...props}/>;
 
 const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
 const Operators = lazy(() => import('./components/Operators/List'));
-const Login = lazy(() => import('./components/Pages/Login'));
-const Register = lazy(() => import('./components/Pages/Register'));
+const Sms = lazy(() => import('./components/Sms/List'));
+const Login = lazy(() => import('./components/Auth/Login'));
+const Register = lazy(() => import('./components/Auth/Register'));
 
 const listofPages = [
     '/login',
@@ -47,6 +48,7 @@ const Routes = ({location}) => {
                                 <Switch location={location}>
                                     <Route path="/dashboard" component={waitFor(Dashboard)}/>
                                     <Route path="/operators-list" component={waitFor(Operators)}/>
+                                    <Route path="/sms" component={waitFor(Sms)}/>
                                     <Redirect to="/dashboard"/>
                                 </Switch>
                             </Suspense>

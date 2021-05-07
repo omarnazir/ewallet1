@@ -20,6 +20,12 @@ const Menu = [
                 translate: 'sidebar.nav.setting.OPERATORS'
             }
         ]
+    },
+    {
+        name: 'SMS',
+        path: '/sms',
+        icon: 'icon-grid',
+        translate: 'sidebar.nav.SMS'
     }
 ];
 

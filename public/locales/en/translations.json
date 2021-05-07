@@ -16,7 +16,8 @@
       "setting": {
         "SETTINGS": "Settings",
         "OPERATORS": "Operators"
-      }
+      },
+      "SMS": "SMS"
     }
   }
 }
