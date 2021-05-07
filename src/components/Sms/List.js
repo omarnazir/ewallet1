@@ -49,6 +49,7 @@ class List extends Component {
                                         <th>Status</th>
                                         <th>Network</th>
                                         <th>Message</th>
+                                        <th>Recipient</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -60,6 +61,7 @@ class List extends Component {
                                             <td>{row.status}</td>
                                             <td>{row.network}</td>
                                             <td>{row.message}</td>
+                                            <td>{row.msisdn}</td>
                                         </tr>
                                     ))}
                                     </tbody>
