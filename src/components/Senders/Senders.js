@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-
+import axios from "axios";
 
 
 class Senders extends Component {
@@ -44,8 +44,24 @@ class Senders extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    senderIdList: []
   };
+
+
+  componentDidMount() {
+    axios.get(`http://localhost:8085/api/v1/sender-ids`, {
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        const response = res.data;
+        this.setState({ senderIdList: response })
+        console.log(response);
+      })
+  }
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -62,17 +78,17 @@ class Senders extends Component {
       <ContentWrapper>
         <div className="content-heading">
           <div className="mr-auto flex-row">
-          Manage Customers Sender id's
+            Manage Customers Sender id's
             <small>Showing all customers sender id's.</small>
           </div>
           <div className="flex-row">
-          <Button outline color="danger" className="btn-pill-right mr-2">View Requested SenderId's</Button>
-          <Button outline color="danger" className="btn-pill-right">Add New SenderId</Button>
+            <Button outline color="danger" className="btn-pill-right mr-2">View Requested SenderId's</Button>
+            <Button outline color="danger" className="btn-pill-right">Add New SenderId</Button>
           </div>
         </div>
         <Container fluid>
           <Card>
-          <CardHeader>
+            <CardHeader>
               <div className="row">
                 <Card className="col-sm-12">
                   <CardBody>
@@ -91,9 +107,9 @@ class Senders extends Component {
                           </div>
                         </div>
                         <div className="col-sm-3">
-                          <div class="form-group">
-                            <label for="exampleFormControlSelect1">No of records: </label>
-                            <select class="form-control" id="exampleFormControlSelect1">
+                          <div className="form-group">
+                            <label htmlFor="exampleFormControlSelect1">No of records: </label>
+                            <select className="form-control" id="exampleFormControlSelect1">
                               <option>All</option>
                               <option>100</option>
                               <option>200</option>
@@ -121,7 +137,7 @@ class Senders extends Component {
                     <tr>
                       <th data-priority="1">ID</th>
                       <th>Customer/Organization</th>
-                     
+
                       <th className="" data-priority="2">
                         Sender
                       </th>
@@ -130,25 +146,24 @@ class Senders extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeA">
-                      <td>1</td>
-                      <td>TANZANIA BREWERIES PUBLIC LIMITED</td>
-                      <td>TBL Info</td>
-                      <td>2021-04-27 08:33:37</td>
-                      <td>
-                        <span className="badge badge-success">Approved</span>
-                      </td>
-                    </tr>
-
-                    <tr className="gradeA">
-                      <td>2</td>
-                      <td>HTT Infranco Ltd</td>
-                      <td>HTT</td>
-                      <td>2021-04-27 08:33:37</td>
-                      <td>
-                        <span className="badge badge-success">Approved</span>
-                      </td>
-                    </tr>
+                    {this.state.senderIdList.map(row => (
+                      <tr>
+                        <td>{row.id}</td>
+                        <td>{row.senderId}</td>
+                        <td>{row.senderId}</td>
+                        <td>{row.dateCreated}</td>
+                        <td>
+                          { row.is_approved==1 && 
+                          <span className="badge badge-success">Approved</span>
+                          }
+                          {
+                            row.is_approved!=1 &&
+                            <span className="badge badge-danger">Rejected</span>
+                          }
+                          
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </Datatable>

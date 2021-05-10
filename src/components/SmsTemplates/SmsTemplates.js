@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-
+import axios from "axios";
 
 
 class SmsTemplates extends Component {
@@ -36,6 +36,7 @@ class SmsTemplates extends Component {
           sPrevious: '<em class="fa fa-caret-left"></em>',
         },
       },
+      // Datatable Buttons setup
       dom: "Bfrtip",
       buttons: [
         { extend: "csv", className: "btn-info" },
@@ -43,8 +44,23 @@ class SmsTemplates extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    smsTemplateList: []
   };
+
+  componentDidMount() {
+    axios.get(`http://localhost:8085/api/v1/sms-request`, {
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        const response = res.data;
+        this.setState({ smsTemplateList: response })
+        console.log(response);
+      })
+  }
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -71,9 +87,9 @@ class SmsTemplates extends Component {
         </div>
         <Container fluid>
           <Card>
-          <CardHeader>
+            <CardHeader>
               <CardTitle>
-              Showing all sms templates from <strong> MAR 29,2021 </strong> to <strong> APR 29,2021 </strong>
+                Showing all sms templates from <strong> MAR 29,2021 </strong> to <strong> APR 29,2021 </strong>
               </CardTitle>
               <div className="row">
                 <Card className="col-sm-12">
@@ -93,9 +109,9 @@ class SmsTemplates extends Component {
                           </div>
                         </div>
                         <div className="col-sm-3">
-                          <div class="form-group">
-                            <label for="exampleFormControlSelect1">No of records: </label>
-                            <select class="form-control" id="exampleFormControlSelect1">
+                          <div className="form-group">
+                            <label htmlFor="exampleFormControlSelect1">No of records: </label>
+                            <select className="form-control" id="exampleFormControlSelect1">
                               <option>All</option>
                               <option>100</option>
                               <option>200</option>
@@ -131,7 +147,7 @@ class SmsTemplates extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeA">
+                    {/* <tr className="gradeA">
                       <td>1</td>
                       <td>SCANIA TANZANIA LTD</td>
                       <td>Bidhaa na huduma zenye viwango vya kimataifa zipo karibu kukufikia Tunduma.
@@ -150,7 +166,25 @@ class SmsTemplates extends Component {
                       </td>
 
 
-                    </tr>
+                    </tr> */}
+
+
+                    {this.state.smsTemplateList.map(row => (
+                      <tr key={row.id}>
+                        <td>{row.id}</td>
+                        <td>SCANIA TANZANIA LTD</td>
+                        <td>{row.messageTemplate}</td>
+                        <td>{row.dateCreated}</td>
+                        <td><span className="badge badge-success">{row.status}</span></td>
+                        <td>N/A</td>
+                        <td>
+                          <span className="btn badge-success">Approved</span>
+                          <br />
+                          <span className="btn badge-danger mt-1">Reject</span>
+                        </td>
+                      </tr>
+                    ))}
+
                   </tbody>
                 </table>
               </Datatable>

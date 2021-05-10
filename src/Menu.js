@@ -92,6 +92,12 @@ const Menu = [
             name: 'Operators',
             path: '/operators-list',
             translate: 'sidebar.nav.setting.OPERATORS'
+        },
+        {
+            name: 'SMS',
+            path: '/sms',
+            icon: 'icon-grid',
+            translate: 'sidebar.nav.SMS'
         }
     
     ]

@@ -3,7 +3,7 @@ import ContentWrapper from "../../Layout/ContentWrapper";
 import Datatable from "../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
 import $ from "jquery";
-
+import axios from "axios";
 
 
 class CustomerList extends Component {
@@ -25,6 +25,7 @@ class CustomerList extends Component {
           sPrevious: '<em class="fa fa-caret-left"></em>',
         },
       },
+      // Datatable Buttons setup
       dom: "Bfrtip",
       buttons: [
         { extend: "csv", className: "btn-info" },
@@ -32,9 +33,26 @@ class CustomerList extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    customersList: []
   };
 
+
+  
+
+  componentDidMount() {
+    axios.get(`http://localhost:8085/api/v1/customers`, {
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        const response = res.data;
+        this.setState({ customersList: response })
+        console.log(response);
+      })
+  }
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
     const inputSearchClass = "datatable_input_col_search";
@@ -57,7 +75,6 @@ class CustomerList extends Component {
         <Container fluid>
           <Card>
             <CardHeader>
-              {/* <CardTitle>Export Buttons</CardTitle> */}
             </CardHeader>
             <CardBody>
               <Datatable options={this.state.dtOptions}>
@@ -78,7 +95,7 @@ class CustomerList extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeX">
+                    {/* <tr className="gradeX">
                       <td>1</td>
                       <td>Alpha Jones</td>
                       <td>alpha@gmail.com</td>
@@ -89,11 +106,37 @@ class CustomerList extends Component {
                       <td>Cash</td>
                       <td> 
                         <a className="btn btn-success" href="#" role="button">
-                        {/* <i className="fa fa-arrow-right"></i> */}
                         <i className="fa fa-eye"></i>
                         </a>
                          </td>                   
-                    </tr>
+                    </tr> */}
+
+                    {this.state.customersList.map(row => (
+                      <tr key={row.id}>
+                        <td>{row.id}</td>
+                        <td>{row.fullname}</td>
+                        <td>{row.email}</td>
+                        <td>{row.phonenumber}</td>
+                        <td>{row.location}</td>
+                        {/* <td>{row.isActive}</td> */}
+                        <td>{row.isActive==1 &&
+                           <span className="badge badge-success">Active</span>
+                        }
+                        {row.isActive!=1 && 
+                          <span className="badge badge-danger">Disabled</span>
+                        }
+                        </td>
+
+                        <td>{row.startDate}</td>
+                        <td>{row.paymentType}</td>
+                        <td> 
+                        <a className="btn btn-success" href="#" role="button">
+                        {/* <i className="fa fa-arrow-right"></i> */}
+                        <i className="fa fa-eye"></i>
+                        </a>
+                         </td>  
+                      </tr>
+                    ))}
                    
                   </tbody>
                 </table>
