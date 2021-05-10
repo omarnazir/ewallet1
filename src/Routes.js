@@ -6,6 +6,15 @@ import PageLoader from './components/Common/PageLoader';
 
 import Base from './components/Layout/Base';
 import BasePage from './components/Layout/BasePage';
+import CustomerList from './components/Customers/CustomerList/CustomerList';
+import PostPaidCustomers from './components/Customers/PostPaid/PostPaidCustomers';
+import Senders from './components/Senders/Senders';
+import ReservedNumbers from './components/Settings/ReservedNumbers';
+import RestrictedWords from './components/Settings/RestrictedWords';
+import SmsTemplates from './components/SmsTemplates/SmsTemplates';
+import Tariffs from './components/Tarriffs/Tariffs';
+import Transactions from './components/Transactions/Transactions';
+import UsersManagement from './components/Users/UsersManagement';
 
 const waitFor = Tag => props => <Tag {...props}/>;
 
@@ -46,9 +55,23 @@ const Routes = ({location}) => {
                         <div>
                             <Suspense fallback={<PageLoader/>}>
                                 <Switch location={location}>
+                                    {/* <Route path="/dashboard" component={waitFor(Dashboard)}/> */}
                                     <Route path="/dashboard" component={waitFor(Dashboard)}/>
+                                    
                                     <Route path="/operators-list" component={waitFor(Operators)}/>
                                     <Route path="/sms" component={waitFor(Sms)}/>
+
+                                    <Route path="/customers-list" component={waitFor(CustomerList)}/>
+                                    <Route path="/customers-postpaid" component={waitFor(PostPaidCustomers)}/>
+                                    <Route path="/transactions" component={waitFor(Transactions)}/>
+                                    <Route path="/senders" component={waitFor(Senders)} />
+                                    <Route path="/sms-templates" component={waitFor(SmsTemplates)}/>
+                                    <Route path="/manage-tariffs" component={waitFor(Tariffs)}/>
+                                    <Route path="/manage-users" component={waitFor(UsersManagement)}/>
+                                    <Route path="/restricted-words" component={waitFor(RestrictedWords)}/>
+                                    <Route path="/reserved-numbers" component={waitFor(ReservedNumbers)}/>
+
+                                    
                                     <Redirect to="/dashboard"/>
                                 </Switch>
                             </Suspense>
