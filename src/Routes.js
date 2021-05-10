@@ -60,7 +60,7 @@ const Routes = ({location}) => {
                                     <Route path="/dashboard" component={waitFor(Dashboard)}/>
                                     
                                     <Route path="/mobile-operators" component={waitFor(MobileOperator)}/>
-                                    <Route path="/sms" component={waitFor(Sms)}/>
+                                    <Route path="/all-sms" component={waitFor(Sms)}/>
 
                                     <Route path="/customers-list" component={waitFor(CustomerList)}/>
                                     <Route path="/customers-postpaid" component={waitFor(PostPaidCustomers)}/>

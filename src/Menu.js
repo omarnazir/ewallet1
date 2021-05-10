@@ -95,8 +95,8 @@ const Menu = [
         },
         {
             name: 'SMS',
-            path: '/sms',
-            icon: 'icon-grid'
+            path: '/all-sms',
+            icon: 'icon-bubble'
         }
     
     ]

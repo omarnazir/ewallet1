@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-
+import axios from "axios";
 
 
 class Transactions extends Component {
@@ -42,7 +42,8 @@ class Transactions extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    smsTransactions: []
   };
 
   // Access to internal datatable instance for customizations
@@ -54,6 +55,20 @@ class Transactions extends Component {
       dtInstance.fnFilter(this.value, columnInputs.index(this));
     });
   };
+
+  componentDidMount() {
+    axios.get(`http://localhost:8085/api/v1/sms`, {
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        const response = res.data;
+        this.setState({ smsTransactions: response })
+        console.log(response);
+      })
+  }
 
   render() {
     return (
@@ -119,18 +134,20 @@ class Transactions extends Component {
                     <tr>
                       <th data-priority="1">SNO</th>
                       <th>DATE</th>
-                      <th className="sort-numeric">TXN ID</th>
+                      {/* <th className="sort-numeric">TXN ID</th> */}
+                      <th className="sort-alpha">SENDER ID</th>
                       <th className="sort-alpha" data-priority="2">
                         SMS
                       </th>
-                      <th>RECEIPT</th>
+                      {/* <th>RECEIPT</th> */}
                       <th>MSISDN</th>
-                      <th>AMOUNT (TZS)</th>
+                      <th>NETWORK</th>
+                      {/* <th>AMOUNT (TZS)</th> */}
                       <th>STATUS</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeA">
+                    {/* <tr className="gradeA">
                       <td>1</td>
                       <td>27/04/201</td>
                       <td>182495042</td>
@@ -141,13 +158,31 @@ class Transactions extends Component {
                       <td>
                         <span className="badge badge-success">Delivered</span>
                       </td>
-                    </tr>
+                    </tr> */}
+                    {this.state.smsTransactions.map(row => (
+                      <tr>
+                        <td>{row.id}</td>
+                        <td>{row.date}</td>
+                        <td>{row.sender}</td>
+                        <td>{row.message}</td>
+
+                        <td>{row.msisdn}</td>
+                        <td>{row.network}</td>
+                        <td>{row.status == "Delivered" &&
+                            <span className="badge badge-success">{row.status}</span>
+                          }
+                          {
+                            row.status=="Failed" && 
+                            <span className="badge badge-danger">{row.status}</span>
+                          }</td>   
+                      </tr>
+                    ))}
+
                   </tbody>
                 </table>
               </Datatable>
             </CardBody>
           </Card>
-          {/* DATATABLE DEMO 3 */}
         </Container>
       </ContentWrapper>
     );
