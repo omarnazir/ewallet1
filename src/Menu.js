@@ -90,14 +90,13 @@ const Menu = [
             path: '/reserved-numbers'
         },  {
             name: 'Operators',
-            path: '/operators-list',
-            translate: 'sidebar.nav.setting.OPERATORS'
+            icon:'fa fa-phone',
+            path: '/mobile-operators'
         },
         {
             name: 'SMS',
             path: '/sms',
-            icon: 'icon-grid',
-            translate: 'sidebar.nav.SMS'
+            icon: 'icon-grid'
         }
     
     ]

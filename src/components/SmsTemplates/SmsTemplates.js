@@ -172,16 +172,36 @@ class SmsTemplates extends Component {
                     {this.state.smsTemplateList.map(row => (
                       <tr key={row.id}>
                         <td>{row.id}</td>
-                        <td>SCANIA TANZANIA LTD</td>
+                        {/* <td>SCANIA TANZANIA LTD</td> */}
+                        <td>{row.customerFk}</td>
                         <td>{row.messageTemplate}</td>
                         <td>{row.dateCreated}</td>
-                        <td><span className="badge badge-success">{row.status}</span></td>
-                        <td>N/A</td>
                         <td>
-                          <span className="btn badge-success">Approved</span>
-                          <br />
-                          <span className="btn badge-danger mt-1">Reject</span>
+                          {row.status == "Approved" &&
+                            <span className="badge badge-success">{row.status}</span>
+                          }
+                          {
+                            row.status=="Pending" && 
+                            <span className="badge badge-warning">{row.status}</span>
+                          }
+                          {
+                            row.status == "Rejected" &&
+                            <span className="badge badge-danger">{row.status}</span>
+                          }
                         </td>
+                        <td>N/A</td>
+                        { row.status == "Pending" &&
+                          <td>
+                            <span className="btn badge-success">Approved</span> <br />
+                            <span className="btn badge-danger mt-1">Reject</span>
+                          </td>
+                        }
+                        {
+                          row.status !="Pending" && 
+                          <td>
+                            N/A
+                          </td>
+                        }
                       </tr>
                     ))}
 

@@ -15,6 +15,7 @@ import SmsTemplates from './components/SmsTemplates/SmsTemplates';
 import Tariffs from './components/Tarriffs/Tariffs';
 import Transactions from './components/Transactions/Transactions';
 import UsersManagement from './components/Users/UsersManagement';
+import MobileOperator from './components/Settings/MobileOperator';
 
 const waitFor = Tag => props => <Tag {...props}/>;
 
@@ -58,7 +59,7 @@ const Routes = ({location}) => {
                                     {/* <Route path="/dashboard" component={waitFor(Dashboard)}/> */}
                                     <Route path="/dashboard" component={waitFor(Dashboard)}/>
                                     
-                                    <Route path="/operators-list" component={waitFor(Operators)}/>
+                                    <Route path="/mobile-operators" component={waitFor(MobileOperator)}/>
                                     <Route path="/sms" component={waitFor(Sms)}/>
 
                                     <Route path="/customers-list" component={waitFor(CustomerList)}/>
