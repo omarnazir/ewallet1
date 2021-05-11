@@ -20,7 +20,7 @@ import MobileOperator from './components/Settings/MobileOperator';
 const waitFor = Tag => props => <Tag {...props}/>;
 
 const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
-const Operators = lazy(() => import('./components/Operators/List'));
+// const Operators = lazy(() => import('./components/Operators/List'));
 const Sms = lazy(() => import('./components/Sms/List'));
 const Login = lazy(() => import('./components/Auth/Login'));
 const Register = lazy(() => import('./components/Auth/Register'));
