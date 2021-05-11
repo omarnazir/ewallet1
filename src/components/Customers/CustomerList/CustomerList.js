@@ -3,7 +3,7 @@ import ContentWrapper from "../../Layout/ContentWrapper";
 import Datatable from "../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
 import $ from "jquery";
-import axios from "axios";
+import axios from "../../../services/axios";
 
 
 class CustomerList extends Component {
@@ -41,12 +41,7 @@ class CustomerList extends Component {
   
 
   componentDidMount() {
-    axios.get(`http://localhost:8085/api/v1/customers`, {
-      headers: {
-        'Content-type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
+    axios.get("/customers")
       .then(res => {
         const response = res.data;
         this.setState({ customersList: response })

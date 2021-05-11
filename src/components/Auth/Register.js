@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { Input, CustomInput } from 'reactstrap';
+import { Input, CustomInput ,Button} from 'reactstrap';
 
 import FormValidator from '../Common/FormValidator.js';
 
@@ -15,11 +16,11 @@ class Register extends Component {
         }
     }
 
-     /**
-      * Validate input using onChange event
-      * @param  {String} formName The name of the form in the state object
-      * @return {Function} a function used for the event
-      */
+    /**
+     * Validate input using onChange event
+     * @param  {String} formName The name of the form in the state object
+     * @return {Function} a function used for the event
+     */
     validateOnChange = event => {
         const input = event.target;
         const form = input.form
@@ -60,111 +61,52 @@ class Register extends Component {
 
     /* Simplify error check */
     hasError = (formName, inputName, method) => {
-        return  this.state[formName] &&
-                this.state[formName].errors &&
-                this.state[formName].errors[inputName] &&
-                this.state[formName].errors[inputName][method]
+        return this.state[formName] &&
+            this.state[formName].errors &&
+            this.state[formName].errors[inputName] &&
+            this.state[formName].errors[inputName][method]
     }
 
     render() {
         return (
-            <div className="block-center mt-4 wd-xl">
-                {/* START card */}
-                <div className="card card-flat">
-                    <div className="card-header text-center bg-dark">
-                        <a href="">
-                            <img className="block-center" src="img/logo.png" alt="Logo"/>
-                        </a>
-                    </div>
-                    <div className="card-body">
-                        <p className="text-center py-2">SIGNUP TO GET INSTANT ACCESS.</p>
-                        <form className="mb-3" name="formRegister" onSubmit={this.onSubmit}>
-                            <div className="form-group">
-                                <label className="text-muted" htmlFor="signupInputEmail1">Email address</label>
-                                <div className="input-group with-focus">
-                                    <Input type="email"
-                                        name="email"
-                                        className="border-right-0"
-                                        placeholder="Enter email"
-                                        invalid={this.hasError('formRegister','email','required')||this.hasError('formRegister','email','email')}
-                                        onChange={this.validateOnChange}
-                                        data-validate='["required", "email"]'
-                                        value={this.state.formRegister.email}/>
-                                    <div className="input-group-append">
-                                        <span className="input-group-text text-muted bg-transparent border-left-0">
-                                            <em className="fa fa-envelope"></em>
-                                        </span>
-                                    </div>
-                                    { this.hasError('formRegister','email','required') && <span className="invalid-feedback">Field is required</span> }
-                                    { this.hasError('formRegister','email','email') && <span className="invalid-feedback">Field must be valid email</span> }
+            <Fragment>
+
+                <header className="topnavbar-wrapper">
+                    { /* START Top Navbar */}
+                    <nav className="navbar topnavbar">
+                        { /* START navbar header */}
+                        <div className="navbar-header">
+                            <a className="navbar-brand" href="#/">
+                                <div className="brand-logo">
+                                    <img className="img-fluid" src="img/logo.png" alt="App Logo" />
                                 </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="text-muted" htmlFor="signupInputPassword1">Password</label>
-                                <div className="input-group with-focus">
-                                    <Input type="text"
-                                        id="id-password"
-                                        name="password"
-                                        className="border-right-0"
-                                        placeholder="Password"
-                                        invalid={this.hasError('formRegister','password','required')}
-                                        onChange={this.validateOnChange}
-                                        data-validate='["required"]'
-                                        value={this.state.formRegister.password}
-                                    />
-                                    <div className="input-group-append">
-                                        <span className="input-group-text text-muted bg-transparent border-left-0">
-                                            <em className="fa fa-lock"></em>
-                                        </span>
-                                    </div>
-                                    <span className="invalid-feedback">Field is required</span>
+                                <div className="brand-logo-collapsed">
+                                    <img className="img-fluid" src="img/logo.png" alt="App Logo" />
                                 </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="text-muted" htmlFor="signupInputRePassword1">Retype Password</label>
-                                <div className="input-group with-focus">
-                                    <Input type="text" name="password2"
-                                        className="border-right-0"
-                                        placeholder="Retype assword"
-                                        invalid={this.hasError('formRegister','password2','equalto')}
-                                        onChange={this.validateOnChange}
-                                        data-validate='["equalto"]'
-                                        value={this.state.formRegister.password2}
-                                        data-param="id-password"
-                                    />
-                                    <div className="input-group-append">
-                                        <span className="input-group-text text-muted bg-transparent border-left-0">
-                                            <em className="fa fa-lock"></em>
-                                        </span>
-                                    </div>
-                                    <span className="invalid-feedback">Field must be equal to previous</span>
-                                </div>
-                            </div>
-                            <CustomInput type="checkbox" id="terms"
-                                name="terms"
-                                label="I agree with the terms"
-                                invalid={this.hasError('formRegister','terms','required')}
-                                onChange={this.validateOnChange}
-                                data-validate='["required"]'
-                                checked={this.state.formRegister.terms}>
-                                    <span className="invalid-feedback">Field is required</span>
-                                </CustomInput>
-                            <button className="btn btn-block btn-primary mt-3" type="submit">Create account</button>
-                        </form>
-                        <p className="pt-3 text-center">Have an account?</p>
-                        <Link to="login" className="btn btn-block btn-secondary">Login</Link>
-                    </div>
-                </div>
-                {/* END card */}
-                <div className="p-3 text-center">
-                    <span className="mr-2">&copy;</span>
-                    <span>2020</span>
-                    <span className="mx-2">-</span>
-                    <span>E-SMS</span>
-                    <br/>
-                    <span>Bulk SMS Platform</span>
-                </div>
-            </div>
+                            </a>
+                        </div>
+                        { /* END navbar header */}
+
+
+                        <div className="navbar-nav flex-row">
+                            <Button outline color="danger" className="btn-pill mr-2">Login</Button>
+                            <Button outline color="success" className="btn-pill mr-3">Sign Up</Button>
+                        </div>
+
+                        { /* START Right Navbar */}
+                        {/* <ul className="navbar-nav flex-row">
+                            <li className="nav-item">
+                                <a className="nav-link" href="" data-search-open="">
+                                    <em className="icon-magnifier"></em>
+                                </a>
+                            </li>
+                        </ul> */}
+                    </nav>
+                </header>
+
+
+
+            </Fragment>
         );
     }
 }

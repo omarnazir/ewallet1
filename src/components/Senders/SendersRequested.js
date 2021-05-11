@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-import axios from "axios";
+import axios from "../../services/axios";
 
 
 class SendersRequested extends Component {
@@ -50,12 +50,7 @@ class SendersRequested extends Component {
 
 
     componentDidMount() {
-        axios.get(`http://localhost:8085/api/v1/sender-ids`, {
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+        axios.get("/sender-ids")
             .then(res => {
                 const response = res.data;
                 this.setState({ senderIdList: response })

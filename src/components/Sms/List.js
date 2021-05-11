@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import ContentWrapper from '../Layout/ContentWrapper';
 import {Row, Col, Card, CardHeader, CardBody, Table} from 'reactstrap';
-import axios from "axios";
-
+// import axios from "axios";
+import axios from '../../services/axios';
 class List extends Component {
 
     constructor(props) {
@@ -13,12 +13,7 @@ class List extends Component {
     }
 
     componentDidMount() {
-        axios.get(`http://localhost:8085/api/v1/sms`, {
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+        axios.get("/sms")
             .then(res => {
                 const operators = res.data;
                 this.setState({operators})

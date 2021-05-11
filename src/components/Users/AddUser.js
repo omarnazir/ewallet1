@@ -15,44 +15,50 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-import axios from "../../services/axios";
+import axios from "axios";
 
 
-class AddSenderId extends Component {
+class AddUser extends Component {
     state = {
-      name:"",
-    }; 
+        name: "",
+        username:"",
+        password:"",
+
+    };
 
     handleSubmit = event => {
 
         event.preventDefault();
-        const sender = {
-            "senderId": this.state.name.toUpperCase(),
-            "isActive": "0",
-            "isDeleted": "1",
-            "isDefault": "0",
-            "dateApproved": null,
-            "dateCreated": "2020-11-24T06:37:16.000+00:00",
-            "customerFk": 180,
-            "source": "VODACOM",
-            "is_approved": 0
-       
+        const user = {
+            "name": "alpha",
+            "username": "alpha",
+            "password": "alpha123",
+            "image": null,
+            "status": null,
+            "lastLogin": null,
+            "thirdParty": null,
+            "customerFk": "null"
         }
-        axios.post("sender-ids/create",sender).then(res=>{
+        axios.post('http://localhost:8085/api/v1/register', user, {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }).then(res => {
             console.log(res);
             console.log(res.data);
-            this.ViewAllSenderIds();
-          })
-      }
+            this.ViewAllUsers();
+        })
+    }
 
-    ViewAllSenderIds=()=>{
-        return this.props.history.push('/senders')
-      }
+    ViewAllUsers = () => {
+        return this.props.history.push('/manage-users')
+    }
 
-      handleChange = event =>{
-        this.setState({ name: event.target.value});
-      }
-    
+    handleChange = event => {
+        this.setState({ name: event.target.value });
+    }
+
     render() {
         return (
             <ContentWrapper>
@@ -62,8 +68,7 @@ class AddSenderId extends Component {
                      <small>Adding a new sender id.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewAllSenderIds} outline color="danger" className="btn-pill-right mr-2">View All SenderId's</Button>
-                        <Button outline color="danger" className="btn-pill-right">Add New SenderId</Button>
+                        <Button onClick={this.ViewAllUsers} outline color="danger" className="btn-pill-right mr-2">View All Users</Button>
                     </div>
                 </div>
                 <Container fluid>
@@ -94,4 +99,4 @@ class AddSenderId extends Component {
     }
 }
 
-export default AddSenderId;
+export default AddUser;

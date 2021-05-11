@@ -3,7 +3,7 @@ import ContentWrapper from "../Layout/ContentWrapper";
 import Datatable from "../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
-import axios from "axios";
+import axios from "../../services/axios";
 
 
 class MobileOperator extends Component {
@@ -38,12 +38,7 @@ class MobileOperator extends Component {
     };
 
     componentDidMount() {
-        axios.get(`http://localhost:8085/api/v1/operators`, {
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+        axios.get("/operators")
             .then(res => {
                 const operators = res.data;
                 this.setState({ operators })
