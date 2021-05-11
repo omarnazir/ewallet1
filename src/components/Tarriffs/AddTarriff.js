@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-import axios from "axios";
+import axios from "../../services/axios";
 
 
 class AddTarriff extends Component {
@@ -23,32 +23,24 @@ class AddTarriff extends Component {
       name:"",
     }; 
 
+
     handleSubmit = event => {
         console.log("am here")
         event.preventDefault();
         //change to tarriff
-        const sender = {
-            "senderId": this.state.name,
-            "isActive": "0",
-            "isDeleted": "1",
-            "isDefault": "0",
-            "dateApproved": null,
-            "dateCreated": "2020-11-24T06:37:16.000+00:00",
-            "customerFk": 180,
-            "source": "VODACOM",
-            "is_approved": 0
-       
-        }
-        //change to tarriff
-        axios.post('http://localhost:8085/api/v1/sender-ids/create',sender, {
-            headers: {
-              'Content-type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }}).then(res=>{
+        const tarriff=  {
+            "tariffName": this.state.name.toUpperCase(),
+            "fromSms": null,
+            "toSms": null,
+            "expireDurationDays": null,
+            "createdAt": "2020-12-02T17:05:19.000+00:00",
+            "createdBy": 0,
+            "isDefault": 1
+    }
+          axios.post("/tariff",tarriff).then(res=>{
             console.log(res);
             console.log(res.data);
-            // window.location = "/retrieve" 
-            this.ViewAllSenderIds();
+            this.ViewTarrifs();
           })
       }
 

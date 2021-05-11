@@ -3,7 +3,7 @@ import ContentWrapper from "../Layout/ContentWrapper";
 import Datatable from "../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
-import axios from "axios";
+import axios from "../../services/axios";
 
 
 class UsersManagement extends Component {
@@ -49,18 +49,17 @@ class UsersManagement extends Component {
 
 
   componentDidMount() {
-    axios.get(`http://localhost:8085/api/v1/users`, {
-      headers: {
-        'Content-type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
+    axios.get("/users")
       .then(res => {
         const response = res.data;
         this.setState({ usersList: response })
         console.log(response);
       })
   }
+
+  AddNewUser = () => {
+    return this.props.history.push('/add-new-user')
+}
 
   render() {
     return (
@@ -71,7 +70,7 @@ class UsersManagement extends Component {
             <small>Showing all post paid customers.</small>
           </div>
           <div className="flex-row">
-            <Button outline color="danger" className="btn-pill-right">Add User</Button>
+            <Button onClick={this.AddNewUser} outline color="danger" className="btn-pill-right">Add User</Button>
           </div>
         </div>
         <Container fluid>

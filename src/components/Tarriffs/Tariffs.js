@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import ContentWrapper from "../Layout/ContentWrapper";
 import Datatable from "../Common/Datatable";
-import { Container, Card, CardHeader, CardBody, CardTitle,Button } from "reactstrap";
+import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
-
+import axios from "../../services/axios";
 
 
 class Tariffs extends Component {
@@ -34,8 +34,17 @@ class Tariffs extends Component {
         { extend: "print", className: "btn-info" },
       ],
     },
-   
+    tarrifsList: []
   };
+
+  componentDidMount() {
+    axios.get("/tariff")
+      .then(res => {
+        const response = res.data;
+        this.setState({ tarrifsList: response })
+        console.log(response);
+      })
+  }
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -46,7 +55,7 @@ class Tariffs extends Component {
       dtInstance.fnFilter(this.value, columnInputs.index(this));
     });
   };
-  AddTarriff=()=>{
+  AddTarriff = () => {
     return this.props.history.push('/add-tarriff')
   }
 
@@ -59,7 +68,7 @@ class Tariffs extends Component {
             <small>Showing all tariffs.</small>
           </div>
           <div className="flex-row">
-          <Button onClick={this.AddTarriff} outline color="danger" className="btn-pill-right">Add New Tariff</Button>
+            <Button onClick={this.AddTarriff} outline color="danger" className="btn-pill-right">Add New Tariff</Button>
           </div>
         </div>
         <Container fluid>
@@ -86,13 +95,31 @@ class Tariffs extends Component {
                       <td>A</td>
                     </tr> */}
 
-                    
+                    {this.state.tarrifsList.map(row => (
+                      <tr key={row.id}>
+                        <td>{row.id}</td>
+                        <td>{row.tariffName}</td>
+                        <td>{row.isDefault?(
+                          <span className="badge badge-success">Default</span>
+                        ):(
+                          <span className="btn badge-success">Set Default</span>
+                        )}</td>
+                        <td>
+                         
+                            <span className="btn badge-success">Edit</span>
+                            <span className="btn badge-danger mr-1 ml-1">Delete</span>
+                            <span className="btn badge-success">Set Tarriff Band</span>
+                        
+
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </Datatable>
             </CardBody>
           </Card>
-          
+
         </Container>
       </ContentWrapper>
     );

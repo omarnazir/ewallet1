@@ -19,6 +19,7 @@ import MobileOperator from './components/Settings/MobileOperator';
 import SendersRequested from './components/Senders/SendersRequested';
 import AddSenderId from './components/Senders/AddSenderId';
 import AddTarriff from './components/Tarriffs/AddTarriff';
+import AddUser from './components/Users/AddUser';
 
 const waitFor = Tag => props => <Tag {...props}/>;
 
@@ -79,6 +80,8 @@ const Routes = ({location}) => {
 
                                     <Route path="/add-tarriff" component={waitFor(AddTarriff)}/>
                                     <Route path="/manage-tariffs" component={waitFor(Tariffs)}/>
+
+                                    <Route path="/add-new-user" component={waitFor(AddUser)}/>
                                     <Route path="/manage-users" component={waitFor(UsersManagement)}/>
                                     <Route path="/restricted-words" component={waitFor(RestrictedWords)}/>
                                     <Route path="/reserved-numbers" component={waitFor(ReservedNumbers)}/>

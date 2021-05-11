@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-import axios from "axios";
+import axios from "../../services/axios";
 
 
 class AddUser extends Component {
@@ -39,10 +39,9 @@ class AddUser extends Component {
             "thirdParty": null,
             "customerFk": "null"
         }
-        axios.post('http://localhost:8085/api/v1/register', user, {
+        axios.post('/register', user, {
             headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Content-type': 'application/json', 
             }
         }).then(res => {
             console.log(res);
@@ -64,8 +63,8 @@ class AddUser extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Add Sender id's
-                     <small>Adding a new sender id.</small>
+                        Add User
+                     <small>Adding a new user.</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewAllUsers} outline color="danger" className="btn-pill-right mr-2">View All Users</Button>

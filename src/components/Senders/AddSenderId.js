@@ -80,7 +80,7 @@ class AddSenderId extends Component {
                                         <button className="btn btn-sm btn-success mr-3" type="submit">
                                             Save
                                         </button>
-                                        <button className="btn btn-sm btn-danger">
+                                        <button className="btn btn-sm btn-danger" onClick={this.ViewAllSenderIds}>
                                             Cancel
                                         </button>
                                     </form>
