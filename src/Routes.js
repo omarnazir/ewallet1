@@ -16,6 +16,9 @@ import Tariffs from './components/Tarriffs/Tariffs';
 import Transactions from './components/Transactions/Transactions';
 import UsersManagement from './components/Users/UsersManagement';
 import MobileOperator from './components/Settings/MobileOperator';
+import SendersRequested from './components/Senders/SendersRequested';
+import AddSenderId from './components/Senders/AddSenderId';
+import AddTarriff from './components/Tarriffs/AddTarriff';
 
 const waitFor = Tag => props => <Tag {...props}/>;
 
@@ -65,8 +68,16 @@ const Routes = ({location}) => {
                                     <Route path="/customers-list" component={waitFor(CustomerList)}/>
                                     <Route path="/customers-postpaid" component={waitFor(PostPaidCustomers)}/>
                                     <Route path="/transactions" component={waitFor(Transactions)}/>
+
+
+                                    <Route path="/add-senderid" component={waitFor(AddSenderId)}/>
                                     <Route path="/senders" component={waitFor(Senders)} />
+
+
+                                    <Route path="/senders-requested" component={waitFor(SendersRequested)}/>
                                     <Route path="/sms-templates" component={waitFor(SmsTemplates)}/>
+
+                                    <Route path="/add-tarriff" component={waitFor(AddTarriff)}/>
                                     <Route path="/manage-tariffs" component={waitFor(Tariffs)}/>
                                     <Route path="/manage-users" component={waitFor(UsersManagement)}/>
                                     <Route path="/restricted-words" component={waitFor(RestrictedWords)}/>

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import ContentWrapper from "../Layout/ContentWrapper";
 import Datatable from "../Common/Datatable";
-import { Container, Card, CardHeader, CardBody, CardTitle,Button } from "reactstrap";
+import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
-
+import axios from "axios";
 
 
 class UsersManagement extends Component {
@@ -25,6 +25,7 @@ class UsersManagement extends Component {
           sPrevious: '<em class="fa fa-caret-left"></em>',
         },
       },
+      // Datatable Buttons setup
       dom: "Bfrtip",
       buttons: [
         { extend: "csv", className: "btn-info" },
@@ -32,7 +33,8 @@ class UsersManagement extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    usersList: []
   };
 
   // Access to internal datatable instance for customizations
@@ -45,6 +47,21 @@ class UsersManagement extends Component {
     });
   };
 
+
+  componentDidMount() {
+    axios.get(`http://localhost:8085/api/v1/users`, {
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        const response = res.data;
+        this.setState({ usersList: response })
+        console.log(response);
+      })
+  }
+
   render() {
     return (
       <ContentWrapper>
@@ -54,7 +71,7 @@ class UsersManagement extends Component {
             <small>Showing all post paid customers.</small>
           </div>
           <div className="flex-row">
-          <Button outline color="danger" className="btn-pill-right">Add User</Button>
+            <Button outline color="danger" className="btn-pill-right">Add User</Button>
           </div>
         </div>
         <Container fluid>
@@ -75,16 +92,28 @@ class UsersManagement extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeA">
-                      <td>1</td>
-                      <td>VODACOM ADMIN</td>
-                      <td>Vodacom</td>
-                      <td> <span className="badge badge-success">Active</span> </td> 
-                      <td>2021-04-29 11:37:22</td>
-                      <td></td>
-                    </tr>
+                    {this.state.usersList.map(row => (
+                      <tr key={row.id}>
+                        <td>{row.id}</td>
+                        <td>{row.name}</td>
+                        <td>{row.username}</td>
 
-                    
+                        <td>
+                          {row.status == 1 &&
+                            <span className="badge badge-success">Active</span>
+                          }
+                          {
+                            row.status != 1 &&
+                            <span className="badge badge-danger">Disabled</span>
+                          }
+                        </td>
+                        <td>{row.lastLogin}</td>
+                        <td> <span className="btn badge-success">Edit</span> <br />
+                          <span className="btn badge-danger mt-1">Delete</span> <br/>
+                          <span className="btn badge-danger mt-1">Disable</span>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </Datatable>
