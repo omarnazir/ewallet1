@@ -46,6 +46,9 @@ class Tariffs extends Component {
       dtInstance.fnFilter(this.value, columnInputs.index(this));
     });
   };
+  AddTarriff=()=>{
+    return this.props.history.push('/add-tarriff')
+  }
 
   render() {
     return (
@@ -56,7 +59,7 @@ class Tariffs extends Component {
             <small>Showing all tariffs.</small>
           </div>
           <div className="flex-row">
-          <Button outline color="danger" className="btn-pill-right">Add New Tariff</Button>
+          <Button onClick={this.AddTarriff} outline color="danger" className="btn-pill-right">Add New Tariff</Button>
           </div>
         </div>
         <Container fluid>

@@ -73,6 +73,13 @@ class Senders extends Component {
     });
   };
 
+  ViewRequestedSenders=()=>{
+    return this.props.history.push('/senders-requested')
+  }
+  AddSenderId=()=>{
+    return this.props.history.push('/add-senderid')
+  }
+
   render() {
     return (
       <ContentWrapper>
@@ -82,8 +89,8 @@ class Senders extends Component {
             <small>Showing all customers sender id's.</small>
           </div>
           <div className="flex-row">
-            <Button outline color="danger" className="btn-pill-right mr-2">View Requested SenderId's</Button>
-            <Button outline color="danger" className="btn-pill-right">Add New SenderId</Button>
+            <Button onClick={this.ViewRequestedSenders} outline color="danger" className="btn-pill-right mr-2">View Requested SenderId's</Button>
+            <Button onClick={this.AddSenderId} outline color="danger" className="btn-pill-right">Add New SenderId</Button>
           </div>
         </div>
         <Container fluid>
@@ -147,7 +154,7 @@ class Senders extends Component {
                   </thead>
                   <tbody>
                     {this.state.senderIdList.map(row => (
-                      <tr>
+                      <tr key={row.id}>
                         <td>{row.id}</td>
                         <td>{row.senderId}</td>
                         <td>{row.senderId}</td>
