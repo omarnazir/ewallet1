@@ -12,14 +12,17 @@ import Senders from './components/Senders/Senders';
 import ReservedNumbers from './components/Settings/ReservedNumbers';
 import RestrictedWords from './components/Settings/RestrictedWords';
 import SmsTemplates from './components/SmsTemplates/SmsTemplates';
-import Tariffs from './components/Tarriffs/Tariffs';
+import Tariffs from './components/Tarriffs/Tarriff/Tariffs';
 import Transactions from './components/Transactions/Transactions';
 import UsersManagement from './components/Users/UsersManagement';
 import MobileOperator from './components/Settings/MobileOperator';
 import SendersRequested from './components/Senders/SendersRequested';
 import AddSenderId from './components/Senders/AddSenderId';
-import AddTarriff from './components/Tarriffs/AddTarriff';
+import AddTarriff from './components/Tarriffs/Tarriff/AddTarriff';
 import AddUser from './components/Users/AddUser';
+import AddSmsTemplate from './components/SmsTemplates/AddSmsTemplate';
+import AddTariffBand from './components/Tarriffs/TarriffBand/AddTariffBand';
+import TariffBand from './components/Tarriffs/TarriffBand/TariffBand';
 
 const waitFor = Tag => props => <Tag {...props}/>;
 
@@ -75,11 +78,15 @@ const Routes = ({location}) => {
                                     <Route path="/senders" component={waitFor(Senders)} />
 
 
+                                    <Route path="/add-sms-templates" component={waitFor(AddSmsTemplate)}/>
                                     <Route path="/senders-requested" component={waitFor(SendersRequested)}/>
                                     <Route path="/sms-templates" component={waitFor(SmsTemplates)}/>
 
-                                    <Route path="/add-tarriff" component={waitFor(AddTarriff)}/>
+                                    <Route path="/add-tariff" component={waitFor(AddTarriff)}/>
                                     <Route path="/manage-tariffs" component={waitFor(Tariffs)}/>
+                                    <Route path="/add-tariff-band" component={waitFor(AddTariffBand)}/>
+                                    <Route path="/manage-tariff-bands" component={waitFor(TariffBand)}/>
+                                    
 
                                     <Route path="/add-new-user" component={waitFor(AddUser)}/>
                                     <Route path="/manage-users" component={waitFor(UsersManagement)}/>

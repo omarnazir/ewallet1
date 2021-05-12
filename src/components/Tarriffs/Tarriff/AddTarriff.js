@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ContentWrapper from "../Layout/ContentWrapper";
-import Datatable from "../Common/Datatable";
+import ContentWrapper from "../../Layout/ContentWrapper";
+import Datatable from "../../Common/Datatable";
 import {
     Container,
     Card,
@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-import axios from "../../services/axios";
+import axios from "../../../services/axios";
 
 
 class AddTarriff extends Component {

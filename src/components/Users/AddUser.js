@@ -63,7 +63,7 @@ class AddUser extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Add User
+                        Create Admin User
                      <small>Adding a new user.</small>
                     </div>
                     <div className="flex-row">
@@ -77,8 +77,28 @@ class AddUser extends Component {
                                 <CardBody>
                                     <form onSubmit={this.handleSubmit}>
                                         <FormGroup>
-                                            <label>Sender Id :</label>
+                                            <label>Full name :</label>
                                             <input className="form-control" name="name" onChange={this.handleChange} required></input>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <label>Username :</label>
+                                            <input className="form-control" name="username" onChange={this.handleChange} required></input>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <label>Email :</label>
+                                            <input className="form-control" type="email" name="email" onChange={this.handleChange} required></input>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <label>Phone number:</label>
+                                            <input className="form-control" name="phonenumber" type="number" onChange={this.handleChange} required></input>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <label>Password :</label>
+                                            <input className="form-control" name="password" type="text" onChange={this.handleChange} required></input>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <label>Confirm Password :</label>
+                                            <input className="form-control" name="confirmPassword" type="text" onChange={this.handleChange} required></input>
                                         </FormGroup>
                                         <button className="btn btn-sm btn-success mr-3" type="submit">
                                             Save

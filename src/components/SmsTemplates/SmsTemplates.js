@@ -72,6 +72,10 @@ class SmsTemplates extends Component {
     });
   };
 
+  AddSmsTemplates = () => {
+    return this.props.history.push('/add-sms-templates')
+  }
+
   render() {
     return (
       <ContentWrapper>
@@ -82,7 +86,7 @@ class SmsTemplates extends Component {
             <small>Showing all sms templates </small>
           </div>
           <div className="flex-row">
-            <Button outline color="danger" className="btn-pill-right">Add New SMS Template</Button>
+            <Button onClick={this.AddSmsTemplates} outline color="danger" className="btn-pill-right">Add New SMS Template</Button>
           </div>
         </div>
         <Container fluid>
@@ -181,7 +185,7 @@ class SmsTemplates extends Component {
                             <span className="badge badge-success">{row.status}</span>
                           }
                           {
-                            row.status=="Pending" && 
+                            row.status == "Pending" &&
                             <span className="badge badge-warning">{row.status}</span>
                           }
                           {
@@ -197,7 +201,7 @@ class SmsTemplates extends Component {
                           </td>
                         }
                         {
-                          row.status !="Pending" && 
+                          row.status != "Pending" &&
                           <td>
                             N/A
                           </td>

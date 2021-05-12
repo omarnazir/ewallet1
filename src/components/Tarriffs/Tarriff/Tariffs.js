@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import ContentWrapper from "../Layout/ContentWrapper";
-import Datatable from "../Common/Datatable";
+import ContentWrapper from "../../Layout/ContentWrapper";
+import Datatable from "../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
-import axios from "../../services/axios";
+import axios from "../../../services/axios";
 
 
 class Tariffs extends Component {
@@ -56,7 +56,11 @@ class Tariffs extends Component {
     });
   };
   AddTarriff = () => {
-    return this.props.history.push('/add-tarriff')
+    return this.props.history.push('/add-tariff')
+  }
+
+  ViewTarriffBand = () => {
+    return this.props.history.push('/manage-tariff-bands')
   }
 
   render() {
@@ -108,7 +112,7 @@ class Tariffs extends Component {
                          
                             <span className="btn badge-success">Edit</span>
                             <span className="btn badge-danger mr-1 ml-1">Delete</span>
-                            <span className="btn badge-success">Set Tarriff Band</span>
+                            <button className="btn badge-success" onClick={this.ViewTarriffBand}>View Bandwidth</button>
                         
 
                         </td>
