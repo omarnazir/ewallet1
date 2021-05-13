@@ -36,6 +36,8 @@ import PrePaidInvoiceList from './components/UsersPages/InvoicesPrePaid/PrePaidI
 import AddUserRequestedSms from './components/UsersPages/Sms/RequestedSms/AddUserRequestedSms';
 import UserRequestedSmsList from './components/UsersPages/Sms/RequestedSms/UserRequestedSmsList';
 import AddNormalUser from './components/UsersPages/User/AddUser';
+import SendSmsCompose from './components/UsersPages/Sms/SendSms/SendSms';
+
 
 const waitFor = Tag => props => <Tag {...props} />;
 
@@ -113,6 +115,8 @@ const Routes = ({ location }) => {
                                 <Route path="/user/senderId" component={waitFor(UserSenderIds)}/>
                                 <Route path="/user/add-senderId" component={waitFor(AddUserSenderId)}/>
 
+
+                                <Route path="/user/send-sms" component={waitFor(SendSmsCompose)}/>
                                 <Route path="/user/outbox" component={waitFor(UserOutbox)}/>
                                 <Route path="/user/scheduled-sms" component={waitFor(UserScheduledSms)}/>
                                 <Route path="/user/contact-list" component={waitFor(UserContactList)}/>
@@ -131,14 +135,8 @@ const Routes = ({ location }) => {
                                 <Route path="/user/add-sms-request" component={waitFor(AddUserRequestedSms)}/>
 
 
-                                {/*
-                               
-                              
-                             
-                               
 
-                               
-                                
+                                {/*
                                 <Route path="/summary-reports" component={waitFor(SmsSummaryReports)}/>
                                 <Route path="/sender-reports" component={waitFor(SenderReports)}/>
                                 */}

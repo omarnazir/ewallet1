@@ -106,7 +106,7 @@ const Menu = [
         {
             name: 'Send SMS',
             icon: 'icon-bubble',
-            path: '/user/transactions'
+            path: '/user/send-sms'
         },
         {
             name: 'Outbox',

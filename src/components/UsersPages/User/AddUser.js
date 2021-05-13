@@ -63,6 +63,10 @@ class AddNormalUser extends Component {
                                             <label>Confirm Password :</label>
                                             <input className="form-control" name="confirmPassword" type="text" onChange={this.handleChange} required></input>
                                         </FormGroup>
+                                        <FormGroup>
+                                            <label>User monthly limit:</label>
+                                            <input className="form-control" name="limit" type="number" onChange={this.handleChange} required></input>
+                                        </FormGroup>
                                         <button className="btn btn-sm btn-success mr-3" type="submit">
                                             Save
                                         </button>
