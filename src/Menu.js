@@ -1,35 +1,3 @@
-/*
-const Menu = [
-    {
-        heading: 'Main Navigation',
-        translate: 'sidebar.heading.HEADER'
-    },
-    {
-        name: 'Dashboard',
-        path: '/dashboard',
-        icon: 'icon-speedometer',
-        translate: 'sidebar.nav.DASHBOARD'
-    },
-    {
-        name: 'Settings',
-        icon: 'icon-grid',
-        translate: 'sidebar.nav.setting.SETTINGS',
-        submenu: [
-            {
-                name: 'Operators',
-                path: '/operators-list',
-                translate: 'sidebar.nav.setting.OPERATORS'
-            }
-        ]
-    },
-    {
-        name: 'SMS',
-        path: '/sms',
-        icon: 'icon-grid',
-        translate: 'sidebar.nav.SMS'
-    }
-];
-*/
 const Menu = [
     {
         heading: 'Main Navigation',
@@ -101,6 +69,84 @@ const Menu = [
     
     ]
     },
+    
+    /**User pages on Refactor DELETE the routes */
+    {
+        name: 'User Pages',
+        icon: 'fa fa-arrow-down',
+        submenu: [ 
+        {
+            name: 'Dashboard',
+            path: '/user/dashboard',
+            icon: 'icon-speedometer',
+            translate: 'sidebar.nav.DASHBOARD'
+        },
+        {
+            name: 'Sender IDs',
+            icon: 'icon-people',
+            path: '/user/senderId'
+        },
+        {
+            name: 'Request SMS',
+            icon: 'fa fa-envelope',
+            path: '/user/add-sms-request'
+        },
+        /** Show for pre paid customers only */
+        {
+            name: 'Purchase SMS',
+            icon: 'fa fa-money-bill',
+            path: '/user/sms-purchase'
+        },
+        {
+            name: 'Invoices',
+            icon: 'fa fa-file',
+            path: '/user/prepaid-invoices'
+        },
+        /**End of show for pre paid customers only */
+        {
+            name: 'Send SMS',
+            icon: 'icon-bubble',
+            path: '/user/transactions'
+        },
+        {
+            name: 'Outbox',
+            icon: 'icon-layers',
+            path: '/user/outbox'
+        },
+        {
+            name: 'Scheduled SMS',
+            icon: 'icon-note',
+            path: '/user/scheduled-sms'
+        },
+        {
+            name: 'Contact lists',
+            icon: 'fa fa-users',
+            path: '/user/contact-list'
+        },
+        {
+            name: 'Manage Users',
+            icon: 'fa fa-users',
+            path: '/user/manage-user'
+        },
+        {
+            name: 'SMS Reports',
+            icon: 'fa fa-file-pdf',
+            submenu: [{
+                name: 'Summary Reports',
+                icon:'fa fa-file-pdf',
+                path: '/user/summary-reports'
+            },
+            {
+                name: 'Sender Reports',
+                icon:'fa fa-file-pdf',
+                path: '/user/sender-reports'
+            },
+        
+        ]
+        },
+    
+    ] 
+    }
    
 ];
 
