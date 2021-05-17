@@ -46,6 +46,15 @@ class Tariffs extends Component {
       })
   }
 
+  deleteTarriff(id,e){
+    axios.delete("/tariff/${id}").then(res=>{
+      const response = res.data;
+      console.log(response);
+      const tarrifs = this.state.tarrifsList.filter(item => item.id !== id);
+      this.setState({ tarrifsList: tarrifs })
+    })
+  }
+
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
     const inputSearchClass = "datatable_input_col_search";
@@ -91,14 +100,6 @@ class Tariffs extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* <tr className="gradeA">
-                      <td>Gecko</td>
-                      <td>Netscape 7.2</td>
-                      <td>Win 95+ / Mac OS 8.6-9.2</td>
-                      <td>1.7</td>
-                      <td>A</td>
-                    </tr> */}
-
                     {this.state.tarrifsList.map(row => (
                       <tr key={row.id}>
                         <td>{row.id}</td>
@@ -111,7 +112,7 @@ class Tariffs extends Component {
                         <td>
                          
                             <span className="btn badge-success">Edit</span>
-                            <span className="btn badge-danger mr-1 ml-1">Delete</span>
+                            <span className="btn badge-danger mr-1 ml-1" onClick={(e) => this.deleteTarriff(row.id, e)}>Delete</span>
                             <button className="btn badge-success" onClick={this.ViewTarriffBand}>View Bandwidth</button>
                         
 
