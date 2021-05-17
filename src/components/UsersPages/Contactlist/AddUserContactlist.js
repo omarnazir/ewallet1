@@ -15,14 +15,39 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-import axios from "../../../services/axios";
+import axios from "../../../services/axios"
 
 
 class AddUserContactList extends Component {
-   
-    ViewAllContacts=()=>{
+
+
+    state = {
+        file: '',
+    };
+
+
+    ViewAllContacts = () => {
         return this.props.history.push('/user/contact-list')
-      }
+    }
+
+
+    handleSubmit = event => {
+        event.preventDefault()
+        const data = new FormData()
+        data.append('file', this.state.file)
+
+        axios.post("/sms/upload-contacts", data, { headers: { "Content-Type": "multipart/form-data" } }).then(res => {
+            console.log(res);
+            console.log(res.data);
+            this.ViewAllContacts();
+        })
+    }
+
+    handleChange = event => {
+        this.setState({ file: event.target.files[0] });
+    }
+
+
     render() {
         return (
             <ContentWrapper>
@@ -40,17 +65,17 @@ class AddUserContactList extends Component {
                         <div className="col-md-6 offset-md-3">
                             <Card className="card-default">
                                 <CardBody>
-                                    <form>
+                                    <form onSubmit={this.handleSubmit}>
                                         <FormGroup>
                                             <label>Contact list Name :</label>
                                             <input className="form-control" name="name" required></input>
                                         </FormGroup>
-                                       
+
                                         <FormGroup>
                                             <label>Select File (Excel xls or xslx) :</label>
-                                            <input className="form-control" name="name" type="file" required></input>
+                                            <input className="form-control" name="file" type="file" required onChange={this.handleChange}></input>
                                         </FormGroup>
-                                     
+
                                         <button className="btn btn-sm btn-success mr-3" type="submit">
                                             Save
                                         </button>

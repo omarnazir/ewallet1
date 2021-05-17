@@ -14,13 +14,27 @@ import {
     FormGroup
 } from "reactstrap";
 import $ from "jquery";
-
+import axios from '../../../../services/axios'
 
 
 class SendSmsCompose extends Component {
     ViewDashboard = () => {
         return this.props.history.push('/user/dashboard')
     }
+
+    state = {
+        smsTemplates: []
+    }
+    componentDidMount() {
+        axios.get("/sms-request")
+            .then(res => {
+                const response = res.data;
+                this.setState({ smsTemplates: response })
+                console.log(response);
+            })
+    }
+
+
     render() {
         return (
             <ContentWrapper>
@@ -29,7 +43,7 @@ class SendSmsCompose extends Component {
                         Sending sms
                      <small>Sending a sms.</small>
                     </div>
-                    
+
                 </div>
                 <Container fluid>
                     <div className="row">
@@ -58,8 +72,11 @@ class SendSmsCompose extends Component {
                                             <label htmlFor="exampleFormControlSelect1">Sms Template : </label>
                                             <select className="form-control" id="exampleFormControlSelect1">
                                                 <option>Select a template</option>
-                                                <option>TEST A</option>
-                                                <option>DEBTORS</option>
+                                                {this.state.smsTemplates.map(row => (
+                                                    <option key={row.id}>
+                                                       {row.messageTemplate}
+                                                    </option>
+                                                ))}
 
                                             </select>
                                         </div>

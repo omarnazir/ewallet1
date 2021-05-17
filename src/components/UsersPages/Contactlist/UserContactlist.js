@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import Datetime from "react-datetime";
 import $ from "jquery";
-
+import axios from '../../../services/axios'
 import Datatable from "../../Common/Datatable";
 
 class UserContactList extends Component {
@@ -45,8 +45,18 @@ class UserContactList extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    }, contactList: []
   };
+
+  componentDidMount() {
+    axios.get("/sms/contact-files")
+      .then(res => {
+        const response = res.data;
+        this.setState({ contactList: response })
+        console.log(response);
+      })
+  }
+
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -61,6 +71,7 @@ class UserContactList extends Component {
   ViewAddContactList = () => {
     return this.props.history.push("/user/add-contact-list");
   };
+
   render() {
     return (
       <ContentWrapper>
@@ -93,7 +104,21 @@ class UserContactList extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeA">
+
+                  {this.state.contactList.map(row => (
+                      <tr key={row.id}>
+                        <td>1</td>
+                        <td>{row.name}</td>
+                        <td>0</td>
+                        <td>{row.url}</td>
+                        <td><span className="badge badge-success">Active</span></td>
+                        <td>
+                        <span className="btn badge-success mr-1">Edit</span>
+                      <span className="btn badge-danger">Delete</span>
+                        </td>
+                      </tr>
+                    ))}
+                    {/* <tr className="gradeA">
                       <td>1</td>
                       <td>Customer contact</td>
                       <td>100</td>
@@ -105,7 +130,7 @@ class UserContactList extends Component {
                       <span className="btn badge-success mr-1">Edit</span>
                       <span className="btn badge-danger">Delete</span>
                       </td>
-                    </tr>
+                    </tr> */}
                     
                   </tbody>
                 </table>

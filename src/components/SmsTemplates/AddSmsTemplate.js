@@ -19,39 +19,43 @@ import axios from "../../services/axios";
 
 
 class AddSmsTemplate extends Component {
+
     state = {
-        name: "",
+        messageTemplate: '',
+        messageTemplateType: ''
+
     };
-
-
-    handleSubmit = event => {
-        console.log("am here")
+    handleSubmit = (event) => {
         event.preventDefault();
-        //change to tarriff
-        const tarriff = {
-            "tariffName": this.state.name.toUpperCase(),
-            "fromSms": null,
-            "toSms": null,
-            "expireDurationDays": null,
-            "createdAt": "2020-12-02T17:05:19.000+00:00",
-            "createdBy": 0,
-            "isDefault": 1
+        console.log(event.target.messageTemplateType.value)
+        this.setState({messageTemplateType:event.target.messageTemplate.value})
+        const smsTemplate = {
+            "senderId": "",
+            "messageTemplate": this.state.messageTemplate,
+            "customerFk": 6,
+            "requestedBy": 6,
+            "approvedBy": null,
+            "status": "Pending",
+            "dateCreated": "2020-12-01T10:19:01.000+00:00",
+            "recipientTab": event.target.messageTemplateType.value,
         }
-        axios.post("/tariff", tarriff).then(res => {
-            console.log(res);
-            console.log(res.data);
-            this.ViewTarrifs();
-        })
-    }
+        console.log(smsTemplate)
 
-    ViewAllTemplates = () => {
-        return this.props.history.push('/sms-templates')
+        
+      
+      axios.post("/sms-request/create", smsTemplate).then(res => {
+          console.log(res);
+          console.log(res.data);
+          this.ViewAllSmsTemplates();
+      }) 
     }
 
     handleChange = event => {
-        this.setState({ name: event.target.value });
+        this.setState({ [event.target.name]: event.target.value });
     }
-
+    ViewAllSmsTemplates = () => {
+        return this.props.history.push('/sms-templates')
+    }
     render() {
         return (
             <ContentWrapper>
@@ -61,7 +65,7 @@ class AddSmsTemplate extends Component {
                      <small>Adding a new sms template</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewAllTemplates} outline color="danger" className="btn-pill-right mr-2">View All Sms Templates</Button>
+                        <Button onClick={this.ViewAllSmsTemplates} outline color="danger" className="btn-pill-right mr-2">View All Sms Templates</Button>
                     </div>
                 </div>
                 <Container fluid>
@@ -72,9 +76,9 @@ class AddSmsTemplate extends Component {
                                     <form onSubmit={this.handleSubmit}>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Message Type : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1">
-                                                <option>Static message</option>
-                                                <option>Dynamic message</option>
+                                            <select className="form-control" id="exampleFormControlSelect1" name="messageTemplateType" onChange={this.handleChange} >
+                                                <option value="static">Static message</option>
+                                                <option value="dynamic">Dynamic message</option>
                                             </select>
                                         </div>
                                         <div className="form-group">
@@ -92,13 +96,13 @@ class AddSmsTemplate extends Component {
                                         </div>
                                         <div className="form-group">
                                             <label>Message : </label>
-                                            <textarea rows="5" className="form-control" type="text" />
-                                            <span  className="mt-2">0 characters</span>
+                                            <textarea rows="5" className="form-control" type="text" name="messageTemplate" onChange={this.handleChange} required />
+                                            <span className="mt-2">0 characters</span>
                                         </div>
                                         <button className="btn btn-sm btn-success mr-3" type="submit">
                                             Save
                                         </button>
-                                        <button onClick={this.ViewTarrifs} className="btn btn-sm btn-danger">
+                                        <button onClick={this.ViewAllSmsTemplates} className="btn btn-sm btn-danger">
                                             Cancel
                                         </button>
                                     </form>

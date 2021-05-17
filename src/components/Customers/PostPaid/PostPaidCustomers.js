@@ -4,7 +4,7 @@ import Datatable from "../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import { Link } from 'react-router-dom';
 import $ from "jquery";
-
+import axios from '../../../services/axios'
 
 
 class PostPaidCustomers extends Component {
@@ -33,8 +33,19 @@ class PostPaidCustomers extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    }, customersPostPaidList: []
   };
+
+
+  componentDidMount() {
+    axios.get("/customers?search=(paymentType:'Post-Paid')")
+      .then(res => {
+        const response = res.data;
+        this.setState({ customersPostPaidList: response })
+        console.log(response);
+      })
+  }
+
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -55,7 +66,7 @@ class PostPaidCustomers extends Component {
             <small>Showing all post paid customers.</small>
           </div>
           <div className="flex-row">
-            {/* <Button outline color="danger" className="btn-pill-right">Add Post Paid Customer</Button> */}
+            <Button outline color="danger" className="btn-pill-right">Add Post Paid Customer</Button>
             {/* <Link outline color="danger" className="btn-pill-right">Add Post Paid Customer</Link> */}
             {/* <Link to="dashboard" className="btn btn-pill-right">
             <span outline color="danger" className="btn-pill-right">Add Post Paid Customer</span>
@@ -87,15 +98,29 @@ class PostPaidCustomers extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* <tr className="gradeA">
-                      <td>Gecko</td>
-                      <td>Netscape 7.2</td>
-                      <td>Win 95+ / Mac OS 8.6-9.2</td>
-                      <td>1.7</td>
-                      <td>A</td>
-                    </tr> */}
+                   
+                    {this.state.customersPostPaidList.map(row => (
+                      <tr key={row.id}>
+                        <td>{row.id}</td>
+                        <td>{row.fullname}</td>
+                        <td>{row.email}</td>
+                        <td>{row.phonenumber}</td>
+                        <td>{row.location}</td>
+                        <td>{row.vaccount}</td>
+                        <td>{row.monthlyLimit}</td>
+                        {/* <td>{row.isActive}</td> */}
+                        <td>{row.isActive == 1 &&
+                          <span className="badge badge-success">Active</span>
+                        }
+                          {row.isActive != 1 &&
+                            <span className="badge badge-danger">Disabled</span>
+                          }
+                        </td>
 
-
+                        <td>{row.startDate}</td>
+                        <td></td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </Datatable>
