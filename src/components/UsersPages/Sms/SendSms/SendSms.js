@@ -23,13 +23,21 @@ class SendSmsCompose extends Component {
     }
 
     state = {
-        smsTemplates: []
+        smsTemplates: [],
+        sendersList: []
     }
     componentDidMount() {
         axios.get("/sms-request")
             .then(res => {
                 const response = res.data;
                 this.setState({ smsTemplates: response })
+                console.log(response);
+            })
+
+        axios.get("/sender-ids")
+            .then(res => {
+                const response = res.data;
+                this.setState({ sendersList: response })
                 console.log(response);
             })
     }
@@ -59,8 +67,11 @@ class SendSmsCompose extends Component {
                                             <label htmlFor="exampleFormControlSelect1">Sender Id : </label>
                                             <select className="form-control" id="exampleFormControlSelect1">
                                                 <option>Select a sender id</option>
-                                                <option>MPESA</option>
-                                                <option>VODACOM</option>
+                                                {this.state.sendersList.map(row => (
+                                                    <option key={row.id} value={row.id} >
+                                                        {row.senderId}
+                                                    </option>
+                                                ))}
                                             </select>
                                         </div>
                                         <FormGroup>
@@ -73,8 +84,8 @@ class SendSmsCompose extends Component {
                                             <select className="form-control" id="exampleFormControlSelect1">
                                                 <option>Select a template</option>
                                                 {this.state.smsTemplates.map(row => (
-                                                    <option key={row.id}>
-                                                       {row.messageTemplate}
+                                                    <option key={row.id} value={row.id}>
+                                                        {row.messageTemplate}
                                                     </option>
                                                 ))}
 

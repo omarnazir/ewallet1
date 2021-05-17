@@ -22,13 +22,26 @@ class AddSmsTemplate extends Component {
 
     state = {
         messageTemplate: '',
-        messageTemplateType: ''
-
+        messageTemplateType: '',
+        showDynamicSmsField:false
     };
+
+    handleOnSelectChange=event=>{
+
+        if([event.target.value]=="dynamic"){
+            this.setState({showDynamicSmsField:true})
+            this.setState({messageTemplateType:"dynamic"})
+        }else {
+            this.setState({showDynamicSmsField:false})
+            this.setState({messageTemplateType:"static"})
+        }
+        this.setState({ [event.target.name]: event.target.value });
+    }
+
+
     handleSubmit = (event) => {
         event.preventDefault();
-        console.log(event.target.messageTemplateType.value)
-        this.setState({messageTemplateType:event.target.messageTemplate.value})
+       
         const smsTemplate = {
             "senderId": "",
             "messageTemplate": this.state.messageTemplate,
@@ -37,12 +50,10 @@ class AddSmsTemplate extends Component {
             "approvedBy": null,
             "status": "Pending",
             "dateCreated": "2020-12-01T10:19:01.000+00:00",
-            "recipientTab": event.target.messageTemplateType.value,
+            "recipientTab": this.state.messageTemplateType,
         }
         console.log(smsTemplate)
 
-        
-      
       axios.post("/sms-request/create", smsTemplate).then(res => {
           console.log(res);
           console.log(res.data);
@@ -76,11 +87,12 @@ class AddSmsTemplate extends Component {
                                     <form onSubmit={this.handleSubmit}>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Message Type : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1" name="messageTemplateType" onChange={this.handleChange} >
+                                            <select className="form-control" id="exampleFormControlSelect1" name="messageTemplateType" onChange={this.handleOnSelectChange} >
                                                 <option value="static">Static message</option>
                                                 <option value="dynamic">Dynamic message</option>
                                             </select>
                                         </div>
+                                        {this.state.showDynamicSmsField && 
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Dynamic sms field: </label>
                                             <select className="form-control" id="exampleFormControlSelect1">
@@ -93,7 +105,7 @@ class AddSmsTemplate extends Component {
                                                 <option>Column F</option>
                                                 <option>Column G</option>
                                             </select>
-                                        </div>
+                                        </div> }
                                         <div className="form-group">
                                             <label>Message : </label>
                                             <textarea rows="5" className="form-control" type="text" name="messageTemplate" onChange={this.handleChange} required />
