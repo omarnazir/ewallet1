@@ -101,6 +101,27 @@ class SendSmsCompose extends Component {
         this.setState({ selectedSenderId: sender.id })
     }
 
+    onChangeSendingOptions = event => {
+        if ([event.target.value] == "Now") {
+            this.setState({ sendLater: false })
+        } else {
+            this.setState({ sendLater: true })
+        }
+    }
+
+    handleSmsTemplateChange = event => {
+        const templateId = event.target.value
+        const template = this.state.smsTemplateList.find(item => item.id == templateId);
+        this.setState({ selectedMessageTemplate: template.messageTemplate })
+        this.setState({ selectedMessageTemplateId: templateId })
+    }
+
+    handleSenderIdChange = event => {
+        const senderId = event.target.value;
+        const sender = this.state.sendersList.find(item => item.id == senderId);
+        this.setState({ selectedSenderId: sender.id })
+    }
+
 
     render() {
         return (
