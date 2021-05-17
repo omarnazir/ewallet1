@@ -12,8 +12,14 @@ import {
     Input,
     Button,
     FormGroup,
+    TabContent,
+    TabPane,
+    Nav,
+    NavItem,
+    NavLink,
 
 } from "reactstrap";
+import classnames from 'classnames';
 import $ from "jquery";
 import axios from '../../../../services/axios'
 
@@ -26,10 +32,29 @@ class SendSmsCompose extends Component {
     state = {
         smsTemplateList: [],
         sendersList: [],
+        contactLists: [],
         sendLater: false,
         selectedMessageTemplate: '',
         selectedMessageTemplateId: 0,
         selectedSenderId: 0,
+        activeTab: 0,
+        activeTab: '1',
+    }
+
+    toggleTab = tab => {
+        if (this.state.activeTab !== tab) {
+            this.setState({
+                activeTab: tab
+            });
+        }
+    }
+
+
+    handleClickActiveTab = event => {
+        const newActiveTab = event.target.tab;
+        this.setState({
+            activeTab: newActiveTab,
+        })
     }
 
 
@@ -45,6 +70,12 @@ class SendSmsCompose extends Component {
             .then(res => {
                 const response = res.data;
                 this.setState({ sendersList: response })
+                console.log(response);
+            })
+        axios.get("/sms/contact-files")
+            .then(res => {
+                const response = res.data;
+                this.setState({ contactLists: response })
                 console.log(response);
             })
     }
@@ -102,69 +133,71 @@ class SendSmsCompose extends Component {
                                                 ))}
                                             </select>
                                         </div>
+                                        <div role="tabpanel">
+                                            {/* Nav tabs */}
+                                            <Nav tabs>
+                                                <NavItem>
+                                                    <NavLink
+                                                        className={classnames({ active: this.state.activeTab === '1' })}
+                                                        onClick={() => { this.toggleTab('1'); }}>
+                                                        <span className="fa fa-file mr-1"></span>
+                                             Upload Contacts
+                                            </NavLink>
+                                                </NavItem>
+                                                <NavItem>
+                                                    <NavLink
+                                                        className={classnames({ active: this.state.activeTab === '2' })}
+                                                        onClick={() => { this.toggleTab('2'); }}>
+                                                        <span className="fa fa-edit mr-1"></span>
+                                              Enter Numbers
+                                            </NavLink>
+                                                </NavItem>
+                                                <NavItem>
+                                                    <NavLink
+                                                        className={classnames({ active: this.state.activeTab === '3' })}
+                                                        onClick={() => { this.toggleTab('3'); }}>
+                                                        <span className="fa fa-book"></span>
+                                                Use Contact List
+                                            </NavLink>
+                                                </NavItem>
+                                            </Nav>
+                                            <TabContent activeTab={this.state.activeTab}>
+                                                <TabPane tabId="1">
+                                                    <div className="form-group px-md-2 px-1">
+                                                        <label for="csvupload"><strong>Accepted files (CSV file or Excel document)</strong></label>
+                                                        <input
+                                                            accept="application/vnd.ms-excel, text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                            type="file"
+                                                            className="form-control-file"
+                                                            name="csvupload"
+                                                            id="csvupload" />
+                                                        <p className="mt-2"><em>Note: These contacts will not be saved</em></p>
+                                                        <p><a href="sample2.csv"> <i className="fa fa-download"></i> Download Sample</a></p>
+                                                    </div>
+
+                                                </TabPane>
+                                                <TabPane tabId="2">  <textarea name="phone_number" type="number" className="form-control rounded-0" rows="5"></textarea>
+                                                    <label className="mt-2">Please separate phone numbers with comma (,)</label></TabPane>
+                                                <TabPane tabId="3">
+                                                <label htmlFor="exampleFormControlSelect1">Sender Id : </label>
+                                            <select className="form-control" id="exampleFormControlSelect1">
+                                                <option>Select a phonebook</option>
+                                                {this.state.contactLists.map(row => (
+                                                    <option key={row.name} value={row.name} >
+                                                        {row.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                                </TabPane>
+
+                                            </TabContent>
+                                        </div>
                                         {/* <FormGroup>
                                             <label>Recipients :</label>
                                             <input className="form-control" type="email" name="email" onChange={this.handleChange} required></input>
                                         </FormGroup> */}
-                                        <div className="form-group row ">
-                                            <label for="recipients" className="col-sm-2 col-form-label">
-                                                Recipients:
-                                         </label>
-                                            <div className="col-sm-12">
-                                                <ul className="nav nav-tabs" role="tablist">
-                                                    <li className="nav-item">
-                                                        <a className="nav-link " data-toggle="tab" href="#tab-first" role="tab">
-                                                            <span className="fa fa-file mr-1"></span> Upload Contacts
-                                            </a>
-                                                    </li>
-                                                    <li className="nav-item">
-                                                        <a className="nav-link" data-toggle="tab" href="#tab-second" role="tab">
-                                                            <span className="fa fa-edit mr-1"></span> Enter Numbers
-                                            </a>
-                                                    </li>
-                                                    <li className="nav-item">
-                                                        <a className="nav-link active" data-toggle="tab" href="#tab-third" role="tab">
-                                                            <span className="fa fa-book"></span> Use Contact List
-                                            </a>
-                                                    </li>
-                                                </ul>
-                                                <div className="tab-content">
-                                                    <div className="tab-pane fade show active" id="tab-first" role="tabpanel">
-                                                        <div className="form-group px-md-2 px-1">
-                                                            <label for="csvupload"><strong>Accepted files (CSV file or Excel document)</strong></label>
-                                                            <input
-                                                                accept="application/vnd.ms-excel, text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                                                                type="file"
-                                                                className="form-control-file"
-                                                                name="csvupload"
-                                                                id="csvupload" />
-                                                            <p className="mt-2"><em>Note: These contacts will not be saved</em></p>
-                                                            <p><a href="sample2.csv"> <i className="fa fa-download"></i> Download Sample</a></p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="tab-pane fade" id="tab-second" role="tabpanel">
-                                                        <textarea name="phone_number" className="form-control rounded-0" rows="5"></textarea>
-                                                        <label className="mt-2">Please separate phone numbers with comma (,)</label>
-                                                    </div>
-                                                    <div className="tab-pane fade" id="tab-third" role="tabpanel">
-                                                        <div className="form-group">
-                                                            <label htmlFor="exampleFormControlSelect11">Contact Lists : </label>
-                                                            <select className="form-control" onChange={this.handleSmsTemplateChange}>
-                                                                <option>Select a template</option>
-                                                                {this.state.smsTemplateList.map(row => (
-                                                                    <option key={row.id} value={row.id}>
-                                                                        {row.messageTemplate}
-                                                                    </option>
-                                                                ))}
 
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                                                            <div className="form-group">
+                                        <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect11">Sms Template : </label>
                                             <select className="form-control" id="exampleFormControlSelect11" onChange={this.handleSmsTemplateChange}>
                                                 <option>Select a template</option>
