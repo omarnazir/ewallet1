@@ -65,7 +65,7 @@ class SendSmsCompose extends Component {
                 // console.log(response);
             })
 
-        axios.get("/sender-ids")
+        axios.get("/sender-ids/my-sender-ids")
             .then(res => {
                 const response = res.data;
                 this.setState({ sendersList: response })
