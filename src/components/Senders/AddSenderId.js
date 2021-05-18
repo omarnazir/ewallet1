@@ -53,6 +53,11 @@ class AddSenderId extends Component {
       handleChange = event =>{
         this.setState({ name: event.target.value});
       }
+
+      AddActionButtonStyle={
+        color:'white',
+        background:"#003366"
+      }
     
     render() {
         return (
@@ -63,8 +68,7 @@ class AddSenderId extends Component {
                      <small>Adding a new sender id.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewAllSenderIds} outline color="danger" className="btn-pill-right mr-2">View All SenderId's</Button>
-                        <Button outline color="danger" className="btn-pill-right">Add New SenderId</Button>
+                        <Button onClick={this.ViewAllSenderIds} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All SenderId's</Button>
                     </div>
                 </div>
                 <Container fluid>

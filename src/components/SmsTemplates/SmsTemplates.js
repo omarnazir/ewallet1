@@ -62,6 +62,11 @@ class SmsTemplates extends Component {
       })
   }
 
+  AddActionButtonStyle={
+    color:'white',
+    background:"#003366"
+  }
+
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
     const inputSearchClass = "datatable_input_col_search";
@@ -90,7 +95,9 @@ class SmsTemplates extends Component {
             <small>Showing all sms templates </small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.AddSmsTemplates} outline color="danger" className="btn-pill-right">Add New SMS Template</Button>
+            <Button onClick={this.AddSmsTemplates} style={this.AddActionButtonStyle} className="btn-pill-right">
+              <i className="fa fa-plus mr-2"></i>
+              Add New SMS Template</Button>
           </div>
         </div>
         <Container fluid>

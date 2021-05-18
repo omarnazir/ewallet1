@@ -61,6 +61,10 @@ class UsersManagement extends Component {
     return this.props.history.push('/add-new-user')
 }
 
+AddActionButtonStyle={
+  color:'white',
+  background:"#003366"
+}
   render() {
     return (
       <ContentWrapper>
@@ -70,7 +74,9 @@ class UsersManagement extends Component {
             <small>Showing all post paid customers.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.AddNewUser} outline color="danger" className="btn-pill-right">Add User</Button>
+            <Button onClick={this.AddNewUser} style={this.AddActionButtonStyle} className="btn-pill-right">
+              <i className="fa fa-plus mr-2"></i>
+              Add User</Button>
           </div>
         </div>
         <Container fluid>
@@ -107,9 +113,9 @@ class UsersManagement extends Component {
                           }
                         </td>
                         <td>{row.lastLogin}</td>
-                        <td> <span className="btn badge-success">Edit</span> <br />
-                          <span className="btn badge-danger mt-1">Delete</span> <br/>
-                          <span className="btn badge-danger mt-1">Disable</span>
+                        <td> <span className="btn badge-success"> <i className="icon-pencil mr-2"></i>Edit</span> <br />
+                          <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/>
+                          <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span>
                         </td>
                       </tr>
                     ))}

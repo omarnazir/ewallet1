@@ -78,6 +78,11 @@ class AddSmsTemplate extends Component {
     ViewAllSmsTemplates = () => {
         return this.props.history.push('/sms-templates')
     }
+
+    AddActionButtonStyle={
+        color:'white',
+        background:"#003366"
+      }
     render() {
         return (
             <ContentWrapper>
@@ -87,7 +92,7 @@ class AddSmsTemplate extends Component {
                      <small>Adding a new sms template</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewAllSmsTemplates} outline color="danger" className="btn-pill-right mr-2">View All Sms Templates</Button>
+                        <Button onClick={this.ViewAllSmsTemplates} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Sms Templates</Button>
                     </div>
                 </div>
                 <Container fluid>

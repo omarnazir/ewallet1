@@ -77,6 +77,10 @@ class Senders extends Component {
   formatDate=(date)=>{
     return Moment(date).format('DD-MM-YYYY')
   }
+  AddActionButtonStyle={
+    color:'white',
+    background:"#003366"
+  }
 
   render() {
     return (
@@ -87,8 +91,10 @@ class Senders extends Component {
             <small>Showing all customers sender id's.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.ViewRequestedSenders} outline color="danger" className="btn-pill-right mr-2">View Requested SenderId's</Button>
-            <Button onClick={this.AddSenderId} outline color="danger" className="btn-pill-right">Add New SenderId</Button>
+            <Button onClick={this.ViewRequestedSenders} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View Requested SenderId's</Button>
+            <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
+              <i className="fa fa-plus mr-2"></i>
+              Add New SenderId</Button>
           </div>
         </div>
         <Container fluid>

@@ -56,6 +56,10 @@ class PostPaidCustomers extends Component {
       dtInstance.fnFilter(this.value, columnInputs.index(this));
     });
   };
+  AddActionButtonStyle={
+    color:'white',
+    background:"#003366"
+  }
 
   render() {
     return (
@@ -66,7 +70,9 @@ class PostPaidCustomers extends Component {
             <small>Showing all post paid customers.</small>
           </div>
           <div className="flex-row">
-            <Button outline color="danger" className="btn-pill-right">Add Post Paid Customer</Button>
+            <Button className="btn-pill-right" style={this.AddActionButtonStyle}>
+              <i className="fa fa-plus mr-2"></i>
+              Add Post Paid Customer</Button>
             {/* <Link outline color="danger" className="btn-pill-right">Add Post Paid Customer</Link> */}
             {/* <Link to="dashboard" className="btn btn-pill-right">
             <span outline color="danger" className="btn-pill-right">Add Post Paid Customer</span>

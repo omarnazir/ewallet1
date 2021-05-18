@@ -77,6 +77,11 @@ class SendersRequested extends Component {
       AddSender=()=>{
         return this.props.history.push('/add-senderid')
       }
+
+      AddActionButtonStyle={
+        color:'white',
+        background:"#003366"
+      }
     render() {
         return (
             <ContentWrapper>
@@ -86,8 +91,10 @@ class SendersRequested extends Component {
             <small>Showing all requested sender id's.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewSenders} outline color="danger" className="btn-pill-right mr-2">View All Sender Id's</Button>
-                        <Button onClick={this.AddSender} outline color="danger" className="btn-pill-right">Add New SenderId</Button>
+                        <Button onClick={this.ViewSenders} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Sender Id's</Button>
+                        <Button onClick={this.AddSender} style={this.AddActionButtonStyle} className="btn-pill-right">
+                            <i className="fa fa-plus mr-2"></i>
+                            Add New SenderId</Button>
                     </div>
                 </div>
                 <Container fluid>

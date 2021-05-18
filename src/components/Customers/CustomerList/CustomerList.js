@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../Layout/ContentWrapper";
 import Datatable from "../../Common/Datatable";
-import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
+import { Container, Card, CardHeader, CardBody, CardTitle ,Button} from "reactstrap";
 import $ from "jquery";
 import axios from "../../../services/axios";
 import Moment from 'moment'
@@ -62,6 +62,10 @@ class CustomerList extends Component {
     return Moment(date).format('DD-MM-YYYY')
   }
 
+  ViewCustomerDetails=()=>{
+    return this.props.history.push('/customers-details/1')
+  }
+
   render() {
     return (
       <ContentWrapper>
@@ -113,10 +117,10 @@ class CustomerList extends Component {
                         <td>{this.formatDate(row.startDate)}</td>
                         <td>{row.paymentType}</td>
                         <td> 
-                        <a className="btn btn-success" href="#" role="button">
+                        <Button className="btn btn-success"  onClick={this.ViewCustomerDetails}>
                         {/* <i className="fa fa-arrow-right"></i> */}
                         <i className="fa fa-eye"></i>
-                        </a>
+                        </Button>
                          </td>  
                       </tr>
                     ))}

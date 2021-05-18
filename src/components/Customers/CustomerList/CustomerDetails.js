@@ -80,6 +80,17 @@ class CustomerDetails extends Component {
             dtInstance.fnFilter(this.value, columnInputs.index(this));
         });
     };
+    AddActionButtonStyle={
+        color:'white',
+        background:"#003366"
+      }
+    
+      TableActionButtonStyle={
+        color:'white',
+        background:"#33414e"
+      }
+    
+      
 
     render() {
         return (
@@ -90,8 +101,8 @@ class CustomerDetails extends Component {
             <small>Showing all customer details.</small>
                     </div>
                     <div className="flex-row d-block d-md-flex">
-                        <Button onClick={this.ViewRequestedSenders} outline color="danger" className="btn btn-pill mr-2">Disable Customer</Button>
-                        <Button onClick={this.AddSenderId} outline color="danger" className="btn-pill-right">View All Customers</Button>
+                        <Button onClick={this.ViewRequestedSenders} className="btn btn-pill mr-2 bg-danger">Disable Customer</Button>
+                        <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">View All Customers</Button>
                     </div>
                 </div>
                 <Container fluid>
