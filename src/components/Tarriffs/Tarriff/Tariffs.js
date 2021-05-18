@@ -89,8 +89,8 @@ class Tariffs extends Component {
             <CardHeader>
             </CardHeader>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
-                <table className="table table-striped my-4 w-100">
+             
+                <table className="table table-striped">
                   <thead>
                     <tr>
                       <th data-priority="1">ID</th>
@@ -111,9 +111,9 @@ class Tariffs extends Component {
                         )}</td>
                         <td>
                          
-                            <span className="btn badge-success">Edit</span>
-                            <span className="btn badge-danger mr-1 ml-1" onClick={(e) => this.deleteTarriff(row.id, e)}>Delete</span>
-                            <button className="btn badge-success" onClick={this.ViewTarriffBand}>View Bandwidth</button>
+                            <span className="btn badge-success mr-2">Edit</span>
+                            <span className="btn badge-danger" onClick={(e) => this.deleteTarriff(row.id, e)}>Delete</span>
+                            <button className="btn badge-success ml-2" onClick={this.ViewTarriffBand}>View Bandwidth</button>
                         
 
                         </td>
@@ -121,7 +121,7 @@ class Tariffs extends Component {
                     ))}
                   </tbody>
                 </table>
-              </Datatable>
+             
             </CardBody>
           </Card>
 

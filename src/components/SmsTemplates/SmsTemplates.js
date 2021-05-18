@@ -15,7 +15,7 @@ import {
 import Datetime from 'react-datetime';
 import $ from "jquery";
 import axios from "axios";
-
+import Moment from 'moment';
 
 class SmsTemplates extends Component {
   state = {
@@ -74,6 +74,10 @@ class SmsTemplates extends Component {
 
   AddSmsTemplates = () => {
     return this.props.history.push('/add-sms-templates')
+  }
+
+  formatDate=(date)=>{
+    return Moment(date).format('lll')
   }
 
   render() {
@@ -179,7 +183,7 @@ class SmsTemplates extends Component {
                         {/* <td>SCANIA TANZANIA LTD</td> */}
                         <td>{row.customerFk}</td>
                         <td>{row.messageTemplate}</td>
-                        <td>{row.dateCreated}</td>
+                        <td>{this.formatDate(row.dateCreated)}</td>
                         <td>
                           {row.status == "Approved" &&
                             <span className="badge badge-success">{row.status}</span>

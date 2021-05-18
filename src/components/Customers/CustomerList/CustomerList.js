@@ -4,7 +4,7 @@ import Datatable from "../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
 import $ from "jquery";
 import axios from "../../../services/axios";
-
+import Moment from 'moment'
 
 class CustomerList extends Component {
   state = {
@@ -58,6 +58,10 @@ class CustomerList extends Component {
     });
   };
 
+  formatDate=(date)=>{
+    return Moment(date).format('DD-MM-YYYY')
+  }
+
   render() {
     return (
       <ContentWrapper>
@@ -90,22 +94,6 @@ class CustomerList extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* <tr className="gradeX">
-                      <td>1</td>
-                      <td>Alpha Jones</td>
-                      <td>alpha@gmail.com</td>
-                      <td>255 783512912</td>
-                      <td>3 rd Dodoma</td>
-                      <td> <span className="badge badge-success">Active</span> </td>  
-                      <td>12/06/2021</td> 
-                      <td>Cash</td>
-                      <td> 
-                        <a className="btn btn-success" href="#" role="button">
-                        <i className="fa fa-eye"></i>
-                        </a>
-                         </td>                   
-                    </tr> */}
-
                     {this.state.customersList.map(row => (
                       <tr key={row.id}>
                         <td>{row.id}</td>
@@ -122,7 +110,7 @@ class CustomerList extends Component {
                         }
                         </td>
 
-                        <td>{row.startDate}</td>
+                        <td>{this.formatDate(row.startDate)}</td>
                         <td>{row.paymentType}</td>
                         <td> 
                         <a className="btn btn-success" href="#" role="button">

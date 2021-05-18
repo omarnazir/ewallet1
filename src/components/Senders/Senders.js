@@ -15,7 +15,7 @@ import {
 import Datetime from 'react-datetime';
 import $ from "jquery";
 import axios from "../../services/axios";
-
+import Moment from 'moment';
 
 class Senders extends Component {
   state = {
@@ -73,6 +73,9 @@ class Senders extends Component {
   }
   AddSenderId=()=>{
     return this.props.history.push('/add-senderid')
+  }
+  formatDate=(date)=>{
+    return Moment(date).format('DD-MM-YYYY')
   }
 
   render() {
@@ -153,7 +156,7 @@ class Senders extends Component {
                         <td>{row.id}</td>
                         <td>{row.senderId}</td>
                         <td>{row.senderId}</td>
-                        <td>{row.dateCreated}</td>
+                        <td>{this.formatDate(row.dateCreated)}</td>
                         <td>
                           { row.is_approved==1 && 
                           <span className="badge badge-success">Approved</span>
