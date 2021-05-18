@@ -117,7 +117,7 @@ class CustomerList extends Component {
                         <td>{this.formatDate(row.startDate)}</td>
                         <td>{row.paymentType}</td>
                         <td> 
-                        <Button className="btn btn-success"  onClick={this.ViewCustomerDetails}>
+                        <Button color="success" className="btn btn-success"  onClick={this.ViewCustomerDetails}>
                         {/* <i className="fa fa-arrow-right"></i> */}
                         <i className="fa fa-eye"></i>
                         </Button>

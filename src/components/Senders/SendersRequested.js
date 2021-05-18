@@ -82,6 +82,8 @@ class SendersRequested extends Component {
         color:'white',
         background:"#003366"
       }
+
+      
     render() {
         return (
             <ContentWrapper>
