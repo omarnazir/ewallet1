@@ -13,8 +13,8 @@ body, .wrapper .section-container {
    Component: top-navbar
  ========================================================================== */
 .topnavbar {
-  background-color: #1797be;
-  background-image: linear-gradient(to right, #1797be 0%, #23b7e5 100%);
+  background-color: #4a4d4e;
+  background-image: linear-gradient(to right, #4a4d4e 0%, #23b7e5 100%);
   background-repeat: repeat-x;
 }
 @media (min-width: 992px) {

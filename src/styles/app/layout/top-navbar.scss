@@ -33,7 +33,7 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
     border: 0;
     padding: 0;
     min-height: $navbar-height;
-    background-color: $nav-top-bg;
+    background-color: $vodacom-gray;
     //@include gradient-x($nav-top-bg-start, $nav-top-bg-end); // // dont' allow stacked icons
 
     @include media-breakpoint-up(md) {

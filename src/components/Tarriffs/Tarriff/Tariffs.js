@@ -72,6 +72,19 @@ class Tariffs extends Component {
     return this.props.history.push('/manage-tariff-bands')
   }
 
+  AddActionButtonStyle={
+    color:'white',
+    background:"#003366"
+  }
+
+  TableActionButtonStyle={
+    color:'white',
+    background:"#33414e"
+  }
+
+
+
+
   render() {
     return (
       <ContentWrapper>
@@ -81,7 +94,10 @@ class Tariffs extends Component {
             <small>Showing all tariffs.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.AddTarriff} outline color="danger" className="btn-pill-right">Add New Tariff</Button>
+            {/* <Button onClick={this.AddTarriff} outline color="primary" className="btn-pill-right">Add New Tariff</Button> */}
+            <Button onClick={this.AddTarriff} style={this.AddActionButtonStyle} className="btn-pill-right">
+              <i className="fa fa-plus mr-2"></i>
+                Add New Tariff</Button>
           </div>
         </div>
         <Container fluid>
@@ -107,15 +123,19 @@ class Tariffs extends Component {
                         <td>{row.isDefault?(
                           <span className="badge badge-success">Default</span>
                         ):(
-                          <span className="btn badge-success">Set Default</span>
+                          <span className="btn bg-success-light" style={this.TableActionButtonStyle}>Set Default</span>
                         )}</td>
                         <td>
                          
-                            <span className="btn badge-success mr-2">Edit</span>
-                            <span className="btn badge-danger" onClick={(e) => this.deleteTarriff(row.id, e)}>Delete</span>
-                            <button className="btn badge-success ml-2" onClick={this.ViewTarriffBand}>View Bandwidth</button>
-                        
-
+                            <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}>
+                             <i className="icon-pencil mr-2"></i>
+                              Edit</span>
+                            <span className="btn bg-danger-dark" onClick={(e) => this.deleteTarriff(row.id, e)}>
+                            <i className="icon-trash mr-2"></i>
+                              Delete</span>
+                            <button className="btn badge-success ml-2" onClick={this.ViewTarriffBand} style={this.TableActionButtonStyle}>
+                            <i className="icon-info mr-2"></i>
+                              View Bandwidth</button>
                         </td>
                       </tr>
                     ))}
