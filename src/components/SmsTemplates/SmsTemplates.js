@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-import axios from "axios";
+import axios from "../../services/axios";
 import Moment from 'moment';
 
 class SmsTemplates extends Component {
@@ -49,12 +49,7 @@ class SmsTemplates extends Component {
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:8085/api/v1/sms-request`, {
-      headers: {
-        'Content-type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
+    axios.get(`http://localhost:8085/api/v1/sms-request`)
       .then(res => {
         const response = res.data;
         this.setState({ smsTemplateList: response })
