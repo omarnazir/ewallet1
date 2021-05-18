@@ -3,7 +3,7 @@ import {Link, Redirect} from 'react-router-dom';
 import {Input, CustomInput} from 'reactstrap';
 
 import FormValidator from '../Common/FormValidator.js';
-import axios from '';
+import axios from "axios";
 
 
 class Login extends Component {
@@ -67,11 +67,12 @@ class Login extends Component {
         e.preventDefault()
 
         if (!hasError) {
-            axios.post('authenticate', {
+            axios.post('http://localhost:8085/api/v1/authenticate', {
                 username: this.state.formLogin.username,
                 password: this.state.formLogin.password
             }).then(res => {
                 sessionStorage.setItem('token', res.data.token);
+                sessionStorage.setItem('user_roles', JSON.stringify(res.data.user.roles));
                 this.setState({redirect: '/dashboard'});
             }).catch(error => {
                 console.log(error.response.data);

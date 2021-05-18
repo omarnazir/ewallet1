@@ -4,7 +4,7 @@ import Datatable from "../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import { Link } from 'react-router-dom';
 import $ from "jquery";
-import axios from '../../../services/axios'
+import axios from '../../../services/axios';
 
 
 class PostPaidCustomers extends Component {

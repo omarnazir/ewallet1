@@ -56,7 +56,7 @@ class Sidebar extends Component {
 
     state = {
         collapse: {},
-        user_roles: []
+        userMenu: []
     }
 
     componentDidMount() {
@@ -68,13 +68,10 @@ class Sidebar extends Component {
         // Listen for routes changes in order to hide the sidebar on mobile
         this.props.history.listen(this.closeSidebar);
 
-        this.setState({
-            user_roles: localStorage.getItem("user_roles")
-        });
-
-        const userRoles = [{name: '/manage-users'}, {name: '/senders'}, {name: '/sms-templates'}];
+        const userRoles = JSON.parse(sessionStorage.getItem("user_roles"));
         const userMenu = Menu.filter(menu => userRoles.some(role => role.name === menu.path));
-        console.log(userMenu);
+        this.setState({userMenu: userMenu});
+        console.log(userRoles);
     }
 
     closeSidebar = () => {
@@ -144,7 +141,7 @@ class Sidebar extends Component {
                             { /* Iterates over all sidebar items */}
                             {
                                 //let NewMenu[]=Menu.filter("pass unwanted items");
-                                Menu.map((item, i) => {
+                                this.state.userMenu.map((item, i) => {
                                     // heading
                                     if (this.itemType(item) === 'heading')
                                         return (

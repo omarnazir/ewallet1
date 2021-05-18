@@ -140,7 +140,7 @@ class Dashboard extends Component {
         });
     }
     logout = () => {
-        localStorage.removeItem('token');
+        sessionStorage.clear();
         this.setState({redirect: '/login'});
     }
 
