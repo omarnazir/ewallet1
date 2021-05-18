@@ -37,7 +37,6 @@ class SendSmsCompose extends Component {
         selectedMessageTemplate: '',
         selectedMessageTemplateId: 0,
         selectedSenderId: 0,
-        activeTab: 0,
         activeTab: '1',
     }
 

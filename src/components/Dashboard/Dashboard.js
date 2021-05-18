@@ -104,7 +104,7 @@ class Dashboard extends Component {
 
     componentDidMount() {
 
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (token == null || token.length === 0) {
             this.setState({redirect: '/login'});
         }
