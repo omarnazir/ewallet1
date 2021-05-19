@@ -58,7 +58,7 @@ class UsersManagement extends Component {
   }
 
   AddNewUser = () => {
-    return this.props.history.push('/add-new-user')
+    return this.props.history.push('/admin/add-new-user')
 }
 
 AddActionButtonStyle={

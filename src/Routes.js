@@ -80,61 +80,61 @@ const Routes = ({ location }) => {
                             <Suspense fallback={<PageLoader />}>
                                 <Switch location={location}>
                                     {/* <Route path="/dashboard" component={waitFor(Dashboard)}/> */}
-                                    <Route path="/dashboard" component={waitFor(Dashboard)} />
+                                    <Route path="/admin/dashboard" component={waitFor(Dashboard)} />
 
-                                    <Route path="/mobile-operators" component={waitFor(MobileOperator)} />
-                                    <Route path="/all-sms" component={waitFor(Sms)} />
+                                    <Route path="/admin/mobile-operators" component={waitFor(MobileOperator)} />
+                                    <Route path="/admin/sms-log" component={waitFor(Sms)} />
 
-                                    <Route path="/customers-list" component={waitFor(CustomerList)} />
-                                    <Route path="/customers-details/1" component={waitFor(CustomerDetails)}/>
-                                    <Route path="/customers-postpaid" component={waitFor(PostPaidCustomers)} />
-                                    <Route path="/transactions" component={waitFor(Transactions)} />
-
-
-                                    <Route path="/add-senderid" component={waitFor(AddSenderId)} />
-                                    <Route path="/senders" component={waitFor(Senders)} />
+                                    <Route path="/admin/customers-list" component={waitFor(CustomerList)} />
+                                    <Route path="/admin/customers-details/1" component={waitFor(CustomerDetails)}/>
+                                    <Route path="/admin/customers-postpaid" component={waitFor(PostPaidCustomers)} />
+                                    <Route path="/admin/transactions" component={waitFor(Transactions)} />
 
 
-                                    <Route path="/add-sms-templates" component={waitFor(AddSmsTemplate)} />
-                                    <Route path="/senders-requested" component={waitFor(SendersRequested)} />
-                                    <Route path="/sms-templates" component={waitFor(SmsTemplates)} />
-
-                                    <Route path="/add-tariff" component={waitFor(AddTarriff)} />
-                                    <Route path="/manage-tariffs" component={waitFor(Tariffs)} />
-                                    <Route path="/add-tariff-band" component={waitFor(AddTariffBand)} />
-                                    <Route path="/manage-tariff-bands" component={waitFor(TariffBand)} />
+                                    <Route path="/admin/add-senderid" component={waitFor(AddSenderId)} />
+                                    <Route path="/admin/senders" component={waitFor(Senders)} />
 
 
-                                    <Route path="/add-new-user" component={waitFor(AddUser)} />
-                                    <Route path="/manage-users" component={waitFor(UsersManagement)} />
-                                    <Route path="/restricted-words" component={waitFor(RestrictedWords)} />
-                                    <Route path="/reserved-numbers" component={waitFor(ReservedNumbers)} />
+                                    <Route path="/admin/add-sms-templates" component={waitFor(AddSmsTemplate)} />
+                                    <Route path="/admin/senders-requested" component={waitFor(SendersRequested)} />
+                                    <Route path="/admin/sms-templates" component={waitFor(SmsTemplates)} />
+
+                                    <Route path="/admin/add-tariff" component={waitFor(AddTarriff)} />
+                                    <Route path="/admin/manage-tariffs" component={waitFor(Tariffs)} />
+                                    <Route path="/admin/add-tariff-band" component={waitFor(AddTariffBand)} />
+                                    <Route path="/admin/manage-tariff-bands" component={waitFor(TariffBand)} />
+
+
+                                    <Route path="/admin/add-new-user" component={waitFor(AddUser)} />
+                                    <Route path="/admin/manage-users" component={waitFor(UsersManagement)} />
+                                    <Route path="/admin/restricted-words" component={waitFor(RestrictedWords)} />
+                                    <Route path="/admin/reserved-numbers" component={waitFor(ReservedNumbers)} />
 
 
                                 {/* User Roles -{type Prepaid & Post Paid}  */}
 
-                                <Route path="/user/dashboard" component={waitFor(UserDashboard)}/>
-                                <Route path="/user/senderId" component={waitFor(UserSenderIds)}/>
-                                <Route path="/user/add-senderId" component={waitFor(AddUserSenderId)}/>
+                                <Route path="/dashboard" component={waitFor(UserDashboard)}/>
+                                <Route path="/senderId" component={waitFor(UserSenderIds)}/>
+                                <Route path="/add-senderId" component={waitFor(AddUserSenderId)}/>
 
 
-                                <Route path="/user/send-sms" component={waitFor(SendSmsCompose)}/>
-                                <Route path="/user/outbox" component={waitFor(UserOutbox)}/>
-                                <Route path="/user/scheduled-sms" component={waitFor(UserScheduledSms)}/>
-                                <Route path="/user/contact-list" component={waitFor(UserContactList)}/>
-                                <Route path="/user/add-contact-list" component={waitFor(AddUserContactList)}/>
+                                <Route path="/send-sms" component={waitFor(SendSmsCompose)}/>
+                                <Route path="/outbox" component={waitFor(UserOutbox)}/>
+                                <Route path="/scheduled-sms" component={waitFor(UserScheduledSms)}/>
+                                <Route path="/contact-lists" component={waitFor(UserContactList)}/>
+                                <Route path="/add-contact-list" component={waitFor(AddUserContactList)}/>
 
-                                <Route path="/user/sms-purchase" component={waitFor(PurchaseSms)}/>
-
-
-                                <Route path="/user/add-user" component={waitFor(AddNormalUser)}/>
-                                <Route path="/user/manage-user" component={waitFor(UserPage)}/>
-
-                                <Route path="/user/prepaid-invoices" component={waitFor(PrePaidInvoiceList)}/>
+                                <Route path="/sms-purchase" component={waitFor(PurchaseSms)}/>
 
 
-                                <Route path="/user/sms-requested" component={waitFor(UserRequestedSmsList)}/>
-                                <Route path="/user/add-sms-request" component={waitFor(AddUserRequestedSms)}/>
+                                <Route path="/add-user" component={waitFor(AddNormalUser)}/>
+                                <Route path="/manage-user" component={waitFor(UserPage)}/>
+
+                                <Route path="/prepaid-invoices" component={waitFor(PrePaidInvoiceList)}/>
+
+
+                                <Route path="/sms-requested" component={waitFor(UserRequestedSmsList)}/>
+                                <Route path="/add-sms-request" component={waitFor(AddUserRequestedSms)}/>
 
 
 

@@ -71,6 +71,7 @@ class Sidebar extends Component {
         const userRoles = JSON.parse(sessionStorage.getItem("user_roles"));
         const userMenu = Menu.filter(menu => userRoles.some(role => role.name === menu.path));
         this.setState({userMenu: userMenu});
+        // this.setState({userMenu: Menu});
         console.log(userRoles);
     }
 

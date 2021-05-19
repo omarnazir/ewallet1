@@ -13,8 +13,10 @@ class SidebarUserBlock extends Component {
     componentDidUpdate(oldProps) {
         if (oldProps.showUserBlock !== this.props.showUserBlock) {
             this.setState({ showUserBlock: this.props.showUserBlock })
+             
         }
     }
+
 
     render() {
         return (
@@ -30,8 +32,8 @@ class SidebarUserBlock extends Component {
                        </div>
                        {/* Name and Job */}
                        <div className="user-block-info">
-                          <span className="user-block-name">Hello, Chris</span>
-                          <span className="user-block-role">Admin</span>
+                          <span className="user-block-name">Hello,User</span>
+                          {/* <span className="user-block-role">Admin</span> */}
                        </div>
                     </div>
                 </div>

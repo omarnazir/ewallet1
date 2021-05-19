@@ -22,23 +22,30 @@ class AddUser extends Component {
     state = {
         name: "",
         username:"",
+        email:"",
+        phonenumber:"",
         password:"",
+        confirmPassword:""
 
     };
+    //phone number and email
 
     handleSubmit = event => {
 
+        const fk=sessionStorage.getItem('customerFk').toString();
+       
         event.preventDefault();
         const user = {
-            "name": "alpha",
-            "username": "alpha",
-            "password": "alpha123",
+            "name": this.state.name,
+            "username": this.state.username,
+            "password": this.state.password,
             "image": null,
             "status": null,
             "lastLogin": null,
             "thirdParty": null,
-            "customerFk": "null"
+            "customerFk": fk,
         }
+     
         axios.post('/register', user, {
             headers: {
                 'Content-type': 'application/json', 
@@ -55,7 +62,7 @@ class AddUser extends Component {
     }
 
     handleChange = event => {
-        this.setState({ name: event.target.value });
+        this.setState({ [event.target.name]: event.target.value });
     }
 
     AddActionButtonStyle={

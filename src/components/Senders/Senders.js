@@ -142,7 +142,7 @@ class Senders extends Component {
               </div>
             </CardHeader>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
@@ -167,8 +167,11 @@ class Senders extends Component {
                           { row.is_approved==1 && 
                           <span className="badge badge-success">Approved</span>
                           }
+                          { row.is_approved==0 && 
+                          <span className="badge badge-warning">Pending</span>
+                          }
                           {
-                            row.is_approved!=1 &&
+                            row.is_approved==2 &&
                             <span className="badge badge-danger">Rejected</span>
                           }
                           
@@ -177,7 +180,7 @@ class Senders extends Component {
                     ))}
                   </tbody>
                 </table>
-              </Datatable>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

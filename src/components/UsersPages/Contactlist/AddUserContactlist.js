@@ -27,7 +27,7 @@ class AddUserContactList extends Component {
 
 
     ViewAllContacts = () => {
-        return this.props.history.push('/user/contact-list')
+        return this.props.history.push('/contact-list')
     }
 
 

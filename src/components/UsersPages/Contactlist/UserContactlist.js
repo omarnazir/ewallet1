@@ -69,7 +69,7 @@ class UserContactList extends Component {
   };
 
   ViewAddContactList = () => {
-    return this.props.history.push("/user/add-contact-list");
+    return this.props.history.push("/add-contact-list");
   };
 
   render() {
