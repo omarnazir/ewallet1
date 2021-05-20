@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import $ from "jquery";
 
-import axios from "../../../services/axios";
+import axios from "../../../services/axios"
 import Moment from 'moment';
 
 class UserSenderIds extends Component {
@@ -117,7 +117,7 @@ class UserSenderIds extends Component {
                     {this.state.senderIdList.map(row => (
                       <tr key={row.id}>
                         <td>{row.id}</td>
-                        <td>{row.senderId}</td>
+                        <td>{row.customerFk}</td>
                         <td>{row.senderId}</td>
                         <td>{this.formatDate(row.dateCreated)}</td>
                         <td>

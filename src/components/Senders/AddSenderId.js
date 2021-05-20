@@ -28,18 +28,10 @@ class AddSenderId extends Component {
 
         event.preventDefault();
         const sender = {
-            "senderId": this.state.name.toUpperCase(),
-            "isActive": "0",
-            "isDeleted": "1",
-            "isDefault": "0",
-            "dateApproved": null,
-            "dateCreated": "2020-11-24T06:37:16.000+00:00",
-            "customerFk": 180,
-            "source": "VODACOM",
-            "is_approved": 0
+            "senderId": this.state.name,
        
         }
-        axios.post("sender-ids/create",sender).then(res=>{
+        axios.post("/sender-ids",sender).then(res=>{
             console.log(res);
             console.log(res.data);
             this.ViewAllSenderIds();
@@ -47,7 +39,7 @@ class AddSenderId extends Component {
       }
 
     ViewAllSenderIds=()=>{
-        return this.props.history.push('/senders')
+        return this.props.history.push('/admin/senders')
       }
 
       handleChange = event =>{

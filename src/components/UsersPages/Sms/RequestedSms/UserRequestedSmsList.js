@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable";
+import axios from "../../../../services/axios"
+import Datatable from "../../../Common/Datatable"
 import {
   Container,
   Card,
@@ -15,7 +16,7 @@ import {
 import Datetime from 'react-datetime';
 import $ from "jquery";
 
-
+import Moment from 'moment';
 
 class UserRequestedSmsList extends Component {
   state = {
@@ -44,9 +45,23 @@ class UserRequestedSmsList extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    smsTemplateList: []
   };
 
+  componentDidMount() {
+    axios.get(`http://localhost:8085/api/v1/sms-request/me`)
+      .then(res => {
+        const response = res.data;
+        this.setState({ smsTemplateList: response })
+        console.log(response);
+      })
+  }
+
+  AddActionButtonStyle={
+    color:'white',
+    background:"#003366"
+  }
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -59,7 +74,11 @@ class UserRequestedSmsList extends Component {
   };
 
   AddSmsTemplates = () => {
-    return this.props.history.push('/user/add-sms-request')
+    return this.props.history.push('/add-sms-request')
+  }
+
+  formatDate=(date)=>{
+    return Moment(date).format('lll')
   }
 
   render() {
@@ -72,56 +91,13 @@ class UserRequestedSmsList extends Component {
             <small>Showing all sms templates </small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.AddSmsTemplates} outline color="danger" className="btn-pill-right">Add New SMS Template</Button>
+            <Button onClick={this.AddSmsTemplates} style={this.AddActionButtonStyle} className="btn-pill-right">
+              <i className="fa fa-plus mr-2"></i>
+              Add New SMS Template</Button>
           </div>
         </div>
         <Container fluid>
           <Card>
-            <CardHeader>
-              <CardTitle>
-                Showing all sms requests from <strong> MAR 29,2021 </strong> to <strong> APR 29,2021 </strong>
-              </CardTitle>
-              <div className="row">
-                <Card className="col-sm-12">
-                  <CardBody>
-                    <form onSubmit={this.onSubmit}>
-                      <div className="form-row align-items-center">
-                        <div className="col-sm-3">
-                          <div className="form-group">
-                            <label>From :</label>
-                            <input className="form-control" type="date" />
-                          </div>
-                        </div>
-                        <div className="col-sm-3">
-                          <div className="form-group">
-                            <label>To: </label>
-                            <input className="form-control" type="date" />
-                          </div>
-                        </div>
-                        <div className="col-sm-3">
-                          <div className="form-group">
-                            <label htmlFor="exampleFormControlSelect1">No of records: </label>
-                            <select className="form-control" id="exampleFormControlSelect1">
-                              <option>All</option>
-                              <option>100</option>
-                              <option>200</option>
-                              <option>500</option>
-                              <option>1000</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div className="col-sm-3">
-                          <button type="submit" className="btn btn-info mt-2">
-                            Search
-                          </button>
-                        </div>
-
-                      </div>
-                    </form>
-                  </CardBody>
-                </Card>
-              </div>
-            </CardHeader>
             <CardBody>
               <Datatable options={this.state.dtOptions}>
                 <table className="table table-striped my-4 w-100">
@@ -137,26 +113,41 @@ class UserRequestedSmsList extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeA">
-                      <td>1</td>
-                      <td>SCANIA TANZANIA LTD</td>
-                      <td>Bidhaa na huduma zenye viwango vya kimataifa zipo karibu kukufikia Tunduma.
-                         Kaa Tayari!. Kwa maelezo zaidi tupigie 0784722630</td>
-                      <td>Apr 28, 2021 at 12:36</td>
-                      <td>
-                        <span className="badge badge-warning">Pending</span>
-                        <span className="badge badge-danger">Rejected</span>
-                        <span className="badge badge-success">Approved</span>
-                      </td>
-                      <td>N/A</td>
-                      <td>
-                        <span className="btn badge-success">Approved</span>
-                        <br />
-                        <span className="btn badge-danger mt-1">Reject</span>
-                      </td>
+                    {this.state.smsTemplateList.map(row => (
+                      <tr key={row.id}>
+                        <td>{row.id}</td>
+                        {/* <td>SCANIA TANZANIA LTD</td> */}
+                        <td>{row.customerFk}</td>
+                        <td>{row.messageTemplate}</td>
+                        <td>{this.formatDate(row.dateCreated)}</td>
+                        <td>
+                          {row.status == "0" &&
+                            <span className="badge badge-warning">Pending</span>
+                          }
+                          {
+                            row.status == "1" &&
+                            <span className="badge badge-success">Approved</span>
+                          }
+                          {
+                            row.status == "2" &&
+                            <span className="badge badge-danger">Rejected</span>
+                          }
+                        </td>
+                        <td>N/A</td>
+                        { row.status == "0" &&
+                          <td>
+                            <span className="btn badge-danger mt-1">Delete</span>
+                          </td>
+                        }
+                        {
+                          row.status != "0" &&
+                          <td>
+                            N/A
+                          </td>
+                        }
+                      </tr>
+                    ))}
 
-
-                    </tr> 
                   </tbody>
                 </table>
               </Datatable>

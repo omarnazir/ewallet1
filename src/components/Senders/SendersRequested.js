@@ -15,8 +15,7 @@ import {
 import Datetime from 'react-datetime';
 import $ from "jquery";
 import axios from "../../services/axios";
-
-
+import Moment from 'moment';
 
 class SendersRequested extends Component {
     state = {
@@ -51,7 +50,7 @@ class SendersRequested extends Component {
 
 
     componentDidMount() {
-        axios.get("/sender-ids")
+        axios.get("/sender-ids/pending")
             .then(res => {
                 const response = res.data;
                 this.setState({ senderIdList: response })
@@ -69,21 +68,25 @@ class SendersRequested extends Component {
         });
     };
 
-    
+    ViewSenders = () => {
+        return this.props.history.push('/admin/senders')
+    }
 
-    ViewSenders=()=>{
-        return this.props.history.push('/senders')
-      }
-      AddSender=()=>{
-        return this.props.history.push('/add-senderid')
-      }
 
-      AddActionButtonStyle={
-        color:'white',
-        background:"#003366"
-      }
+    ViewRequestedSenders = () => {
+        return this.props.history.push('/admin/senders-requested')
+    }
+    AddSenderId = () => {
+        return this.props.history.push('/admin/add-senderid')
+    }
+    formatDate = (date) => {
+        return Moment(date).format('DD-MM-YYYY')
+    }
+    AddActionButtonStyle = {
+        color: 'white',
+        background: "#003366"
+    }
 
-      
     render() {
         return (
             <ContentWrapper>
@@ -94,7 +97,7 @@ class SendersRequested extends Component {
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewSenders} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Sender Id's</Button>
-                        <Button onClick={this.AddSender} style={this.AddActionButtonStyle} className="btn-pill-right">
+                        <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
                             <i className="fa fa-plus mr-2"></i>
                             Add New SenderId</Button>
                     </div>
@@ -144,41 +147,50 @@ class SendersRequested extends Component {
                             </div>
                         </CardHeader>
                         <CardBody>
-                            <Datatable options={this.state.dtOptions}>
-                                <table className="table table-striped my-4 w-100">
-                                    <thead>
-                                        <tr>
-                                            <th data-priority="1">ID</th>
-                                            <th>Customer/Organization</th>
+                            {/* <Datatable options={this.state.dtOptions}> */}
+                            <table className="table table-striped my-4 w-100">
+                                <thead>
+                                    <tr>
+                                        <th data-priority="1">ID</th>
+                                        <th>Customer/Organization</th>
 
-                                            <th className="" data-priority="2">
-                                                Sender
+                                        <th className="" data-priority="2">
+                                            Sender
                       </th>
-                                            <th>DATE REGISTERED</th>
-                                            <th>STATUS</th>
+                                        <th>DATE REGISTERED</th>
+                                        <th>STATUS</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.senderIdList.map(row => (
+                                        <tr key={row.id}>
+                                            <td>{row.id}</td>
+                                            <td>{row.senderId}</td>
+                                            <td>{row.senderId}</td>
+                                            <td>{this.formatDate(row.dateCreated)}</td>
+                                            <td>
+                                                {row.is_approved == 1 &&
+                                                    <span className="badge badge-success">Approved</span>
+                                                }
+                                                {row.is_approved == 0 &&
+                                                    <span className="badge badge-warning">Pending</span>
+                                                }
+                                                {
+                                                    row.is_approved == 2 &&
+                                                    <span className="badge badge-danger">Rejected</span>
+                                                }
+
+                                            </td>
+                                            <td>
+                                                <span className="btn badge-success mr-1" style={this.AddActionButtonStyle}>Approved</span>
+                                                <span className="btn badge-danger">Rejected</span>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {this.state.senderIdList.map(row => (
-                                             <tr>
-                                             {row && row.is_approved=="Pending" &&
-                                             <tr>
-                                                        <td>{row.id}</td>
-                                                        <td>{row.senderId}</td>
-                                                        <td>{row.senderId}</td>
-                                                        <td>{row.dateCreated}</td>
-                                                        <td>
-                                                                <span className="badge badge-success">Approved</span>
-                                                                <span className="badge badge-danger">Rejected</span>
-                                                        </td>
-                                                        </tr>
-                                                  
-                                            }
-                                              </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </Datatable>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {/* </Datatable> */}
                         </CardBody>
                     </Card>
                 </Container>

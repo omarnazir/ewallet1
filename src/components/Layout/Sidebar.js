@@ -60,6 +60,13 @@ class Sidebar extends Component {
     }
 
     componentDidMount() {
+        /*
+        const token = sessionStorage.getItem('token');
+        const userRoles = JSON.parse(sessionStorage.getItem("user_roles"));
+        if (token == null || token.length === 0||userRoles==null) {
+            this.setState({redirect: '/login'});
+        }*/
+
         // pass navigator to access router api
         SidebarRun(this.navigator, this.closeSidebar);
         // prepare the flags to handle menu collapsed states

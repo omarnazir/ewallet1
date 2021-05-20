@@ -69,10 +69,10 @@ class Senders extends Component {
   };
 
   ViewRequestedSenders=()=>{
-    return this.props.history.push('/senders-requested')
+    return this.props.history.push('/admin/senders-requested')
   }
   AddSenderId=()=>{
-    return this.props.history.push('/add-senderid')
+    return this.props.history.push('/admin/add-senderid')
   }
   formatDate=(date)=>{
     return Moment(date).format('DD-MM-YYYY')

@@ -159,6 +159,11 @@ class UserDashboard extends Component {
     }
 
     componentDidMount() {
+        const token = sessionStorage.getItem('token');
+        if (token == null || token.length === 0) {
+            this.setState({redirect: '/login'});
+        }
+        
         // Easy pie
         let pieOptions1 = {
             animate: {

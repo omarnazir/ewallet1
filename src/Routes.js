@@ -133,7 +133,7 @@ const Routes = ({ location }) => {
                                 <Route path="/prepaid-invoices" component={waitFor(PrePaidInvoiceList)}/>
 
 
-                                <Route path="/sms-requested" component={waitFor(UserRequestedSmsList)}/>
+                                <Route path="/sms-requests" component={waitFor(UserRequestedSmsList)}/>
                                 <Route path="/add-sms-request" component={waitFor(AddUserRequestedSms)}/>
 
 
