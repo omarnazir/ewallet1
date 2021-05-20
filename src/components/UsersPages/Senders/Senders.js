@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../Layout/ContentWrapper";
+import Datatable from "../../Common/Datatable"
 import {
   Container,
   Card,
@@ -9,12 +10,12 @@ import {
   InputGroup,
   InputGroupAddon,
   Input,
-  Button,
+  Button
 } from "reactstrap";
-import Datetime from "react-datetime";
 import $ from "jquery";
 
-import Datatable from "../../Common/Datatable";
+import axios from "../../../services/axios";
+import Moment from 'moment';
 
 class UserSenderIds extends Component {
   state = {
@@ -23,8 +24,6 @@ class UserSenderIds extends Component {
       ordering: true, // Column ordering
       info: true, // Bottom left status text
       responsive: true,
-      // Text translation options
-      // Note the required keywords between underscores (e.g _MENU_)
       oLanguage: {
         sSearch: '<em class="fa fa-search"></em>',
         sLengthMenu: "_MENU_ records per page",
@@ -45,8 +44,19 @@ class UserSenderIds extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    senderIdList: []
   };
+
+
+  componentDidMount() {
+    axios.get("/sender-ids/me")
+      .then(res => {
+        const response = res.data;
+        this.setState({ senderIdList: response })
+        console.log(response);
+      })
+  }
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -58,19 +68,30 @@ class UserSenderIds extends Component {
     });
   };
 
-  addSenderId = () => {
-    return this.props.history.push("/user/add-senderId");
-  };
+  ViewRequestedSenders=()=>{
+    return this.props.history.push('/senders-requested')
+  }
+  AddSenderId=()=>{
+    return this.props.history.push('/add-senderid')
+  }
+  formatDate=(date)=>{
+    return Moment(date).format('DD-MM-YYYY')
+  }
+  AddActionButtonStyle={
+    color:'white',
+    background:"#003366"
+  }
+
   render() {
     return (
       <ContentWrapper>
-        <div className="content-heading">
+       <div className="content-heading">
           <div className="mr-auto flex-row">
             Sender id's
-            <small>Showing all approved customers sender id's.</small>
+            <small>Showing all customers sender id's.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.addSenderId} outline color="danger" className="btn-pill-right">
+            <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
               Add New SenderId
             </Button>
           </div>
@@ -78,33 +99,46 @@ class UserSenderIds extends Component {
         <Container fluid>
           <Card>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
                       <th data-priority="1">ID</th>
+                      <th>Customer/Organization</th>
+
                       <th className="" data-priority="2">
                         Sender
                       </th>
+                      <th>DATE REGISTERED</th>
                       <th>STATUS</th>
-                      <th>Reason for rejection</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeA">
-                      <td>1</td>
-                      <td>TBL Info</td>
-                      <td>
-                        <span className="badge badge-success">Approved</span>
-                      </td>
-                      <td>N/A</td>
-                      <td></td>
-                    </tr>
+                    {this.state.senderIdList.map(row => (
+                      <tr key={row.id}>
+                        <td>{row.id}</td>
+                        <td>{row.senderId}</td>
+                        <td>{row.senderId}</td>
+                        <td>{this.formatDate(row.dateCreated)}</td>
+                        <td>
+                          { row.is_approved==1 && 
+                          <span className="badge badge-success">Approved</span>
+                          }
+                          { row.is_approved==0 && 
+                          <span className="badge badge-warning">Pending</span>
+                          }
+                          {
+                            row.is_approved==2 &&
+                            <span className="badge badge-danger">Rejected</span>
+                          }
+                          
+                        </td>
+                      </tr>
+                    ))}
                     
                   </tbody>
                 </table>
-              </Datatable>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

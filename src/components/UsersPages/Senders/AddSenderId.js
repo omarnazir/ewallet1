@@ -1,85 +1,94 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../Layout/ContentWrapper";
 import {
-  Container,
-  Card,
-  Col,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  InputGroup,
-  InputGroupAddon,
-  Input,
-  Textarea,
-  FormGroup,
-  Button,
+    Container,
+    Card,
+    CardHeader,
+    CardBody,
+    CardTitle,
+    InputGroup,
+    InputGroupAddon,
+    Input,
+    Button,
+    FormGroup
 } from "reactstrap";
-import Datetime from "react-datetime";
+import Datetime from 'react-datetime';
 import $ from "jquery";
-import { Link, Redirect } from "react-router-dom";
+
+import axios from "../../../services/axios";
 
 
 
 class AddUserSenderId extends Component {
-  state = {
-    displayColorPicker: false,
-    displayColorPickerInput: false,
-    colorSelected: "#00AABB",
+    state = {
+      name:"",
+    }; 
 
-    selectedOption: "",
-    selectedOptionMulti: [],
-  };
+    handleSubmit = event => {
 
-  ViewSenderIds = () => {
-    return this.props.history.push("/user/senderId");
-  };
+        event.preventDefault();
+        const sender = {
+            "senderId": this.state.name,
+       
+        }
+        axios.post("sender-ids",sender).then(res=>{
+            console.log(res);
+            console.log(res.data);
+            this.ViewAllSenderIds();
+          })
+      }
 
-  render() {
-    const { editorState } = this.state;
-    return (
-      <ContentWrapper>
-        <div className="content-heading">
-          <div className="mr-auto flex-row">
-            Add Sender Id
-            <small>Create a sender id .</small>
-          </div>
-          <div className="flex-row">
-            <Button
-              onClick={this.ViewSenderIds}
-              outline
-              color="danger"
-              className="btn-pill-right"
-            >
-              View Sender Ids
-            </Button>
-          </div>
-        </div>
-        <Container fluid>
-          <div className="row">
-            <div className="col-md-6 offset-md-3">
-              <Card className="card-default">
-                <CardBody>
-                  <form onSubmit={this.onSubmit}>
-                    <FormGroup>
-                      <label>Sender Id:</label>
-                      <Input type="text" placeholder="" />
-                    </FormGroup>
-                    
-                    <button className="btn btn-sm btn-secondary mr-3 outline" type="submit">
-                      Save Sender Id
-                    </button>
-                    <button className="btn btn-sm btn-danger" onClick={this.ViewSenderIds}>
-                      Cancel
-                    </button>
-                  </form>
-                </CardBody>
-              </Card>
-            </div>
-          </div>
-        </Container>
-      </ContentWrapper>
-    );
-  }
+    ViewAllSenderIds=()=>{
+        return this.props.history.push('/senderId')
+      }
+
+      handleChange = event =>{
+        this.setState({ name: event.target.value});
+      }
+
+      AddActionButtonStyle={
+        color:'white',
+        background:"#003366"
+      }
+    
+    render() {
+        return (
+            <ContentWrapper>
+                <div className="content-heading">
+                    <div className="mr-auto flex-row">
+                        Add Sender id's
+                     <small>Adding a new sender id.</small>
+                    </div>
+                    <div className="flex-row">
+                        <Button onClick={this.ViewAllSenderIds} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All SenderId's</Button>
+                    </div>
+                </div>
+                <Container fluid>
+                    <div className="row">
+                        <div className="col-md-6 offset-md-3">
+                            <Card className="card-default">
+                                <CardBody>
+                                    <form onSubmit={this.handleSubmit}>
+                                        <FormGroup>
+                                            <label>Sender Id :</label>
+                                            <input className="form-control" name="name" onChange={this.handleChange} required></input>
+                                        </FormGroup>
+                                        <button className="btn btn-sm btn-success mr-3" type="submit">
+                                            Save
+                                        </button>
+                                        <button className="btn btn-sm btn-danger" onClick={this.ViewAllSenderIds}>
+                                            Cancel
+                                        </button>
+                                    </form>
+                                </CardBody>
+                            </Card>
+
+                        </div>
+                    </div>
+                </Container>
+            </ContentWrapper>
+        );
+    }
 }
 
 export default AddUserSenderId;
