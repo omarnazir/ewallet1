@@ -20,38 +20,30 @@ import axios from "../../../services/axios";
 
 class AddTarriff extends Component {
     state = {
-      name:"",
-    }; 
+        name: "",
+    };
 
 
     handleSubmit = event => {
-        console.log("am here")
         event.preventDefault();
-        //change to tarriff
-        const tarriff=  {
-            "tariffName": this.state.name.toUpperCase(),
-            "fromSms": null,
-            "toSms": null,
-            "expireDurationDays": null,
-            "createdAt": "2020-12-02T17:05:19.000+00:00",
-            "createdBy": 0,
-            "isDefault": 1
-    }
-          axios.post("/tariff",tarriff).then(res=>{
+        const tarriff = {
+            "tariffName": this.state.name
+        }
+        axios.post("/tariff", tarriff).then(res => {
             console.log(res);
             console.log(res.data);
             this.ViewTarrifs();
-          })
-      }
+        })
+    }
 
-    ViewTarrifs=()=>{
-        return this.props.history.push('/manage-tariffs')
-      }
+    ViewTarrifs = () => {
+        return this.props.history.push('/admin/manage-tariffs')
+    }
 
-      handleChange = event =>{
-        this.setState({ name: event.target.value});
-      }
-    
+    handleChange = event => {
+        this.setState({ name: event.target.value });
+    }
+
     render() {
         return (
             <ContentWrapper>

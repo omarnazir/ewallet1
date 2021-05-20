@@ -4,7 +4,7 @@ import Datatable from "../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
 import axios from "../../../services/axios";
-
+import update from 'immutability-helper';
 
 class Tariffs extends Component {
   state = {
@@ -46,12 +46,29 @@ class Tariffs extends Component {
       })
   }
 
-  deleteTarriff(id,e){
-    axios.delete("/tariff/${id}").then(res=>{
+  DeleteTariff(id){
+    axios.delete("/tariff/" + id)
+    .then(res => {
       const response = res.data;
-      console.log(response);
-      const tarrifs = this.state.tarrifsList.filter(item => item.id !== id);
-      this.setState({ tarrifsList: tarrifs })
+      const tarrifsList = this.state.tarrifsList.filter((tarrif) => {
+        return tarrif.id !== id;
+      });
+      this.setState({ tarrifsList })
+    })
+  }
+
+  DefualtTariff(id){
+    axios.get("/tariff/default/" + id)
+    .then(res => {
+      const response = res.data;
+      // const tarrifsList =  this.state.tarrifsList.map((tarriff) => {
+      //   return tarriff.id === id ? { ...response.data } : tarriff;
+      // })
+     
+
+      const index = this.state.tarrifsList.findIndex((tarriff) => tarriff.id === id);
+      const updateTarriffList = update(this.state.tarrifsList, {$splice: [[index, 1, res.data]]});  // array.splice(start, deleteCount, item1)
+      this.setState({tarrifsList: updateTarriffList});
     })
   }
 
@@ -65,7 +82,7 @@ class Tariffs extends Component {
     });
   };
   AddTarriff = () => {
-    return this.props.history.push('/add-tariff')
+    return this.props.history.push('/admin/add-tariff')
   }
 
   ViewTarriffBand = () => {
@@ -94,7 +111,6 @@ class Tariffs extends Component {
             <small>Showing all tariffs.</small>
           </div>
           <div className="flex-row">
-            {/* <Button onClick={this.AddTarriff} outline color="primary" className="btn-pill-right">Add New Tariff</Button> */}
             <Button onClick={this.AddTarriff} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
                 Add New Tariff</Button>
@@ -123,14 +139,13 @@ class Tariffs extends Component {
                         <td>{row.isDefault?(
                           <span className="badge badge-success">Default</span>
                         ):(
-                          <span className="btn bg-success-light" style={this.TableActionButtonStyle}>Set Default</span>
+                          <span className="btn bg-success-light" style={this.TableActionButtonStyle} onClick={() => this.DefualtTariff(row.id)}>Set Default</span>
                         )}</td>
                         <td>
-                         
                             <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}>
                              <i className="icon-pencil mr-2"></i>
                               Edit</span>
-                            <span className="btn bg-danger-dark" onClick={(e) => this.deleteTarriff(row.id, e)}>
+                            <span className="btn bg-danger-dark" onClick={() => this.DeleteTariff(row.id)}>
                             <i className="icon-trash mr-2"></i>
                               Delete</span>
                             <button className="btn badge-success ml-2" onClick={this.ViewTarriffBand} style={this.TableActionButtonStyle}>

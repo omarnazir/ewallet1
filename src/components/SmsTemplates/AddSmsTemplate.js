@@ -49,18 +49,12 @@ class AddSmsTemplate extends Component {
         event.preventDefault();
 
         const smsTemplate = {
-            "senderId": "",
-            "messageTemplate": this.state.messageTemplate,
-            "customerFk": 6,
-            "requestedBy": 6,
-            "approvedBy": null,
-            "status": "Pending",
-            "dateCreated": "2020-12-01T10:19:01.000+00:00",
+            "messageTemplate": this.state.messageTemplate, 
             "recipientTab": this.state.messageTemplateType,
         }
         console.log(smsTemplate)
 
-        axios.post("/sms-request/create", smsTemplate).then(res => {
+        axios.post("/sms-request/", smsTemplate).then(res => {
             console.log(res);
             console.log(res.data);
             this.ViewAllSmsTemplates();
@@ -76,7 +70,7 @@ class AddSmsTemplate extends Component {
     }
 
     ViewAllSmsTemplates = () => {
-        return this.props.history.push('/sms-templates')
+        return this.props.history.push('/admin/sms-templates')
     }
 
     AddActionButtonStyle={

@@ -38,6 +38,7 @@ import UserRequestedSmsList from './components/UsersPages/Sms/RequestedSms/UserR
 import AddNormalUser from './components/UsersPages/User/AddUser';
 import SendSmsCompose from './components/UsersPages/Sms/SendSms/SendSms';
 import CustomerDetails from './components/Customers/CustomerList/CustomerDetails';
+import SmsTemplatesRequested from './components/SmsTemplates/SmsTemplatesRequested';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -97,6 +98,7 @@ const Routes = ({ location }) => {
 
                                     <Route path="/admin/add-sms-templates" component={waitFor(AddSmsTemplate)} />
                                     <Route path="/admin/senders-requested" component={waitFor(SendersRequested)} />
+                                    <Route path="/admin/sms-requested-templates" component={waitFor(SmsTemplatesRequested)}/>
                                     <Route path="/admin/sms-templates" component={waitFor(SmsTemplates)} />
 
                                     <Route path="/admin/add-tariff" component={waitFor(AddTarriff)} />
@@ -135,6 +137,7 @@ const Routes = ({ location }) => {
 
                                 <Route path="/sms-requests" component={waitFor(UserRequestedSmsList)}/>
                                 <Route path="/add-sms-request" component={waitFor(AddUserRequestedSms)}/>
+                                
 
 
 

@@ -17,7 +17,7 @@ import $ from "jquery";
 import axios from "../../services/axios";
 import Moment from 'moment';
 
-class SmsTemplates extends Component {
+class SmsTemplatesRequested extends Component {
   state = {
     dtOptions: {
       paging: true, // Table pagination
@@ -49,12 +49,13 @@ class SmsTemplates extends Component {
   };
 
   componentDidMount() {
-    axios.get("/sms-request")
+    axios.get("/sms-request/pending")
       .then(res => {
         const response = res.data;
         this.setState({ smsTemplateList: response })
         console.log(response);
       })
+
   }
 
   AddActionButtonStyle = {
@@ -76,27 +77,63 @@ class SmsTemplates extends Component {
     return this.props.history.push('/admin/add-sms-templates')
   }
 
-
-  ViewRequestedTemplates = () => {
-    return this.props.history.push('/admin/sms-requested-templates')
-  }
-
-
   formatDate = (date) => {
     return Moment(date).format('lll')
   }
+  ViewAllSmsTemplates = () => {
+    return this.props.history.push('/admin/sms-templates')
+  }
+
+  // ApproveTemplate(row){
+  //   console.log("clicked")
+  //   // const value=e.target.value;
+  //   // console.log(value)
+  // }
+
+  RejectTemplate = (e) => {
+    const value = e.target.value;
+    console.log(value)
+  }
+
+  ApproveTemplate = (id) => {
+    // setBooks(books.filter((book) => book.id !== id));
+    console.log("clicked" + id)
+  };
+
+  ApproveTemplate = (id) => {
+    axios.get("/sms-request/approve/" + id)
+      .then(res => {
+        const response = res.data;
+        const smsTemplateList = this.state.smsTemplateList.filter((template) => {
+          return template.id !== id;
+        });
+        this.setState({ smsTemplateList })
+      })
+  }
+  RejectTemplate = (id) => {
+    axios.get("/sms-request/reject/" + id)
+      .then(res => {
+        const response = res.data;
+        const smsTemplateList = this.state.smsTemplateList.filter((template) => {
+          return template.id !== id;
+        });
+        this.setState({ smsTemplateList })
+      })
+  }
+
 
   render() {
+
     return (
       <ContentWrapper>
         <div className="content-heading">
           <div className="mr-auto flex-row">
+            Requested SMS Templates
           <br />
             <small>Showing all sms templates </small>
           </div>
           <div className="flex-row">
-          <Button onClick={this.ViewRequestedTemplates} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
-              View Requested Sms Templates</Button>
+            <Button onClick={this.ViewAllSmsTemplates} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Sms Templates</Button>
             <Button onClick={this.AddSmsTemplates} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
               Add New SMS Template</Button>
@@ -150,48 +187,58 @@ class SmsTemplates extends Component {
               </div>
             </CardHeader>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
-                <table className="table table-striped my-4 w-100">
-                  <thead>
-                    <tr>
-                      <th data-priority="1">#</th>
-                      <th>Customer Name</th>
-                      <th>MESSAGE</th>
-                      <th>DATE</th>
-                      <th>STATUS</th>
-                      <th>Reason for rejection</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.smsTemplateList.map(row => (
-                      <tr key={row.id}>
-                        <td>{row.id}</td>
-                        {/* <td>SCANIA TANZANIA LTD</td> */}
-                        <td>{row.customerFk}</td>
-                        <td>{row.messageTemplate}</td>
-                        <td>{this.formatDate(row.dateCreated)}</td>
-                        <td>
-                          {row.status == "1" &&
-                            <span className="badge badge-success">Approved</span>
-                          }
-                          {
-                            row.status == "0" &&
-                            <span className="badge badge-warning">Pending</span>
-                          }
-                          {
-                            row.status == "2" &&
-                            <span className="badge badge-danger">Rejected</span>
-                          }
-                        </td>
-                        <td>N/A</td>
-                       
-                        
-                      </tr>
-                    ))}
+              <table className="table table-striped my-4 w-100">
+                <thead>
+                  <tr>
+                    <th data-priority="1">#</th>
+                    <th>Customer Name</th>
+                    <th>MESSAGE</th>
+                    <th>DATE</th>
+                    <th>STATUS</th>
+                    <th>Reason for rejection</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.smsTemplateList.map(row => (
+                    <tr key={row.id}>
+                      <td>{row.id}</td>
+                      {/* <td>SCANIA TANZANIA LTD</td> */}
+                      <td>{row.customerFk}</td>
+                      <td>{row.messageTemplate}</td>
+                      <td>{this.formatDate(row.dateCreated)}</td>
+                      <td>
+                        {row.status == "1" &&
+                          <span className="badge badge-success">Approved</span>
+                        }
+                        {
+                          row.status == "0" &&
+                          <span className="badge badge-warning">Pending</span>
+                        }
+                        {
+                          row.status == "2" &&
+                          <span className="badge badge-danger">Rejected</span>
+                        }
+                      </td>
+                      <td>N/A</td>
+                      { row.status == "0" &&
 
-                  </tbody>
-                </table>
-              </Datatable>
+                        <td>
+                          <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveTemplate(row.id)}>Approved</span>
+                          <span className="btn badge-danger" onClick={() => this.RejectTemplate(row.id)}>Rejected</span>
+                        </td>
+                      }
+                      {
+                        row.status != "0" &&
+                        <td>
+                          N/A
+                          </td>
+                      }
+                    </tr>
+                  ))}
+
+                </tbody>
+              </table>
             </CardBody>
           </Card>
         </Container>
@@ -200,4 +247,4 @@ class SmsTemplates extends Component {
   }
 }
 
-export default SmsTemplates;
+export default SmsTemplatesRequested;

@@ -87,6 +87,30 @@ class SendersRequested extends Component {
         background: "#003366"
     }
 
+    ApproveSenderId=(id)=>{
+        axios.get("/sender-ids/approve/"+id)
+            .then(res => {
+                const response = res.data;
+                const senderIdList = this.state.senderIdList.filter((sender) => {
+                    return sender.id !== id;
+                  });
+                  this.setState({ senderIdList })
+            })
+    }
+
+    RejectSenderId=(id)=>{
+        axios.get("/sender-ids/reject/"+id)
+            .then(res => {
+                const response = res.data;
+                const senderIdList = this.state.senderIdList.filter((sender) => {
+                    return sender.id !== id;
+                  });
+                  this.setState({ senderIdList })
+            })
+       
+
+    }
+
     render() {
         return (
             <ContentWrapper>
@@ -183,8 +207,8 @@ class SendersRequested extends Component {
 
                                             </td>
                                             <td>
-                                                <span className="btn badge-success mr-1" style={this.AddActionButtonStyle}>Approved</span>
-                                                <span className="btn badge-danger">Rejected</span>
+                                                <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={()=>this.ApproveSenderId(row.id)}>Approved</span>
+                                                <span className="btn badge-danger" onClick={()=>this.RejectSenderId(row.id)}>Rejected</span>
                                             </td>
                                         </tr>
                                     ))}
