@@ -1,32 +1,17 @@
-import React, {Component} from 'react';
-import {withTranslation, Trans} from 'react-i18next';
+import React, { Component } from 'react';
+import { withTranslation, Trans } from 'react-i18next';
 import ContentWrapper from '../../Layout/ContentWrapper';
-import {Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import { Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import EasyPieChart from 'easy-pie-chart';
 
 import CardTool from '../../Common/CardTool'
 import Sparkline from '../../Common/Sparklines';
 import FlotChart from '../../Charts/Flot';
 import Now from '../../Common/Now';
-
+import axios from "../../../services/axios";
 class UserDashboard extends Component {
 
     state = {
-        flotData: [{
-            "label": "Uniques",
-            "color": "#768294",
-            "data": [
-                ["Mar", 70], ["Apr", 85], ["May", 59], ["Jun", 93], ["Jul", 66], ["Aug", 86], ["Sep", 60]
-            ]
-        }, {
-            "label": "Recurrent",
-            "color": "#1f92fe",
-            "data": [
-                ["Mar", 21], ["Apr", 12], ["May", 27], ["Jun", 24], ["Jul", 16], ["Aug", 39], ["Sep", 15]
-            ]
-        }],
-
-
         barStackedData: [{
             "label": "Failed",
             "color": "#f05050",
@@ -113,57 +98,26 @@ class UserDashboard extends Component {
             },
             shadowSize: 0
         },
-
-        flotOptions: {
-            series: {
-                lines: {
-                    show: false
-                },
-                points: {
-                    show: true,
-                    radius: 4
-                },
-                splines: {
-                    show: true,
-                    tension: 0.4,
-                    lineWidth: 1,
-                    fill: 0.5
-                }
-            },
-            grid: {
-                borderColor: '#eee',
-                borderWidth: 1,
-                hoverable: true,
-                backgroundColor: '#fcfcfc'
-            },
-            tooltip: true,
-            tooltipOpts: {
-                content: (label, x, y) => x + ' : ' + y
-            },
-            xaxis: {
-                tickColor: '#fcfcfc',
-                mode: 'categories'
-            },
-            yaxis: {
-                min: 0,
-                max: 150, // optional: use it for a clear represetation
-                tickColor: '#eee',
-                //position: 'right' or 'left',
-                tickFormatter: v => v /* + ' visitors'*/
-            },
-            shadowSize: 0
-        },
-
-        dropdownOpen: false
+        dashboardData: {},
+        isPrePaid: true,
+        purchasedSms: ""
 
     }
 
     componentDidMount() {
         const token = sessionStorage.getItem('token');
         if (token == null || token.length === 0) {
-            this.setState({redirect: '/login'});
+            this.setState({ redirect: '/login' });
         }
-        
+
+        axios.get("/dashboard")
+            .then(res => {
+                const response = res.data;
+                this.setState({ dashboardData: response })
+                this.customerSmsPurchase()
+                console.log(response);
+            })
+
         // Easy pie
         let pieOptions1 = {
             animate: {
@@ -180,16 +134,16 @@ class UserDashboard extends Component {
         new EasyPieChart(this.refs.easypie, pieOptions1);
     }
 
-    changeLanguage = lng => {
-        this.props.i18n.changeLanguage(lng);
+    customerSmsPurchase = () => {
+        const paymentType=this.state.dashboardData.paymentType;
+        // const paymentType = "Post-Paid"
+        if (paymentType == "Post-Paid") {
+            this.setState({ purchasedSms: "Post-Paid" })
+            this.setState({ isPrePaid: false })
+        } else {
+            this.setState({ purchasedSms: this.state.dashboardData.smsBalance })
+        }
     }
-
-    toggle = () => {
-        this.setState({
-            dropdownOpen: !this.state.dropdownOpen
-        });
-    }
-
     render() {
         // Usse t function instead of Trans component
         // const { t } = this.props;
@@ -211,7 +165,7 @@ class UserDashboard extends Component {
                                 <em className="icon-layers fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-dark rounded-right">
-                                <div className="h2 mt-0">1,700</div>
+                                <div className="h2 mt-0">{this.state.purchasedSms}</div>
                                 <div className="text-uppercase">Purchased Sms</div>
                             </div>
                         </div>
@@ -224,7 +178,7 @@ class UserDashboard extends Component {
                                 <em className="icon-bubble fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-info rounded-right">
-                                <div className="h2 mt-0">800</div>
+                                <div className="h2 mt-0">{this.state.dashboardData.totalSmsSent}</div>
                                 <div className="text-uppercase">Message Sent</div>
                             </div>
                         </div>
@@ -237,25 +191,26 @@ class UserDashboard extends Component {
                                 <em className="icon-bubble fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-danger rounded-right">
-                                <div className="h2 mt-0">8,500</div>
+                                <div className="h2 mt-0">{this.state.dashboardData.totalSmsFailed}</div>
                                 <div className="text-uppercase">Message Failed</div>
                             </div>
                         </div>
                     </Col>
-                    <Col xl={3} lg={6} md={12}>
-                        { /* START card */}
-                        <div className="card flex-row align-items-center align-items-stretch border-0">
-                            <div
-                                className="col-4 d-flex align-items-center bg-green justify-content-center rounded-left">
-                                <em className="icon-bubbles fa-3x"></em>
+                    {this.state.isPrePaid &&
+                        <Col xl={3} lg={6} md={12}>
+                            { /* START card */}
+                            <div className="card flex-row align-items-center align-items-stretch border-0">
+                                <div
+                                    className="col-4 d-flex align-items-center bg-green justify-content-center rounded-left">
+                                    <em className="icon-bubbles fa-3x"></em>
+                                </div>
+                                <div className="col-8 py-3 bg-green rounded-right">
+                                    <div className="h2 mt-0">{this.state.dashboardData.smsBalance}</div>
+                                    <div className="text-uppercase">Message Balance</div>
+                                </div>
                             </div>
-                            <div className="col-8 py-3 bg-green rounded-right">
-                                <div className="h2 mt-0">500</div>
-                                <div className="text-uppercase">Message Balance</div>
-                            </div>
-                        </div>
-                    </Col>
-                    
+                        </Col>
+                    }
                 </Row>
                 { /* END cards box */}
                 <Row>
@@ -267,12 +222,12 @@ class UserDashboard extends Component {
                                 { /* START card */}
                                 <div className="card card-default">
                                     <div className="card-header">
-                                        <CardTool refresh onRefresh={(_, done) => setTimeout(done, 2000)}/>
+                                        <CardTool refresh onRefresh={(_, done) => setTimeout(done, 2000)} />
                                         <div className="card-title"> Messages statistics</div>
                                     </div>
                                     <div className="card-body">
-                                        <FlotChart data={this.state.barStackedData} options={this.state.barStackedOptions} 
-                                                   height="250px"/>
+                                        <FlotChart data={this.state.barStackedData} options={this.state.barStackedOptions}
+                                            height="250px" />
                                     </div>
                                 </div>
                                 { /* END widget */}
@@ -280,17 +235,14 @@ class UserDashboard extends Component {
                         </Row>
                         { /* END chart */}
                     </Col>
-                    { /* END dashboard main content */}
-                    { /* START dashboard sidebar */}
                     <Col xl={3}>
-                        { /* START loader widget */}
                         <div className="card card-default">
                             <div className="card-body">
-                               
+
                                 <div className="">Delivery Success Rate</div>
                                 <div className="text-center py-4">
                                     <div ref="easypie" data-percent="70" className="easypie-chart easypie-chart-lg">
-                                        <span>70%</span>
+                                        <span>98%</span>
                                     </div>
                                 </div>
                                 <Sparkline options={{
@@ -299,8 +251,8 @@ class UserDashboard extends Component {
                                     barWidth: 5,
                                     barSpacing: 2
                                 }}
-                                           values="5,4,8,7,8,5,4,6,5,5,9,4,6,3,4,7,5,4,7"
-                                           className="text-center"/>
+                                    values="5,4,8,7,8,5,4,6,5,5,9,4,6,3,4,7,5,4,7"
+                                    className="text-center" />
                             </div>
                             <div className="card-footer">
                                 <p className="text-muted">
@@ -308,9 +260,7 @@ class UserDashboard extends Component {
                                 </p>
                             </div>
                         </div>
-                        { /* END loader widget */}
                     </Col>
-                    { /* END dashboard sidebar */}
                 </Row>
             </ContentWrapper>
         );

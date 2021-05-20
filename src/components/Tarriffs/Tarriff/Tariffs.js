@@ -58,7 +58,7 @@ class Tariffs extends Component {
   }
 
   DefualtTariff(id){
-    axios.get("/tariff/default/" + id)
+    axios.put("/tariff/default/" + id)
     .then(res => {
       const response = res.data;
       // const tarrifsList =  this.state.tarrifsList.map((tarriff) => {

@@ -88,7 +88,7 @@ class SendersRequested extends Component {
     }
 
     ApproveSenderId=(id)=>{
-        axios.get("/sender-ids/approve/"+id)
+        axios.put("/sender-ids/approve/"+id)
             .then(res => {
                 const response = res.data;
                 const senderIdList = this.state.senderIdList.filter((sender) => {
@@ -99,7 +99,7 @@ class SendersRequested extends Component {
     }
 
     RejectSenderId=(id)=>{
-        axios.get("/sender-ids/reject/"+id)
+        axios.put("/sender-ids/reject/"+id)
             .then(res => {
                 const response = res.data;
                 const senderIdList = this.state.senderIdList.filter((sender) => {

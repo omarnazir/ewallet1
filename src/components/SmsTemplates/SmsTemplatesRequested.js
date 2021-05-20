@@ -101,7 +101,7 @@ class SmsTemplatesRequested extends Component {
   };
 
   ApproveTemplate = (id) => {
-    axios.get("/sms-request/approve/" + id)
+    axios.put("/sms-request/approve/" + id)
       .then(res => {
         const response = res.data;
         const smsTemplateList = this.state.smsTemplateList.filter((template) => {
@@ -111,7 +111,7 @@ class SmsTemplatesRequested extends Component {
       })
   }
   RejectTemplate = (id) => {
-    axios.get("/sms-request/reject/" + id)
+    axios.put("/sms-request/reject/" + id)
       .then(res => {
         const response = res.data;
         const smsTemplateList = this.state.smsTemplateList.filter((template) => {
