@@ -23,8 +23,8 @@ class AddUserContactList extends Component {
 
     state = {
         file: '',
-        title:"",
-        description:""
+        title: "",
+        description: ""
     };
 
 
@@ -36,8 +36,8 @@ class AddUserContactList extends Component {
     handleSubmit = event => {
         event.preventDefault()
         const data = new FormData()
-        data.append("title",this.state.title)
-        data.append("description",this.state.description)
+        data.append("title", this.state.title)
+        data.append("description", this.state.description)
         data.append('file', this.state.file)
 
         axios.post("/contact-lists", data, { headers: { "Content-Type": "multipart/form-data" } }).then(res => {
@@ -54,7 +54,7 @@ class AddUserContactList extends Component {
 
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
-       
+
     }
 
 
@@ -87,7 +87,15 @@ class AddUserContactList extends Component {
 
                                         <FormGroup>
                                             <label>Select File (Excel xls or xslx) :</label>
-                                            <input className="form-control" name="file" type="file" required onChange={this.handleFileChange}></input>
+                                            <input
+                                                accept="application/vnd.ms-excel, text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                type="file"
+                                                className="form-control form-control-file"
+                                                name="file"
+                                                id="csvupload"
+                                                required
+                                                onChange={this.handleFileChange}
+                                            />
                                         </FormGroup>
 
                                         <button className="btn btn-sm btn-success mr-3" type="submit">

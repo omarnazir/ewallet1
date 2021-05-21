@@ -33,11 +33,19 @@ class SendSmsCompose extends Component {
         smsTemplateList: [],
         sendersList: [],
         contactLists: [],
-        sendLater: false,
+        sendScheduled: false,
         selectedMessageTemplate: '',
         selectedMessageTemplateId: 0,
         selectedSenderId: 0,
         activeTab: '1',
+
+        campaign:"",
+        senderId: 0,
+        templateId: 0,
+        recipientType: "file",
+        contactListId: 0,
+        numbers: "",
+        file:""
     }
 
     toggleTab = tab => {
@@ -45,17 +53,18 @@ class SendSmsCompose extends Component {
             this.setState({
                 activeTab: tab
             });
+
+            if (tab == "1") {
+                this.setState({ recipientType: "file" })
+            }
+            if (tab == "2") {
+                this.setState({ recipientType: "numbers" })
+            }
+            if (tab == "3") {
+                this.setState({ recipientType: "contactList" })
+            }
         }
     }
-
-
-    handleClickActiveTab = event => {
-        const newActiveTab = event.target.tab;
-        this.setState({
-            activeTab: newActiveTab,
-        })
-    }
-
 
     componentDidMount() {
         axios.get("/sms-request/me/approved")
@@ -79,12 +88,51 @@ class SendSmsCompose extends Component {
             })
     }
 
+    handleSubmit = event => {
+        event.preventDefault()
+
+        console.log("senderId " + this.state.senderId)
+        console.log("templateId "+ this.state.selectedMessageTemplateId)
+        console.log('recipientType '+ this.state.recipientType)
+        console.log("contactListId "+ this.state.contactListId)
+        console.log("numbers "+ this.state.numbers)
+        console.log("file "+ this.state.file)
+        console.log("ActiveTab "+ this.state.activeTab)
+        console.log("SmsScheduled"+ this.state.sendScheduled)
+
+        const data = new FormData()
+        data.append("senderId",this.state.senderId)
+        data.append("templateId", this.state.selectedMessageTemplateId)
+        data.append("recipientType", this.state.recipientType)
+        data.append("contactListId", this.state.contactListId)
+        data.append("numbers", this.state.numbers)
+        if(this.state.recipientType=="file" || this.state.file!=undefined){
+            data.append("file", this.state.file)
+        }
+  
+            axios.post("/sms/send-sms", data, { headers: { "Content-Type": "multipart/form-data" } })
+        .then(res => {
+            console.log(res);
+            console.log(res.data);
+            this.ViewDashboard();
+        })
+    }
+
+
+    ViewDashboard = () => {
+        return this.props.history.push('/dashboard')
+    }
+
     onChangeSendingOptions = event => {
         if ([event.target.value] == "Now") {
-            this.setState({ sendLater: false })
+            this.setState({ sendScheduled: false })
         } else {
-            this.setState({ sendLater: true })
+            this.setState({ sendScheduled: true })
         }
+    }
+
+    handleFileChange = event => {
+        this.setState({ file: event.target.files[0] });
     }
 
     handleSmsTemplateChange = event => {
@@ -94,17 +142,11 @@ class SendSmsCompose extends Component {
         this.setState({ selectedMessageTemplateId: templateId })
     }
 
-    handleSenderIdChange = event => {
-        const senderId = event.target.value;
-        const sender = this.state.sendersList.find(item => item.id == senderId);
-        this.setState({ selectedSenderId: sender.id })
-    }
-
     onChangeSendingOptions = event => {
         if ([event.target.value] == "Now") {
-            this.setState({ sendLater: false })
+            this.setState({ sendScheduled: false })
         } else {
-            this.setState({ sendLater: true })
+            this.setState({ sendScheduled: true })
         }
     }
 
@@ -112,13 +154,22 @@ class SendSmsCompose extends Component {
         const templateId = event.target.value
         const template = this.state.smsTemplateList.find(item => item.id == templateId);
         this.setState({ selectedMessageTemplate: template.messageTemplate })
-        this.setState({ selectedMessageTemplateId: templateId })
+        this.setState({ selectedMessageTemplateId: template.id })
     }
 
     handleSenderIdChange = event => {
-        const senderId = event.target.value;
+        
+        const senderId = [event.target.value]
+        console.log(senderId)
         const sender = this.state.sendersList.find(item => item.id == senderId);
-        this.setState({ selectedSenderId: sender.id })
+        this.setState({ senderId:sender.id })
+    }
+
+
+    handlePhoneBookChange = event => {
+        const contactListId = [event.target.value];
+        const contact = this.state.contactLists.find(item => item.id == contactListId);
+        this.setState({ contactListId:contact.id })
     }
 
 
@@ -140,12 +191,12 @@ class SendSmsCompose extends Component {
                                     <form onSubmit={this.handleSubmit}>
                                         <FormGroup>
                                             <label>Campaign :</label>
-                                            <input className="form-control" name="name" onChange={this.handleChange} required></input>
+                                            <input className="form-control" name="campaign" onChange={this.handleChange} required></input>
                                         </FormGroup>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Sender Id : </label>
                                             <select className="form-control" id="exampleFormControlSelect1" onChange={this.handleSenderIdChange}>
-                                                <option>Select a sender id</option>
+                                                <option key="0" value="0">Select a sender id</option>
                                                 {this.state.sendersList.map(row => (
                                                     <option key={row.id} value={row.id} >
                                                         {row.senderId}
@@ -184,37 +235,39 @@ class SendSmsCompose extends Component {
                                             <TabContent activeTab={this.state.activeTab}>
                                                 <TabPane tabId="1">
                                                     <div className="form-group px-md-2 px-1">
-                                                        <label for="csvupload"><strong>Accepted files (CSV file or Excel document)</strong></label>
+                                                        <label htmlFor="csvupload"><strong>Accepted files (CSV file or Excel document)</strong></label>
                                                         <input
                                                             accept="application/vnd.ms-excel, text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                                             type="file"
                                                             className="form-control-file"
-                                                            name="csvupload"
-                                                            id="csvupload" />
+                                                            name="file"
+                                                            id="csvupload"
+                                                            onChange={this.handleFileChange}
+                                                             />
                                                         <p className="mt-2"><em>Note: These contacts will not be saved</em></p>
                                                         <p><a href="sample2.csv"> <i className="fa fa-download"></i> Download Sample</a></p>
                                                     </div>
 
                                                 </TabPane>
-                                                <TabPane tabId="2">  <textarea name="phone_number" type="number" className="form-control rounded-0" rows="5"></textarea>
+                                                <TabPane tabId="2">  <textarea name="numbers" type="text" className="form-control rounded-0" rows="5" onChange={this.handleChange}></textarea>
                                                     <label className="mt-2">Please separate phone numbers with comma (,)</label></TabPane>
                                                 <TabPane tabId="3">
-                                                <label htmlFor="exampleFormControlSelect1">Sender Id : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1">
-                                                <option>Select a phonebook</option>
-                                                {this.state.contactLists.map(row => (
-                                                    <option key={row.id} value={row.id} >
-                                                        {row.title}  ({row.count} subscribers)
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                    <label htmlFor="exampleFormControlSelect2">Sender Id : </label>
+                                                    <select className="form-control" id="exampleFormControlSelect2" onChange={this.handlePhoneBookChange}>
+                                                        <option>Select a phonebook</option>
+                                                        {this.state.contactLists.map(row => (
+                                                            <option key={row.id} value={row.id} >
+                                                                {row.title}  ({row.count} subscribers)
+                                                            </option>
+                                                        ))}
+                                                    </select>
                                                 </TabPane>
 
                                             </TabContent>
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="exampleFormControlSelect11">Sms Template : </label>
-                                            <select className="form-control" id="exampleFormControlSelect11" onChange={this.handleSmsTemplateChange}>
+                                            <label htmlFor="exampleFormControlSelect13">Sms Template : </label>
+                                            <select className="form-control" id="exampleFormControlSelect13" onChange={this.handleSmsTemplateChange}>
                                                 <option>Select a template</option>
                                                 {this.state.smsTemplateList.map(row => (
                                                     <option key={row.id} value={row.id}>
@@ -230,14 +283,14 @@ class SendSmsCompose extends Component {
                                         </FormGroup>
 
                                         <div className="form-group">
-                                            <label htmlFor="exampleFormControlSelect1">Sending Options : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1" onChange={this.onChangeSendingOptions}>
+                                            <label htmlFor="exampleFormControlSelect4">Sending Options : </label>
+                                            <select className="form-control" id="exampleFormControlSelect4" onChange={this.onChangeSendingOptions}>
                                                 <option value="Now">Now</option>
                                                 <option value="Later">Later</option>
                                             </select>
                                         </div>
 
-                                        {this.state.sendLater &&
+                                        {this.state.sendScheduled &&
                                             <FormGroup>
                                                 <label>Scheduled Date:</label>
                                                 <input className="form-control" name="date" type="datetime-local" onChange={this.handleChange}></input>
