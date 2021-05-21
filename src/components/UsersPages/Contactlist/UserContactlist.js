@@ -49,7 +49,7 @@ class UserContactList extends Component {
   };
 
   componentDidMount() {
-    axios.get("/sms/contact-files")
+    axios.get("/contact-lists/me")
       .then(res => {
         const response = res.data;
         this.setState({ contactList: response })
@@ -107,31 +107,22 @@ class UserContactList extends Component {
 
                   {this.state.contactList.map(row => (
                       <tr key={row.id}>
-                        <td>1</td>
-                        <td>{row.name}</td>
-                        <td>0</td>
-                        <td>{row.url}</td>
+                        <td>{row.id}</td>
+                        <td>{row.title}</td>
+                        <td>{row.count}</td>
+                        <td>{row.description}</td>
+                        {row.isActive== 1 &&
                         <td><span className="badge badge-success">Active</span></td>
+                         }
+                         {row.isActive!= 1 &&
+                        <td><span className="badge badge-success">Disabled</span></td>
+                         }
                         <td>
-                        <span className="btn badge-success mr-1">Edit</span>
+                        {/* <span className="btn badge-success mr-1">Edit</span> */}
                       <span className="btn badge-danger">Delete</span>
                         </td>
                       </tr>
-                    ))}
-                    {/* <tr className="gradeA">
-                      <td>1</td>
-                      <td>Customer contact</td>
-                      <td>100</td>
-                      <td>A list of all debtors</td>
-                      <td>
-                        <span className="badge badge-success">Active</span>
-                      </td>
-                      <td>
-                      <span className="btn badge-success mr-1">Edit</span>
-                      <span className="btn badge-danger">Delete</span>
-                      </td>
-                    </tr> */}
-                    
+                    ))}  
                   </tbody>
                 </table>
               </Datatable>

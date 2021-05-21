@@ -130,7 +130,7 @@ const Routes = ({ location }) => {
 
 
                                 <Route path="/add-user" component={waitFor(AddNormalUser)}/>
-                                <Route path="/manage-user" component={waitFor(UserPage)}/>
+                                <Route path="/manage-users" component={waitFor(UserPage)}/>
 
                                 <Route path="/prepaid-invoices" component={waitFor(PrePaidInvoiceList)}/>
 

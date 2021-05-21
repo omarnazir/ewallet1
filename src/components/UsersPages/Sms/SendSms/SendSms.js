@@ -71,7 +71,7 @@ class SendSmsCompose extends Component {
                 this.setState({ sendersList: response })
                 console.log(response);
             })
-        axios.get("/sms/contact-files")
+        axios.get("/contact-lists/me")
             .then(res => {
                 const response = res.data;
                 this.setState({ contactLists: response })
@@ -176,7 +176,7 @@ class SendSmsCompose extends Component {
                                                     <NavLink
                                                         className={classnames({ active: this.state.activeTab === '3' })}
                                                         onClick={() => { this.toggleTab('3'); }}>
-                                                        <span className="fa fa-book"></span>
+                                                        <span className="fa fa-book mr-1"></span>
                                                 Use Contact List
                                             </NavLink>
                                                 </NavItem>
@@ -203,8 +203,8 @@ class SendSmsCompose extends Component {
                                             <select className="form-control" id="exampleFormControlSelect1">
                                                 <option>Select a phonebook</option>
                                                 {this.state.contactLists.map(row => (
-                                                    <option key={row.name} value={row.name} >
-                                                        {row.name}
+                                                    <option key={row.id} value={row.id} >
+                                                        {row.title}  ({row.count} subscribers)
                                                     </option>
                                                 ))}
                                             </select>
@@ -212,11 +212,6 @@ class SendSmsCompose extends Component {
 
                                             </TabContent>
                                         </div>
-                                        {/* <FormGroup>
-                                            <label>Recipients :</label>
-                                            <input className="form-control" type="email" name="email" onChange={this.handleChange} required></input>
-                                        </FormGroup> */}
-
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect11">Sms Template : </label>
                                             <select className="form-control" id="exampleFormControlSelect11" onChange={this.handleSmsTemplateChange}>

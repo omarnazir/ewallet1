@@ -76,7 +76,10 @@ class Sidebar extends Component {
         this.props.history.listen(this.closeSidebar);
 
         const userRoles = JSON.parse(sessionStorage.getItem("user_roles"));
-        const userMenu = Menu.filter(menu => userRoles.some(role => role.name === menu.path));
+        let userMenu = Menu.filter(menu => userRoles.some(role => role.name === menu.path));
+        //@Todo find how to filter nested item if exists 
+        // let subMenus=Menu.filter(menu=>userRoles.some(role=>role.name==menu.submenu.path))
+        
         this.setState({userMenu: userMenu});
         // this.setState({userMenu: Menu});
         console.log(userRoles);

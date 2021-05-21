@@ -61,7 +61,7 @@ class UserPage extends Component {
 
 
   ViewAddNormalUser = () => {
-    return this.props.history.push('/user/add-user')
+    return this.props.history.push('/add-user')
 }
 
   render() {

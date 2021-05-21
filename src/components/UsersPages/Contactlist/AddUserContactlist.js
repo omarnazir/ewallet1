@@ -23,28 +23,38 @@ class AddUserContactList extends Component {
 
     state = {
         file: '',
+        title:"",
+        description:""
     };
 
 
     ViewAllContacts = () => {
-        return this.props.history.push('/contact-list')
+        return this.props.history.push('/contact-lists')
     }
 
 
     handleSubmit = event => {
         event.preventDefault()
         const data = new FormData()
+        data.append("title",this.state.title)
+        data.append("description",this.state.description)
         data.append('file', this.state.file)
 
-        axios.post("/sms/upload-contacts", data, { headers: { "Content-Type": "multipart/form-data" } }).then(res => {
+        axios.post("/contact-lists", data, { headers: { "Content-Type": "multipart/form-data" } }).then(res => {
             console.log(res);
             console.log(res.data);
             this.ViewAllContacts();
         })
     }
 
-    handleChange = event => {
+    handleFileChange = event => {
         this.setState({ file: event.target.files[0] });
+    }
+
+
+    handleChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+       
     }
 
 
@@ -68,12 +78,16 @@ class AddUserContactList extends Component {
                                     <form onSubmit={this.handleSubmit}>
                                         <FormGroup>
                                             <label>Contact list Name :</label>
-                                            <input className="form-control" name="name" required></input>
+                                            <input className="form-control" name="title" required onChange={this.handleChange}></input>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <label>Description:</label>
+                                            <input className="form-control" name="description" required onChange={this.handleChange}></input>
                                         </FormGroup>
 
                                         <FormGroup>
                                             <label>Select File (Excel xls or xslx) :</label>
-                                            <input className="form-control" name="file" type="file" required onChange={this.handleChange}></input>
+                                            <input className="form-control" name="file" type="file" required onChange={this.handleFileChange}></input>
                                         </FormGroup>
 
                                         <button className="btn btn-sm btn-success mr-3" type="submit">

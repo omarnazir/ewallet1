@@ -13,13 +13,56 @@ import {
     FormGroup
 } from "reactstrap";
 import $ from "jquery";
-
+import axios from "../../../../services/axios"
 
 
 class PurchaseSms extends Component {
 
     ViewAllInvoices = () => {
-        return this.props.history.push('/user/prepaid-invoices')
+        return this.props.history.push('/prepaid-invoices')
+    }
+
+    state = {
+        tariff: "",
+        paymentMethod:"",
+        paymentMsisdn:"",
+        tariffList:[]
+    };
+
+    componentDidMount() {
+        axios.get("/tariff")
+            .then(res => {
+                const response = res.data;
+                this.setState({ tariffList: response })
+              
+            })
+        }
+
+    handleSubmit = event => {
+        event.preventDefault();
+        const tarriff = {
+            "tariff": this.state.tariff,
+            "paymentMethod":this.state.paymentMethod,
+            "paymentMsisdn":this.state.paymentMsisdn
+        }
+        axios.post("/bills", tarriff).then(res => {
+            console.log(res);
+            console.log(res.data);
+            this.ViewAllInvoices();
+        })
+    }
+
+    handleChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+    }
+
+    handlePaymentMethodChange = event => {
+        const paymentMethod = event.target.value;
+        this.setState({ paymentMethod })
+    }
+    handleSelectBundleChange = event => {
+        const tariff = event.target.value;
+        this.setState({ tariff })
     }
     render() {
         return (
@@ -38,23 +81,27 @@ class PurchaseSms extends Component {
                         <div className="col-md-6 offset-md-3">
                             <Card className="card-default">
                                 <CardBody>
-                                    <form>
+                                    <form onSubmit={this.handleSubmit}>
 
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Select a bundle : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1">
-                                                <option>A</option>
+                                            <select className="form-control" id="exampleFormControlSelect1" required name="tariff" onChange={this.handleSelectBundleChange} >
+                                                {this.state.tariffList.map(row => (
+                                                    <option key={row.id} value={row.id} >
+                                                        {row.tariffName}
+                                                    </option>
+                                                ))}
                                             </select>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Payment method : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1">
-                                                <option>MPESA</option>
+                                            <select className="form-control" id="exampleFormControlSelect1" name="paymentMethod" required onChange={this.handlePaymentMethodChange}>
+                                                <option value="MPESA">MPESA</option>
                                             </select>
                                         </div>
                                         <FormGroup>
                                             <label>Enter Vodacom phone number:</label>
-                                            <input className="form-control" name="name" type="number" required></input>
+                                            <input className="form-control" name="paymentMsisdn" type="number" required onClick={this.handleChange}></input>
                                         </FormGroup>
                                      
                                             <h6>After entering the number check out your phone to continue</h6>

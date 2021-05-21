@@ -19,7 +19,7 @@ import $ from "jquery";
 
 class AddNormalUser extends Component {
     ViewAllUsers = () => {
-        return this.props.history.push('/user/manage-user')
+        return this.props.history.push('/manage-user')
     }
     render() {
         return (
