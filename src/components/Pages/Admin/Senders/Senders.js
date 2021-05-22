@@ -14,7 +14,6 @@ import {
   Button,
   Breadcrumb
 } from "reactstrap";
-import Datetime from 'react-datetime';
 import $ from "jquery";
 import Moment from 'moment';
 
@@ -98,12 +97,13 @@ class Senders extends Component {
     });
   }
 
+
   render() {
     return (
       <ContentWrapper>
         <div className="content-heading">
           <div className="mr-auto flex-row">
-            Manage Customers Sender id's
+           <h3 style={{ fontWeight:500 }}>Manage Customers Sender id's</h3>
             <small>Showing all customers sender id's.</small>
           </div>
           <div className="flex-row">
@@ -165,6 +165,7 @@ class Senders extends Component {
                 dataField: this.state.field,
                 order: this.state.order
               } }
+              noDataIndication="No senders added"
                />
             </CardBody>
           </Card>
