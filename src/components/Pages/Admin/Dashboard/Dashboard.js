@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {withTranslation, Trans} from 'react-i18next';
 import ContentWrapper from '../../../Layout/ContentWrapper';
+import axios from "../../../../services/axios";
 import {Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,Button} from 'reactstrap';
 import EasyPieChart from 'easy-pie-chart';
 import {Redirect} from 'react-router-dom';
@@ -98,7 +99,8 @@ class Dashboard extends Component {
             },
             shadowSize: 0
         },
-        dropdownOpen: false
+        dropdownOpen: false,
+        dashboardData: {},
 
     }
 
@@ -108,6 +110,14 @@ class Dashboard extends Component {
         if (token == null || token.length === 0) {
             this.setState({redirect: '/login'});
         }
+
+
+        axios.get("/dashboard/admin")
+        .then(res => {
+            const response = res.data;
+            this.setState({ dashboardData: response })
+            console.log(response);
+        })
 
 
         // Easy pie
@@ -152,8 +162,9 @@ class Dashboard extends Component {
         return (
             <ContentWrapper>
                 <div className="content-heading">
-                    <div>Dashboard
-                        <small>Welcome to esms</small>
+                    <div>
+                    Dashboard
+                     <small>Welcome to esms</small>
                     </div>
                     <div className="ml-auto">
                         <Button onClick={this.logout} color="danger" size="sm">Logout</Button>
@@ -168,7 +179,7 @@ class Dashboard extends Component {
                                 <em className="icon-layers fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-dark rounded-right">
-                                <div className="h2 mt-0">1,700</div>
+                                <div className="h2 mt-0">{this.state.dashboardData.totalMessageTemplates}</div>
                                 <div className="text-uppercase">Message templates</div>
                             </div>
                         </div>
@@ -181,7 +192,7 @@ class Dashboard extends Component {
                                 <em className="icon-globe fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-danger rounded-right">
-                                <div className="h2 mt-0">800</div>
+                                <div className="h2 mt-0">{this.state.dashboardData.totalTariffs}</div>
                                 <div className="text-uppercase">Total tariffs</div>
                             </div>
                         </div>
@@ -193,7 +204,7 @@ class Dashboard extends Component {
                                 <em className="icon-bubbles fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-green rounded-right">
-                                <div className="h2 mt-0">500</div>
+                                <div className="h2 mt-0">{this.state.dashboardData.totalSenderIds}</div>
                                 <div className="text-uppercase">Sender ID's</div>
                             </div>
                         </div>
@@ -205,8 +216,8 @@ class Dashboard extends Component {
                                 <em className="icon-user fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-info rounded-right">
-                                <div className="h2 mt-0">8,500</div>
-                                <div className="text-uppercase">Post paid customers</div>
+                                <div className="h2 mt-0">{this.state.dashboardData.totalCustomers}</div>
+                                <div className="text-uppercase">Customers</div>
                             </div>
                         </div>
                     </Col>

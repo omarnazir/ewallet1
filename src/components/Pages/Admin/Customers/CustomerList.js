@@ -8,32 +8,6 @@ import Moment from 'moment'
 
 class CustomerList extends Component {
   state = {
-    dtOptions: {
-      paging: true, // Table pagination
-      ordering: true, // Column ordering
-      info: true, // Bottom left status text
-      responsive: true,
-      oLanguage: {
-        sSearch: '<em class="fa fa-search"></em>',
-        sLengthMenu: "_MENU_ records per page",
-        info: "Showing page _PAGE_ of _PAGES_",
-        zeroRecords: "Nothing found - sorry",
-        infoEmpty: "No records available",
-        infoFiltered: "(filtered from _MAX_ total records)",
-        oPaginate: {
-          sNext: '<em class="fa fa-caret-right"></em>',
-          sPrevious: '<em class="fa fa-caret-left"></em>',
-        },
-      },
-      // Datatable Buttons setup
-      dom: "Bfrtip",
-      buttons: [
-        { extend: "csv", className: "btn-info" },
-        { extend: "excel", className: "btn-info", title: "XLS-File" },
-        { extend: "pdf", className: "btn-info", title: $("title").text() },
-        { extend: "print", className: "btn-info" },
-      ],
-    },
     customersList: []
   };
 
@@ -48,22 +22,13 @@ class CustomerList extends Component {
         console.log(response);
       })
   }
-  // Access to internal datatable instance for customizations
-  dtInstance = (dtInstance) => {
-    const inputSearchClass = "datatable_input_col_search";
-    const columnInputs = $("tfoot ." + inputSearchClass);
-    // On input keyup trigger filtering
-    columnInputs.keyup(function () {
-      dtInstance.fnFilter(this.value, columnInputs.index(this));
-    });
-  };
 
   formatDate=(date)=>{
     return Moment(date).format('DD-MM-YYYY')
   }
 
   ViewCustomerDetails=()=>{
-    return this.props.history.push('/customers-details/1')
+    return this.props.history.push('/admin/customers-details/1')
   }
 
   render() {
