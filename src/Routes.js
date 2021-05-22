@@ -6,46 +6,48 @@ import PageLoader from './components/Common/PageLoader';
 
 import Base from './components/Layout/Base';
 import BasePage from './components/Layout/BasePage';
-import CustomerList from './components/Customers/CustomerList/CustomerList';
-import PostPaidCustomers from './components/Customers/PostPaid/PostPaidCustomers';
-import Senders from './components/Senders/Senders';
-import ReservedNumbers from './components/Settings/ReservedNumbers';
-import RestrictedWords from './components/Settings/RestrictedWords';
-import SmsTemplates from './components/SmsTemplates/SmsTemplates';
-import Tariffs from './components/Tarriffs/Tarriff/Tariffs';
-import Transactions from './components/Transactions/Transactions';
-import UsersManagement from './components/Users/UsersManagement';
-import MobileOperator from './components/Settings/MobileOperator';
-import SendersRequested from './components/Senders/SendersRequested';
-import AddSenderId from './components/Senders/AddSenderId';
-import AddTarriff from './components/Tarriffs/Tarriff/AddTarriff';
-import AddUser from './components/Users/AddUser';
-import AddSmsTemplate from './components/SmsTemplates/AddSmsTemplate';
-import AddTariffBand from './components/Tarriffs/TarriffBand/AddTariffBand';
-import TariffBand from './components/Tarriffs/TarriffBand/TariffBand';
-import UserDashboard from './components/UsersPages/Dashboard/UserDashboard';
-import UserSenderIds from './components/UsersPages/Senders/Senders';
-import AddUserSenderId from './components/UsersPages/Senders/AddSenderId';
-import UserOutbox from './components/UsersPages/Sms/Outbox/UserOutbox';
-import UserScheduledSms from './components/UsersPages/Sms/ScheduledSms/UserScheduledSms';
-import UserContactList from './components/UsersPages/Contactlist/UserContactlist';
-import AddUserContactList from './components/UsersPages/Contactlist/AddUserContactlist';
-import UserPage from './components/UsersPages/User/UserPage';
-import PurchaseSms from './components/UsersPages/Sms/PurchaseSmsPrePaid/PurchaseSms';
-import PrePaidInvoiceList from './components/UsersPages/InvoicesPrePaid/PrePaidInvoiceList';
-import AddUserRequestedSms from './components/UsersPages/Sms/RequestedSms/AddUserRequestedSms';
-import UserRequestedSmsList from './components/UsersPages/Sms/RequestedSms/UserRequestedSmsList';
-import AddNormalUser from './components/UsersPages/User/AddUser';
-import SendSmsCompose from './components/UsersPages/Sms/SendSms/SendSms';
-import CustomerDetails from './components/Customers/CustomerList/CustomerDetails';
-import SmsTemplatesRequested from './components/SmsTemplates/SmsTemplatesRequested';
 
+
+
+
+import SmsTemplatesRequested from './components/Pages/Admin/SmsTemplates/RequestedSmsTemplates';
+import CustomerDetails from './components/Pages/Admin/Customers/CustomerDetails';
+import MobileOperator from './components/Pages/Admin/Settings/MobileOperator';
+import SmsLogs from './components/Pages/Admin/Settings/SmsLogs';
+import CustomerList from './components/Pages/Admin/Customers/CustomerList';
+import PostPaidCustomers from './components/Pages/Admin/Customers/PostPaidCustomers';
+import Transactions from './components/Pages/Admin/Transactions/Transactions';
+import Senders from './components/Pages/Admin/Senders/Senders';
+import SendersRequested from './components/Pages/Admin/Senders/RequestedSenders';
+import AddSenderId from './components/Pages/Admin/Senders/AddSenderId';
+import AddSmsTemplate from './components/Pages/Admin/SmsTemplates/AddSmsTemplate';
+import SmsTemplates from './components/Pages/Admin/SmsTemplates/SmsTemplates';
+import AddTariff from "./components/Pages/Admin/Tariffs/AddTarriff"
+import Tariffs from "./components/Pages/Admin/Tariffs/Tariffs"
+import AddTariffBand from './components/Pages/Admin/Tariffs/AddTariffBand';
+import TarriffBand from './components/Pages/Admin/Tariffs/TariffBand';
+import AddUser from './components/Pages/Admin/UserManagement/AddUser';
+import UsersManagement from './components/Pages/Admin/UserManagement/UsersList';
+import RestrictedWords from './components/Pages/Admin/Settings/RestrictedWords';
+import ReservedNumbers from './components/Pages/Admin/Settings/ReservedNumbers';
+import UserSenderIds from './components/Pages/Public/Senders/Senders';
+import UserDashboard from './components/Pages/Public/Dashboard/UserDashboard';
+import AddUserSenderId from './components/Pages/Public/Senders/AddSenderId';
+import SendSmsCompose from './components/Pages/Public/Sms/SendSms';
+import UserOutbox from "./components/Pages/Public/Sms/UserOutbox"
+import UserScheduledSms from "./components/Pages/Public/Sms/UserScheduledSms"
+import UserContactList from './components/Pages/Public/ContactList/UserContactlist';
+import AddUserContactList from './components/Pages/Public/ContactList/AddUserContactlist';
+import PurchaseSms from "./components/Pages/Public/PrePaid/PurchaseSms/PurchaseSms"
+import AddNormalUser from './components/Pages/Public/Users/AddUser';
+import UserPage from './components/Pages/Public/Users/UserPage';
+import PrePaidInvoiceList from './components/Pages/Public/PrePaid/Invoices/PrePaidInvoiceList';
+import UserRequestedSmsList from './components/Pages/Public/Sms/UserRequestedSmsList';
+import AddUserRequestedSms from './components/Pages/Public/Sms/AddUserRequestedSms';
 
 const waitFor = Tag => props => <Tag {...props} />;
 
-const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
-// const Operators = lazy(() => import('./components/Operators/List'));
-const Sms = lazy(() => import('./components/Sms/List'));
+const Dashboard = lazy(() => import('./components/Pages/Admin/Dashboard/Dashboard'));
 const Login = lazy(() => import('./components/Auth/Login'));
 const Register = lazy(() => import('./components/Auth/Register'));
 
@@ -84,7 +86,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin/dashboard" component={waitFor(Dashboard)} />
 
                                     <Route path="/admin/mobile-operators" component={waitFor(MobileOperator)} />
-                                    <Route path="/admin/sms-log" component={waitFor(Sms)} />
+                                    <Route path="/admin/sms-log" component={waitFor(SmsLogs)} />
 
                                     <Route path="/admin/customers-list" component={waitFor(CustomerList)} />
                                     <Route path="/admin/customers-details/1" component={waitFor(CustomerDetails)}/>
@@ -101,10 +103,10 @@ const Routes = ({ location }) => {
                                     <Route path="/admin/sms-requested-templates" component={waitFor(SmsTemplatesRequested)}/>
                                     <Route path="/admin/sms-templates" component={waitFor(SmsTemplates)} />
 
-                                    <Route path="/admin/add-tariff" component={waitFor(AddTarriff)} />
+                                    <Route path="/admin/add-tariff" component={waitFor(AddTariff)} />
                                     <Route path="/admin/manage-tariffs" component={waitFor(Tariffs)} />
                                     <Route path="/admin/add-tariff-band" component={waitFor(AddTariffBand)} />
-                                    <Route path="/admin/manage-tariff-bands" component={waitFor(TariffBand)} />
+                                    <Route path="/admin/manage-tariff-bands" component={waitFor(TarriffBand)} />
 
 
                                     <Route path="/admin/add-new-user" component={waitFor(AddUser)} />

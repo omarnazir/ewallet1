@@ -133,7 +133,7 @@ class Login extends Component {
                             <div className="card-body">
                                 <p className="text-center py-2">SIGN IN TO CONTINUE.</p>
                                 {this.state.loginHasError ?
-                                <p className="text-danger">Invalid login, please try again</p> : null}
+                                <p className="text-danger">Invalid username or password, please try again</p> : null}
                                 <form className="mb-3" name="formLogin" onSubmit={this.onSubmit}>
                                     <div className="form-group">
                                         <div className="input-group with-focus">
