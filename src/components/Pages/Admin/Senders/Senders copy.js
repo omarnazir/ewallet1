@@ -11,21 +11,41 @@ import {
   InputGroup,
   InputGroupAddon,
   Input,
-  Button,
-  Breadcrumb
+  Button
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
 import Moment from 'moment';
 
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-
 class Senders extends Component {
   state = {
-    senderIdList: [],
-    field: null,
-    order: null
+    dtOptions: {
+      paging: true, // Table pagination
+      ordering: true, // Column ordering
+      info: true, // Bottom left status text
+      responsive: true,
+      oLanguage: {
+        sSearch: '<em class="fa fa-search"></em>',
+        sLengthMenu: "_MENU_ records per page",
+        info: "Showing page _PAGE_ of _PAGES_",
+        zeroRecords: "Nothing found - sorry",
+        infoEmpty: "No records available",
+        infoFiltered: "(filtered from _MAX_ total records)",
+        oPaginate: {
+          sNext: '<em class="fa fa-caret-right"></em>',
+          sPrevious: '<em class="fa fa-caret-left"></em>',
+        },
+      },
+      // Datatable Buttons setup
+      dom: "Bfrtip",
+      buttons: [
+        { extend: "csv", className: "btn-info" },
+        { extend: "excel", className: "btn-info", title: "XLS-File" },
+        { extend: "pdf", className: "btn-info", title: $("title").text() },
+        { extend: "print", className: "btn-info" },
+      ],
+    },
+    senderIdList: []
   };
 
 
@@ -38,64 +58,28 @@ class Senders extends Component {
       })
   }
 
-  columns = [{
-    dataField: 'id',
-    text: 'ID',
-    sort: true,
-    onSort: this.handleSort
-  }, {
-    dataField: 'senderId',
-    text: 'Customer/Organization'
-  }, {
-    dataField: 'senderId',
-    text: 'SENDER'
-  },
-  {
-    dataField: 'dateCreated',
-    text: 'DATE REGISTERED',
-    isDummyField: true,
-    formatter:(cellContent,row)=>{
-      return (this.formatDate(row.dateCreated))
-    }
-  },
-  {
-    dataField: 'is_approved',
-    text: 'STATUS',
-    isDummyField: true,
-    formatter: (cellContent, row) => {
-      if (row.is_approved == 1) {
-        return (
-          <span className="badge badge-success">Approved</span>
-        );
-      } else if (row.is_approved == 0) {
-        return (<span className="badge badge-warning">Pending</span>)
-      } else {
-        return (
-          <span className="badge badge-danger">Rejected</span>
-        );
-      }
-    }
-  }
-  ];
+  // Access to internal datatable instance for customizations
+  dtInstance = (dtInstance) => {
+    const inputSearchClass = "datatable_input_col_search";
+    const columnInputs = $("tfoot ." + inputSearchClass);
+    // On input keyup trigger filtering
+    columnInputs.keyup(function () {
+      dtInstance.fnFilter(this.value, columnInputs.index(this));
+    });
+  };
 
-  ViewRequestedSenders = () => {
+  ViewRequestedSenders=()=>{
     return this.props.history.push('/admin/senders-requested')
   }
-  AddSenderId = () => {
+  AddSenderId=()=>{
     return this.props.history.push('/admin/add-senderid')
   }
-  formatDate = (date) => {
+  formatDate=(date)=>{
     return Moment(date).format('DD-MM-YYYY')
   }
-  AddActionButtonStyle = {
-    color: 'white',
-    background: "#003366"
-  }
-  handleSort = (field, order) => {
-    this.setState({
-      field,
-      order
-    });
+  AddActionButtonStyle={
+    color:'white',
+    background:"#003366"
   }
 
   render() {
@@ -158,14 +142,45 @@ class Senders extends Component {
               </div>
             </CardHeader>
             <CardBody>
-              <BootstrapTable bootstrap4 striped keyField='id' 
-              data={this.state.senderIdList} columns={this.columns}
-               pagination={paginationFactory()} 
-               sort={ {
-                dataField: this.state.field,
-                order: this.state.order
-              } }
-               />
+              {/* <Datatable options={this.state.dtOptions}> */}
+                <table className="table table-striped my-4 w-100">
+                  <thead>
+                    <tr>
+                      <th data-priority="1">ID</th>
+                      <th>Customer/Organization</th>
+
+                      <th className="" data-priority="2">
+                        Sender
+                      </th>
+                      <th>DATE REGISTERED</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.senderIdList.map(row => (
+                      <tr key={row.id}>
+                        <td>{row.id}</td>
+                        <td>{row.senderId}</td>
+                        <td>{row.senderId}</td>
+                        <td>{this.formatDate(row.dateCreated)}</td>
+                        <td>
+                          { row.is_approved==1 && 
+                          <span className="badge badge-success">Approved</span>
+                          }
+                          { row.is_approved==0 && 
+                          <span className="badge badge-warning">Pending</span>
+                          }
+                          {
+                            row.is_approved==2 &&
+                            <span className="badge badge-danger">Rejected</span>
+                          }
+                          
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

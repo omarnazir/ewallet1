@@ -87,6 +87,8 @@
     "raphael": "2.3.0",
     "rc-slider": "8.7.1",
     "react": "17.0.2",
+    "react-bootstrap-table-next": "^4.0.3",
+    "react-bootstrap-table2-paginator": "^2.1.2",
     "react-chartist": "0.14.4",
     "react-chartjs-2": "2.11.1",
     "react-color": "2.19.3",
