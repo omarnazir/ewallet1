@@ -4,7 +4,9 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import PageLoader from './components/Common/PageLoader';
 
+//Authorized uses Base 
 import Base from './components/Layout/Base';
+//Unauthorized uses BasePage
 import BasePage from './components/Layout/BasePage';
 
 

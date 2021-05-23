@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
-import axios from "../../../../services/axios";
+import {SenderIdService} from "../../../../services"
 import {
     Container,
     Card,
@@ -13,7 +12,6 @@ import {
     Input,
     Button
 } from "reactstrap";
-import Datetime from 'react-datetime';
 import $ from "jquery";
 import Moment from 'moment';
 
@@ -50,12 +48,11 @@ class SendersRequested extends Component {
 
 
     componentDidMount() {
-        axios.get("/sender-ids/pending")
-            .then(res => {
-                const response = res.data;
-                this.setState({ senderIdList: response })
-                console.log(response);
-            })
+        SenderIdService.GetAllPendingSenderIds().then(res => {
+            const response = res.data;
+            this.setState({ senderIdList: response })
+            console.log(response);
+        })
     }
 
     // Access to internal datatable instance for customizations
@@ -87,28 +84,28 @@ class SendersRequested extends Component {
         background: "#003366"
     }
 
-    ApproveSenderId=(id)=>{
-        axios.put("/sender-ids/approve/"+id)
-            .then(res => {
+    ApproveSenderId = (id) => {
+        SenderIdService.ApproveSenderId(id).then(
+            res => {
                 const response = res.data;
                 const senderIdList = this.state.senderIdList.filter((sender) => {
                     return sender.id !== id;
-                  });
-                  this.setState({ senderIdList })
-            })
+                });
+                this.setState({ senderIdList })
+            }
+        )
     }
 
-    RejectSenderId=(id)=>{
-        axios.put("/sender-ids/reject/"+id)
-            .then(res => {
+    RejectSenderId = (id) => {
+        SenderIdService.RejectSenderId(id).then(
+            res => {
                 const response = res.data;
                 const senderIdList = this.state.senderIdList.filter((sender) => {
                     return sender.id !== id;
-                  });
-                  this.setState({ senderIdList })
-            })
-       
-
+                });
+                this.setState({ senderIdList })
+            }
+        )
     }
 
     render() {
@@ -207,8 +204,8 @@ class SendersRequested extends Component {
 
                                             </td>
                                             <td>
-                                                <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={()=>this.ApproveSenderId(row.id)}>Approved</span>
-                                                <span className="btn badge-danger" onClick={()=>this.RejectSenderId(row.id)}>Rejected</span>
+                                                <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveSenderId(row.id)}>Approved</span>
+                                                <span className="btn badge-danger" onClick={() => this.RejectSenderId(row.id)}>Rejected</span>
                                             </td>
                                         </tr>
                                     ))}

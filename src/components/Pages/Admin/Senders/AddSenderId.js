@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
-import axios from "../../../../services/axios";
+import  {SenderIdService}  from "../../../../services"
 import {
     Container,
     Card,
@@ -22,36 +21,37 @@ import $ from "jquery";
 
 class AddSenderId extends Component {
     state = {
-      name:"",
-    }; 
+        name: "",
+    };
 
     handleSubmit = event => {
-
         event.preventDefault();
         const sender = {
-            "senderId": this.state.name,
-       
+            senderId: this.state.name,
+
         }
-        axios.post("/sender-ids",sender).then(res=>{
-            console.log(res);
-            console.log(res.data);
-            this.ViewAllSenderIds();
-          })
-      }
+        SenderIdService.AddSenderId(sender).then(
+            res => {
+                console.log(res);
+                console.log(res.data);
+                this.ViewAllSenderIds();
+            }
+        )
+    }
 
-    ViewAllSenderIds=()=>{
+    ViewAllSenderIds = () => {
         return this.props.history.push('/admin/senders')
-      }
+    }
 
-      handleChange = event =>{
-        this.setState({ name: event.target.value});
-      }
+    handleChange = event => {
+        this.setState({ name: event.target.value });
+    }
 
-      AddActionButtonStyle={
-        color:'white',
-        background:"#003366"
-      }
-    
+    AddActionButtonStyle = {
+        color: 'white',
+        background: "#003366"
+    }
+
     render() {
         return (
             <ContentWrapper>

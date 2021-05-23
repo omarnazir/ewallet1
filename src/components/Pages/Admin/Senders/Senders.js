@@ -16,6 +16,8 @@ import {
 } from "reactstrap";
 import $ from "jquery";
 import Moment from 'moment';
+import  {SenderIdService}  from "../../../../services"
+
 
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -31,12 +33,10 @@ class Senders extends Component {
 
 
   componentDidMount() {
-    axios.get("/sender-ids")
-      .then(res => {
-        const response = res.data;
-        this.setState({ senderIdList: response })
-        console.log(response);
-      })
+    SenderIdService.GetAllSenderIds().then(res=>{
+      const response = res.data;
+      this.setState({ senderIdList: response })
+    })
   }
 
   columns = [{
