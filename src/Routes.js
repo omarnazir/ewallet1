@@ -40,10 +40,10 @@ import UserOutbox from "./components/Pages/Public/Sms/UserOutbox"
 import UserScheduledSms from "./components/Pages/Public/Sms/UserScheduledSms"
 import UserContactList from './components/Pages/Public/ContactList/UserContactlist';
 import AddUserContactList from './components/Pages/Public/ContactList/AddUserContactlist';
-import PurchaseSms from "./components/Pages/Public/PrePaid/PurchaseSms/PurchaseSms"
+import PurchaseSms from "./components/Pages/Public/PrePaid/PrePaidPurchaseSms"
 import AddNormalUser from './components/Pages/Public/Users/AddUser';
 import UserPage from './components/Pages/Public/Users/UserPage';
-import PrePaidInvoiceList from './components/Pages/Public/PrePaid/Invoices/PrePaidInvoiceList';
+import PrePaidInvoiceList from './components/Pages/Public/PrePaid/PrePaidInvoiceList';
 import UserRequestedSmsList from './components/Pages/Public/Sms/UserRequestedSmsList';
 import AddUserRequestedSms from './components/Pages/Public/Sms/AddUserRequestedSms';
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import ContentWrapper from "../../../../Layout/ContentWrapper";
-import axios from "../../../../../services/axios";
-import Datatable from "../../../../Common/Datatable";
+import ContentWrapper from "../../../Layout/ContentWrapper";
+import axios from "../../../../services/axios";
+import Datatable from "../../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
 import $ from "jquery";
 

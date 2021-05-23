@@ -3,7 +3,7 @@ import {Link, Redirect} from 'react-router-dom';
 import {Input, CustomInput,Button} from 'reactstrap';
 
 import FormValidator from '../Common/FormValidator.js';
-import axios from "axios";
+import {AuthService} from "../../services"
 
 
 class Login extends Component {
@@ -65,22 +65,20 @@ class Login extends Component {
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
 
         e.preventDefault()
-
         if (!hasError) {
-            axios.post('http://localhost:8085/api/v1/authenticate', {
-                username: this.state.formLogin.username,
-                password: this.state.formLogin.password
-            }).then(res => {
-                sessionStorage.setItem('token', res.data.token);
-                sessionStorage.setItem('user',res.data.user)
-                sessionStorage.setItem('customerFk',res.data.user.customerFk);
-                sessionStorage.setItem('username',res.data.user.username);
-                sessionStorage.setItem('user_roles', JSON.stringify(res.data.user.roles));
-                this.setState({redirect: '/dashboard'});
-            }).catch(error => {
-                console.log(error.response.data);
+            const data={
+                username:this.state.formLogin.username,
+                password:this.state.formLogin.password
+            }
+            AuthService.login(data).then(
+                (res)=>{
+                    console.log(res)
+                    this.setState({redirect: '/dashboard'});
+                },(err)=>{
+                // console.log(err.response.data);
                 this.setState({loginHasError: true})
-            });
+                }
+            )
         }
     }
 
@@ -93,6 +91,7 @@ class Login extends Component {
     }
 
     render() {
+        const year = new Date().getFullYear()
         if (this.state.redirect) {
             return <Redirect to={this.state.redirect}/>
         }
@@ -151,7 +150,7 @@ class Login extends Component {
                                                 </span>
                                             </div>
                                             {this.hasError('formLogin', 'username', 'required') &&
-                                            <span className="invalid-feedback">Field is required</span>}
+                                            <span className="invalid-feedback">Username is required</span>}
                                         </div>
                                     </div>
                                     <div className="form-group">
@@ -171,7 +170,7 @@ class Login extends Component {
                                                     <em className="fa fa-lock"></em>
                                                 </span>
                                             </div>
-                                            <span className="invalid-feedback">Field is required</span>
+                                            <span className="invalid-feedback">Password is required</span>
                                         </div>
                                     </div>
                                     <div className="clearfix">
@@ -193,7 +192,7 @@ class Login extends Component {
                     </div>
                     <div className="p-3 text-center">
                     <span className="mr-2">&copy;</span>
-                    <span>2020</span>
+                    <span>{year}</span>
                     <span className="mx-2">-</span>
                     <span>E-SMS</span>
                     <br/>

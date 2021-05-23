@@ -18,11 +18,6 @@ class AuthService {
         })
     }
 
-     // catch(err => {
-        //     console.log(error.response.data)
-        //     return err;
-        // })
-
     register(data){
         const registrationUser= {
             fullname:data.fullname,
@@ -45,6 +40,7 @@ class AuthService {
     }
 
 
+    /*
     registeredUser = {
         "fullname": this.state.fullname,
         "email": this.state.email,
@@ -76,18 +72,22 @@ class AuthService {
         // "sms_account_type": "User",
         // "sms_expire": null,
         // "sms_expire_days": 30,
-        //*Assign on approval */
+
+        //**Assign on approval 
         // "tariff_fk": 1,
+
+
         "payment_type": this.state.AccountType,
         // "post_paid_approved": 0,
         "nin": this.state.nidaNumber,
         "nida_attachment": this.state.nidaFile,
         // "ind_org": "",
         "business_licence": "",
-        /**Set the gateway on approval */
+
+        /**Set the gateway on approval 
         // "sms_gateway_username": "",
         // "sms_gateway_password": ""
-    }
+    } **/
   
   
 }

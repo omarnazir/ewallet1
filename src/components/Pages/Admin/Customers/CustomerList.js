@@ -6,13 +6,18 @@ import { Container, Card, CardHeader, CardBody, CardTitle ,Button} from "reactst
 import $ from "jquery";
 import Moment from 'moment'
 
+
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.css';
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+
 class CustomerList extends Component {
   state = {
-    customersList: []
+    customersList: [],
+    field: null,
+    order: null
   };
-
-
-  
 
   componentDidMount() {
     axios.get("/customers")
@@ -27,9 +32,97 @@ class CustomerList extends Component {
     return Moment(date).format('DD-MM-YYYY')
   }
 
-  ViewCustomerDetails=()=>{
-    return this.props.history.push('/admin/customers-details/1')
+  ViewCustomerDetails=(id)=>{
+    console.log(id)
+    // return this.props.history.push('/admin/customers-details/1')
   }
+  handleSort = (field, order) => {
+    this.setState({
+      field,
+      order
+    });
+  }
+
+   rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      console.log(`clicked on row with index: ${rowIndex}`);
+      let getCurrentCellIndex = e.target.cellIndex;
+      let getLastCellIndex = document.querySelector('table tr:last-child td:last-child').cellIndex
+      
+    
+      if (getCurrentCellIndex !== getLastCellIndex && getCurrentCellIndex !== undefined) {
+        e.stopPropagation();
+        
+          // console.log(`----> ${JSON.stringify(row)} |||| ${rowIndex}`)
+      }
+    }
+  };
+
+
+  columns = [{
+    dataField: 'id',
+    text: '#',
+    sort: true,
+    onSort: this.handleSort
+  },
+  {
+    dataField: 'fullname',
+    text: 'CUSTOMER NAME'
+  },
+  {
+    dataField: 'email',
+    text: 'EMAIL'
+  },{
+    dataField: 'phonenumber',
+    text: 'PHONE'
+  }, {
+    dataField: 'location',
+    text: 'ADDRESS'
+  },
+  {
+    dataField: 'isActive',
+    text: 'STATUS',
+    isDummyField: true,
+    formatter: (cellContent, row) => {
+      if (row.isActive == 1) {
+        return (
+          <span className="badge badge-success">Active</span>
+        );
+      }else {
+        return (
+          <span className="badge badge-danger">Disabled</span>
+        );
+      }
+    }
+  }
+  ,{
+    dataField: 'startDate',
+    text: 'DATE REGISTERED',
+    isDummyField: true,
+    formatter:(cellContent,row)=>{
+      return (this.formatDate(row.startDate))
+    }
+  }, {
+    dataField: 'paymentType',
+    text: 'PAYMENT TYPE'
+  }, {
+    dataField: 'id',
+    text: 'ACTION',
+    isDummyField: true,
+    formatter:(cellContent,row)=>{
+      return (
+      <Button color="success" className="btn btn-success">
+      <i className="fa fa-eye"></i>
+      </Button>)
+    }
+    
+  }
+
+]
+
+ 
+
+
 
   render() {
     return (
@@ -45,54 +138,16 @@ class CustomerList extends Component {
             <CardHeader>
             </CardHeader>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
-                <table className="table table-striped my-4 w-100">
-                  <thead>
-                    <tr>
-                      <th data-priority="1">#</th>
-                      <th>CUSTOMER NAME</th>
-                      <th>EMAIL</th>
-                      <th className="sort-numeric">PHONE</th>
-                      <th className="sort-alpha" data-priority="2">
-                        ADDRESS
-                      </th>
-                      <th>STATUS</th>
-                      <th>DATE REGISTERED</th>
-                      <th>PAYMENT TYPE</th>
-                      <th>ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.customersList.map(row => (
-                      <tr key={row.id}>
-                        <td>{row.id}</td>
-                        <td>{row.fullname}</td>
-                        <td>{row.email}</td>
-                        <td>{row.phonenumber}</td>
-                        <td>{row.location}</td>
-                        {/* <td>{row.isActive}</td> */}
-                        <td>{row.isActive==1 &&
-                           <span className="badge badge-success">Active</span>
-                        }
-                        {row.isActive!=1 && 
-                          <span className="badge badge-danger">Disabled</span>
-                        }
-                        </td>
-
-                        <td>{this.formatDate(row.startDate)}</td>
-                        <td>{row.paymentType}</td>
-                        <td> 
-                        <Button color="success" className="btn btn-success"  onClick={this.ViewCustomerDetails}>
-                        {/* <i className="fa fa-arrow-right"></i> */}
-                        <i className="fa fa-eye"></i>
-                        </Button>
-                         </td>  
-                      </tr>
-                    ))}
-                   
-                  </tbody>
-                </table>
-              </Datatable>
+            <BootstrapTable bootstrap4 striped keyField='id' 
+              data={this.state.customersList} columns={this.columns}
+               pagination={paginationFactory()} 
+               sort={ {
+                dataField: this.state.field,
+                order: this.state.order
+              } }
+              noDataIndication="No senders added"
+              rowEvents={this.rowEvents}
+               />
             </CardBody>
           </Card>
         </Container>

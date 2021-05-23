@@ -153,6 +153,7 @@ class Register extends Component {
     }
 
     render() {
+        const year = new Date().getFullYear()
         return (
             <div>
                 <header>
@@ -366,7 +367,7 @@ class Register extends Component {
                 <div className="block-center mt-md-5 mt-3 bg-dark py-2">
                     <div className="p-3 text-center text-white">
                         <span className="mr-2">&copy;</span>
-                        <span>2021</span>
+                        <span>{year}</span>
                         <span className="mx-2">-</span>
                         <span>E-SMS</span>
                         <br />

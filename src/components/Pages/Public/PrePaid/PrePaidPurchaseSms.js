@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ContentWrapper from "../../../../Layout/ContentWrapper";
-import axios from "../../../../../services/axios";
+import ContentWrapper from "../../../Layout/ContentWrapper";
+import axios from "../../../../services/axios";
 import {
     Container,
     Card,
