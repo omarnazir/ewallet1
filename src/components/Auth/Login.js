@@ -75,11 +75,11 @@ class Login extends Component {
                     console.log(res)
                     const roles=res.user.roles;
 
-                    const found=roles.findIndex((row)=>row.name=="/dashboard")
+                    const found=roles.findIndex((row)=>row.name=="/admin/dashboard")
                     if(found==1){
-                        this.setState({redirect: '/dashboard'});
-                    }else{
                         this.setState({redirect: '/admin/dashboard'});
+                    }else{
+                        this.setState({redirect: '/dashboard'});
                     }
                     window.location.reload();
                 },(err)=>{

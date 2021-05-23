@@ -224,8 +224,8 @@ class SmsTemplatesRequested extends Component {
                       { row.status == "0" &&
 
                         <td>
-                          <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveTemplate(row.id)}>Approved</span>
-                          <span className="btn badge-danger" onClick={() => this.RejectTemplate(row.id)}>Rejected</span>
+                          <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveTemplate(row.id)}>Approve</span>
+                          <span className="btn badge-danger" onClick={() => this.RejectTemplate(row.id)}>Reject</span>
                         </td>
                       }
                       {

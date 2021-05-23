@@ -108,7 +108,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin/add-tariff" component={waitFor(AddTariff)} />
                                     <Route path="/admin/manage-tariffs" component={waitFor(Tariffs)} />
                                     <Route path="/admin/add-tariff-band" component={waitFor(AddTariffBand)} />
-                                    <Route path="/admin/manage-tariff-bands" component={waitFor(TarriffBand)} />
+                                    <Route path="/admin/manage-tariff-bands/:id" component={waitFor(TarriffBand)} />
 
 
                                     <Route path="/admin/add-new-user" component={waitFor(AddUser)} />

@@ -9,6 +9,7 @@ class AuthService {
         }
         return axios.post(API_URL + "/authenticate", logindata).then(res => {
             if(res.data){
+                sessionStorage.clear();
                 sessionStorage.setItem('token', res.data.token);
                 sessionStorage.setItem('user', res.data.user)
                 sessionStorage.setItem('username', res.data.user.username);

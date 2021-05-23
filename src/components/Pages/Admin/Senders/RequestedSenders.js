@@ -204,8 +204,8 @@ class SendersRequested extends Component {
 
                                             </td>
                                             <td>
-                                                <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveSenderId(row.id)}>Approved</span>
-                                                <span className="btn badge-danger" onClick={() => this.RejectSenderId(row.id)}>Rejected</span>
+                                                <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveSenderId(row.id)}>Approve</span>
+                                                <span className="btn badge-danger" onClick={() => this.RejectSenderId(row.id)}>Reject</span>
                                             </td>
                                         </tr>
                                     ))}

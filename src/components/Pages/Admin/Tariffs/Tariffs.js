@@ -64,12 +64,15 @@ class Tariffs extends Component {
       // const tarrifsList =  this.state.tarrifsList.map((tarriff) => {
       //   return tarriff.id === id ? { ...response.data } : tarriff;
       // })
-     
-
       const index = this.state.tarrifsList.findIndex((tarriff) => tarriff.id === id);
       const updateTarriffList = update(this.state.tarrifsList, {$splice: [[index, 1, res.data]]});  // array.splice(start, deleteCount, item1)
       this.setState({tarrifsList: updateTarriffList});
     })
+  }
+
+  ViewTariffBand(row){
+    console.log(row.id)
+    return this.props.history.push('/admin/manage-tariff-bands/'+row.id,row)
   }
 
   // Access to internal datatable instance for customizations
@@ -83,10 +86,6 @@ class Tariffs extends Component {
   };
   AddTarriff = () => {
     return this.props.history.push('/admin/add-tariff')
-  }
-
-  ViewTarriffBand = () => {
-    return this.props.history.push('/manage-tariff-bands')
   }
 
   AddActionButtonStyle={
@@ -148,7 +147,7 @@ class Tariffs extends Component {
                             <span className="btn bg-danger-dark" onClick={() => this.DeleteTariff(row.id)}>
                             <i className="icon-trash mr-2"></i>
                               Delete</span>
-                            <button className="btn badge-success ml-2" onClick={this.ViewTarriffBand} style={this.TableActionButtonStyle}>
+                            <button className="btn badge-success ml-2" onClick={() => this.ViewTariffBand(row)} style={this.TableActionButtonStyle}>
                             <i className="icon-info mr-2"></i>
                               View Bandwidth</button>
                         </td>

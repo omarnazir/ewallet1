@@ -46,15 +46,18 @@ class Senders extends Component {
     onSort: this.handleSort
   }, {
     dataField: 'senderId',
-    text: 'Customer/Organization'
+    text: 'Customer/Organization',
+    sort:true
   }, {
     dataField: 'senderId',
-    text: 'SENDER'
+    text: 'SENDER',
+    sort:true
   },
   {
     dataField: 'dateCreated',
     text: 'DATE REGISTERED',
     isDummyField: true,
+    sort:true,
     formatter:(cellContent,row)=>{
       return (this.formatDate(row.dateCreated))
     }
@@ -63,6 +66,7 @@ class Senders extends Component {
     dataField: 'is_approved',
     text: 'STATUS',
     isDummyField: true,
+    sort:true,
     formatter: (cellContent, row) => {
       if (row.is_approved == 1) {
         return (

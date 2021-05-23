@@ -35,17 +35,23 @@ class TarriffBand extends Component {
         { extend: "print", className: "btn-info" },
       ],
     },
-    tarrifsList: []
+    tariffBandList: [],
+    tariffId:0,
+    tariff:{}
   };
 
-  // componentDidMount() {
-  //   axios.get("/tariff")
-  //     .then(res => {
-  //       const response = res.data;
-  //       this.setState({ tarrifsList: response })
-  //       console.log(response);
-  //     })
-  // }
+  componentDidMount() {
+    axios.get("/tariff-bands")
+      .then(res => {
+        const response = res.data;
+        this.setState({ tariffBandList: response })
+        console.log(response);
+      })
+    const { state } = this.props.history.location;
+    this.setState({tariff:state})
+    console.log('id', state.id);
+    console.log("name",state.tariffName)
+  }
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -85,45 +91,39 @@ class TarriffBand extends Component {
             <CardHeader>
             </CardHeader>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+            
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
                       <th data-priority="1">ID</th>
                       <th>TARIFF NAME</th>
+                      <th>TARIFF (Tshs)</th>
                       <th>SMS VOLUME</th>
                       <th>EXPIRATION (Days)</th>
                       <th>ACTIONS</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {/* <tr className="gradeA">
-                      <td>Gecko</td>
-                      <td>Netscape 7.2</td>
-                      <td>Win 95+ / Mac OS 8.6-9.2</td>
-                      <td>1.7</td>
-                      <td>A</td>
-                    </tr> */}
-
-                    {this.state.tarrifsList.map(row => (
+                    {this.state.tariffBandList.map(row => (
                       <tr key={row.id}>
                         <td>{row.id}</td>
-                        <td>{row.tariffName}</td>
-                        <td>{row.isDefault?(
-                          <span className="badge badge-success">Default</span>
-                        ):(
-                          <span className="btn badge-success">Set Default</span>
-                        )}</td>
+                        <td>{this.state.tariff.tariffName}</td>
+                        <td>{row.pricePerSms}</td>
+                        <td>{row.smsVolume}</td>
+                        <td>{row.expireDurationDays}</td>
                         <td>
-                         
-                            <span className="btn badge-danger">Delete</span>
-                          
+                        <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}>
+                             <i className="icon-pencil mr-2"></i>
+                              Edit</span>
+                            <span className="btn bg-danger-dark" onClick={() => this.DeleteTariff(row.id)}>
+                            <i className="icon-trash mr-2"></i>
+                              Delete</span>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </Datatable>
+            
             </CardBody>
           </Card>
 
