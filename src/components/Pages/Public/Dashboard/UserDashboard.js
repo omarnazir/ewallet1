@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { withTranslation, Trans } from 'react-i18next';
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import axios from "../../../../services/axios";
-import { Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,Button} from 'reactstrap';
 import EasyPieChart from 'easy-pie-chart';
 
 import CardTool from '../../../Common/CardTool'
 import Sparkline from '../../../Common/Sparklines';
 import FlotChart from '../../../Common/Flot';
 import Now from '../../../Common/Now';
+import { AuthService } from '../../../../services';
+import {Redirect} from 'react-router-dom'
 
 class UserDashboard extends Component {
 
@@ -145,15 +147,26 @@ class UserDashboard extends Component {
             this.setState({ purchasedSms: this.state.dashboardData.smsBalance })
         }
     }
+
+    logout=()=>{
+        AuthService.logout();
+        this.setState({redirect:"/login"})
+    }
     render() {
         // Usse t function instead of Trans component
         // const { t } = this.props;
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect}/>
+        }
 
         return (
             <ContentWrapper>
                 <div className="content-heading">
                     <div>Dashboard
                         <small>Welcome to esms</small>
+                    </div>
+                    <div className="ml-auto">
+                        <Button onClick={this.logout} color="danger" size="sm">Logout</Button>
                     </div>
                 </div>
                 { /* START cards box */}

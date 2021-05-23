@@ -73,7 +73,15 @@ class Login extends Component {
             AuthService.login(data).then(
                 (res)=>{
                     console.log(res)
-                    this.setState({redirect: '/dashboard'});
+                    const roles=res.user.roles;
+
+                    const found=roles.findIndex((row)=>row.name=="/dashboard")
+                    if(found==1){
+                        this.setState({redirect: '/dashboard'});
+                    }else{
+                        this.setState({redirect: '/admin/dashboard'});
+                    }
+                    window.location.reload();
                 },(err)=>{
                 // console.log(err.response.data);
                 this.setState({loginHasError: true})

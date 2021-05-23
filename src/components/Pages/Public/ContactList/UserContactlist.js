@@ -120,7 +120,8 @@ class UserContactList extends Component {
                          }
                         <td>
                         {/* <span className="btn badge-success mr-1">Edit</span> */}
-                      <span className="btn badge-danger">Delete</span>
+                      {/* <span className="btn badge-danger">Delete</span> */}
+                         N/A
                         </td>
                       </tr>
                     ))}  

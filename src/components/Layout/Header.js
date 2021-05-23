@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, ListGroup, ListGroupItem } from 'reactstrap';
+import { Link, Redirect } from 'react-router-dom';
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, ListGroup, ListGroupItem,Button } from 'reactstrap';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -9,11 +9,14 @@ import * as actions from '../../store/actions/actions';
 
 import ToggleFullscreen from '../Common/ToggleFullscreen';
 import HeaderRun from './Header.run'
-
+import { AuthService } from '../../services';
 class Header extends Component {
 
     componentDidMount() {
         HeaderRun();
+    }
+    state={
+        
     }
 
     toggleUserblock = e => {
@@ -37,6 +40,12 @@ class Header extends Component {
         this.props.actions.toggleSetting('asideToggled');
     }
 
+    logout=()=>{
+        AuthService.logout();
+        this.setState({redirect:"/login"})
+        
+    }
+
     resize () {
         // all IE friendly dispatchEvent
         var evt = document.createEvent('UIEvents');
@@ -47,6 +56,9 @@ class Header extends Component {
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect}/>
+        }
         return (
             <header className="topnavbar-wrapper">
                 { /* START Top Navbar */ }
@@ -94,8 +106,8 @@ class Header extends Component {
                         </li>
                         { /* START lock screen */ }
                         <li className="nav-item d-none d-md-block">
-                            <Link to="lock" title="Lock screen" className="nav-link">
-                                <em className="icon-lock"></em>
+                            <Link onClick={this.logout} title="Lock screen" className="nav-link">
+                                <em className="icon-login"></em>
                             </Link>
                         </li>
                         { /* END lock screen */ }

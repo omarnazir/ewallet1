@@ -39,6 +39,18 @@ class AuthService {
         sessionStorage.clear();
     }
 
+    isAuthenticated(){
+        let isloggedIn=false;
+        const token = sessionStorage.getItem('token');
+        const roles=sessionStorage.getItem("user_roles")
+        if (token == null || token.length === 0) {
+            isloggedIn=false;
+        }else{
+            isloggedIn=true
+        }
+        return isloggedIn;
+    }
+
 
     /*
     registeredUser = {

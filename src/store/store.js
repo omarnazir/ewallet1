@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
-import reducers from './reducers/reducers';
+import reducers from './reducers';
 import middlewares from './middlewares/middlewares'
 
 import { updateTheme } from './middlewares/themes.middleware.js';

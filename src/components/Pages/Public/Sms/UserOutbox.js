@@ -14,7 +14,8 @@ import {
 } from "reactstrap";
 import Datetime from "react-datetime";
 import $ from "jquery";
-
+import {AuthService} from "../../../../services"
+import {Redirect} from 'react-router-dom';
 
 
 class UserOutbox extends Component {
@@ -46,7 +47,8 @@ class UserOutbox extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    isAuthenticated:false,
   };
 
   // Access to internal datatable instance for customizations
@@ -59,11 +61,21 @@ class UserOutbox extends Component {
     });
   };
 
+  componentDidMount(){
+    const isAuthenticated=AuthService.isAuthenticated();
+    if(!isAuthenticated){
+    this.setState({redirect: "/login"})
+    }
+  }
+
   //GO TO COMPOSE SMS
-  addSenderId = () => {
-    return this.props.history.push("/user/add-senderId");
+  ViewComposeSms = () => {
+    return this.props.history.push("/send-sms");
   };
   render() {
+    if (this.state.redirect) {
+      return <Redirect to="/login"/>
+  }
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -72,7 +84,7 @@ class UserOutbox extends Component {
             <small>Showing all sent messages.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.addSenderId} outline color="danger" className="btn-pill-right">
+            <Button onClick={this.ViewComposeSms} outline color="danger" className="btn-pill-right">
               Compose SMS
             </Button>
           </div>
