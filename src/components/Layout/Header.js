@@ -100,17 +100,21 @@ class Header extends Component {
                     { /* END Left navbar */ }
                     { /* START Right Navbar */ }
                     <ul className="navbar-nav flex-row">
-                        { /* Fullscreen (only desktops) */ }
+                        { /* START user */ }
+                        <li className="nav-item d-none align-items-center d-md-block">
+                            <span className="text-white">Alpha</span>
+                        </li>
                         <li className="nav-item d-none d-md-block">
                             <ToggleFullscreen className="nav-link"/>
                         </li>
-                        { /* START lock screen */ }
                         <li className="nav-item d-none d-md-block">
                             <Link onClick={this.logout} title="Lock screen" className="nav-link">
-                                <em className="icon-login"></em>
+                                <em className="icon-logout"></em>
                             </Link>
                         </li>
-                        { /* END lock screen */ }
+                        { /* END user */ }
+                        { /* Fullscreen (only desktops) */ }
+                       
                     </ul>
                     { /* END Right Navbar */ }
                 </nav>

@@ -166,9 +166,6 @@ class Dashboard extends Component {
                     Dashboard
                      <small>Welcome to esms</small>
                     </div>
-                    <div className="ml-auto">
-                        <Button onClick={this.logout} color="danger" size="sm">Logout</Button>
-                    </div>
                 </div>
                 <Row>
                     <Col xl={3} md={6}>
