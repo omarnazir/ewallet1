@@ -50,7 +50,7 @@ class UserRequestedSmsList extends Component {
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:8085/api/v1/sms-request/me`)
+    axios.get("/sms-request/me")
       .then(res => {
         const response = res.data;
         this.setState({ smsTemplateList: response })
@@ -81,6 +81,17 @@ class UserRequestedSmsList extends Component {
     return Moment(date).format('lll')
   }
 
+  DeleteSmsRequest(id){
+    axios.delete("/sms-request/" + id)
+    .then(res => {
+      const response = res.data;
+      const smsTemplateList = this.state.smsTemplateList.filter((item) => {
+        return item.id !== id;
+      });
+      this.setState({ smsTemplateList:smsTemplateList })
+    })
+  }
+
   render() {
     return (
       <ContentWrapper>
@@ -99,7 +110,7 @@ class UserRequestedSmsList extends Component {
         <Container fluid>
           <Card>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
@@ -132,11 +143,17 @@ class UserRequestedSmsList extends Component {
                             row.status == "2" &&
                             <span className="badge badge-danger">Rejected</span>
                           }
+                           {
+                            row.status == "3" &&
+                            <span className="badge badge-danger">Disabled</span>
+                          }
                         </td>
                         <td>N/A</td>
                         { row.status == "0" &&
                           <td>
-                            <span className="btn badge-danger mt-1">Delete</span>
+                             <span className="btn bg-danger-dark" onClick={() => this.DeleteSmsRequest(row.id)}>
+                            <i className="icon-trash mr-2"></i>
+                              Delete</span>
                           </td>
                         }
                         {
@@ -150,7 +167,7 @@ class UserRequestedSmsList extends Component {
 
                   </tbody>
                 </table>
-              </Datatable>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

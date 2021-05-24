@@ -41,16 +41,19 @@ class TarriffBand extends Component {
   };
 
   componentDidMount() {
-    axios.get("/tariff-bands")
+    const { state } = this.props.history.location;
+    this.setState({tariff:state})
+    this.setState({tariffId:state.id})
+    console.log('id', state.id);
+    console.log("name",state.tariffName)
+
+    axios.get("/tariff-bands/tariff/"+state.id)
       .then(res => {
         const response = res.data;
         this.setState({ tariffBandList: response })
         console.log(response);
       })
-    const { state } = this.props.history.location;
-    this.setState({tariff:state})
-    console.log('id', state.id);
-    console.log("name",state.tariffName)
+    
   }
 
   // Access to internal datatable instance for customizations
@@ -63,14 +66,14 @@ class TarriffBand extends Component {
     });
   };
   AddTariffBand = () => {
-    return this.props.history.push('/add-tariff-band')
+    return this.props.history.push('/admin/add-tariff-band/'+this.state.tariff.id,this.state.tariff)
   }
   ViewTarriffBand = () => {
-    return this.props.history.push('/manage-tariff-bands')
+    return this.props.history.push('/admin/manage-tariff-bands')
   }
 
   ViewTarrifs=()=>{
-    return this.props.history.push('/manage-tariffs') 
+    return this.props.history.push('/admin/manage-tariffs') 
   }
 
   render() {

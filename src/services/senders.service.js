@@ -12,7 +12,7 @@ export class SenderIdService {
         return axios.get("/sender-ids/pending")
     }
 
-    //Admin & User
+    //User
     AddSenderId(data){
         const sender={
             senderId:data.senderId
@@ -20,6 +20,15 @@ export class SenderIdService {
         return axios.post("/sender-ids",sender)
     }
 
+    //AddDefaultSender ->Approved 
+    AddDefaultSenderId(data){
+        const sender={
+            senderId:data.senderId
+        }
+        return axios.post("/senderId-default/",sender)
+    }
+    
+    
     //Aprove Sender Id
     ApproveSenderId(id){
         return axios.put("/sender-ids/approve/"+id)

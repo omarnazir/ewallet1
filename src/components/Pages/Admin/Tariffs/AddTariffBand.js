@@ -21,36 +21,47 @@ import $ from "jquery";
 
 class AddTariffBand extends Component {
     state = {
-      name:"",
+      fromAmount:0,
+      toAmount:0,
+      expireDurationDays:0,
+      pricePerSms:0,
+      tariffsAmount:0,
+      smsVolume:0,
+      tariff:[]
     }; 
 
 
     handleSubmit = event => {
-        console.log("am here")
         event.preventDefault();
-        //change to tarriff
-        const tarriff=  {
-            "tariffName": this.state.name.toUpperCase(),
-            "fromSms": null,
-            "toSms": null,
-            "expireDurationDays": null,
-            "createdAt": "2020-12-02T17:05:19.000+00:00",
-            "createdBy": 0,
-            "isDefault": 1
-    }
-          axios.post("/tariff",tarriff).then(res=>{
-            console.log(res);
+
+        const { state } = this.props.history.location;
+        this.setState({tariff:state})
+        this.setState({tariffId:state.id})
+        console.log('id', state.id);
+        console.log("name",state.tariffName)
+    
+
+       const tariffBand= {
+            "tariffId":this.state.tariff.id,
+            "fromAmount":this.state.fromAmount,
+            "toAmount":this.state.toAmount,
+            "expireDurationDays":this.state.expireDurationDays,
+            "pricePerSms":this.state.pricePerSms
+        }
+      
+          axios.post("/tariff-bands",tariffBand).then(res=>{
+            console.log(tariffBand);
             console.log(res.data);
-            this.ViewTarrifs();
+            this.ViewTarrifBands();
           })
       }
 
     ViewTarrifBands=()=>{
-        return this.props.history.push('/manage-tariff-bands')
+        return this.props.history.push('/admin/manage-tariff-bands')
       }
 
       handleChange = event =>{
-        this.setState({ name: event.target.value});
+        this.setState({ [event.target.name]: event.target.value});
       }
     
     render() {
@@ -73,29 +84,29 @@ class AddTariffBand extends Component {
                                     <form onSubmit={this.handleSubmit}>
                                         <FormGroup>
                                             <label>From Amount :</label>
-                                            <input className="form-control" name="name" onChange={this.handleChange} type="number" required></input>
+                                            <input className="form-control" name="fromAmount" onChange={this.handleChange} type="number" required></input>
                                         </FormGroup>
                                         <FormGroup>
                                             <label>To Amount :</label>
-                                            <input className="form-control" name="name" onChange={this.handleChange} type="number" required></input>
+                                            <input className="form-control" name="toAmount" onChange={this.handleChange} type="number" required></input>
                                         </FormGroup>
                                         <FormGroup>
                                             <label>Price per  SMS :</label>
-                                            <input className="form-control" name="name" onChange={this.handleChange} type="number" required></input>
+                                            <input className="form-control" name="pricePerSms" onChange={this.handleChange} type="number" required></input>
                                         </FormGroup>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Expire Time (Days): </label>
                                             <select className="form-control" id="exampleFormControlSelect1">
-                                                <option>30 Days</option>
-                                                <option>60 Days</option>
-                                                <option>90 Days</option>
-                                                <option>Never</option>
+                                                <option value="30">30 Days</option>
+                                                <option value="60">60 Days</option>
+                                                <option value="90">90 Days</option>
+                                                <option value="1000000000">Never</option>
                                             </select>
                                         </div>
                                         <button className="btn btn-sm btn-success mr-3" type="submit">
                                             Save
                                         </button>
-                                        <button onClick={this.ViewTarrifs} className="btn btn-sm btn-danger">
+                                        <button onClick={this.ViewTarrifBands} className="btn btn-sm btn-danger">
                                             Cancel
                                         </button>
                                     </form>

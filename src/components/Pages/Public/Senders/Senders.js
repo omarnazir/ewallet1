@@ -80,18 +80,28 @@ class UserSenderIds extends Component {
     color:'white',
     background:"#003366"
   }
+  deleteSenderId = (id) => {
+    axios.delete("/sender-ids/" + id)
+      .then(res => {
+        const response = res.data;
+        const senderIdList = this.state.senderIdList.filter((template) => {
+          return template.id !== id;
+        });
+        this.setState({ senderIdList })
+      })
+  }
 
   render() {
     return (
       <ContentWrapper>
        <div className="content-heading">
           <div className="mr-auto flex-row">
-            Sender id's
-            <small>Showing all customers sender id's.</small>
+            Sender IDs
+            <small>Showing all Sender IDs .</small>
           </div>
           <div className="flex-row">
             <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
-              Add New SenderId
+              Add Sender ID
             </Button>
           </div>
         </div>
@@ -110,6 +120,7 @@ class UserSenderIds extends Component {
                       </th>
                       <th>DATE REGISTERED</th>
                       <th>STATUS</th>
+                      <th>ACTION</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -132,6 +143,11 @@ class UserSenderIds extends Component {
                           }
                           
                         </td>
+                        <td>{ row.is_approved==0 && 
+                         <span className="btn bg-danger-dark" onClick={() => this.deleteSenderId(row.id)}>
+                         <i className="icon-trash mr-2"></i>
+                           Delete</span>
+                        } </td>
                       </tr>
                     ))}
                     

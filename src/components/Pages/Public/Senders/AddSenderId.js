@@ -58,11 +58,11 @@ class AddUserSenderId extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Add Sender id's
-                     <small>Adding a new sender id.</small>
+                        Add Sender ID
+                     <small>Adding a new Sender ID.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewAllSenderIds} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All SenderId's</Button>
+                        <Button onClick={this.ViewAllSenderIds} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Sender IDs</Button>
                     </div>
                 </div>
                 <Container fluid>

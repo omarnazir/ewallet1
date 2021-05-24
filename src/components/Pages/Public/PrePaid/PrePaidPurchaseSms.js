@@ -27,14 +27,14 @@ class PurchaseSms extends Component {
         tariff: "",
         paymentMethod:"",
         paymentMsisdn:"",
-        tariffList:[]
+        tarriffBand:[]
     };
 
     componentDidMount() {
-        axios.get("/tariff")
+        axios.get("/tariff-bands")
             .then(res => {
                 const response = res.data;
-                this.setState({ tariffList: response })
+                this.setState({ tarriffBand: response })
               
             })
         }
@@ -87,9 +87,9 @@ class PurchaseSms extends Component {
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Select a bundle : </label>
                                             <select className="form-control" id="exampleFormControlSelect1" required name="tariff" onChange={this.handleSelectBundleChange} >
-                                                {this.state.tariffList.map(row => (
+                                                {this.state.tarriffBand.map(row => (
                                                     <option key={row.id} value={row.id} >
-                                                        {row.tariffName}
+                                                      {row.toAmount} sms - {row.toAmount * row.pricePerSms}
                                                     </option>
                                                 ))}
                                             </select>

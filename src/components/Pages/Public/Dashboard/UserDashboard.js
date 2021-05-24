@@ -165,9 +165,6 @@ class UserDashboard extends Component {
                     <div>Dashboard
                         <small>Welcome to esms</small>
                     </div>
-                    <div className="ml-auto">
-                        <Button onClick={this.logout} color="danger" size="sm">Logout</Button>
-                    </div>
                 </div>
                 { /* START cards box */}
                 <Row>

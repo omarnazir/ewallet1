@@ -37,6 +37,10 @@ class AuthService {
     }
 
     logout(){
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("username");
+        sessionStorage.removeItem("user_roles");
         sessionStorage.clear();
     }
 

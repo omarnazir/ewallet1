@@ -78,6 +78,19 @@ class Sidebar extends Component {
         const userRoles = JSON.parse(sessionStorage.getItem("user_roles"));
         if(userRoles!=null){
         let userMenu = Menu.filter(menu => userRoles.some(role => role.name === menu.path));
+        let subMenuIndex = Menu.findIndex(sub=>sub.submenu!=null);
+        let subMenu=[];
+        let userSubMenu=[];
+        if(subMenuIndex>0){
+            console.log(Menu);
+            subMenu=Menu[subMenuIndex];
+            userSubMenu=subMenu.submenu.filter(submenu=>userRoles.some(role => role.name === submenu.path));
+            console.log(userSubMenu);
+            //userMenu=[...userMenu,userSubMenu];
+            console.log(userMenu);
+        }
+
+        //let userSubMenu = Menu.filter(menu => userRoles.some(role => role.name === menu.submenu.path));
         //@Todo find how to filter nested item if exists 
         // let subMenus=Menu.filter(menu=>userRoles.some(role=>role.name==menu.submenu.path))
         
