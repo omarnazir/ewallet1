@@ -83,15 +83,15 @@ class AddTariffBand extends Component {
                                 <CardBody>
                                     <form onSubmit={this.handleSubmit}>
                                         <FormGroup>
-                                            <label>From Amount :</label>
+                                            <label>Amount :</label>
                                             <input className="form-control" name="fromAmount" onChange={this.handleChange} type="number" required></input>
                                         </FormGroup>
                                         <FormGroup>
-                                            <label>To Amount :</label>
+                                            <label>Vat Amount :</label>
                                             <input className="form-control" name="toAmount" onChange={this.handleChange} type="number" required></input>
                                         </FormGroup>
                                         <FormGroup>
-                                            <label>Price per  SMS :</label>
+                                            <label>Number of SMS :</label>
                                             <input className="form-control" name="pricePerSms" onChange={this.handleChange} type="number" required></input>
                                         </FormGroup>
                                         <div className="form-group">

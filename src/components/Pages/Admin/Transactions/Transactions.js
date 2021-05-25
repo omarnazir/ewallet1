@@ -7,12 +7,8 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardTitle,
-  InputGroup,
-  InputGroupAddon,
-  Input,
+  CardTitle
 } from "reactstrap";
-import Datetime from 'react-datetime';
 import $ from "jquery";
 
 
@@ -58,13 +54,16 @@ class Transactions extends Component {
   };
 
   componentDidMount() {
+    this.fetchTxns();
+  }
+
+  fetchTxns = () => {
     axios.get(`http://localhost:8085/api/v1/sms`, {
       headers: {
         'Content-type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
       }
-    })
-      .then(res => {
+    }).then(res => {
         const response = res.data;
         this.setState({ smsTransactions: response })
         console.log(response);
@@ -105,9 +104,9 @@ class Transactions extends Component {
                           </div>
                         </div>
                         <div className="col-sm-3">
-                          <div class="form-group">
-                            <label for="exampleFormControlSelect1">No of records: </label>
-                            <select class="form-control" id="exampleFormControlSelect1">
+                          <div className="form-group">
+                            <label>No of records: </label>
+                            <select className="form-control" id="exampleFormControlSelect1">
                               <option>All</option>
                               <option>100</option>
                               <option>200</option>
@@ -135,50 +134,23 @@ class Transactions extends Component {
                     <tr>
                       <th data-priority="1">SNO</th>
                       <th>DATE</th>
-                      {/* <th className="sort-numeric">TXN ID</th> */}
                       <th className="sort-alpha">SENDER ID</th>
-                      <th className="sort-alpha" data-priority="2">
-                        SMS
-                      </th>
-                      {/* <th>RECEIPT</th> */}
+                      <th className="sort-alpha" data-priority="2">SMS</th>
                       <th>MSISDN</th>
                       <th>NETWORK</th>
-                      {/* <th>AMOUNT (TZS)</th> */}
-                      <th>STATUS</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {/* <tr className="gradeA">
-                      <td>1</td>
-                      <td>27/04/201</td>
-                      <td>182495042</td>
-                      <td>Umetumiwa ujumbe mfupi</td>
-                      <td>1538419034</td>
-                      <td>255809087</td>
-                      <td>30</td>
-                      <td>
-                        <span className="badge badge-success">Delivered</span>
-                      </td>
-                    </tr> */}
                     {this.state.smsTransactions.map(row => (
                       <tr>
                         <td>{row.id}</td>
                         <td>{row.date}</td>
                         <td>{row.sender}</td>
                         <td>{row.message}</td>
-
                         <td>{row.msisdn}</td>
-                        <td>{row.network}</td>
-                        <td>{row.status == "Delivered" &&
-                            <span className="badge badge-success">{row.status}</span>
-                          }
-                          {
-                            row.status=="Failed" && 
-                            <span className="badge badge-danger">{row.status}</span>
-                          }</td>   
+                        <td>{row.network}</td> 
                       </tr>
                     ))}
-
                   </tbody>
                 </table>
               </Datatable>

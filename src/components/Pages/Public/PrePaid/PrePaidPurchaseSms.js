@@ -30,6 +30,11 @@ class PurchaseSms extends Component {
         tarriffBand:[]
     };
 
+    AddActionButtonStyle={
+        color:'white',
+        background:"#003366"
+      }
+
     componentDidMount() {
         axios.get("/tariff-bands")
             .then(res => {
@@ -70,11 +75,11 @@ class PurchaseSms extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Purchase sms units
-                     <small>Recharge sms for pre paid customers</small>
+                        Purchase SMS 
+                     <small>Purchase SMS for Pre-paid customers</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewAllInvoices} outline color="danger" className="btn-pill-right mr-2">View Invoices</Button>
+                        <Button onClick={this.ViewAllInvoices} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View Invoices</Button>
                     </div>
                 </div>
                 <Container fluid>
