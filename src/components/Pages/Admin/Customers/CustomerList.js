@@ -32,9 +32,9 @@ class CustomerList extends Component {
     return Moment(date).format('DD-MM-YYYY')
   }
 
-  ViewCustomerDetails=(id)=>{
-    console.log(id)
-    // return this.props.history.push('/admin/customers-details/1')
+  ViewCustomerDetails=(row)=>{
+    console.log(row.id)
+    return this.props.history.push('/admin/customers-details/'+row.id,row)
   }
   handleSort = (field, order) => {
     this.setState({
@@ -43,20 +43,6 @@ class CustomerList extends Component {
     });
   }
 
-   rowEvents = {
-    onClick: (e, row, rowIndex) => {
-      console.log(`clicked on row with index: ${rowIndex}`);
-      let getCurrentCellIndex = e.target.cellIndex;
-      let getLastCellIndex = document.querySelector('table tr:last-child td:last-child').cellIndex
-      
-    
-      if (getCurrentCellIndex !== getLastCellIndex && getCurrentCellIndex !== undefined) {
-        e.stopPropagation();
-        
-          // console.log(`----> ${JSON.stringify(row)} |||| ${rowIndex}`)
-      }
-    }
-  };
 
 
   columns = [{
@@ -83,6 +69,7 @@ class CustomerList extends Component {
     dataField: 'isActive',
     text: 'STATUS',
     isDummyField: true,
+    sort:true,
     formatter: (cellContent, row) => {
       if (row.isActive == 1) {
         return (
@@ -109,19 +96,21 @@ class CustomerList extends Component {
     dataField: 'id',
     text: 'ACTION',
     isDummyField: true,
-    formatter:(cellContent,row)=>{
+    formatter:(cell, row, rowIndex, formatExtraData) => {
       return (
-      <Button color="success" className="btn btn-success">
-      <i className="fa fa-eye"></i>
-      </Button>)
+        <Button  color="success" className="btn btn-success"
+          onClick={() => {
+            this.ViewCustomerDetails(row);
+          }}
+        >
+          <i className="fa fa-eye"></i>
+        </Button>
+      );
     }
     
   }
 
 ]
-
- 
-
 
 
   render() {
