@@ -91,7 +91,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin/sms-log" component={waitFor(SmsLogs)} />
 
                                     <Route path="/admin/customers-list" component={waitFor(CustomerList)} />
-                                    <Route path="/admin/customers-details/1" component={waitFor(CustomerDetails)}/>
+                                    <Route path="/admin/customers-details/:id" component={waitFor(CustomerDetails)}/>
                                     <Route path="/admin/customers-postpaid" component={waitFor(PostPaidCustomers)} />
                                     <Route path="/admin/transactions" component={waitFor(Transactions)} />
 
@@ -99,6 +99,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin/add-senderid" component={waitFor(AddSenderId)} />
                                     <Route path="/admin/senders" component={waitFor(Senders)} />
 
+                                   
 
                                     <Route path="/admin/add-sms-templates" component={waitFor(AddSmsTemplate)} />
                                     <Route path="/admin/senders-requested" component={waitFor(SendersRequested)} />

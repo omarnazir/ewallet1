@@ -168,7 +168,7 @@ class SendersRequested extends Component {
                             </div>
                         </CardHeader>
                         <CardBody>
-                            <Datatable options={this.state.dtOptions}>
+                            {/* <Datatable options={this.state.dtOptions}> */}
                             <table className="table table-striped my-4 w-100">
                                 <thead>
                                     <tr>
@@ -211,7 +211,7 @@ class SendersRequested extends Component {
                                     ))}
                                 </tbody>
                             </table>
-                            </Datatable>
+                            {/* </Datatable> */}
                         </CardBody>
                     </Card>
                 </Container>

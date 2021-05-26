@@ -20,20 +20,7 @@ class AuthService {
     }
 
     register(data){
-        const registrationUser= {
-            fullname:data.fullname,
-            email:data.email,
-            phonenumber:data.phoneNumber,
-            username:data.username,
-            password:data.password,
-            location:data.physicalAddress,
-            customer_type:data.customerType,
-            payment_type:data.AccountType,
-            nin:data.nin,
-            nida_attachment:data.nida_attachment,
-            // business_licence,
-        }
-        return axios.post(API_URL+"/customers",registrationUser)
+        return axios.post(API_URL+"/auth/register",data,{ headers: { "Content-Type": "multipart/form-data" } })
     }
 
     logout(){

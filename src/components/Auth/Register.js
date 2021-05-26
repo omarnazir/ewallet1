@@ -4,32 +4,33 @@ import { Input, CustomInput, Button } from 'reactstrap';
 import image from './bulksms-image.jpeg';
 import axios from "axios";
 import FormValidator from '../Common/FormValidator.js';
+import { AuthService } from '../../services';
+import { data } from 'jquery';
 
 class Register extends Component {
 
     state = {
-        formRegister: {
-            customerType: '',
-            AccountType: '',
-            fullname: '',
-            username: '',
+       
+
+            fullname:"",
             email: '',
-            phoneNumber: '',
+            phonenumber:"",
+            location: '',
+            customer_type: '',
+            v_account:"",
+            username: '',
             password: '',
-            physicalAddress: '',
-            nidaNumber: '',
-            nidaFile: '',
+            payment_type: '',
+            id_number: '',
+            attachment: '',
             termscheck: false,
 
             //Other params
-
-
-
             passwordConfirm: '',
-        }
-
-
-
+            fileDisplay:false,
+            fileDisplayName:"",
+        showIndividualFields:true,
+        showVaccount:false
     }
 
     ViewLoginPage = () => {
@@ -38,54 +39,35 @@ class Register extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        const registeredUser = {
-            "fullname": this.state.fullname,
-            "email": this.state.email,
-            "phonenumber": this.state.phoneNumber,
-            "username": this.state.username,
-            "password": this.state.password,
-            "image": "",
-            "status": 1,
-            "third_party": "EWALLET",
-            "location": this.state.physicalAddress,
-            "contact_person": "Imani Mwendamseke",
-            "start_date": null,
-            "is_active": 1,
-            "is_deleted": 0,
-            "freelancer_fk": null,
-            "logo_url": "",
-            "side_bar_bg": "",
-            "header_bg": "",
-            "flag": "",
-            "customer_type": this.state.customerType,
-            "v_account": "",
-            "monthly_limit": 500,
-            "sms_balance": 0,
-            "total_sms_sent": 0,
-            "total_sms_delivered": 0,
-            "total_sms_failed": 0,
-            "total_sms_purchased": 0,
-            "sms_account": 1,
-            "sms_account_type": "User",
-            "sms_expire": null,
-            "sms_expire_days": 30,
-            "tariff_fk": 1,
-            "payment_type": this.state.AccountType,
-            "post_paid_approved": 0,
-            "nin": this.state.nidaNumber,
-            "nida_attachment": this.state.nidaFile,
-            "ind_org": "",
-            "business_licence": "",
-            "sms_gateway_username": "",
-            "sms_gateway_password": ""
-        }
-        console.log(registeredUser);
+        console.log(this.state)
+
+        const data = new FormData()
+
+        data.append("fullname", this.state.fullname)
+        data.append("email", this.state.email)
+        data.append("phonenumber",this.state.phonenumber)
+        data.append('location', this.state.location)
+        data.append('customer_type', this.state.customer_type)
+        //field added on post paid selected
+        data.append('v_account', this.state.v_account)
+
+        data.append('username', this.state.username)
+        data.append('password', this.state.password)
+        data.append('payment_type', this.state.payment_type)
+        //on prepaid select: Nida  Nida number
+        //on post paid select: buss licence: buss licence number add Vaccount field
+        data.append('id_number', this.state.id_number)
+        data.append('attachment', this.state.attachment)
+
         
-        axios.post("http://localhost:8085/api/v1/customers/create", registeredUser).then(res => {
-            console.log(res);
-            console.log(res.data);
-            console.log("sent");
-            this.ViewLoginPage();
+    
+
+     
+        AuthService.register(data).then((res)=>{
+            console.log(res)
+            this.ViewLoginPage()
+        },(err)=>{
+            console.log(err)
         })
     }
 
@@ -93,11 +75,29 @@ class Register extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
+    handleOnCustomerSelectChange = event => {
 
-    // handleOnColumnChange= event =>{
-    //     const value=this.state.messageTemplate+event.target.value;
-    //     this.setState({messageTemplate:value})
-    // }
+        if ([event.target.value] == "Individual") {
+            this.setState({ showIndividualFields: true })
+            this.setState({ showOrganizationFields: false })
+        } else {
+            this.setState({ showIndividualFields: false })
+            this.setState({ showOrganizationFields: true })
+        }
+        this.setState({ [event.target.name]: event.target.value });
+    }
+
+    
+  
+    handleOnPaymentSelectChange = event => {
+
+        if ([event.target.value] == "Post-paid") {
+            this.setState({ showVaccount: true })
+        } else {
+            this.setState({ showVaccount: false })
+        }
+        this.setState({ [event.target.name]: event.target.value });
+    }
 
     /**
      * Validate input using onChange event
@@ -124,6 +124,10 @@ class Register extends Component {
 
     }
 
+    handleFileChange = event => {
+        this.setState({ attachment: event.target.files[0] });
+        this.setState({fileDisplayName:event.target.files[0].name})
+    }
 
 
     onSubmit = e => {
@@ -206,7 +210,7 @@ class Register extends Component {
                                         <div className="form-row">
                                             <div className="form-group col-md-6 px-2">
                                                 <label>Customer type</label>
-                                                <select className="form-control form-control-lg rounded-0" name="customerType" required onChange={this.handleChange}>
+                                                <select className="form-control form-control-lg rounded-0" name="customer_type" required onChange={this.handleOnCustomerSelectChange}>
                                                     <option value="" disabled selected hidden>Select customer type</option>
                                                     <option value="Individual">Individual</option>
                                                     <option value="Organization">Organization</option>
@@ -214,9 +218,10 @@ class Register extends Component {
                                             </div>
                                             <div className="form-group col-md-6 px-2">
                                                 <label>Account type</label>
-                                                <select className="form-control form-control-lg rounded-0" name="AccountType" required onChange={this.handleChange}>
+                                                <select className="form-control form-control-lg rounded-0" name="payment_type" required onChange={this.handleOnPaymentSelectChange}>
                                                     <option value="" disabled selected hidden>Select account type</option>
-                                                    <option value="prepaid">Pre-paid account</option>
+                                                    <option value="Pre-paid">Pre-paid account</option>
+                                                    <option value="Post-paid">Post-paid account</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -266,7 +271,7 @@ class Register extends Component {
                                             <div className="form-group col-md-6 px-2">
                                                 <label>Phone number</label>
                                                 <div className="input-group with-focus">                     
-                                                <Input type="tel" name="phoneNumber"
+                                                <Input type="tel" name="phonenumber"
                                                     className="border-right-0 form-control form-control-lg rounded-0"
                                                     placeholder="Enter phone number" onChange={this.handleChange} required/>
                                                     <div className="input-group-append">
@@ -312,7 +317,7 @@ class Register extends Component {
                                             <div className="form-group col-md-6 px-2">
                                                 <label>Physical address</label>
                                                 <div className="input-group with-focus">
-                                                    <Input type="text" name="physicalAddress"
+                                                    <Input type="text" name="location"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
                                                         placeholder="Enter physical address" onChange={this.handleChange} required />
                                                     <div className="input-group-append">
@@ -323,11 +328,11 @@ class Register extends Component {
                                                 </div>
                                             </div>
                                             <div className="form-group col-md-6 px-2">
-                                                <label>NIDA ID Number</label>
+                                                <label> {this.state.showIndividualFields?"NIDA ID Number":"Bussiness License Number"}</label>
                                                 <div className="input-group with-focus">
-                                                    <Input type="text" name="nidaNumber"
+                                                    <Input type="number" name="id_number"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
-                                                        placeholder="National card ID number" onChange={this.handleChange} required />
+                                                        placeholder="ID number" onChange={this.handleChange} required  />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text bg-transparent border-left-0">
                                                             <em className="fa fa-user"></em>
@@ -336,16 +341,38 @@ class Register extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-md-8 px-2">
-                                            <label for="nidafile">NIDA ID (Scanned PDF required)
+                                        <div className="form-row">
+                                        <div class="form-group col-md-6 px-2">
+                                            <label for="nidafile"> {this.state.showIndividualFields?"NIDA ID (Scanned PDF required)":"Bussiness License (Scanned PDF required)"}
                                                 <span className="text-danger"> (Max. size 200KB)</span>
                                             </label>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input form-control form-control-lg rounded-0" name="nidaFile" />
-                                                <label class="custom-file-label" for="nidafile">Select file for upload</label>
+                                                <input type="file" class="custom-file-input form-control form-control-lg rounded-0" name="attachment"
+                                                 onChange={this.handleFileChange} required 
+                                                 accept="image/png, image/jpeg,application/pdf"
+                                                 />
+                                                <label class="custom-file-label" for="attachment">{this.state.fileDisplay?this.state.fileDisplayName:"Select file for upload"}</label>
                                             </div>
                                             <small><span id="fileSizeError"></span></small>
                                         </div>
+
+                                        { this.state.showVaccount &&
+                                        <div className="form-group col-md-6 px-2">
+                                                <label>V Account:</label>
+                                                <div className="input-group with-focus">
+                                                    <Input type="text" name="v_account"
+                                                        className="border-right-0 form-control form-control-lg rounded-0"
+                                                        placeholder="V account" onChange={this.handleChange} required />
+                                                    <div className="input-group-append">
+                                                        <span className="input-group-text bg-transparent border-left-0">
+                                                            <em className="fa fa-user"></em>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                           
+                                         </div>
                                         <div className="form-group px-md-2 px-1 my-2 mr-auto">
                                             <div className="form-check">
                                                 <input className="form-check-input" type="checkbox" required value="" id="termscheck" name="termscheck" />

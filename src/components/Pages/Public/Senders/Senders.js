@@ -49,7 +49,7 @@ class UserSenderIds extends Component {
 
 
   componentDidMount() {
-    axios.get("/sender-ids/me")
+    axios.get("/sender-ids/my-sender-ids")
       .then(res => {
         const response = res.data;
         this.setState({ senderIdList: response })
