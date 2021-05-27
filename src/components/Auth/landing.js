@@ -71,6 +71,19 @@ class LandingPage extends Component {
         fontWeight: "600"
     }
 
+    ViewLogin = () => {
+        return this.props.history.push('/login')
+    }
+
+    ViewSignUp = () => {
+        return this.props.history.push('/register')
+    }
+
+    onSubmit = e => {
+        e.preventDefault();
+        this.ViewSignUp();
+    }
+
     render() {
         // if (this.state.redirect) {
         //     return <Redirect to={this.state.redirect}/>
@@ -106,8 +119,8 @@ class LandingPage extends Component {
                                     <a class="nav-link text-white" href="#contact" style={this.NavLink}>Contact</a>
                                 </li>
                             </ul>
-                            <Button outline color="danger" className="btn-pill mr-3">Login</Button>
-                            <Button outline color="success" className="btn-pill mr-3">Sign Up</Button>
+                            <Button outline onClick={this.ViewLogin} color="danger" className="btn-pill mr-3">Login</Button>
+                            <Button outline color="success" onClick={this.ViewSignUp} className="btn-pill mr-3">Sign Up</Button>
                         </div>
                     </nav>
                 </header>
@@ -119,11 +132,11 @@ class LandingPage extends Component {
                             <p style={this.HeroSubText} className="text-dark">With our affordable SMS packages, you can now manage
                                 <br/>all your SMS campaigns online with our SMS Gateway.
                             </p>
-                            <a href="#">
-                                <button className="btn btn-light rounded-pill btn-outline-dark mt-2" style={this.FrontButton}>Sign up today &nbsp;
+                           
+                                <button onClick={this.ViewSignUp} className="btn btn-light rounded-pill btn-outline-dark mt-2" style={this.FrontButton}>Sign up today &nbsp;
                                     <span className="fa fa-arrow-right"></span>
                                 </button>
-                            </a>
+                           
                         </div>
                     </div>
                 </div>
@@ -160,20 +173,20 @@ class LandingPage extends Component {
                     <hr className="my-md-4 my-2"/>
                     <div className="text-center text-dark my-md-5 my-3 py-3">
                         <h4 className="mb-4 px-2"><em>Experience more other features like Contact Manager, CSV and Excel Upload and Developer API Integration</em></h4>
-                        <a href="">
-                            <button className="btn rounded-pill btn-outline-dark mt-3" style={this.FrontButton}>Sign up today &nbsp;
+                       
+                            <button className="btn rounded-pill btn-outline-dark mt-3" onClick={this.ViewSignUp} style={this.FrontButton}>Sign up today &nbsp;
                                 <span className="fa fa-arrow-right"></span>
                             </button>
-                        </a>
+                       
                     </div>
                     <div className="text-center py-5 px-lg-5" style={this.RedSection} id="pricing">
                         <h1 className="text-white mt-5 mb-3"><em>Pricing</em></h1>
                         <p className="text-white mx-lg-5 px-md-5 px-2 mb-4" style={this.HeroSubText}>We have very affordable SMS packages rates for everyone . Simply register, pay easily via M-pesa and just send as you wish!</p>
-                        <a href="">
-                            <button className="btn rounded-pill btn-light btn-outline-dark mb-5 mt-2" style={this.FrontButton}>Sign up today &nbsp;
+                       
+                            <button onClick={this.ViewSignUp} className="btn rounded-pill btn-light btn-outline-dark mb-5 mt-2" style={this.FrontButton}>Sign up today &nbsp;
                                 <span className="fa fa-arrow-right"></span>
                             </button>
-                        </a>
+                       
                     </div>
                     <div className="text-center text-dark my-md-5 my-3" id="contact">
                         <h1 className="mb-4 pt-2">Get in touch</h1>
@@ -202,7 +215,7 @@ class LandingPage extends Component {
                         </div>
                         <div className="col-md-7 px-md-3">
                             <div className="bg-light p-md-4 p-2">
-                                <form className="mb-3 p-md-2 p-1" name="formContact" onSubmit={this.onSubmit}>
+                                <form className="mb-3 p-md-2 p-1"  name="formContact" onSubmit={this.onSubmit}>
                                     <div className="form-group px-2">
                                         <label>Full name</label>
                                         <div className="input-group with-focus">

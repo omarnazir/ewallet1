@@ -156,6 +156,14 @@ class Register extends Component {
             this.state[formName].errors[inputName][method]
     }
 
+    ViewLogin = () => {
+        return this.props.history.push('/login')
+    }
+
+    ViewSignUp = () => {
+        return this.props.history.push('/register')
+    }
+
     render() {
         const year = new Date().getFullYear()
         return (
@@ -177,8 +185,8 @@ class Register extends Component {
                         { /* END navbar header */}
 
                         <div className="navbar-nav flex-row">
-                            <Button outline color="danger" className="btn-pill mr-2">Login</Button>
-                            <Button outline color="success" className="btn-pill mr-3">Sign Up</Button>
+                            <Button onClick={this.ViewLogin} outline color="success" className="btn-pill mr-2">Login</Button>
+                
                         </div>
                     </nav>
                 </header>
@@ -220,8 +228,8 @@ class Register extends Component {
                                                 <label>Account type</label>
                                                 <select className="form-control form-control-lg rounded-0" name="payment_type" required onChange={this.handleOnPaymentSelectChange}>
                                                     <option value="" disabled selected hidden>Select account type</option>
-                                                    <option value="Pre-paid">Pre-paid account</option>
-                                                    <option value="Post-paid">Post-paid account</option>
+                                                    <option value="Pre-Paid">Pre-paid account</option>
+                                                    <option value="Post-Paid">Post-paid account</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -342,16 +350,16 @@ class Register extends Component {
                                             </div>
                                         </div>
                                         <div className="form-row">
-                                        <div class="form-group col-md-6 px-2">
-                                            <label for="nidafile"> {this.state.showIndividualFields?"NIDA ID (Scanned PDF required)":"Bussiness License (Scanned PDF required)"}
+                                        <div className="form-group col-md-6 px-2">
+                                            <label htmlFor="nidafile"> {this.state.showIndividualFields?"NIDA ID (Scanned PDF required)":"Bussiness License (Scanned PDF required)"}
                                                 <span className="text-danger"> (Max. size 200KB)</span>
                                             </label>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input form-control form-control-lg rounded-0" name="attachment"
+                                            <div className="custom-file">
+                                                <input type="file" className="custom-file-input form-control form-control-lg rounded-0" name="attachment"
                                                  onChange={this.handleFileChange} required 
                                                  accept="image/png, image/jpeg,application/pdf"
                                                  />
-                                                <label class="custom-file-label" for="attachment">{this.state.fileDisplay?this.state.fileDisplayName:"Select file for upload"}</label>
+                                                <label className="custom-file-label" htmlFor="attachment">{this.state.fileDisplay?this.state.fileDisplayName:"Select file for upload"}</label>
                                             </div>
                                             <small><span id="fileSizeError"></span></small>
                                         </div>
@@ -376,7 +384,7 @@ class Register extends Component {
                                         <div className="form-group px-md-2 px-1 my-2 mr-auto">
                                             <div className="form-check">
                                                 <input className="form-check-input" type="checkbox" required value="" id="termscheck" name="termscheck" />
-                                                <label className="form-check-label" for="termscheck">
+                                                <label className="form-check-label" htmlFor="termscheck">
                                                     I agree with <a href="#">Terms and Conditions</a>
                                                 </label>
                                             </div>

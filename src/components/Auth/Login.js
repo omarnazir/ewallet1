@@ -83,7 +83,7 @@ class Login extends Component {
                     }else{
                         this.setState({redirect: '/admin/dashboard'});
                     }
-                    // window.location.reload();
+                    window.location.reload();
                 },(err)=>{
                 // console.log(err.response.data);
                 this.setState({loginHasError: true})
@@ -98,6 +98,14 @@ class Login extends Component {
             this.state[formName].errors &&
             this.state[formName].errors[inputName] &&
             this.state[formName].errors[inputName][method]
+    }
+
+    ViewLogin = () => {
+        return this.props.history.push('/login')
+    }
+
+    ViewSignUp = () => {
+        return this.props.history.push('/register')
     }
 
     render() {
@@ -125,8 +133,7 @@ class Login extends Component {
                         { /* END navbar header */}
 
                         <div className="navbar-nav flex-row">
-                            <Button outline color="danger" className="btn-pill mr-3">Login</Button>
-                            <Button outline color="success" className="btn-pill mr-3">Sign Up</Button>
+                            <Button onClick={this.ViewSignUp} outline color="success" className="btn-pill mr-3">Sign Up</Button>
                         </div>
                     </nav>
                 </header>
@@ -135,7 +142,7 @@ class Login extends Component {
                     <div className="block-center mt-5 wd-xl">
                         <div className="card card-flat">
                             <div className="card-header text-center bg-dark">
-                                <a href="">
+                                <a href="/">
                                     <img className="block-center rounded" src="img/logo.png" alt="Logo"/>
                                 </a>
                             </div>
