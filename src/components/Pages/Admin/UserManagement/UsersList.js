@@ -85,7 +85,7 @@ AddActionButtonStyle={
             <CardHeader>
             </CardHeader>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
@@ -122,7 +122,7 @@ AddActionButtonStyle={
                     ))}
                   </tbody>
                 </table>
-              </Datatable>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

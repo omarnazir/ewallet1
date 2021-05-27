@@ -74,9 +74,12 @@ class PostPaidCustomers extends Component {
             <small>Showing all post paid customers.</small>
           </div>
           <div className="flex-row">
-            <Button className="btn-pill-right" style={this.AddActionButtonStyle}>
+            
+            {/* <Button className="btn-pill-right" style={this.AddActionButtonStyle}>
               <i className="fa fa-plus mr-2"></i>
-              Add Post Paid Customer</Button>
+              Add Post Paid Customer</Button> */}
+
+
             {/* <Link outline color="danger" className="btn-pill-right">Add Post Paid Customer</Link> */}
             {/* <Link to="dashboard" className="btn btn-pill-right">
             <span outline color="danger" className="btn-pill-right">Add Post Paid Customer</span>
@@ -89,7 +92,7 @@ class PostPaidCustomers extends Component {
               {/* <CardTitle>Export Buttons</CardTitle> */}
             </CardHeader>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
@@ -144,7 +147,7 @@ class PostPaidCustomers extends Component {
                     ))}
                   </tbody>
                 </table>
-              </Datatable>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

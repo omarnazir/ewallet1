@@ -1,17 +1,11 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
-import {
-  Container,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle
-} from "reactstrap";
+import Datatable from "../../../Common/Datatable";
+import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
 import $ from "jquery";
-
-
+import Moment from "moment"
+import NumberFormat from 'react-number-format'
 
 class Transactions extends Component {
   state = {
@@ -32,6 +26,7 @@ class Transactions extends Component {
           sPrevious: '<em class="fa fa-caret-left"></em>',
         },
       },
+      // Datatable Buttons setup
       dom: "Bfrtip",
       buttons: [
         { extend: "csv", className: "btn-info" },
@@ -39,9 +34,23 @@ class Transactions extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    },
-    smsTransactions: []
+    },billsList:[]
   };
+
+  componentDidMount() {
+    axios.get("/bills")
+        .then(res => {
+            const response = res.data;
+            this.setState({ billsList: response })
+
+        })
+      }
+  
+
+      formatDate = (date) => {
+        return Moment(date).format('DD-MM-YYYY')
+      }
+
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -53,112 +62,63 @@ class Transactions extends Component {
     });
   };
 
-  componentDidMount() {
-    this.fetchTxns();
-  }
-
-  fetchTxns = () => {
-    axios.get(`http://localhost:8085/api/v1/sms`, {
-      headers: {
-        'Content-type': 'application/json',
-        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-      }
-    }).then(res => {
-        const response = res.data;
-        this.setState({ smsTransactions: response })
-        console.log(response);
-      })
-  }
-
-  AddActionButtonStyle={
-    color:'white',
-    background:"#003366"
-  }
-
   render() {
     return (
       <ContentWrapper>
         <div className="content-heading">
           <div>
-            Transactions
-            <br />
-            <small>Showing all transactions </small>
+            Invoices
+            <small>Showing all invoices.</small>
           </div>
         </div>
         <Container fluid>
           <Card>
             <CardHeader>
-              {/* <CardTitle>
-                Showing all transactions from <strong> MAR 29,2021  </strong> to <strong>  APR 29,2021 </strong>
-              </CardTitle> */}
-              <div className="row">
-                <Card className="col-sm-12">
-                  <CardBody>
-                    <form onSubmit={this.onSubmit}>
-                      <div className="form-row align-items-center">
-                        <div className="col-sm-3">
-                          <div className="form-group">
-                            <label>From :</label>
-                            <input className="form-control" type="date" />
-                          </div>
-                        </div>
-                        <div className="col-sm-3">
-                          <div className="form-group">
-                            <label>To: </label>
-                            <input className="form-control" type="date" />
-                          </div>
-                        </div>
-                        <div className="col-sm-3">
-                          <div className="form-group">
-                            <label>No of records: </label>
-                            <select className="form-control" id="exampleFormControlSelect1">
-                              <option>All</option>
-                              <option>100</option>
-                              <option>200</option>
-                              <option>500</option>
-                              <option>1000</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div className="col-sm-3">
-                          <button type="submit" style={this.AddActionButtonStyle} className="btn btn-info mt-2">
-                            Search
-                          </button>
-                        </div>
-
-                      </div>
-                    </form>
-                  </CardBody>
-                </Card>
-              </div>
             </CardHeader>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
-                      <th data-priority="1">SNO</th>
-                      <th>DATE</th>
-                      <th className="sort-alpha">SENDER ID</th>
-                      <th className="sort-alpha" data-priority="2">SMS</th>
-                      <th>MSISDN</th>
-                      <th>NETWORK</th>
+                      <th data-priority="1">#</th>
+                      <th>INVOICE</th>
+                      <th>QUANTITY</th>
+                      <th>AMOUNT</th>
+                      <th>PAYMENT STATUS</th>
+                      <th>METHOD</th>
+                      <th>PAYMENT DATE</th>
+                      <th>DATE CREATED</th>
+                      <th>ACTION</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.smsTransactions.map(row => (
-                      <tr>
-                        <td>{row.id}</td>
-                        <td>{row.date}</td>
-                        <td>{row.sender}</td>
-                        <td>{row.message}</td>
-                        <td>{row.msisdn}</td>
-                        <td>{row.network}</td> 
-                      </tr>
-                    ))}
+
+                    {
+                      this.state.billsList.map((bill)=>(
+
+                        <tr className="gradeX">
+                        <td>{bill.id}</td>
+                        <td>{bill.billNumber}</td>
+                        <td><NumberFormat value={bill.smsQuantity} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
+                        <td><NumberFormat value={bill.billAmount} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
+                        {/* <td>{bill.billAmount}</td> */}
+                        {bill.status==0 &&
+                        <td> <span className="badge badge-danger">Not Paid</span> </td>  
+                        }
+                        {bill.status==1 && 
+                        <td> <span className="badge badge-success">Paid</span> </td>  
+                        }
+                        <td>{bill.paymentMethod}</td> 
+                        <td>N/A</td> 
+                        <td>{this.formatDate(bill.createdAt)}</td>
+                        <td> <span className="btn badge-success">VIEW</span> </td>                   
+                      </tr> 
+                      ))
+                    }
+                  
                   </tbody>
                 </table>
-              </Datatable>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>
