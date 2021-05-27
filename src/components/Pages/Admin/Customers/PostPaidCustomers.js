@@ -5,8 +5,7 @@ import axios from "../../../../services/axios";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import { Link } from 'react-router-dom';
 import $ from "jquery";
-
-
+import Moment from "moment"
 
 class PostPaidCustomers extends Component {
   state = {
@@ -39,7 +38,7 @@ class PostPaidCustomers extends Component {
 
 
   componentDidMount() {
-    axios.get("/customers?search=(paymentType:'Post-Paid')")
+    axios.get("/customers/post-paid")
       .then(res => {
         const response = res.data;
         this.setState({ customersPostPaidList: response })
@@ -57,9 +56,13 @@ class PostPaidCustomers extends Component {
       dtInstance.fnFilter(this.value, columnInputs.index(this));
     });
   };
-  AddActionButtonStyle={
-    color:'white',
-    background:"#003366"
+  AddActionButtonStyle = {
+    color: 'white',
+    background: "#003366"
+  }
+
+  formatDate = (date) => {
+    return Moment(date).format('DD-MM-YYYY')
   }
 
   render() {
@@ -105,7 +108,7 @@ class PostPaidCustomers extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                   
+
                     {this.state.customersPostPaidList.map(row => (
                       <tr key={row.id}>
                         <td>{row.id}</td>
@@ -114,7 +117,12 @@ class PostPaidCustomers extends Component {
                         <td>{row.phonenumber}</td>
                         <td>{row.location}</td>
                         <td>{row.vaccount}</td>
+                        {row.monthlyLimit != null && 
                         <td>{row.monthlyLimit}</td>
+                        }
+                         {row.monthlyLimit == null && 
+                        <td>N/A</td>
+                        }
                         {/* <td>{row.isActive}</td> */}
                         <td>{row.isActive == 1 &&
                           <span className="badge badge-success">Active</span>
@@ -124,8 +132,14 @@ class PostPaidCustomers extends Component {
                           }
                         </td>
 
-                        <td>{row.startDate}</td>
-                        <td></td>
+                        <td>{this.formatDate(row.createdAt)}</td>
+                        <td>  <Button color="success" className="btn btn-success"
+                          onClick={() => {
+                            this.ViewCustomerDetails(row);
+                          }}
+                        >
+                          <i className="fa fa-eye"></i>
+                        </Button></td>
                       </tr>
                     ))}
                   </tbody>

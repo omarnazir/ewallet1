@@ -15,6 +15,9 @@ import Datetime from 'react-datetime';
 import $ from "jquery";
 
 import Datatable from "../../../Common/Datatable";
+import { AuthService } from "../../../../services";
+import axios from '../../../../services/axios'
+
 
 class UserPage extends Component {
   state = {
@@ -45,7 +48,8 @@ class UserPage extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    usersList:[]
   };
 
   // Access to internal datatable instance for customizations
@@ -58,7 +62,19 @@ class UserPage extends Component {
     });
   };
 
+  componentDidMount(){
+    const isAuthenticated=AuthService.isAuthenticated();
+    if(!isAuthenticated){
+    this.setState({redirect: "/login"})
+    }
 
+    axios.get("/users/list")
+    .then(res => {
+      const response = res.data;
+      this.setState({ usersList: response })
+      console.log(response);
+    })
+  }
 
   ViewAddNormalUser = () => {
     return this.props.history.push('/add-user')
@@ -93,10 +109,11 @@ class UserPage extends Component {
                     </tr>
                   </thead>
                   <tbody>
+                    {this.state.usersList.map(row=>
                      <tr className="gradeA">
-                      <td>1</td>
-                      <td>KHALFAN HUSSEIN</td>
-                      <td>alphax.codes</td>
+                      <td>{row.id}</td>
+                      <td>{row.name}</td>
+                      <td>{row.username}</td>
                       <td>500</td>
                       <td>
                       {/* <span className="badge badge-warning">Pending</span>
@@ -110,6 +127,7 @@ class UserPage extends Component {
                       <span className="btn badge-danger mt-1">Delete</span>
                       </td>
                     </tr>  
+                    )}
                   </tbody>
                 </table>
               </Datatable>

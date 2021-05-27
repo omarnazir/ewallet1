@@ -111,8 +111,8 @@ class TarriffBand extends Component {
                       <tr key={row.id}>
                         <td>{row.id}</td>
                         <td>{this.state.tariff.tariffName}</td>
-                        <td>{row.pricePerSms}</td>
-                        <td>{row.smsVolume}</td>
+                        <td>{row.bandAmount}</td>
+                        <td>{row.smsQuantity}</td>
                         <td>{row.expireDurationDays}</td>
                         <td>
                         <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}>

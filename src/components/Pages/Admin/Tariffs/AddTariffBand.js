@@ -16,54 +16,53 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
+import { useHistory } from "react-router-dom";
 
 
 
 class AddTariffBand extends Component {
     state = {
-      fromAmount:0,
-      toAmount:0,
-      expireDurationDays:0,
-      pricePerSms:0,
-      tariffsAmount:0,
-      smsVolume:0,
-      tariff:[]
-    }; 
+
+        tariff: [],
+        tariffId: 0,
+        bandAmount:0,
+        smsQuantity: 0,
+        expireDurationDays: 0,
+        vatAmount: 0
+    };
 
 
     handleSubmit = event => {
         event.preventDefault();
 
         const { state } = this.props.history.location;
-        this.setState({tariff:state})
-        this.setState({tariffId:state.id})
+  
         console.log('id', state.id);
-        console.log("name",state.tariffName)
-    
+        console.log("name", state.tariffName)
 
-       const tariffBand= {
-            "tariffId":this.state.tariff.id,
-            "fromAmount":this.state.fromAmount,
-            "toAmount":this.state.toAmount,
-            "expireDurationDays":this.state.expireDurationDays,
-            "pricePerSms":this.state.pricePerSms
+        const tariffBands = {
+            "tariffId": state.id,
+            "bandAmount": this.state.bandAmount,
+            "smsQuantity": this.state.smsQuantity,
+            "expireDurationDays": this.state.expireDurationDays,
+            "vatAmount": this.state.vatAmount
+
         }
-      
-          axios.post("/tariff-bands",tariffBand).then(res=>{
-            console.log(tariffBand);
+
+        axios.post("/tariff-bands", tariffBands).then(res => {
             console.log(res.data);
-            this.ViewTarrifBands();
-          })
-      }
+            this.ViewTarrifBands(state.id);
+        })
+    }
 
-    ViewTarrifBands=()=>{
-        return this.props.history.push('/admin/manage-tariff-bands')
-      }
+    ViewTarrifBands = (id) => {
+        return this.props.history.goBack();
+    }
 
-      handleChange = event =>{
-        this.setState({ [event.target.name]: event.target.value});
-      }
-    
+    handleChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+    }
+
     render() {
         return (
             <ContentWrapper>
@@ -84,22 +83,25 @@ class AddTariffBand extends Component {
                                     <form onSubmit={this.handleSubmit}>
                                         <FormGroup>
                                             <label>Amount :</label>
-                                            <input className="form-control" name="fromAmount" onChange={this.handleChange} type="number" required></input>
+                                            <input className="form-control" name="bandAmount" onChange={this.handleChange} type="number" required></input>
                                         </FormGroup>
                                         <FormGroup>
                                             <label>Vat Amount :</label>
-                                            <input className="form-control" name="toAmount" onChange={this.handleChange} type="number" required></input>
+                                            <input className="form-control" name="vatAmount" onChange={this.handleChange} type="number" required></input>
                                         </FormGroup>
                                         <FormGroup>
                                             <label>Number of SMS :</label>
-                                            <input className="form-control" name="pricePerSms" onChange={this.handleChange} type="number" required></input>
+                                            <input className="form-control" name="smsQuantity" onChange={this.handleChange} type="number" required></input>
                                         </FormGroup>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Expire Time (Days): </label>
-                                            <select className="form-control" id="exampleFormControlSelect1">
+                                            <select className="form-control" id="exampleFormControlSelect1" name="expireDurationDays" onChange={this.handleChange}>
+                                                <option value="0">Select number days</option>
                                                 <option value="30">30 Days</option>
                                                 <option value="60">60 Days</option>
                                                 <option value="90">90 Days</option>
+                                                <option value="180">180 Days</option>
+                                                <option value="365">365 Days</option>
                                                 <option value="1000000000">Never</option>
                                             </select>
                                         </div>

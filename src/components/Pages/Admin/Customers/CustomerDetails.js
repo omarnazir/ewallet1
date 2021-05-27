@@ -58,6 +58,11 @@ class CustomerDetails extends Component {
     }
 
 
+  ViewCustomerList=()=>{
+    return this.props.history.push("/admin/customers-list")
+  }
+
+
     handleClickActiveTab = event => {
         const newActiveTab = event.target.tab;
         this.setState({
@@ -68,8 +73,6 @@ class CustomerDetails extends Component {
     componentDidMount() {
 
         const { state } = this.props.history.location;
-        // this.setState({customer:state})
-        console.log("from page 2 ")
         console.log(state.id)
 
         axios.get("/customers/" + state.id)
@@ -109,7 +112,7 @@ class CustomerDetails extends Component {
                     </div>
                     <div className="flex-row d-block d-md-flex">
                         <Button onClick={this.ViewRequestedSenders} className="btn btn-pill mr-2 bg-danger">Disable Customer</Button>
-                        <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">View All Customers</Button>
+                        <Button onClick={this.ViewCustomerList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Customers</Button>
                     </div>
                 </div>
                 <Container fluid>

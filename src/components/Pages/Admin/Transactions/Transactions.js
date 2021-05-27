@@ -70,6 +70,11 @@ class Transactions extends Component {
       })
   }
 
+  AddActionButtonStyle={
+    color:'white',
+    background:"#003366"
+  }
+
   render() {
     return (
       <ContentWrapper>
@@ -83,9 +88,9 @@ class Transactions extends Component {
         <Container fluid>
           <Card>
             <CardHeader>
-              <CardTitle>
+              {/* <CardTitle>
                 Showing all transactions from <strong> MAR 29,2021  </strong> to <strong>  APR 29,2021 </strong>
-              </CardTitle>
+              </CardTitle> */}
               <div className="row">
                 <Card className="col-sm-12">
                   <CardBody>
@@ -116,7 +121,7 @@ class Transactions extends Component {
                           </div>
                         </div>
                         <div className="col-sm-3">
-                          <button type="submit" className="btn btn-info mt-2">
+                          <button type="submit" style={this.AddActionButtonStyle} className="btn btn-info mt-2">
                             Search
                           </button>
                         </div>

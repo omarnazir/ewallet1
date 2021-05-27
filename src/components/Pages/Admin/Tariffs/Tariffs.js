@@ -38,14 +38,17 @@ class Tariffs extends Component {
   };
 
   componentDidMount() {
-    axios.get("/tariff")
-      .then(res => {
-        const response = res.data;
-        this.setState({ tarrifsList: response })
-        console.log(response);
-      })
+    this.GetAllTariffs()
   }
 
+  GetAllTariffs=()=>{
+    axios.get("/tariff")
+    .then(res => {
+      const response = res.data;
+      this.setState({ tarrifsList: response })
+      console.log(response);
+    })
+  }
   DeleteTariff(id){
     axios.delete("/tariff/" + id)
     .then(res => {
@@ -58,15 +61,13 @@ class Tariffs extends Component {
   }
 
   DefualtTariff(id){
-    axios.put("/tariff/default/" + id)
+    axios.put("/tariff/set-default/" + id)
     .then(res => {
       const response = res.data;
-      // const tarrifsList =  this.state.tarrifsList.map((tarriff) => {
-      //   return tarriff.id === id ? { ...response.data } : tarriff;
-      // })
-      const index = this.state.tarrifsList.findIndex((tarriff) => tarriff.id === id);
-      const updateTarriffList = update(this.state.tarrifsList, {$splice: [[index, 1, res.data]]});  // array.splice(start, deleteCount, item1)
-      this.setState({tarrifsList: updateTarriffList});
+      this.GetAllTariffs();
+      // const index = this.state.tarrifsList.findIndex((tarriff) => tarriff.id === id);
+      // const updateTarriffList = update(this.state.tarrifsList, {$splice: [[index, 1, res.data]]});  // array.splice(start, deleteCount, item1)
+      // this.setState({tarrifsList: updateTarriffList});
     })
   }
 

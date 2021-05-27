@@ -4,8 +4,8 @@ import axios from "../../../../services/axios";
 import Datatable from "../../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
 import $ from "jquery";
-
-
+import Moment from "moment"
+import NumberFormat from 'react-number-format'
 
 class PrePaidInvoiceList extends Component {
   state = {
@@ -34,11 +34,23 @@ class PrePaidInvoiceList extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },billsList:[]
   };
 
+  componentDidMount() {
+    axios.get("/bills")
+        .then(res => {
+            const response = res.data;
+            this.setState({ billsList: response })
 
+        })
+      }
   
+
+      formatDate = (date) => {
+        return Moment(date).format('DD-MM-YYYY')
+      }
+
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -80,18 +92,30 @@ class PrePaidInvoiceList extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeX">
-                      <td>1</td>
-                      <td>221088</td>
-                      <td>5</td>
-                      <td>100</td>
-                      <td> <span className="badge badge-success">PAID</span> </td>  
-                      <td>MPESA</td>
-                      
-                      <td>Nov 30, 2021 at 00:00</td> 
-                      <td>Mar 24, 2021 at 07:39</td>
-                      <td> <span className="btn badge-success">VIEW</span> </td>                   
-                    </tr> 
+
+                    {
+                      this.state.billsList.map((bill)=>(
+
+                        <tr className="gradeX">
+                        <td>{bill.id}</td>
+                        <td>{bill.billNumber}</td>
+                        <td><NumberFormat value={bill.smsQuantity} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
+                        <td><NumberFormat value={bill.billAmount} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
+                        {/* <td>{bill.billAmount}</td> */}
+                        {bill.status==0 &&
+                        <td> <span className="badge badge-danger">Not Paid</span> </td>  
+                        }
+                        {bill.status==1 && 
+                        <td> <span className="badge badge-success">Paid</span> </td>  
+                        }
+                        <td>{bill.paymentMethod}</td> 
+                        <td>N/A</td> 
+                        <td>{this.formatDate(bill.createdAt)}</td>
+                        <td> <span className="btn badge-success">VIEW</span> </td>                   
+                      </tr> 
+                      ))
+                    }
+                  
                   </tbody>
                 </table>
               </Datatable>

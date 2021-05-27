@@ -16,7 +16,7 @@ import Datetime from "react-datetime";
 import $ from "jquery";
 import {AuthService} from "../../../../services"
 import {Redirect} from 'react-router-dom';
-
+import axios from '../../../../services/axios'
 
 class UserOutbox extends Component {
   state = {
@@ -49,6 +49,7 @@ class UserOutbox extends Component {
       ],
     },
     isAuthenticated:false,
+    smsList:[]
   };
 
   // Access to internal datatable instance for customizations
@@ -66,6 +67,13 @@ class UserOutbox extends Component {
     if(!isAuthenticated){
     this.setState({redirect: "/login"})
     }
+
+    axios.get("/sms")
+    .then(res => {
+      const response = res.data;
+      this.setState({ smsList: response })
+      console.log(response);
+    })
   }
 
   //GO TO COMPOSE SMS
@@ -106,23 +114,31 @@ class UserOutbox extends Component {
                       <th>UNITS</th>
                       <th>DATE</th>
                       <th>STATUS</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
+                  {this.state.smsList.map(row => (
                     <tr className="gradeA">
-                      <td>1</td>
-                      <td>VODACOM</td>
-                      <td>255656121885</td>
-                      <td>TIGO</td>
-                      <td>TESTING SMS</td>
-                      <td>1</td>
-                      <td>Mar 20, 2021 at 22:03</td>
+                      <td>{row.id}</td>
+                      <td>{row.senderId}</td>
+                      <td>{row.msisdn}</td>
+                      <td>{row.network}</td>
+                      <td>{row.message}</td>
+                      <td>{1}</td>
+                      <td>{row.createdAt}</td>
+                      {row.status=="Delivered" && 
                       <td>
                         <span className="badge badge-success">Delivered</span>
                       </td>
-                      <td></td>
+                       }
+                        {row.status!="Delivered" && 
+                      <td>
+                        <span className="badge badge-danger">{row.status}</span>
+                      </td>
+                       }
                     </tr>
+                  ))}
+                    
                     
                   </tbody>
                 </table>

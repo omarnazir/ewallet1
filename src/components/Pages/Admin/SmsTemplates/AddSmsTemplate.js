@@ -97,7 +97,7 @@ class AddSmsTemplate extends Component {
                                     <form onSubmit={this.handleSubmit}>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Message Type : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1" name="messageTemplateType" onChange={this.handleOnSelectChange} >
+                                            <select className="form-control" id="exampleFormControlSelect1" name="messageTemplateType" onChange={this.handleOnSelectChange} value={this.state.messageTemplate} >
                                                 <option value="static">Static message</option>
                                                 <option value="dynamic">Dynamic message</option>
                                             </select>

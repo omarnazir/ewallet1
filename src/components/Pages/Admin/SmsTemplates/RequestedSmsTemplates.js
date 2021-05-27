@@ -142,9 +142,9 @@ class SmsTemplatesRequested extends Component {
         <Container fluid>
           <Card>
             <CardHeader>
-              <CardTitle>
+              {/* <CardTitle>
                 Showing all sms templates from <strong> MAR 29,2021 </strong> to <strong> APR 29,2021 </strong>
-              </CardTitle>
+              </CardTitle> */}
               <div className="row">
                 <Card className="col-sm-12">
                   <CardBody>

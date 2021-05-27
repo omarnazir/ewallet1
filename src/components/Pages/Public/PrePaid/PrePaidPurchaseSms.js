@@ -24,39 +24,59 @@ class PurchaseSms extends Component {
     }
 
     state = {
-        tariff: "",
-        paymentMethod:"",
-        paymentMsisdn:"",
-        tarriffBand:[]
+        tariffBand: "",
+        paymentMethod: "",
+        phoneNumber: "",
+        tarriffBandList: [],
+        paymentTypeList:[]
     };
 
-    AddActionButtonStyle={
-        color:'white',
-        background:"#003366"
-      }
+    AddActionButtonStyle = {
+        color: 'white',
+        background: "#003366"
+    }
 
     componentDidMount() {
-        axios.get("/tariff-bands")
+        axios.get("/tariff/get-default-bands")
             .then(res => {
                 const response = res.data;
-                this.setState({ tarriffBand: response })
-              
+                this.setState({ tarriffBandList: response })
+
             })
-        }
+
+        axios.get("/payment-type")
+            .then(res => {
+                const response = res.data;
+                this.setState({ paymentTypeList: response })
+            })
+    }
+
+
+
+
+
 
     handleSubmit = event => {
         event.preventDefault();
-        const tarriff = {
-            "tariff": this.state.tariff,
-            "paymentMethod":this.state.paymentMethod,
-            "paymentMsisdn":this.state.paymentMsisdn
+        const bill={
+            "tariff_band_id":this.state.tariffBand,
+            "payment_type_id":this.state.paymentMethod,
+            "msisdn":this.state.phoneNumber
         }
-        axios.post("/bills", tarriff).then(res => {
+        console.log(bill)
+
+        // const bill2={
+        //     "tariff_band_id":21,
+        //     "payment_type_id":1,
+        //     "msisdn":"0745252650"
+        // }
+        axios.post("/bills", bill).then(res => {
             console.log(res);
             console.log(res.data);
             this.ViewAllInvoices();
         })
     }
+
 
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
@@ -64,18 +84,18 @@ class PurchaseSms extends Component {
 
     handlePaymentMethodChange = event => {
         const paymentMethod = event.target.value;
-        this.setState({ paymentMethod })
+        this.setState({ paymentMethod:paymentMethod })
     }
     handleSelectBundleChange = event => {
         const tariff = event.target.value;
-        this.setState({ tariff })
+        this.setState({ tariffBand:tariff })
     }
     render() {
         return (
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Purchase SMS 
+                        Purchase SMS
                      <small>Purchase SMS for Pre-paid customers</small>
                     </div>
                     <div className="flex-row">
@@ -91,33 +111,38 @@ class PurchaseSms extends Component {
 
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Select a bundle : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1" required name="tariff" onChange={this.handleSelectBundleChange} >
-                                                {this.state.tarriffBand.map(row => (
+                                            <select className="form-control" id="exampleFormControlSelect1" required name="tariffBand" onChange={this.handleSelectBundleChange} onClick={this.handleSelectBundleChange} >
+                                                {this.state.tarriffBandList.map(row => (
                                                     <option key={row.id} value={row.id} >
-                                                      {row.toAmount} sms - {row.toAmount * row.pricePerSms}
+                                                        {row.smsQuantity} sms -  Tsh {row.bandAmount}
                                                     </option>
                                                 ))}
                                             </select>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Payment method : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1" name="paymentMethod" required onChange={this.handlePaymentMethodChange}>
-                                                <option value="MPESA">MPESA</option>
+                                            <select className="form-control" id="exampleFormControlSelect1" name="paymentMethod" required onChange={this.handlePaymentMethodChange} onClick={this.handlePaymentMethodChange}>
+                                            {/* <option>Select payment method</option> */}
+                                            {this.state.paymentTypeList.map(row => (
+                                                    <option key={row.id} value={row.id} >
+                                                        {row.name}
+                                                    </option>
+                                                ))}
                                             </select>
                                         </div>
                                         <FormGroup>
                                             <label>Enter Vodacom phone number:</label>
-                                            <input className="form-control" name="paymentMsisdn" type="number" required onClick={this.handleChange}></input>
+                                            <input className="form-control" name="phoneNumber" type="number" required onChange={this.handleChange} ></input>
                                         </FormGroup>
-                                     
-                                            <h6>After entering the number check out your phone to continue</h6>
-                                        
+
+                                        <h6>After entering the number check out your phone to continue</h6>
+
                                         <div className="mt-3">
-                                        <button className="btn btn-sm btn-success mr-3" type="submit">
-                                            Continue
+                                            <button className="btn btn-sm btn-success mr-3" type="submit">
+                                                Continue
                                         </button>
-                                        <button onClick={this.ViewAllInvoices} className="btn btn-sm btn-danger">
-                                            Cancel
+                                            <button onClick={this.ViewAllInvoices} className="btn btn-sm btn-danger">
+                                                Cancel
                                         </button>
                                         </div>
                                     </form>
