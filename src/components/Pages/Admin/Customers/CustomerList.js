@@ -45,6 +45,12 @@ class CustomerList extends Component {
     });
   }
 
+
+  AddActionButtonStyle = {
+    color: 'white',
+    background: "#003366"
+  }
+
   pagination = paginationFactory({
     page: 2,
     sizePerPage: 5,
@@ -149,9 +155,14 @@ class CustomerList extends Component {
     return (
       <ContentWrapper>
         <div className="content-heading">
-          <div>
+          <div className="mr-auto flex-row">
             Customers List
             <small>Showing all customers.</small>
+          </div>
+          <div className="flex-row">
+            <button className="btn  ml-2" style={this.AddActionButtonStyle}>
+              <i className="icon-info mr-2"></i>
+                              Customers pending approval</button>
           </div>
         </div>
         <Container fluid>
@@ -171,11 +182,11 @@ class CustomerList extends Component {
                 {
                   props => (
                     <div>
-                      <h6>Input something at below input field:</h6>
+                      {/* <h6>Input something at below input field:</h6>
                       <SearchBar {...props.searchProps} />
                       <ClearSearchButton {...props.searchProps} />
                       <hr />
-                      <MyExportCSV {...props.csvProps} />
+                      <MyExportCSV {...props.csvProps} /> */}
                       <BootstrapTable bootstrap4 striped keyField='id'
                         data={this.state.customersList} columns={this.columns} condensed
                         pagination={paginationFactory()}

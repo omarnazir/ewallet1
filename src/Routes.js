@@ -46,6 +46,7 @@ import UserPage from './components/Pages/Public/Users/UserPage';
 import PrePaidInvoiceList from './components/Pages/Public/PrePaid/PrePaidInvoiceList';
 import UserRequestedSmsList from './components/Pages/Public/Sms/UserRequestedSmsList';
 import AddUserRequestedSms from './components/Pages/Public/Sms/AddUserRequestedSms';
+import LandingPage from './components/Auth/landing';
 
 const waitFor = Tag => props => <Tag {...props} />;
 
@@ -55,7 +56,8 @@ const Register = lazy(() => import('./components/Auth/Register'));
 
 const listofPages = [
     '/login',
-    '/register'
+    '/register',
+    '/'
 ];
 
 const Routes = ({ location }) => {
@@ -72,6 +74,7 @@ const Routes = ({ location }) => {
                     <Switch location={location}>
                         <Route path="/login" component={waitFor(Login)} />
                         <Route path="/register" component={waitFor(Register)} />
+                        <Route path="/" component={waitFor(LandingPage)}/>
                     </Switch>
                 </Suspense>
             </BasePage>

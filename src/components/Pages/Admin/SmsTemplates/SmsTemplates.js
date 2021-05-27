@@ -106,6 +106,7 @@ class SmsTemplates extends Component {
       <ContentWrapper>
         <div className="content-heading">
           <div className="mr-auto flex-row">
+            Requested Sms Templates
             <br />
             <small>Showing all sms templates </small>
           </div>
@@ -117,9 +118,9 @@ class SmsTemplates extends Component {
         <Container fluid>
           <Card>
             <CardHeader>
-              <CardTitle>
+              {/* <CardTitle>
                 Showing all sms templates from <strong> MAR 29,2021 </strong> to <strong> APR 29,2021 </strong>
-              </CardTitle>
+              </CardTitle> */}
               <div className="row">
                 <Card className="col-sm-12">
                   <CardBody>
@@ -150,7 +151,7 @@ class SmsTemplates extends Component {
                           </div>
                         </div>
                         <div className="col-sm-3">
-                          <button type="submit" className="btn btn-info mt-2">
+                          <button type="submit" className="btn btn-info mt-2" style={this.AddActionButtonStyle}>
                             Search
                           </button>
                         </div>
