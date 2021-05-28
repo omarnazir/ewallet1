@@ -161,7 +161,7 @@ class Sidebar extends Component {
                         <ul className="sidebar-nav">
                             { /* START user info */}
                             <li className="has-user-block">
-                                <SidebarUserBlock/>
+                                <SidebarUserBlock  />
                             </li>
                             { /* END user info */}
 

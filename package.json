@@ -116,6 +116,8 @@
     "simple-line-icons": "2.5.5",
     "spinkit": "1.2.5",
     "sweetalert": "2.1.2",
+    "sweetalert2": "^11.0.12",
+    "sweetalert2-react-content": "^4.0.1",
     "validator": "10.11.0",
     "weather-icons": "github:erikflowers/weather-icons",
     "web-vitals": "0.2.4",

@@ -46,7 +46,9 @@ class CustomerDetails extends Component {
         },
         activeTab: '1',
         customerId: 0,
-        customer: {}
+        customer: {},
+        isActive: 0,
+        usersList: []
     };
 
     toggleTab = tab => {
@@ -58,9 +60,9 @@ class CustomerDetails extends Component {
     }
 
 
-  ViewCustomerList=()=>{
-    return this.props.history.push("/admin/customers-list")
-  }
+    ViewCustomerList = () => {
+        return this.props.history.push("/admin/customers-list")
+    }
 
 
     handleClickActiveTab = event => {
@@ -73,12 +75,21 @@ class CustomerDetails extends Component {
     componentDidMount() {
 
         const { state } = this.props.history.location;
-        console.log(state.id)
+        // console.log(state.id)
+        this.setState({ isActive: state.isActive })
+        this.setState({ customerId: state.id })
 
         axios.get("/customers/" + state.id)
             .then(res => {
                 const response = res.data;
                 this.setState({ customer: response })
+            })
+
+        axios.get("/customers/users-list/" + state.id)
+            .then(res => {
+                const response = res.data;
+                this.setState({ usersList: response })
+                console.log(response);
             })
     }
     // Access to internal datatable instance for customizations
@@ -100,9 +111,43 @@ class CustomerDetails extends Component {
         background: "#33414e"
     }
 
+    ApproveCustomer(id) {
+        console.log(id)
+        axios.put("/customers/approve/" + id)
+            .then(res => {
+                const response = res.data;
+
+                this.ViewCustomerList();
+            })
+
+    }
+
+    RejectCustomer(id) {
+
+        axios.put("/customers/reject/" + id)
+            .then(res => {
+                const response = res.data;
+
+                this.ViewCustomerList();
+            })
+    }
+
+    DeleteTariff(id) {
+        console.log("am here ")
+        console.log(id)
+        // axios.delete("/customers/approve/313" + id)
+        // .then(res => {
+        //   const response = res.data;
+        //   const tarrifsList = this.state.tarrifsList.filter((tarrif) => {
+        //     return tarrif.id !== id;
+        //   });
+        //   this.setState({ tarrifsList })
+        // })
+    }
 
 
     render() {
+        const id = this.state.customer.id;
         return (
             <ContentWrapper>
                 <div className="content-heading">
@@ -111,7 +156,15 @@ class CustomerDetails extends Component {
                         <small>Showing all customer details.</small>
                     </div>
                     <div className="flex-row d-block d-md-flex">
-                        <Button onClick={this.ViewRequestedSenders} className="btn btn-pill mr-2 bg-danger">Disable Customer</Button>
+                        {this.state.isActive == 1 &&
+                            <Button onClick={() => this.ViewRequestedSenders} className="btn btn-pill mr-2 bg-danger">Disable Customer</Button>
+                        }
+                        {this.state.isActive != 1 &&
+                            <span>
+                                <Button onClick={() => this.RejectCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-danger">Reject Customer</Button>
+                                <Button onClick={() => this.ApproveCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-success">Approve Customer</Button>
+                            </span>
+                        }
                         <Button onClick={this.ViewCustomerList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Customers</Button>
                     </div>
                 </div>
@@ -134,12 +187,13 @@ class CustomerDetails extends Component {
                                     className={classnames({ active: this.state.activeTab === '2' })}
                                     onClick={() => { this.toggleTab('2'); }}>
                                     <span className="icon-wallet mr-2"></span>
-                                              Transactions
+                                              Attachments
                                             </NavLink>
                             </NavItem>
+                        
                             <NavItem>
                                 <NavLink
-                                    className={classnames({ active: this.state.activeTab === '3' })}
+                                    className={classnames({ active: this.state.activeTab === '4' })}
                                     onClick={() => { this.toggleTab('3'); }}>
                                     <span className="fa fa-users mr-2"></span>
                                                  User Accounts
@@ -150,7 +204,7 @@ class CustomerDetails extends Component {
                             <TabPane tabId="1">
 
                                 <Col xl="12">
-                                    <div className="col-md-8 offset-md-2">
+                                    <div>
                                         <div className="card">
                                             <div className="card-header px-0">
                                                 <h4 className="text-center mt-2">Customer Details</h4>
@@ -159,23 +213,22 @@ class CustomerDetails extends Component {
                                             <div className="card-body mt-2 py-1">
                                                 <div className="px-md-3 px-2">
                                                     <div className="px-2">
-                                                        <p className="mb-3 text-dark"><strong>Customer name:</strong> &nbsp; <span name="name">{this.state.customer.fullname }</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Email:</strong> &nbsp; <span name="email">{this.state.customer.email }</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Phone:</strong> &nbsp; <span name="phone">{this.state.customer.phonenumber }</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Address:</strong> &nbsp; <span name="address">{this.state.customer.location }</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Status:</strong> &nbsp; <span name="status"></span>Pending</p>
-                                                        <p className="mb-3 text-dark"><strong>Date registered:</strong> &nbsp; <span name="regdate">12/01/2021</span></p>
+                                                        <p className="mb-3 text-dark"><strong>Customer name:</strong> &nbsp; <span name="name">{this.state.customer.fullname}</span></p>
+                                                        <p className="mb-3 text-dark"><strong>Email:</strong> &nbsp; <span name="email">{this.state.customer.email}</span></p>
+                                                        <p className="mb-3 text-dark"><strong>Phone:</strong> &nbsp; <span name="phone">{this.state.customer.phonenumber}</span></p>
+                                                        <p className="mb-3 text-dark"><strong>Address:</strong> &nbsp; <span name="address">{this.state.customer.location}</span></p>
+                                                        <p className="mb-3 text-dark"><strong>Status:</strong> &nbsp;
+                                                        <span name="status"></span>{this.state.customer.isActive == 1 ? "Active" : "Pending"}
+                                                        </p>
+                                                        <p className="mb-3 text-dark"><strong>Date registered:</strong> &nbsp; <span name="regdate">{this.state.customer.createdAt}</span></p>
                                                         <p className="mb-3 text-dark"><strong>ID number:</strong> &nbsp; <span name="nidaid">19900302-600123-456791</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Attachment:</strong> &nbsp; <span name="attachment"><a href="#">View Attachment</a></span></p>
-                                                        <p className="mb-3 text-dark"><strong>SMSC ID:</strong> &nbsp; <span name="smsc">ID-01XXXX</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Tariff:</strong> &nbsp; <span name="tariff">Dabo Bando</span></p>
+                                                        {/* <p className="mb-3 text-dark"><strong>Attachment:</strong> &nbsp; <span name="attachment"><a href="#">View Attachment</a></span></p> */}
+                                                        {/* <p className="mb-3 text-dark"><strong>SMSC ID:</strong> &nbsp; <span name="smsc">ID-01XXXX</span></p> */}
+                                                        {/* <p className="mb-3 text-dark"><strong>Tariff:</strong> &nbsp; <span name="tariff">Dabo Bando</span></p> */}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="card-footer bg-white py-3">
-                                                <Button color="success" className="btn-pill mr-3">Approve Customer</Button>
-                                                <Button color="danger" className="btn-pill mr-3">Reject Customer</Button>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </Col>
@@ -183,47 +236,103 @@ class CustomerDetails extends Component {
 
                             </TabPane>
                             <TabPane tabId="2">
-                                <table className="table table-striped my-4 w-100">
-                                    <thead>
-                                        <tr>
-                                            <th data-priority="1">#</th>
-                                            <th>DATE</th>
-                                            <th>TXN ID</th>
-                                            <th>TYPE</th>
-                                            <th>SMS</th>
-                                            <th>RECEIPT</th>
-                                            <th>MSISDN</th>
-                                            <th>AMOUNT</th>
-                                            <th>STATUS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+
+                                <Col xl="12">
+                                    <div>
+                                        <div className="card">
+                                            <div className="card-header px-0">
+                                                <h4 className="text-center mt-2">Customer Details</h4>
+                                            </div>
+                                            <hr className="my-0" />
+                                            <div className="card-body mt-2 py-1">
+                                                <div className="px-md-3 px-2">
+                                                    <div className="px-2">
+                                                        <table className="table table-striped my-4 w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th data-priority="1">#</th>
+                                                                    <th>DATE</th>
+                                                                    <th>TXN ID</th>
+                                                                    <th>TYPE</th>
+                                                                    <th>SMS</th>
+                                                                    <th>RECEIPT</th>
+                                                                    <th>MSISDN</th>
+                                                                    <th>AMOUNT</th>
+                                                                    <th>STATUS</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
 
 
-                                    </tbody>
-                                </table>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Col>
+
+
 
                             </TabPane>
+
+                        
                             <TabPane tabId="3">
 
-                                <table className="table table-striped my-4 w-100">
-                                    <thead>
-                                        <tr>
-                                            <th data-priority="1">#</th>
-                                            <th>FULL NAME</th>
-                                            <th>USERNAME</th>
-                                            <th className="sort-numeric">SMS MONTHLY LIMIT</th>
 
-                                            <th>STATUS</th>
-                                            <th>LAST LOGIN</th>
+                                <Col xl="12">
+                                    <div>
+                                        <div className="card">
+                                            <div className="card-header px-0">
+                                                <h4 className="text-center mt-2">User Accounts</h4>
+                                            </div>
+                                            <hr className="my-0" />
+                                            <div className="card-body mt-2 py-1">
+                                                <div className="px-md-3 px-2">
+                                                    <div className="px-2">
+                                                        <table className="table table-striped my-4 w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th data-priority="1">#</th>
+                                                                    <th>FULL NAME</th>
+                                                                    <th>USERNAME</th>
+                                                                    <th className="sort-numeric">SMS MONTHLY LIMIT</th>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                                                    <th>STATUS</th>
+                                                                    <th>LAST LOGIN</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {this.state.usersList.map(row =>
+                                                                    <tr className="gradeA" key={row.id}>
+                                                                        <td>{row.id}</td>
+                                                                        <td>{row.name}</td>
+                                                                        <td>{row.username}</td>
+                                                                        <td>500</td>
+                                                                        <td>
+                                                                            {/* <span className="badge badge-warning">Pending</span>
+                      <span className="badge badge-danger">Rejected</span> */}
+                                                                            <span className="badge badge-success">Active</span>
+                                                                        </td>
+                                                                        <td>2020-04-01 13:18:51</td>
+
+                                                                    </tr>
+                                                                )}
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Col>
 
 
-                                    </tbody>
-                                </table>
                             </TabPane>
 
                         </TabContent>

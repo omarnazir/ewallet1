@@ -3,17 +3,24 @@ import PropTypes from 'prop-types';
 import { Collapse } from 'reactstrap';
 
 import { connect } from 'react-redux';
+import { AuthService } from '../../services';
 
 class SidebarUserBlock extends Component {
 
     state = {
-        showUserBlock: false
+        showUserBlock: false,
+        username:"User",
+    }
+
+
+    getUsername(){
+        return AuthService.getUsername;
     }
 
     componentDidUpdate(oldProps) {
         if (oldProps.showUserBlock !== this.props.showUserBlock) {
             this.setState({ showUserBlock: this.props.showUserBlock })
-             
+            this.setState({username:this.getUsername()})
         }
     }
 
@@ -26,13 +33,13 @@ class SidebarUserBlock extends Component {
                        {/* User picture */}
                        <div className="user-block-picture">
                           <div className="user-block-status">
-                             <img className="img-thumbnail rounded-circle" src="img/user/02.jpg" alt="Avatar" width="60" height="60" />
+                             <img className="img-thumbnail rounded-circle" src="img/user/avatar.png" alt="Avatar" width="60" height="60" />
                              <div className="circle bg-success circle-lg"></div>
                           </div>
                        </div>
                        {/* Name and Job */}
                        <div className="user-block-info">
-                          <span className="user-block-name">Hello,User</span>
+                          <span className="user-block-name">Hello,{this.state.username}</span>
                           {/* <span className="user-block-role">Admin</span> */}
                        </div>
                     </div>

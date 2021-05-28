@@ -43,6 +43,14 @@ class AuthService {
         return isloggedIn;
     }
 
+    getUsername(){
+       if(this.isAuthenticated()){
+           return sessionStorage.getItem("username")
+       }else {
+           return "";
+       }
+    }
+
 
     /*
     registeredUser = {

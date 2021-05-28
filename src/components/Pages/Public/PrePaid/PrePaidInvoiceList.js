@@ -38,7 +38,7 @@ class PrePaidInvoiceList extends Component {
   };
 
   componentDidMount() {
-    axios.get("/bills")
+    axios.get("/bills/customer")
         .then(res => {
             const response = res.data;
             this.setState({ billsList: response })
@@ -76,7 +76,7 @@ class PrePaidInvoiceList extends Component {
             <CardHeader>
             </CardHeader>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
@@ -118,7 +118,7 @@ class PrePaidInvoiceList extends Component {
                   
                   </tbody>
                 </table>
-              </Datatable>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

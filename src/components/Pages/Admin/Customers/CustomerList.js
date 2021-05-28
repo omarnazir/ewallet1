@@ -74,7 +74,8 @@ class CustomerList extends Component {
     dataField: 'id',
     text: '#',
     sort: true,
-    onSort: this.handleSort
+    onSort: this.handleSort,
+    
   },
   {
     dataField: 'fullname',
@@ -96,13 +97,18 @@ class CustomerList extends Component {
     isDummyField: true,
     sort: true,
     formatter: (cellContent, row) => {
-      if (row.isActive == 1) {
+      if (row.isActive == 0) {
         return (
-          <span className="badge badge-success">Active</span>
+          <span className="badge badge-warning">Pending</span>
         );
-      } else {
+      }
+       if(row.isActive == 1){
+        return  (<span className="badge badge-success">Active</span>);
+      }
+
+       if(row.isActive==2) {
         return (
-          <span className="badge badge-danger">Disabled</span>
+          <span className="badge badge-danger">Rejected</span>
         );
       }
     }
@@ -194,7 +200,7 @@ class CustomerList extends Component {
                           dataField: this.state.field,
                           order: this.state.order
                         }}
-                        noDataIndication="Customr Table Empty"
+                        noDataIndication="Customers Table Empty"
                         rowEvents={this.rowEvents}
                       />
                     </div>

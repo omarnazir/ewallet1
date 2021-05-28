@@ -95,7 +95,7 @@ class UserPage extends Component {
         <Container fluid>
           <Card>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
@@ -130,7 +130,7 @@ class UserPage extends Component {
                     )}
                   </tbody>
                 </table>
-              </Datatable>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

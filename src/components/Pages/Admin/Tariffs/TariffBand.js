@@ -2,81 +2,99 @@ import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
-import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
+import {
+  Container, Card, CardHeader, CardBody, CardTitle, Button, Modal,
+  ModalHeader,
+  ModalBody,
+  FormGroup,
+  ModalFooter,
+} from "reactstrap";
 import $ from "jquery";
 
 
 
 class TarriffBand extends Component {
   state = {
-    dtOptions: {
-      paging: true, // Table pagination
-      ordering: true, // Column ordering
-      info: true, // Bottom left status text
-      responsive: true,
-      oLanguage: {
-        sSearch: '<em class="fa fa-search"></em>',
-        sLengthMenu: "_MENU_ records per page",
-        info: "Showing page _PAGE_ of _PAGES_",
-        zeroRecords: "Nothing found - sorry",
-        infoEmpty: "No records available",
-        infoFiltered: "(filtered from _MAX_ total records)",
-        oPaginate: {
-          sNext: '<em class="fa fa-caret-right"></em>',
-          sPrevious: '<em class="fa fa-caret-left"></em>',
-        },
-      },
-      // Datatable Buttons setup
-      dom: "Bfrtip",
-      buttons: [
-        { extend: "csv", className: "btn-info" },
-        { extend: "excel", className: "btn-info", title: "XLS-File" },
-        { extend: "pdf", className: "btn-info", title: $("title").text() },
-        { extend: "print", className: "btn-info" },
-      ],
-    },
     tariffBandList: [],
-    tariffId:0,
-    tariff:{}
+    tariffId: 0,
+    tariff: {},
+    tariffName:"",
+    modal:false,
+    AddTariffBandMode:true,
+    bandAmount:0,
+    smsQuantity: 0,
+    expireDurationDays: 0,
+    vatAmount: 0
   };
 
   componentDidMount() {
     const { state } = this.props.history.location;
-    this.setState({tariff:state})
-    this.setState({tariffId:state.id})
-    console.log('id', state.id);
-    console.log("name",state.tariffName)
+    this.setState({ tariff: state })
+    this.setState({ tariffId: state.id })
+    this.setState({tariffName:state.tariffName})
+   
 
-    axios.get("/tariff-bands/tariff/"+state.id)
-      .then(res => {
-        const response = res.data;
-        this.setState({ tariffBandList: response })
-        console.log(response);
-      })
-    
+    this.getTariffBands(state.id)
   }
 
-  // Access to internal datatable instance for customizations
-  dtInstance = (dtInstance) => {
-    const inputSearchClass = "datatable_input_col_search";
-    const columnInputs = $("tfoot ." + inputSearchClass);
-    // On input keyup trigger filtering
-    columnInputs.keyup(function () {
-      dtInstance.fnFilter(this.value, columnInputs.index(this));
-    });
-  };
+  getTariffBands(id){
+    axios.get("/tariff-bands/tariff/" +id)
+    .then(res => {
+      const response = res.data;
+      this.setState({ tariffBandList: response })
+      console.log(response);
+    })
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.toggleModal();
+
+    const tariffBands = {
+        "tariffId": this.state.tariffId,
+        "bandAmount": this.state.bandAmount,
+        "smsQuantity": this.state.smsQuantity,
+        "expireDurationDays": this.state.expireDurationDays,
+        "vatAmount": this.state.vatAmount
+
+    }
+
+    axios.post("/tariff-bands", tariffBands).then(res => {
+        console.log(res.data);
+        this.getTariffBands(this.state.tariffId)
+        
+    })
+}
+
+handleChange = event => {
+  this.setState({ [event.target.name]: event.target.value });
+}
+
   AddTariffBand = () => {
-    return this.props.history.push('/admin/add-tariff-band/'+this.state.tariff.id,this.state.tariff)
+    return this.props.history.push('/admin/add-tariff-band/' + this.state.tariff.id, this.state.tariff)
   }
   ViewTarriffBand = () => {
     return this.props.history.push('/admin/manage-tariff-bands')
   }
 
-  ViewTarrifs=()=>{
-    return this.props.history.push('/admin/manage-tariffs') 
+  ViewTarrifs = () => {
+    return this.props.history.push('/admin/manage-tariffs')
+  }
+  toggleModal = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  hideToggelModal=()=>{
+    this.setState({
+      modal:false,
+    })
+    this.setState(this.setState({AddTariffBand:true}))
   }
 
   render() {
+    let index=0;
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -85,8 +103,48 @@ class TarriffBand extends Component {
             <small>Showing all tarriff bands.</small>
           </div>
           <div className="flex-row">
-          <Button onClick={this.ViewTarrifs} outline color="danger" className="btn-pill-right mr-2">View All Tarrifs</Button>
-          <Button onClick={this.AddTariffBand} outline color="danger" className="btn-pill-right">Add New Tariff Band</Button>
+            <Button onClick={this.ViewTarrifs} outline color="danger" className="btn-pill-right mr-2">View All Tarrifs</Button>
+            <Button onClick={this.toggleModal} outline color="danger" className="btn-pill-right">Add New Tariff Band</Button>
+
+            <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+              <ModalHeader toggle={this.toggleModal}>{this.state.AddTariffBandMode ? "Add Tariff Band" : "Edit Tariff Band"}</ModalHeader>
+              <form onSubmit={this.handleSubmit}>
+                <ModalBody>
+                  <FormGroup>
+                    <label>Amount :</label>
+                    <input className="form-control" name="bandAmount" onChange={this.handleChange} type="number" required></input>
+                  </FormGroup>
+                  <FormGroup>
+                    <label>Vat Amount :</label>
+                    <input className="form-control" name="vatAmount" onChange={this.handleChange} type="number" required></input>
+                  </FormGroup>
+                  <FormGroup>
+                    <label>Number of SMS :</label>
+                    <input className="form-control" name="smsQuantity" onChange={this.handleChange} type="number" required></input>
+                  </FormGroup>
+                  <div className="form-group">
+                    <label htmlFor="exampleFormControlSelect1">Expire Time (Days): </label>
+                    <select className="form-control" id="exampleFormControlSelect1" name="expireDurationDays" onChange={this.handleChange}>
+                      <option value="0">Select number days</option>
+                      <option value="30">30 Days</option>
+                      <option value="60">60 Days</option>
+                      <option value="90">90 Days</option>
+                      <option value="180">180 Days</option>
+                      <option value="365">365 Days</option>
+                      <option value="1000000000">Never</option>
+                    </select>
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
+                    Save
+                    </button>
+                  <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger  px-5">
+                    Cancel
+                   </button>
+                </ModalFooter>
+              </form>
+            </Modal>
           </div>
         </div>
         <Container fluid>
@@ -94,39 +152,39 @@ class TarriffBand extends Component {
             <CardHeader>
             </CardHeader>
             <CardBody>
-            
-                <table className="table table-striped my-4 w-100">
-                  <thead>
-                    <tr>
-                      <th data-priority="1">ID</th>
-                      <th>TARIFF NAME</th>
-                      <th>TARIFF (Tshs)</th>
-                      <th>SMS VOLUME</th>
-                      <th>EXPIRATION (Days)</th>
-                      <th>ACTIONS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.tariffBandList.map(row => (
-                      <tr key={row.id}>
-                        <td>{row.id}</td>
-                        <td>{this.state.tariff.tariffName}</td>
-                        <td>{row.bandAmount}</td>
-                        <td>{row.smsQuantity}</td>
-                        <td>{row.expireDurationDays}</td>
-                        <td>
+
+              <table className="table table-striped my-4 w-100">
+                <thead>
+                  <tr>
+                    <th data-priority="1">ID</th>
+                    <th>TARIFF NAME</th>
+                    <th>TARIFF (Tshs)</th>
+                    <th>SMS VOLUME</th>
+                    <th>EXPIRATION (Days)</th>
+                    <th>ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.tariffBandList.map(row => (
+                    <tr key={row.id}>
+                      <td>{index += 1}</td>
+                      <td>{this.state.tariff.tariffName}</td>
+                      <td>{row.bandAmount}</td>
+                      <td>{row.smsQuantity}</td>
+                      <td>{row.expireDurationDays}</td>
+                      <td>
                         <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}>
-                             <i className="icon-pencil mr-2"></i>
+                          <i className="icon-pencil mr-2"></i>
                               Edit</span>
-                            <span className="btn bg-danger-dark" onClick={() => this.DeleteTariff(row.id)}>
-                            <i className="icon-trash mr-2"></i>
+                        <span className="btn bg-danger-dark" onClick={() => this.DeleteTariff(row.id)}>
+                          <i className="icon-trash mr-2"></i>
                               Delete</span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-            
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
             </CardBody>
           </Card>
 
