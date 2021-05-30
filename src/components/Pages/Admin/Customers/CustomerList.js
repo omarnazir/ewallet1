@@ -97,16 +97,16 @@ class CustomerList extends Component {
     isDummyField: true,
     sort: true,
     formatter: (cellContent, row) => {
-      if (row.isActive == 0) {
+      if (row.isApproved == 0) {
         return (
           <span className="badge badge-warning">Pending</span>
         );
       }
-       if(row.isActive == 1){
-        return  (<span className="badge badge-success">Active</span>);
+       if(row.isApproved == 1){
+        return  (<span className="badge badge-success">Approved</span>);
       }
 
-       if(row.isActive==2) {
+       if(row.isApproved==2) {
         return (
           <span className="badge badge-danger">Rejected</span>
         );
@@ -166,9 +166,9 @@ class CustomerList extends Component {
             <small>Showing all customers.</small>
           </div>
           <div className="flex-row">
-            <button className="btn  ml-2" style={this.AddActionButtonStyle}>
+            {/* <button className="btn  ml-2" style={this.AddActionButtonStyle}>
               <i className="icon-info mr-2"></i>
-                              Customers pending approval</button>
+                              Customers pending approval</button> */}
           </div>
         </div>
         <Container fluid>

@@ -21,6 +21,11 @@ class AddNormalUser extends Component {
     ViewAllUsers = () => {
         return this.props.history.push('/manage-user')
     }
+
+    AddActionButtonStyle = {
+        color: 'white',
+        background: "#003366"
+    }
     render() {
         return (
             <ContentWrapper>
@@ -30,7 +35,7 @@ class AddNormalUser extends Component {
                      <small>Adding a new user.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewAllUsers} outline color="danger" className="btn-pill-right mr-2">View All Users</Button>
+                        <Button onClick={this.ViewAllUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
                     </div>
                 </div>
                 <Container fluid>

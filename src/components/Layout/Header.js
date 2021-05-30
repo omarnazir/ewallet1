@@ -14,9 +14,14 @@ class Header extends Component {
 
     componentDidMount() {
         HeaderRun();
+        const user= AuthService.getUsername();
+        const username=user.replace(/^"(.*)"$/, '$1')
+        const finalUsername = username.charAt(0).toUpperCase() + username.slice(1);
+        this.setState({username:finalUsername})
+        
     }
     state={
-        
+        username:'',
     }
 
     toggleUserblock = e => {
@@ -46,6 +51,10 @@ class Header extends Component {
         
     }
 
+    getUsername(){
+      const user= AuthService.getUsername();
+      this.setState({username:user.username})
+     }
     resize () {
         // all IE friendly dispatchEvent
         var evt = document.createEvent('UIEvents');
@@ -99,10 +108,10 @@ class Header extends Component {
                     </ul>
                     { /* END Left navbar */ }
                     { /* START Right Navbar */ }
-                    <ul className="navbar-nav flex-row">
+                    <ul className="navbar-nav flex-row" >
                         { /* START user */ }
-                        <li className="nav-item d-none align-items-center d-md-block">
-                            <span className="text-white">Alpha</span>
+                        <li className="nav-item d-none text-center d-md-block">
+                            <span className="text-white nav-link">Hi {this.state.username}</span>
                         </li>
                         <li className="nav-item d-none d-md-block">
                             <ToggleFullscreen className="nav-link"/>

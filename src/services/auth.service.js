@@ -12,7 +12,7 @@ class AuthService {
                 sessionStorage.clear();
                 sessionStorage.setItem('token', res.data.token);
                 sessionStorage.setItem('user', res.data.user)
-                sessionStorage.setItem('username', res.data.user.username);
+                sessionStorage.setItem('username', JSON.stringify(res.data.user.username));
                 sessionStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
             }
             return res.data;

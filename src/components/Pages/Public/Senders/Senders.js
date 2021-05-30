@@ -92,6 +92,7 @@ class UserSenderIds extends Component {
   }
 
   render() {
+    let index=0;
     return (
       <ContentWrapper>
        <div className="content-heading">
@@ -126,8 +127,8 @@ class UserSenderIds extends Component {
                   <tbody>
                     {this.state.senderIdList.map(row => (
                       <tr key={row.id}>
-                        <td>{row.id}</td>
-                        <td>{row.customerFk}</td>
+                        <td>{index+=1}</td>
+                        <td>{row.customerEntity.fullname}</td>
                         <td>{row.senderId}</td>
                         <td>{this.formatDate(row.dateCreated)}</td>
                         <td>

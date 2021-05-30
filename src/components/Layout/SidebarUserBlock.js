@@ -9,18 +9,14 @@ class SidebarUserBlock extends Component {
 
     state = {
         showUserBlock: false,
-        username:"User",
     }
 
 
-    getUsername(){
-        return AuthService.getUsername;
-    }
 
     componentDidUpdate(oldProps) {
         if (oldProps.showUserBlock !== this.props.showUserBlock) {
             this.setState({ showUserBlock: this.props.showUserBlock })
-            this.setState({username:this.getUsername()})
+         
         }
     }
 
@@ -38,10 +34,10 @@ class SidebarUserBlock extends Component {
                           </div>
                        </div>
                        {/* Name and Job */}
-                       <div className="user-block-info">
+                       {/* <div className="user-block-info">
                           <span className="user-block-name">Hello,{this.state.username}</span>
-                          {/* <span className="user-block-role">Admin</span> */}
-                       </div>
+                         <span className="user-block-role">Admin</span>
+                       </div> */}
                     </div>
                 </div>
             </Collapse>

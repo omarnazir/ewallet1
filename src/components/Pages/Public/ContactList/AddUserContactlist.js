@@ -58,6 +58,11 @@ class AddUserContactList extends Component {
 
     }
 
+    AddActionButtonStyle = {
+        color: 'white',
+        background: "#003366"
+    }
+
 
     render() {
         return (
@@ -68,7 +73,7 @@ class AddUserContactList extends Component {
                      <small>Adding a new contact list</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewAllContacts} outline color="danger" className="btn-pill-right mr-2">View All Contact lists</Button>
+                        <Button onClick={this.ViewAllContacts} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Contact lists</Button>
                     </div>
                 </div>
                 <Container fluid>
@@ -99,10 +104,10 @@ class AddUserContactList extends Component {
                                             />
                                         </FormGroup>
 
-                                        <button className="btn btn-sm btn-success mr-3" type="submit">
+                                        <button className="btn btn-sm btn-success mr-3 px-5" type="submit">
                                             Save
                                         </button>
-                                        <button onClick={this.ViewAllContacts} className="btn btn-sm btn-danger">
+                                        <button onClick={this.ViewAllContacts} className="btn btn-sm btn-danger px-5">
                                             Cancel
                                         </button>
                                     </form>

@@ -46,6 +46,10 @@ class PostPaidCustomers extends Component {
       })
   }
 
+  ViewCustomerDetails = (row) => {
+    console.log(row.id)
+    return this.props.history.push('/admin/customers-details/' + row.id, row)
+  }
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {

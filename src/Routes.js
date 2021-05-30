@@ -46,6 +46,8 @@ import UserPage from './components/Pages/Public/Users/UserPage';
 import PrePaidInvoiceList from './components/Pages/Public/PrePaid/PrePaidInvoiceList';
 import UserRequestedSmsList from './components/Pages/Public/Sms/UserRequestedSmsList';
 import AddUserRequestedSms from './components/Pages/Public/Sms/AddUserRequestedSms';
+import PrePaidInvoice from "./components/Pages/Public/PrePaid/PrePaidInvoice";
+
 import LandingPage from './components/Auth/landing';
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -145,6 +147,7 @@ const Routes = ({ location }) => {
 
                                 <Route path="/sms-requests" component={waitFor(UserRequestedSmsList)}/>
                                 <Route path="/add-sms-request" component={waitFor(AddUserRequestedSms)}/>
+                                <Route path="/invoice/:id" component={waitFor(PrePaidInvoice)}/>
                                 
 
 

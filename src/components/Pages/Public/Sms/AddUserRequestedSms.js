@@ -122,10 +122,10 @@ class AddUserRequestedSms extends Component {
                                             <span className="mt-2"><span className="text-danger">{this.state.messageTemplateLength}</span> <strong>characters</strong></span>
                                             <span className="mt-2 float-right">160 characters = 1 SMS</span>
                                         </div>
-                                        <button className="btn btn-sm btn-success mr-3" type="submit">
+                                        <button className="btn btn-sm btn-success mr-3 px-5" type="submit">
                                             Save
                                         </button>
-                                        <button onClick={this.ViewAllSmsTemplates} className="btn btn-sm btn-danger">
+                                        <button onClick={this.ViewAllSmsTemplates} className="btn btn-sm btn-danger px-5">
                                             Cancel
                                         </button>
                                     </form>

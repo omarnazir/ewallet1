@@ -10,27 +10,27 @@ import { data } from 'jquery';
 class Register extends Component {
 
     state = {
-       
 
-            fullname:"",
-            email: '',
-            phonenumber:"",
-            location: '',
-            customer_type: '',
-            v_account:"",
-            username: '',
-            password: '',
-            payment_type: '',
-            id_number: '',
-            attachment: '',
-            termscheck: false,
 
-            //Other params
-            passwordConfirm: '',
-            fileDisplay:false,
-            fileDisplayName:"",
-        showIndividualFields:true,
-        showVaccount:false
+        fullname: "",
+        email: '',
+        phonenumber: "",
+        location: '',
+        customer_type: '',
+        v_account: "",
+        username: '',
+        password: '',
+        payment_type: '',
+        id_number: '',
+        attachment: '',
+        termscheck: false,
+
+        //Other params
+        passwordConfirm: '',
+        fileDisplay: false,
+        fileDisplayName: "",
+        showIndividualFields: true,
+        showVaccount: false
     }
 
     ViewLoginPage = () => {
@@ -45,7 +45,7 @@ class Register extends Component {
 
         data.append("fullname", this.state.fullname)
         data.append("email", this.state.email)
-        data.append("phonenumber",this.state.phonenumber)
+        data.append("phonenumber", this.state.phonenumber)
         data.append('location', this.state.location)
         data.append('customer_type', this.state.customer_type)
         //field added on post paid selected
@@ -59,14 +59,14 @@ class Register extends Component {
         data.append('id_number', this.state.id_number)
         data.append('attachment', this.state.attachment)
 
-        
-    
 
-     
-        AuthService.register(data).then((res)=>{
+
+
+
+        AuthService.register(data).then((res) => {
             console.log(res)
             this.ViewLoginPage()
-        },(err)=>{
+        }, (err) => {
             console.log(err)
         })
     }
@@ -87,8 +87,8 @@ class Register extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
-    
-  
+
+
     handleOnPaymentSelectChange = event => {
 
         if ([event.target.value] == "Post-paid") {
@@ -126,7 +126,7 @@ class Register extends Component {
 
     handleFileChange = event => {
         this.setState({ attachment: event.target.files[0] });
-        this.setState({fileDisplayName:event.target.files[0].name})
+        this.setState({ fileDisplayName: event.target.files[0].name })
     }
 
 
@@ -186,7 +186,7 @@ class Register extends Component {
 
                         <div className="navbar-nav flex-row">
                             <Button onClick={this.ViewLogin} outline color="success" className="btn-pill mr-2">Login</Button>
-                
+
                         </div>
                     </nav>
                 </header>
@@ -239,7 +239,7 @@ class Register extends Component {
                                                 <div className="input-group with-focus">
                                                     <Input type="text" name="fullname"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
-                                                        placeholder="Enter full name" onChange={this.handleChange} required/>
+                                                        placeholder="Enter full name" onChange={this.handleChange} required />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text bg-transparent border-left-0">
                                                             <em className="fa fa-user"></em>
@@ -253,7 +253,7 @@ class Register extends Component {
                                                 <div className="input-group with-focus">
                                                     <Input type="text" name="username"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
-                                                        placeholder="Select username" onChange={this.handleChange} required/>
+                                                        placeholder="Select username" onChange={this.handleChange} required />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text bg-transparent border-left-0">
                                                             <em className="fa fa-user"></em>
@@ -268,7 +268,7 @@ class Register extends Component {
                                                 <div className="input-group with-focus">
                                                     <Input type="email" name="email"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
-                                                        placeholder="Enter email address" onChange={this.handleChange} required/>
+                                                        placeholder="Enter email address" onChange={this.handleChange} required />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text bg-transparent border-left-0">
                                                             <em className="fa fa-envelope"></em>
@@ -278,10 +278,10 @@ class Register extends Component {
                                             </div>
                                             <div className="form-group col-md-6 px-2">
                                                 <label>Phone number</label>
-                                                <div className="input-group with-focus">                     
-                                                <Input type="tel" name="phonenumber"
-                                                    className="border-right-0 form-control form-control-lg rounded-0"
-                                                    placeholder="Enter phone number" onChange={this.handleChange} required/>
+                                                <div className="input-group with-focus">
+                                                    <Input type="tel" name="phonenumber"
+                                                        className="border-right-0 form-control form-control-lg rounded-0"
+                                                        placeholder="Enter phone number" onChange={this.handleChange} required />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text bg-transparent border-left-0">
                                                             <em className="fa fa-phone-alt"></em>
@@ -296,7 +296,7 @@ class Register extends Component {
                                                 <div className="input-group with-focus">
                                                     <Input type="password" name="password"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
-                                                        placeholder="Enter secure password" onChange={this.handleChange} required/>
+                                                        placeholder="Enter secure password" onChange={this.handleChange} required />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text bg-transparent border-left-0">
                                                             <em className="fa fa-lock"></em>
@@ -312,7 +312,7 @@ class Register extends Component {
                                                 <div className="input-group with-focus">
                                                     <Input type="password" name="passwordConfirm"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
-                                                        placeholder="Repeat password" onChange={this.handleChange} required/>
+                                                        placeholder="Repeat password" onChange={this.handleChange}  required />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text bg-transparent border-left-0">
                                                             <em className="fa fa-lock"></em>
@@ -336,11 +336,11 @@ class Register extends Component {
                                                 </div>
                                             </div>
                                             <div className="form-group col-md-6 px-2">
-                                                <label> {this.state.showIndividualFields?"NIDA ID Number":"Bussiness License Number"}</label>
+                                                <label> {this.state.showIndividualFields ? "NIDA ID Number" : "Bussiness License Number"}</label>
                                                 <div className="input-group with-focus">
                                                     <Input type="number" name="id_number"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
-                                                        placeholder="ID number" onChange={this.handleChange} required  />
+                                                        placeholder="ID number" onChange={this.handleChange} required />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text bg-transparent border-left-0">
                                                             <em className="fa fa-user"></em>
@@ -350,37 +350,37 @@ class Register extends Component {
                                             </div>
                                         </div>
                                         <div className="form-row">
-                                        <div className="form-group col-md-6 px-2">
-                                            <label htmlFor="nidafile"> {this.state.showIndividualFields?"NIDA ID (Scanned PDF required)":"Bussiness License (Scanned PDF required)"}
-                                                <span className="text-danger"> (Max. size 200KB)</span>
-                                            </label>
-                                            <div className="custom-file">
-                                                <input type="file" className="custom-file-input form-control form-control-lg rounded-0" name="attachment"
-                                                 onChange={this.handleFileChange} required 
-                                                 accept="image/png, image/jpeg,application/pdf"
-                                                 />
-                                                <label className="custom-file-label" htmlFor="attachment">{this.state.fileDisplay?this.state.fileDisplayName:"Select file for upload"}</label>
+                                            <div className="form-group col-md-6 px-2">
+                                                <label htmlFor="nidafile"> {this.state.showIndividualFields ? "NIDA ID (Scanned PDF required)" : "Bussiness License (Scanned PDF required)"}
+                                                    <span className="text-danger"> (Max. size 200KB)</span>
+                                                </label>
+                                                <div className="custom-file">
+                                                    <input type="file" className="custom-file-input form-control form-control-lg rounded-0" name="attachment"
+                                                        onChange={this.handleFileChange} required
+                                                        accept="image/png, image/jpeg,application/pdf"
+                                                    />
+                                                    <label className="custom-file-label" htmlFor="attachment">{this.state.fileDisplay ? this.state.fileDisplayName : "Select file for upload"}</label>
+                                                </div>
+                                                <small><span id="fileSizeError"></span></small>
                                             </div>
-                                            <small><span id="fileSizeError"></span></small>
-                                        </div>
 
-                                        { this.state.showVaccount &&
-                                        <div className="form-group col-md-6 px-2">
-                                                <label>V Account:</label>
-                                                <div className="input-group with-focus">
-                                                    <Input type="text" name="v_account"
-                                                        className="border-right-0 form-control form-control-lg rounded-0"
-                                                        placeholder="V account" onChange={this.handleChange} required />
-                                                    <div className="input-group-append">
-                                                        <span className="input-group-text bg-transparent border-left-0">
-                                                            <em className="fa fa-user"></em>
-                                                        </span>
+                                            {this.state.showVaccount &&
+                                                <div className="form-group col-md-6 px-2">
+                                                    <label>V Account:</label>
+                                                    <div className="input-group with-focus">
+                                                        <Input type="text" name="v_account"
+                                                            className="border-right-0 form-control form-control-lg rounded-0"
+                                                            placeholder="V account" onChange={this.handleChange} required />
+                                                        <div className="input-group-append">
+                                                            <span className="input-group-text bg-transparent border-left-0">
+                                                                <em className="fa fa-user"></em>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        }
-                                           
-                                         </div>
+                                            }
+
+                                        </div>
                                         <div className="form-group px-md-2 px-1 my-2 mr-auto">
                                             <div className="form-check">
                                                 <input className="form-check-input" type="checkbox" required value="" id="termscheck" name="termscheck" />

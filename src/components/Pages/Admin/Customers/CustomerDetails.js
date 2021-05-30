@@ -9,7 +9,11 @@ import {
     Nav,
     NavItem,
     NavLink,
-    Col
+    Col,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
 } from "reactstrap";
 import classnames from 'classnames';
 import $ from "jquery";
@@ -18,37 +22,18 @@ import $ from "jquery";
 
 class CustomerDetails extends Component {
     state = {
-        dtOptions: {
-            paging: true, // Table pagination
-            ordering: true, // Column ordering
-            info: true, // Bottom left status text
-            responsive: true,
-            oLanguage: {
-                sSearch: '<em class="fa fa-search"></em>',
-                sLengthMenu: "_MENU_ records per page",
-                info: "Showing page _PAGE_ of _PAGES_",
-                zeroRecords: "Nothing found - sorry",
-                infoEmpty: "No records available",
-                infoFiltered: "(filtered from _MAX_ total records)",
-                oPaginate: {
-                    sNext: '<em class="fa fa-caret-right"></em>',
-                    sPrevious: '<em class="fa fa-caret-left"></em>',
-                },
-            },
-            // Datatable Buttons setup
-            dom: "Bfrtip",
-            buttons: [
-                { extend: "csv", className: "btn-info" },
-                { extend: "excel", className: "btn-info", title: "XLS-File" },
-                { extend: "pdf", className: "btn-info", title: $("title").text() },
-                { extend: "print", className: "btn-info" },
-            ],
-        },
         activeTab: '1',
         customerId: 0,
         customer: {},
-        isActive: 0,
-        usersList: []
+        isApproved: 0,
+        usersList: [],
+        tarrifsList: [],
+        paymentType:"",
+
+        tariffId:22,
+        monthlySmsLimit:0,
+        smscUsername:"",
+        smscPassword:""
     };
 
     toggleTab = tab => {
@@ -76,8 +61,9 @@ class CustomerDetails extends Component {
 
         const { state } = this.props.history.location;
         // console.log(state.id)
-        this.setState({ isActive: state.isActive })
+        this.setState({ isApproved: state.isApproved })
         this.setState({ customerId: state.id })
+        this.setState({paymentType:state.paymentType})
 
         axios.get("/customers/" + state.id)
             .then(res => {
@@ -91,16 +77,17 @@ class CustomerDetails extends Component {
                 this.setState({ usersList: response })
                 console.log(response);
             })
+
+
+
+        axios.get("/tariff")
+            .then(res => {
+                const response = res.data;
+                this.setState({ tarrifsList: response })
+                console.log(response);
+            })
+
     }
-    // Access to internal datatable instance for customizations
-    dtInstance = (dtInstance) => {
-        const inputSearchClass = "datatable_input_col_search";
-        const columnInputs = $("tfoot ." + inputSearchClass);
-        // On input keyup trigger filtering
-        columnInputs.keyup(function () {
-            dtInstance.fnFilter(this.value, columnInputs.index(this));
-        });
-    };
     AddActionButtonStyle = {
         color: 'white',
         background: "#003366"
@@ -122,6 +109,33 @@ class CustomerDetails extends Component {
 
     }
 
+    handleSubmit = event => {
+        event.preventDefault();
+        this.hideToggelModal();
+
+
+        const data=
+        {
+            "customerId":this.state.customerId,
+            "tariffId":this.state.tariffId,
+            "smscUsername":this.state.smscUsername,
+            "smscPassword":this.state.smscPassword,
+            "monthlySmsLimit":this.state.monthlySmsLimit
+        }
+    
+        console.log(data)
+        
+        axios.put("/customers/approve",data).then(res=>{
+            const response = res.data;
+
+            this.ViewCustomerList();
+        })
+      }
+
+    handleChange = event => {
+        this.setState({[event.target.name]: event.target.value });
+      }
+
     RejectCustomer(id) {
 
         axios.put("/customers/reject/" + id)
@@ -132,17 +146,15 @@ class CustomerDetails extends Component {
             })
     }
 
-    DeleteTariff(id) {
-        console.log("am here ")
-        console.log(id)
-        // axios.delete("/customers/approve/313" + id)
-        // .then(res => {
-        //   const response = res.data;
-        //   const tarrifsList = this.state.tarrifsList.filter((tarrif) => {
-        //     return tarrif.id !== id;
-        //   });
-        //   this.setState({ tarrifsList })
-        // })
+    toggleModal = () => {
+        this.setState({
+            modal: !this.state.modal
+        });
+    }
+    hideToggelModal = () => {
+        this.setState({
+            modal: false,
+        })
     }
 
 
@@ -156,13 +168,20 @@ class CustomerDetails extends Component {
                         <small>Showing all customer details.</small>
                     </div>
                     <div className="flex-row d-block d-md-flex">
-                        {this.state.isActive == 1 &&
+                        {this.state.isApproved == 1 &&
                             <Button onClick={() => this.ViewRequestedSenders} className="btn btn-pill mr-2 bg-danger">Disable Customer</Button>
                         }
-                        {this.state.isActive != 1 &&
+                        {this.state.isApproved == 0 &&
                             <span>
                                 <Button onClick={() => this.RejectCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-danger">Reject Customer</Button>
-                                <Button onClick={() => this.ApproveCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-success">Approve Customer</Button>
+                                {/* <Button onClick={() => this.ApproveCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-success">Approve Customer</Button> */}
+                                <Button onClick={() => this.toggleModal()} className="btn btn-pill mr-2 bg-success">Approve Customer</Button>
+                            </span>
+                        }
+                        {
+                            this.state.isApproved==2 &&
+                            <span>
+                                <Button onClick={() => this.toggleModal()} className="btn btn-pill mr-2 bg-success">Approve Customer</Button>
                             </span>
                         }
                         <Button onClick={this.ViewCustomerList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Customers</Button>
@@ -170,6 +189,47 @@ class CustomerDetails extends Component {
                 </div>
                 <Container fluid>
 
+                    <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+                        <ModalHeader toggle={this.toggleModal}>Approve Customer</ModalHeader>
+                        <form onSubmit={this.handleSubmit}>
+                            <ModalBody>
+                                <FormGroup>
+                                    <label>Sms Username :</label>
+                                    <input className="form-control" name="smscUsername" onChange={this.handleChange} type="text" required></input>
+                                </FormGroup>
+                                <FormGroup>
+                                    <label>Smsc Password :</label>
+                                    <input className="form-control" name="smscPassword" onChange={this.handleChange} type="text" required></input>
+                                </FormGroup>
+
+                                {this.state.paymentType=="Post-Paid" && 
+                                <FormGroup>
+                                    <label>Monthly sms limit :</label>
+                                    <input className="form-control" name="monthlySmsLimit" onChange={this.handleChange} type="number" required></input>
+                                </FormGroup>
+    }
+                                <div className="form-group">
+                                    <label htmlFor="exampleFormControlSelect1">Tariff : </label>
+                                    <select className="form-control" id="exampleFormControlSelect1" name="tariffId" onChange={this.handleChange}>
+                                        <option value="0">Select a tariff</option>
+                                        {this.state.tarrifsList.map(row => (
+                                            <option key={row.id} value={row.id} >
+                                                {row.tariffName}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
+                                    Approve
+                    </button>
+                                <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger  px-5">
+                                    Cancel
+                   </button>
+                            </ModalFooter>
+                        </form>
+                    </Modal>
 
                     <div role="tabpanel card card-body">
                         {/* Nav tabs */}
@@ -190,7 +250,7 @@ class CustomerDetails extends Component {
                                               Attachments
                                             </NavLink>
                             </NavItem>
-                        
+
                             <NavItem>
                                 <NavLink
                                     className={classnames({ active: this.state.activeTab === '4' })}
@@ -219,7 +279,13 @@ class CustomerDetails extends Component {
                                                         <p className="mb-3 text-dark"><strong>Address:</strong> &nbsp; <span name="address">{this.state.customer.location}</span></p>
                                                         <p className="mb-3 text-dark"><strong>Status:</strong> &nbsp;
                                                         <span name="status"></span>{this.state.customer.isActive == 1 ? "Active" : "Pending"}
+                                                        </p> 
+                                                        <p className="mb-3 text-dark"><strong>Customer Type:</strong> &nbsp;
+                                                        <span name="status"></span>{this.state.customer.customerType}
                                                         </p>
+                                                        <p className="mb-3 text-dark"><strong>Payment Type:</strong> &nbsp;
+                                                        <span name="status"></span>{this.state.customer.paymentType}
+                                                        </p>  
                                                         <p className="mb-3 text-dark"><strong>Date registered:</strong> &nbsp; <span name="regdate">{this.state.customer.createdAt}</span></p>
                                                         <p className="mb-3 text-dark"><strong>ID number:</strong> &nbsp; <span name="nidaid">19900302-600123-456791</span></p>
                                                         {/* <p className="mb-3 text-dark"><strong>Attachment:</strong> &nbsp; <span name="attachment"><a href="#">View Attachment</a></span></p> */}
@@ -278,7 +344,7 @@ class CustomerDetails extends Component {
 
                             </TabPane>
 
-                        
+
                             <TabPane tabId="3">
 
 

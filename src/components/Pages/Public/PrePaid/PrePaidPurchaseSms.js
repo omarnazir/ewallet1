@@ -110,8 +110,9 @@ class PurchaseSms extends Component {
                                     <form onSubmit={this.handleSubmit}>
 
                                         <div className="form-group">
-                                            <label htmlFor="exampleFormControlSelect1">Select a bundle : </label>
+                                            <label htmlFor="exampleFormControlSelect1">Bundle : </label>
                                             <select className="form-control" id="exampleFormControlSelect1" required name="tariffBand" onChange={this.handleSelectBundleChange} onClick={this.handleSelectBundleChange} >
+                                            <option value="0">Select a bundle band</option>
                                                 {this.state.tarriffBandList.map(row => (
                                                     <option key={row.id} value={row.id} >
                                                         {row.smsQuantity} sms -  Tsh {row.bandAmount}
@@ -122,7 +123,7 @@ class PurchaseSms extends Component {
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Payment method : </label>
                                             <select className="form-control" id="exampleFormControlSelect1" name="paymentMethod" required onChange={this.handlePaymentMethodChange} onClick={this.handlePaymentMethodChange}>
-                                            {/* <option>Select payment method</option> */}
+                                            <option value="0">Select payment method</option>
                                             {this.state.paymentTypeList.map(row => (
                                                     <option key={row.id} value={row.id} >
                                                         {row.name}
@@ -138,10 +139,10 @@ class PurchaseSms extends Component {
                                         <h6>After entering the number check out your phone to continue</h6>
 
                                         <div className="mt-3">
-                                            <button className="btn btn-sm btn-success mr-3" type="submit">
+                                            <button className="btn btn-sm btn-success mr-3 px-5" type="submit">
                                                 Continue
                                         </button>
-                                            <button onClick={this.ViewAllInvoices} className="btn btn-sm btn-danger">
+                                            <button onClick={this.ViewAllInvoices} className="btn btn-sm btn-danger px-5">
                                                 Cancel
                                         </button>
                                         </div>
