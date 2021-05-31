@@ -9,32 +9,7 @@ import NumberFormat from 'react-number-format'
 
 class Transactions extends Component {
   state = {
-    dtOptions: {
-      paging: true, // Table pagination
-      ordering: true, // Column ordering
-      info: true, // Bottom left status text
-      responsive: true,
-      oLanguage: {
-        sSearch: '<em class="fa fa-search"></em>',
-        sLengthMenu: "_MENU_ records per page",
-        info: "Showing page _PAGE_ of _PAGES_",
-        zeroRecords: "Nothing found - sorry",
-        infoEmpty: "No records available",
-        infoFiltered: "(filtered from _MAX_ total records)",
-        oPaginate: {
-          sNext: '<em class="fa fa-caret-right"></em>',
-          sPrevious: '<em class="fa fa-caret-left"></em>',
-        },
-      },
-      // Datatable Buttons setup
-      dom: "Bfrtip",
-      buttons: [
-        { extend: "csv", className: "btn-info" },
-        { extend: "excel", className: "btn-info", title: "XLS-File" },
-        { extend: "pdf", className: "btn-info", title: $("title").text() },
-        { extend: "print", className: "btn-info" },
-      ],
-    },billsList:[]
+    billsList:[]
   };
 
   componentDidMount() {
@@ -46,23 +21,22 @@ class Transactions extends Component {
         })
       }
   
-
       formatDate = (date) => {
         return Moment(date).format('DD-MM-YYYY')
       }
 
+      ViewPrePaidInvoice(row){
+        console.log(row)
+        return this.props.history.push('/admin/invoices/' + row.id, row)
+      }
 
-  // Access to internal datatable instance for customizations
-  dtInstance = (dtInstance) => {
-    const inputSearchClass = "datatable_input_col_search";
-    const columnInputs = $("tfoot ." + inputSearchClass);
-    // On input keyup trigger filtering
-    columnInputs.keyup(function () {
-      dtInstance.fnFilter(this.value, columnInputs.index(this));
-    });
-  };
+      AddActionButtonStyle = {
+        color: 'white',
+        background: "#003366"
+    }
 
   render() {
+    let index=0;
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -96,8 +70,8 @@ class Transactions extends Component {
                     {
                       this.state.billsList.map((bill)=>(
 
-                        <tr className="gradeX">
-                        <td>{bill.id}</td>
+                        <tr className="gradeX" key={bill.id}>
+                        <td>{index+=1}</td>
                         <td>{bill.billNumber}</td>
                         <td><NumberFormat value={bill.smsQuantity} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
                         <td><NumberFormat value={bill.billAmount} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
@@ -111,7 +85,11 @@ class Transactions extends Component {
                         <td>{bill.paymentMethod}</td> 
                         <td>N/A</td> 
                         <td>{this.formatDate(bill.createdAt)}</td>
-                        <td> <span className="btn badge-success">VIEW</span> </td>                   
+                        <td> <span className="btn" style={this.AddActionButtonStyle} onClick={() => {
+                            this.ViewPrePaidInvoice(bill);
+                          }}>
+                          VIEW
+                          </span> </td>                   
                       </tr> 
                       ))
                     }

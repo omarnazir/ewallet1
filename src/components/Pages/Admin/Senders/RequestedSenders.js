@@ -109,6 +109,7 @@ class SendersRequested extends Component {
     }
 
     render() {
+        let index=0;
         return (
             <ContentWrapper>
                 <div className="content-heading">
@@ -120,7 +121,7 @@ class SendersRequested extends Component {
                         <Button onClick={this.ViewSenders} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Sender Id's</Button>
                         <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
                             <i className="fa fa-plus mr-2"></i>
-                            Add New SenderId</Button>
+                            Add New Default SenderId</Button>
                     </div>
                 </div>
                 <Container fluid>
@@ -186,7 +187,7 @@ class SendersRequested extends Component {
                                 <tbody>
                                     {this.state.senderIdList.map(row => (
                                         <tr key={row.id}>
-                                            <td>{row.id}</td>
+                                            <td>{index+=1}</td>
                                             <td>{row.senderId}</td>
                                             <td>{row.senderId}</td>
                                             <td>{this.formatDate(row.dateCreated)}</td>

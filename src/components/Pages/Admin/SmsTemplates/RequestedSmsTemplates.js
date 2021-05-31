@@ -124,6 +124,7 @@ class SmsTemplatesRequested extends Component {
 
   render() {
 
+    let index=0;
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -202,9 +203,9 @@ class SmsTemplatesRequested extends Component {
                 <tbody>
                   {this.state.smsTemplateList.map(row => (
                     <tr key={row.id}>
-                      <td>{row.id}</td>
+                      <td>{index+=1}</td>
                       {/* <td>SCANIA TANZANIA LTD</td> */}
-                      <td>{row.customerFk}</td>
+                      <td>{row.customerEntity.fullname}</td>
                       <td>{row.messageTemplate}</td>
                       <td>{this.formatDate(row.dateCreated)}</td>
                       <td>

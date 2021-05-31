@@ -129,7 +129,7 @@ class Senders extends Component {
             <Button onClick={this.ViewRequestedSenders} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View Requested SenderId's</Button>
             <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
-              Add New SenderId</Button>
+              Add New Default SenderId</Button>
           </div>
         </div>
         <Container fluid>

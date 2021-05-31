@@ -77,6 +77,18 @@ handleChange = event => {
     return this.props.history.push('/admin/manage-tariff-bands')
   }
 
+
+  DeleteTariffBand(id) {
+    axios.delete("/tariff-bands/" + id)
+      .then(res => {
+        const response = res.data;
+        const tariffBandList = this.state.tariffBandList.filter((tarrif) => {
+          return tarrif.id !== id;
+        });
+        this.setState({ tariffBandList })
+      })
+  }
+
   ViewTarrifs = () => {
     return this.props.history.push('/admin/manage-tariffs')
   }
@@ -176,7 +188,7 @@ handleChange = event => {
                         <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}>
                           <i className="icon-pencil mr-2"></i>
                               Edit</span>
-                        <span className="btn bg-danger-dark" onClick={() => this.DeleteTariff(row.id)}>
+                        <span className="btn bg-danger-dark" onClick={() => this.DeleteTariffBand(row.id)}>
                           <i className="icon-trash mr-2"></i>
                               Delete</span>
                       </td>

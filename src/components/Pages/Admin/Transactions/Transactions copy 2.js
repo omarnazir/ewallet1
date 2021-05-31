@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
-import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
+import Datatable from "../../../Common/Datatable";
+import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
 import $ from "jquery";
+import Moment from "moment"
+import NumberFormat from 'react-number-format'
 
-
-
-class UsersManagement extends Component {
+class Transactions extends Component {
   state = {
     dtOptions: {
       paging: true, // Table pagination
@@ -34,9 +34,23 @@ class UsersManagement extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    },
-    usersList: []
+    },billsList:[]
   };
+
+  componentDidMount() {
+    axios.get("/bills")
+        .then(res => {
+            const response = res.data;
+            this.setState({ billsList: response })
+
+        })
+      }
+  
+
+      formatDate = (date) => {
+        return Moment(date).format('DD-MM-YYYY')
+      }
+
 
   // Access to internal datatable instance for customizations
   dtInstance = (dtInstance) => {
@@ -48,37 +62,14 @@ class UsersManagement extends Component {
     });
   };
 
-
-  componentDidMount() {
-    axios.get("/users")
-      .then(res => {
-        const response = res.data;
-        this.setState({ usersList: response })
-        console.log(response);
-      })
-  }
-
-  AddNewUser = () => {
-    return this.props.history.push('/admin/add-new-user')
-}
-
-AddActionButtonStyle={
-  color:'white',
-  background:"#003366"
-}
   render() {
     let index=0;
     return (
       <ContentWrapper>
         <div className="content-heading">
-          <div className="mr-auto flex-row">
-            Manage User
-            <small>Showing all post paid customers.</small>
-          </div>
-          <div className="flex-row">
-            <Button onClick={this.AddNewUser} style={this.AddActionButtonStyle} className="btn-pill-right">
-              <i className="fa fa-plus mr-2"></i>
-              Add User</Button>
+          <div>
+            Invoices
+            <small>Showing all invoices.</small>
           </div>
         </div>
         <Container fluid>
@@ -91,36 +82,41 @@ AddActionButtonStyle={
                   <thead>
                     <tr>
                       <th data-priority="1">#</th>
-                      <th>FULL NAME</th>
-                      <th>USERNAME</th>
-                      <th>STATUS</th>
-                      <th>LAST LOGIN</th>
+                      <th>INVOICE</th>
+                      <th>QUANTITY</th>
+                      <th>AMOUNT</th>
+                      <th>PAYMENT STATUS</th>
+                      <th>METHOD</th>
+                      <th>PAYMENT DATE</th>
+                      <th>DATE CREATED</th>
                       <th>ACTION</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.usersList.map(row => (
-                      <tr key={row.id}>
-                        <td>{index+=1}</td>
-                        <td>{row.name}</td>
-                        <td>{row.username}</td>
 
-                        <td>
-                          {row.status == 1 &&
-                            <span className="badge badge-success">Active</span>
-                          }
-                          {
-                            row.status != 1 &&
-                            <span className="badge badge-danger">Disabled</span>
-                          }
-                        </td>
-                        <td>{row.lastLogin}</td>
-                        <td> <span className="btn badge-success"> <i className="icon-pencil mr-2"></i>Edit</span> <br />
-                          <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/>
-                          <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span>
-                        </td>
-                      </tr>
-                    ))}
+                    {
+                      this.state.billsList.map((bill)=>(
+
+                        <tr className="gradeX" key={bill.id}>
+                        <td>{index+=1}</td>
+                        <td>{bill.billNumber}</td>
+                        <td><NumberFormat value={bill.smsQuantity} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
+                        <td><NumberFormat value={bill.billAmount} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
+                        {/* <td>{bill.billAmount}</td> */}
+                        {bill.status==0 &&
+                        <td> <span className="badge badge-danger">Not Paid</span> </td>  
+                        }
+                        {bill.status==1 && 
+                        <td> <span className="badge badge-success">Paid</span> </td>  
+                        }
+                        <td>{bill.paymentMethod}</td> 
+                        <td>N/A</td> 
+                        <td>{this.formatDate(bill.createdAt)}</td>
+                        <td> <span className="btn badge-success">VIEW</span> </td>                   
+                      </tr> 
+                      ))
+                    }
+                  
                   </tbody>
                 </table>
               {/* </Datatable> */}
@@ -132,4 +128,4 @@ AddActionButtonStyle={
   }
 }
 
-export default UsersManagement;
+export default Transactions;

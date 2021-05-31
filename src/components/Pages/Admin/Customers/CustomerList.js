@@ -18,7 +18,8 @@ class CustomerList extends Component {
   state = {
     customersList: [],
     field: null,
-    order: null
+    order: null,
+    index:0
   };
 
   componentDidMount() {
@@ -51,6 +52,7 @@ class CustomerList extends Component {
     background: "#003366"
   }
 
+
   pagination = paginationFactory({
     page: 2,
     sizePerPage: 5,
@@ -70,12 +72,16 @@ class CustomerList extends Component {
     }
   });
 
+
   columns = [{
     dataField: 'id',
     text: '#',
     sort: true,
     onSort: this.handleSort,
-    
+    // isDummyField: true,
+    // formatter: (cellContent, row) => {
+    //   return this.state.index+=1;
+    // }
   },
   {
     dataField: 'fullname',
@@ -146,6 +152,7 @@ class CustomerList extends Component {
 
 
   render() {
+    let index=0;
     const { SearchBar, ClearSearchButton } = Search;
     const MyExportCSV = (props) => {
       const handleClick = () => {

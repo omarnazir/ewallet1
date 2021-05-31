@@ -181,7 +181,7 @@ class SmsTemplates extends Component {
                       <tr key={row.id}>
                         <td>{row.id}</td>
                         {/* <td>SCANIA TANZANIA LTD</td> */}
-                        <td>{row.customerFk}</td>
+                        <td>{row.customerEntity.fullname}</td>
                         <td>{row.messageTemplate}</td>
                         <td>{this.formatDate(row.dateCreated)}</td>
                         <td>

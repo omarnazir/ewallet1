@@ -137,7 +137,7 @@ class UserPage extends Component {
                       <td>
                         <span className="btn " style={this.AddActionButtonStyle}>Edit</span>
                         <br />
-                        {/* <span className="btn badge-danger mt-1">Delete</span> */}
+                        <span className="btn badge-danger mt-1">Disable</span>
                       </td>
                     </tr>
                   )}

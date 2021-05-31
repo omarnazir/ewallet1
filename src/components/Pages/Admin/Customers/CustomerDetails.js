@@ -61,6 +61,10 @@ class CustomerDetails extends Component {
 
         const { state } = this.props.history.location;
         // console.log(state.id)
+        if (state == undefined) {
+            return this.props.history.push('/admin/customers-list/')
+          }
+
         this.setState({ isApproved: state.isApproved })
         this.setState({ customerId: state.id })
         this.setState({paymentType:state.paymentType})
@@ -160,6 +164,7 @@ class CustomerDetails extends Component {
 
     render() {
         const id = this.state.customer.id;
+        let userIndex=0;
         return (
             <ContentWrapper>
                 <div className="content-heading">
@@ -374,7 +379,7 @@ class CustomerDetails extends Component {
                                                             <tbody>
                                                                 {this.state.usersList.map(row =>
                                                                     <tr className="gradeA" key={row.id}>
-                                                                        <td>{row.id}</td>
+                                                                        <td>{userIndex+=1}</td>
                                                                         <td>{row.name}</td>
                                                                         <td>{row.username}</td>
                                                                         <td>500</td>

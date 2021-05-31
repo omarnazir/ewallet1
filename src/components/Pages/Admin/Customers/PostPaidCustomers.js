@@ -70,6 +70,7 @@ class PostPaidCustomers extends Component {
   }
 
   render() {
+    let index=0;
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -118,7 +119,7 @@ class PostPaidCustomers extends Component {
 
                     {this.state.customersPostPaidList.map(row => (
                       <tr key={row.id}>
-                        <td>{row.id}</td>
+                        <td>{index+=1}</td>
                         <td>{row.fullname}</td>
                         <td>{row.email}</td>
                         <td>{row.phonenumber}</td>

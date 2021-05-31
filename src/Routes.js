@@ -49,6 +49,7 @@ import AddUserRequestedSms from './components/Pages/Public/Sms/AddUserRequestedS
 import PrePaidInvoice from "./components/Pages/Public/PrePaid/PrePaidInvoice";
 
 import LandingPage from './components/Auth/landing';
+import Invoices from './components/Pages/Admin/Transactions/Invoices';
 
 const waitFor = Tag => props => <Tag {...props} />;
 
@@ -121,6 +122,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin/manage-users" component={waitFor(UsersManagement)} />
                                     <Route path="/admin/restricted-words" component={waitFor(RestrictedWords)} />
                                     <Route path="/admin/reserved-numbers" component={waitFor(ReservedNumbers)} />
+                                    <Route path="/admin/invoices/:id" component={waitFor(Invoices)} />
 
 
                                 {/* User Roles -{type Prepaid & Post Paid}  */}
