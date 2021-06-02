@@ -39,5 +39,9 @@ export class SenderIdService {
         return axios.put("/sender-ids/reject/"+id)
     }
 
+    DisableSenderId(id){
+        return axios.put("/disable/"+id)
+    }
+
 }
 export default new SenderIdService();

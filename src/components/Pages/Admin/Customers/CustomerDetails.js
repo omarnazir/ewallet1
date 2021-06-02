@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import classnames from 'classnames';
 import $ from "jquery";
+import { Document, Page } from 'react-pdf';
 
 
 
@@ -28,12 +29,12 @@ class CustomerDetails extends Component {
         isApproved: 0,
         usersList: [],
         tarrifsList: [],
-        paymentType:"",
+        paymentType: "",
 
-        tariffId:22,
-        monthlySmsLimit:0,
-        smscUsername:"",
-        smscPassword:""
+        tariffId: 22,
+        monthlySmsLimit: 0,
+        smscUsername: "",
+        smscPassword: ""
     };
 
     toggleTab = tab => {
@@ -63,11 +64,11 @@ class CustomerDetails extends Component {
         // console.log(state.id)
         if (state == undefined) {
             return this.props.history.push('/admin/customers-list/')
-          }
+        }
 
         this.setState({ isApproved: state.isApproved })
         this.setState({ customerId: state.id })
-        this.setState({paymentType:state.paymentType})
+        this.setState({ paymentType: state.paymentType })
 
         axios.get("/customers/" + state.id)
             .then(res => {
@@ -118,27 +119,27 @@ class CustomerDetails extends Component {
         this.hideToggelModal();
 
 
-        const data=
+        const data =
         {
-            "customerId":this.state.customerId,
-            "tariffId":this.state.tariffId,
-            "smscUsername":this.state.smscUsername,
-            "smscPassword":this.state.smscPassword,
-            "monthlySmsLimit":this.state.monthlySmsLimit
+            "customerId": this.state.customerId,
+            "tariffId": this.state.tariffId,
+            "smscUsername": this.state.smscUsername,
+            "smscPassword": this.state.smscPassword,
+            "monthlySmsLimit": this.state.monthlySmsLimit
         }
-    
+
         console.log(data)
-        
-        axios.put("/customers/approve",data).then(res=>{
+
+        axios.put("/customers/approve", data).then(res => {
             const response = res.data;
 
             this.ViewCustomerList();
         })
-      }
+    }
 
     handleChange = event => {
-        this.setState({[event.target.name]: event.target.value });
-      }
+        this.setState({ [event.target.name]: event.target.value });
+    }
 
     RejectCustomer(id) {
 
@@ -164,7 +165,7 @@ class CustomerDetails extends Component {
 
     render() {
         const id = this.state.customer.id;
-        let userIndex=0;
+        let userIndex = 0;
         return (
             <ContentWrapper>
                 <div className="content-heading">
@@ -184,7 +185,7 @@ class CustomerDetails extends Component {
                             </span>
                         }
                         {
-                            this.state.isApproved==2 &&
+                            this.state.isApproved == 2 &&
                             <span>
                                 <Button onClick={() => this.toggleModal()} className="btn btn-pill mr-2 bg-success">Approve Customer</Button>
                             </span>
@@ -207,12 +208,12 @@ class CustomerDetails extends Component {
                                     <input className="form-control" name="smscPassword" onChange={this.handleChange} type="text" required></input>
                                 </FormGroup>
 
-                                {this.state.paymentType=="Post-Paid" && 
-                                <FormGroup>
-                                    <label>Monthly sms limit :</label>
-                                    <input className="form-control" name="monthlySmsLimit" onChange={this.handleChange} type="number" required></input>
-                                </FormGroup>
-    }
+                                {this.state.paymentType == "Post-Paid" &&
+                                    <FormGroup>
+                                        <label>Monthly sms limit :</label>
+                                        <input className="form-control" name="monthlySmsLimit" onChange={this.handleChange} type="number" required></input>
+                                    </FormGroup>
+                                }
                                 <div className="form-group">
                                     <label htmlFor="exampleFormControlSelect1">Tariff : </label>
                                     <select className="form-control" id="exampleFormControlSelect1" name="tariffId" onChange={this.handleChange}>
@@ -284,13 +285,13 @@ class CustomerDetails extends Component {
                                                         <p className="mb-3 text-dark"><strong>Address:</strong> &nbsp; <span name="address">{this.state.customer.location}</span></p>
                                                         <p className="mb-3 text-dark"><strong>Status:</strong> &nbsp;
                                                         <span name="status"></span>{this.state.customer.isActive == 1 ? "Active" : "Pending"}
-                                                        </p> 
+                                                        </p>
                                                         <p className="mb-3 text-dark"><strong>Customer Type:</strong> &nbsp;
                                                         <span name="status"></span>{this.state.customer.customerType}
                                                         </p>
                                                         <p className="mb-3 text-dark"><strong>Payment Type:</strong> &nbsp;
                                                         <span name="status"></span>{this.state.customer.paymentType}
-                                                        </p>  
+                                                        </p>
                                                         <p className="mb-3 text-dark"><strong>Date registered:</strong> &nbsp; <span name="regdate">{this.state.customer.createdAt}</span></p>
                                                         <p className="mb-3 text-dark"><strong>ID number:</strong> &nbsp; <span name="nidaid">19900302-600123-456791</span></p>
                                                         {/* <p className="mb-3 text-dark"><strong>Attachment:</strong> &nbsp; <span name="attachment"><a href="#">View Attachment</a></span></p> */}
@@ -318,25 +319,12 @@ class CustomerDetails extends Component {
                                             <div className="card-body mt-2 py-1">
                                                 <div className="px-md-3 px-2">
                                                     <div className="px-2">
-                                                        <table className="table table-striped my-4 w-100">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th data-priority="1">#</th>
-                                                                    <th>DATE</th>
-                                                                    <th>TXN ID</th>
-                                                                    <th>TYPE</th>
-                                                                    <th>SMS</th>
-                                                                    <th>RECEIPT</th>
-                                                                    <th>MSISDN</th>
-                                                                    <th>AMOUNT</th>
-                                                                    <th>STATUS</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-
-
-                                                            </tbody>
-                                                        </table>
+                                                        {/* <img className="img-fluid" src={this.state.customer.attachment} alt="Attachment" /> */}
+                                                        <Document
+                                                            file={this.state.customer.attachment}
+                                                        >
+                                                            <Page pageNumber={1} />
+                                                        </Document>
                                                     </div>
                                                 </div>
                                             </div>
@@ -379,16 +367,23 @@ class CustomerDetails extends Component {
                                                             <tbody>
                                                                 {this.state.usersList.map(row =>
                                                                     <tr className="gradeA" key={row.id}>
-                                                                        <td>{userIndex+=1}</td>
+                                                                        <td>{userIndex += 1}</td>
                                                                         <td>{row.name}</td>
                                                                         <td>{row.username}</td>
-                                                                        <td>500</td>
+                                                                        <td>{row.userMonthlySmsLimit}</td>
                                                                         <td>
-                                                                            {/* <span className="badge badge-warning">Pending</span>
-                      <span className="badge badge-danger">Rejected</span> */}
-                                                                            <span className="badge badge-success">Active</span>
+
+                                                                            {row.isActive == 1 &&
+                                                                                <span className="badge badge-success">Active</span>
+                                                                            }
+                                                                            {row.isActive == 0 &&
+                                                                                <span className="badge badge-success">Pending</span>
+                                                                            }
+                                                                            {row.isActive == 2 &&
+                                                                                <span className="badge badge-danger">Disabled</span>
+                                                                            }
                                                                         </td>
-                                                                        <td>2020-04-01 13:18:51</td>
+                                                                        <td>{row.registrationDate}</td>
 
                                                                     </tr>
                                                                 )}

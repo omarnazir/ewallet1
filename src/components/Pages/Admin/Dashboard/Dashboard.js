@@ -9,6 +9,9 @@ import CardTool from '../../../Common/CardTool'
 import Sparkline from '../../../Common/Sparklines';
 import FlotChart from '../../../Common/Flot';
 import Now from '../../../Common/Now';
+import { AuthService } from '../../../../services';
+
+
 
 class Dashboard extends Component {
 
@@ -105,6 +108,10 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
+        const isAuthenticated = AuthService.isAuthenticated();
+        if (!isAuthenticated) {
+          this.setState({ redirect: "/login" })
+        }
 
         const token = sessionStorage.getItem('token');
         if (token == null || token.length === 0) {

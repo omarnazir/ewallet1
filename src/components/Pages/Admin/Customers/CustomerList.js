@@ -12,7 +12,8 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-
+import { AuthService } from '../../../../services';
+import {Redirect} from 'react-router-dom';
 
 class CustomerList extends Component {
   state = {
@@ -23,6 +24,10 @@ class CustomerList extends Component {
   };
 
   componentDidMount() {
+    const isAuthenticated = AuthService.isAuthenticated();
+    if (!isAuthenticated) {
+      this.setState({ redirect: "/login" })
+    }
     axios.get("/customers")
       .then(res => {
         const response = res.data;
@@ -152,6 +157,9 @@ class CustomerList extends Component {
 
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect}/>
+  }
     let index=0;
     const { SearchBar, ClearSearchButton } = Search;
     const MyExportCSV = (props) => {

@@ -17,6 +17,9 @@ import $ from "jquery";
 import axios from "../../../../services/axios";
 import Moment from 'moment';
 import update from 'immutability-helper';
+import { AuthService } from '../../../../services';
+import {Redirect} from 'react-router-dom';
+
 
 class SmsTemplates extends Component {
   state = {
@@ -50,6 +53,10 @@ class SmsTemplates extends Component {
   };
 
   componentDidMount() {
+    const isAuthenticated = AuthService.isAuthenticated();
+    if (!isAuthenticated) {
+      this.setState({ redirect: "/login" })
+    }
     axios.get("/sms-request")
       .then(res => {
         const response = res.data;
@@ -102,6 +109,9 @@ class SmsTemplates extends Component {
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect}/>
+  }
     return (
       <ContentWrapper>
         <div className="content-heading">

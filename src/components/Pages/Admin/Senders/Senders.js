@@ -16,13 +16,15 @@ import {
 } from "reactstrap";
 import $ from "jquery";
 import Moment from 'moment';
-import  {SenderIdService}  from "../../../../services"
+import { SenderIdService } from "../../../../services"
 
 
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+import { AuthService } from '../../../../services';
+import {Redirect} from 'react-router-dom';
 
 class Senders extends Component {
   state = {
@@ -33,7 +35,11 @@ class Senders extends Component {
 
 
   componentDidMount() {
-    SenderIdService.GetAllSenderIds().then(res=>{
+    const isAuthenticated = AuthService.isAuthenticated();
+    if (!isAuthenticated) {
+      this.setState({ redirect: "/login" })
+    }
+    SenderIdService.GetAllSenderIds().then(res => {
       const response = res.data;
       this.setState({ senderIdList: response })
     })
@@ -47,18 +53,18 @@ class Senders extends Component {
   }, {
     dataField: 'senderId',
     text: 'Customer/Organization',
-    sort:true
+    sort: true
   }, {
     dataField: 'senderId',
     text: 'SENDER',
-    sort:true
+    sort: true
   },
   {
     dataField: 'dateCreated',
     text: 'DATE REGISTERED',
     isDummyField: true,
-    sort:true,
-    formatter:(cellContent,row)=>{
+    sort: true,
+    formatter: (cellContent, row) => {
       return (this.formatDate(row.dateCreated))
     }
   },
@@ -66,7 +72,7 @@ class Senders extends Component {
     dataField: 'is_approved',
     text: 'STATUS',
     isDummyField: true,
-    sort:true,
+    sort: true,
     formatter: (cellContent, row) => {
       if (row.is_approved == 1) {
         return (
@@ -74,9 +80,12 @@ class Senders extends Component {
         );
       } else if (row.is_approved == 0) {
         return (<span className="badge badge-warning">Pending</span>)
-      } else {
+      } else if (row.is_approved == 2) {
+        return (<span className="badge badge-danger">Rejected</span>)
+      }
+      else {
         return (
-          <span className="badge badge-danger">Rejected</span>
+          <span className="badge badge-danger">Disabled</span>
         );
       }
     }
@@ -85,11 +94,13 @@ class Senders extends Component {
     dataField: 'is_approved',
     text: 'ACTION',
     isDummyField: true,
-    sort:true,
+    sort: true,
     formatter: (cellContent, row) => {
       if (row.is_approved == 1) {
         return (
-          <span className="btn badge-danger">Disable</span>
+          <span className="btn badge-danger" onClick={() => {
+            this.DisableSenderId(row);
+          }}>Disable</span>
         );
       }
     }
@@ -116,13 +127,21 @@ class Senders extends Component {
     });
   }
 
+  DisableSenderId = (row) => {
+    SenderIdService.DisableSenderId(row.id).then(res => {
+      const response = res.data;
+    })
+  }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect}/>
+  }
     return (
       <ContentWrapper>
         <div className="content-heading">
           <div className="mr-auto flex-row">
-           <h3 style={{ fontWeight:500 }}>Manage Customers Sender id's</h3>
+            <h3 style={{ fontWeight: 500 }}>Manage Customers Sender id's</h3>
             <small>Showing all customers sender id's.</small>
           </div>
           <div className="flex-row">
@@ -177,15 +196,15 @@ class Senders extends Component {
               </div>
             </CardHeader>
             <CardBody>
-              <BootstrapTable bootstrap4 striped keyField='id' 
-              data={this.state.senderIdList} columns={this.columns}
-               pagination={paginationFactory()} 
-               sort={ {
-                dataField: this.state.field,
-                order: this.state.order
-              } }
-              noDataIndication="No senders added"
-               />
+              <BootstrapTable bootstrap4 striped keyField='id'
+                data={this.state.senderIdList} columns={this.columns}
+                pagination={paginationFactory()}
+                sort={{
+                  dataField: this.state.field,
+                  order: this.state.order
+                }}
+                noDataIndication="No senders added"
+              />
             </CardBody>
           </Card>
         </Container>

@@ -386,6 +386,8 @@ class Register extends Component {
                                                 <input className="form-check-input" type="checkbox" required value="" id="termscheck" name="termscheck" />
                                                 <label className="form-check-label" htmlFor="termscheck">
                                                     I agree with <a href="#">Terms and Conditions</a>
+                                                    
+
                                                 </label>
                                             </div>
                                         </div>

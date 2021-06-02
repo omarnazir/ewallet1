@@ -5,6 +5,8 @@ import axios from "../../../../services/axios";
 // import Swal from "../../../Common/Swal";
 import Swal from "sweetalert2"
 import withReactContent from 'sweetalert2-react-content'
+import { AuthService } from '../../../../services';
+import {Redirect} from 'react-router-dom';
 
 const MySwal = withReactContent(Swal)
 import {
@@ -34,6 +36,10 @@ class Tariffs extends Component {
   };
 
   componentDidMount() {
+    const isAuthenticated = AuthService.isAuthenticated();
+    if (!isAuthenticated) {
+      this.setState({ redirect: "/login" })
+    }
     this.GetAllTariffs()
   }
 
@@ -151,6 +157,9 @@ class Tariffs extends Component {
   
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect}/>
+  }
     let index = 0;
     return (
       <ContentWrapper>

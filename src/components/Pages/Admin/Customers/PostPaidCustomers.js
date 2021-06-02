@@ -6,6 +6,8 @@ import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reacts
 import { Link } from 'react-router-dom';
 import $ from "jquery";
 import Moment from "moment"
+import { AuthService } from '../../../../services';
+import {Redirect} from 'react-router-dom';
 
 class PostPaidCustomers extends Component {
   state = {
@@ -38,6 +40,10 @@ class PostPaidCustomers extends Component {
 
 
   componentDidMount() {
+    const isAuthenticated = AuthService.isAuthenticated();
+    if (!isAuthenticated) {
+      this.setState({ redirect: "/login" })
+    }
     axios.get("/customers/post-paid")
       .then(res => {
         const response = res.data;
@@ -70,6 +76,9 @@ class PostPaidCustomers extends Component {
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect}/>
+  }
     let index=0;
     return (
       <ContentWrapper>

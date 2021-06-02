@@ -4,7 +4,8 @@ import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
-
+import { AuthService } from '../../../../services';
+import {Redirect} from 'react-router-dom';
 
 
 class UsersManagement extends Component {
@@ -50,6 +51,11 @@ class UsersManagement extends Component {
 
 
   componentDidMount() {
+    const isAuthenticated = AuthService.isAuthenticated();
+    if (!isAuthenticated) {
+      this.setState({ redirect: "/login" })
+    }
+
     axios.get("/users")
       .then(res => {
         const response = res.data;
@@ -68,6 +74,9 @@ AddActionButtonStyle={
 }
   render() {
     let index=0;
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect}/>
+  }
     return (
       <ContentWrapper>
         <div className="content-heading">

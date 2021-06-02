@@ -15,9 +15,8 @@ import Datetime from 'react-datetime';
 import $ from "jquery";
 
 import Datatable from "../../../Common/Datatable";
-import axios from '../../../../services/axios';
-import { AuthService } from '../../../../services';
-import {Redirect} from 'react-router-dom';
+import { AuthService } from "../../../../services/auth.service";
+import axios from '../../../../services/axios'
 
 
 class UserPage extends Component {
@@ -64,10 +63,7 @@ class UserPage extends Component {
   };
 
   componentDidMount() {
-    const isAuthenticated = AuthService.isAuthenticated();
-    if (!isAuthenticated) {
-      this.setState({ redirect: "/login" })
-    }
+
 
     axios.get("/users/list")
       .then(res => {
@@ -87,9 +83,6 @@ class UserPage extends Component {
 
   render() {
     let index = 0;
-    if (this.state.redirect) {
-      return <Redirect to={this.state.redirect}/>
-  }
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -139,9 +132,7 @@ class UserPage extends Component {
                       </td>
                       <td>N/A</td>
                       <td>
-                        <span className="btn " style={this.AddActionButtonStyle}>Edit</span>
-                        <br />
-                        <span className="btn badge-danger mt-1">Disable</span>
+                        N/A
                       </td>
                     </tr>
                   )}
