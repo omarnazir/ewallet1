@@ -121,6 +121,11 @@ const Menu = [
             path: '/contact-lists'
         },
         {
+            name: 'Manage User',
+            icon: 'fa fa-users',
+            path: '/manage-user'
+        },
+        {
             name: 'Manage Users',
             icon: 'fa fa-users',
             path: '/manage-users'

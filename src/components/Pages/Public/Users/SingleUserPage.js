@@ -19,7 +19,7 @@ import { AuthService } from "../../../../services/auth.service";
 import axios from '../../../../services/axios'
 
 
-class UserPage extends Component {
+class SingleUserPage extends Component {
   state = {
     dtOptions: {
       paging: true, // Table pagination
@@ -49,7 +49,7 @@ class UserPage extends Component {
         { extend: "print", className: "btn-info" },
       ],
     },
-    usersList: []
+    user: {}
   };
 
   // Access to internal datatable instance for customizations
@@ -65,17 +65,15 @@ class UserPage extends Component {
   componentDidMount() {
 
 
-    axios.get("/users/list")
+    axios.get("/users/me")
       .then(res => {
         const response = res.data;
-        this.setState({ usersList: response })
+        this.setState({ user: response })
         console.log(response);
       })
   }
 
-  ViewAddNormalUser = () => {
-    return this.props.history.push('/add-user')
-  }
+ 
   AddActionButtonStyle = {
     color: 'white',
     background: "#003366"
@@ -83,15 +81,13 @@ class UserPage extends Component {
 
   render() {
     let index = 0;
+    const {id,name,username,userMonthlySmsLimit,isActive}=this.state.user;
     return (
       <ContentWrapper>
         <div className="content-heading">
           <div className="mr-auto flex-row">
             Manage User
             <small>User management panel </small>
-          </div>
-          <div className="flex-row">
-            <Button onClick={this.ViewAddNormalUser} style={this.AddActionButtonStyle} className="btn-pill-right">Add User</Button>
           </div>
         </div>
         <Container fluid>
@@ -111,19 +107,19 @@ class UserPage extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.usersList.map(row =>
-                    <tr className="gradeA" key={row.id}>
+                  
+                    <tr className="gradeA" key={id}>
                       <td>{index += 1}</td>
-                      <td>{row.name}</td>
-                      <td>{row.username}</td>
-                      <td>{row.userMonthlySmsLimit}</td>
+                      <td>{name}</td>
+                      <td>{username}</td>
+                      <td>{userMonthlySmsLimit}</td>
                       <td>
-                        {row.isActive == 1 &&
+                        {isActive == 1 &&
 
                           <span className="badge badge-success">Active</span>
                         }
                         {
-                          row.isActive !=1 &&
+                          isActive !=1 &&
                              <span className="badge badge-danger">Disabled</span>
                         }
                        
@@ -131,11 +127,13 @@ class UserPage extends Component {
 
                       </td>
                       <td>N/A</td>
+                  
                       <td>
-                        N/A
+                        <span className="btn " style={this.AddActionButtonStyle}>Edit</span>
                       </td>
+                     
                     </tr>
-                  )}
+                 
                 </tbody>
               </table>
               {/* </Datatable> */}
@@ -147,4 +145,4 @@ class UserPage extends Component {
   }
 }
 
-export default UserPage;
+export default SingleUserPage;

@@ -50,6 +50,7 @@ import PrePaidInvoice from "./components/Pages/Public/PrePaid/PrePaidInvoice";
 
 import LandingPage from './components/Auth/landing';
 import Invoices from './components/Pages/Admin/Transactions/Invoices';
+import SingleUserPage from './components/Pages/Public/Users/SingleUserPage';
 
 const waitFor = Tag => props => <Tag {...props} />;
 
@@ -143,6 +144,7 @@ const Routes = ({ location }) => {
 
                                 <Route path="/add-user" component={waitFor(AddNormalUser)}/>
                                 <Route path="/manage-users" component={waitFor(UserPage)}/>
+                                <Route path="/manage-user" component={waitFor(SingleUserPage)}/>
 
                                 <Route path="/prepaid-invoices" component={waitFor(PrePaidInvoiceList)}/>
 
