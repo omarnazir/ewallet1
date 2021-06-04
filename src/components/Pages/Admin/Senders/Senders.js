@@ -39,6 +39,11 @@ class Senders extends Component {
     if (!isAuthenticated) {
       this.setState({ redirect: "/login" })
     }
+    this.GetAllSenderIds();
+   
+  }
+
+  GetAllSenderIds=()=>{
     SenderIdService.GetAllSenderIds().then(res => {
       const response = res.data;
       this.setState({ senderIdList: response })
@@ -130,6 +135,7 @@ class Senders extends Component {
   DisableSenderId = (row) => {
     SenderIdService.DisableSenderId(row.id).then(res => {
       const response = res.data;
+      this.GetAllSenderIds();
     })
   }
 

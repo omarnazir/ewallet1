@@ -40,7 +40,7 @@ export class SenderIdService {
     }
 
     DisableSenderId(id){
-        return axios.put("/disable/"+id)
+        return axios.put("/sender-ids/disable/"+id)
     }
 
 }

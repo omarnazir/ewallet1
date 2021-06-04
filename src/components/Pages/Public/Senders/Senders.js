@@ -142,6 +142,10 @@ class UserSenderIds extends Component {
                             row.is_approved==2 &&
                             <span className="badge badge-danger">Rejected</span>
                           }
+                           {
+                            row.is_approved==3 &&
+                            <span className="badge badge-danger">Disabled</span>
+                          }
                           
                         </td>
                         <td>{ row.is_approved==0 && 
