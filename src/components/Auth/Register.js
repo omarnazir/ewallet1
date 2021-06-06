@@ -152,12 +152,12 @@ class Register extends Component {
         console.log(data)
 
 
-        // AuthService.register(data).then((res) => {
-        //     console.log(res)
-        //     this.ViewLoginPage()
-        // }, (err) => {
-        //     console.log(err)
-        // })
+        AuthService.register(data).then((res) => {
+            console.log(res)
+            this.ViewLoginPage()
+        }, (err) => {
+            console.log(err)
+        })
 
 
     }
@@ -238,7 +238,7 @@ class Register extends Component {
                                                     value={this.state.formRegister.customer_type}
                                                     invalid={this.hasError('formRegister', 'customer_type', 'required')}
                                                 >
-                                                    <option value="" disabled selected hidden>Select customer type</option>
+                                                    <option value="" disabled selected>Select customer type</option>
                                                     <option value="Individual">Individual</option>
                                                     <option value="Organization">Organization</option>
                                                 </select>
@@ -254,7 +254,7 @@ class Register extends Component {
                                                     invalid={this.hasError('formRegister', 'payment_type', 'required')
                                                     }
                                                 >
-                                                    <option value="" disabled selected hidden>Select account type</option>
+                                                    <option value="" disabled selected>Select account type</option>
                                                     <option value="Pre-Paid" selected>Pre-paid account</option>
                                                     <option value="Post-Paid">Post-paid account</option>
                                                 </select>
