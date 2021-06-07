@@ -153,7 +153,7 @@ class Register extends Component {
 
         data.append('username', this.state.formRegister.username)
         data.append('password', this.state.formRegister.password)
-        data.append('payment_type', this.state.formRegister.payment_type)
+        data.append('payment_type', this.state.payment_type)
         //on prepaid select: Nida  Nida number
         //on post paid select: buss licence: buss licence number add Vaccount field
         data.append('id_number', this.state.formRegister.id_number)
@@ -382,15 +382,17 @@ class Register extends Component {
                                                             <em className="fa fa-lock"></em>
                                                         </span>
                                                     </div>
-                                                    {this.hasError('formRegister', 'password', 'required') &&
-                                                        <span className="invalid-feedback">Valid password  is required</span>}
+                                                    {/* {this.hasError('formRegister', 'password', 'required') &&
+                                                        <span className="invalid-feedback">Valid password  is required</span>} */}
                                                     {this.hasError('formRegister', 'password', 'minlen') &&
                                                         <span className="invalid-feedback">Password too weak</span>}
-                                                </div>
 
+
+                                                </div>
+                                                {this.hasError('formRegister', 'password', 'minlen') &&
                                                 <small className="text-danger">
                                                     <strong>Must contain at least one upper and one lower letter, one special character and number</strong>
-                                                </small>
+                                                </small>}
 
                                             </div>
                                             <div className="form-group col-md-6 px-2">
