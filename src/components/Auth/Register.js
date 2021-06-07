@@ -153,7 +153,7 @@ class Register extends Component {
 
         data.append('username', this.state.formRegister.username)
         data.append('password', this.state.formRegister.password)
-        data.append('payment_type', this.state.payment_type)
+        data.append('payment_type', this.state.formRegister.payment_type)
         //on prepaid select: Nida  Nida number
         //on post paid select: buss licence: buss licence number add Vaccount field
         data.append('id_number', this.state.formRegister.id_number)

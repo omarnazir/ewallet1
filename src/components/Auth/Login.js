@@ -83,7 +83,7 @@ class Login extends Component {
                     }else{
                         this.setState({redirect: '/admin/dashboard'});
                     }
-                    window.location.reload();
+                    // window.location.reload();
                 },(err)=>{
                 // console.log(err.response.data);
                 this.setState({loginHasError: true})
