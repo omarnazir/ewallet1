@@ -18,8 +18,8 @@ class Register extends Component {
 
         formRegister: {
 
-            customer_type: '',
-            payment_type: '',
+            customer_type: 'Individual',
+            payment_type: 'Pre-Paid',
 
             fullname: "",
             email: '',
@@ -40,7 +40,8 @@ class Register extends Component {
         fileDisplayName: "",
         showIndividualFields: true,
         showVaccount: false,
-        modal: false
+        modal: false,
+        attachment:''
     }
 
     ViewLoginPage = () => {
@@ -62,7 +63,7 @@ class Register extends Component {
             this.setState({ showIndividualFields: false })
             this.setState({ showOrganizationFields: true })
         }
-        console.log(event.target.name)
+      
 
     }
 
@@ -86,6 +87,8 @@ class Register extends Component {
 
     validateOnChange = event => {
         const input = event.target;
+        console.log(input);
+
         const form = input.form
         const value = input.type === 'checkbox' ? input.checked : input.value;
         if ([event.target.name] == "customer_type") {
@@ -95,6 +98,10 @@ class Register extends Component {
 
         if ([event.target.name] == "payment_type") {
             this.handleOnPaymentSelectChange([event.target.value])
+
+        }
+        if([event.target.name]=="attachment"){
+            this.handleFileChange(event)
         }
 
         const result = FormValidator.validate(input);
@@ -115,13 +122,20 @@ class Register extends Component {
 
     handleFileChange = event => {
         this.setState({ attachment: event.target.files[0] });
-        this.setState({ fileDisplayName: event.target.files[0].name })
+        
     }
+
+    // handleFileChange = event => {
+    //     console.log(event)
+    //     this.setState({ attachment: event});
+        
+    // }
 
 
     onSubmit = e => {
         const form = e.target;
         const inputs = [...form.elements].filter(i => ['INPUT'].includes(i.nodeName))
+     
 
         const { errors, hasError } = FormValidator.bulkValidate(inputs)
 
@@ -157,10 +171,11 @@ class Register extends Component {
         //on prepaid select: Nida  Nida number
         //on post paid select: buss licence: buss licence number add Vaccount field
         data.append('id_number', this.state.formRegister.id_number)
-        data.append('attachment', this.state.formRegister.attachment)
+        // data.append('attachment', this.state.formRegister.attachment)
+        data.append('attachment', this.state.attachment)
+       
+       
 
-
-        console.log(data)
 
 
         AuthService.register(data).then((res) => {
@@ -470,7 +485,7 @@ class Register extends Component {
 
                                                 <div className="custom-file">
                                                     <input
-                                                        accept="amage/png, image/jpeg,application/pdf"
+                                                        accept="image/png,image/jpeg,application/pdf"
                                                         type="file"
                                                         className="form-control form-control-file"
                                                         name="attachment"
