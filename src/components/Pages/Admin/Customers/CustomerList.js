@@ -5,22 +5,15 @@ import axios from "../../../../services/axios";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
 import Moment from 'moment'
+import ReactDatatable from '@ashvin27/react-datatable';
 
 
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.css';
-import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import { AuthService } from '../../../../services';
 import {Redirect} from 'react-router-dom';
 
 class CustomerList extends Component {
   state = {
-    customersList: [],
-    field: null,
-    order: null,
-    index:0
+    customersList: []
   };
 
   componentDidMount() {
@@ -44,12 +37,7 @@ class CustomerList extends Component {
     console.log(row.id)
     return this.props.history.push('/admin/customers-details/' + row.id, row)
   }
-  handleSort = (field, order) => {
-    this.setState({
-      field,
-      order
-    });
-  }
+  
 
 
   AddActionButtonStyle = {
@@ -57,102 +45,100 @@ class CustomerList extends Component {
     background: "#003366"
   }
 
+  config = {
+    page_size: 10,
+    length_menu: [10, 25, 50],
+    show_filter: true,
+    show_pagination: true,
+    pagination:'advance',
+    filename: "Contact List",
+    button: {
+      
+    }
+  }
 
-  pagination = paginationFactory({
-    page: 2,
-    sizePerPage: 5,
-    lastPageText: '>>',
-    firstPageText: '<<',
-    nextPageText: '>',
-    prePageText: '<',
-    showTotal: true,
-    alwaysShowAllBtns: true,
-    onPageChange: function (page, sizePerPage) {
-      console.log('page', page);
-      console.log('sizePerPage', sizePerPage);
+
+  columns = [
+    {
+        key: "id",
+        text: "#",
+        sortable: true,
+        // cell: (record, index) => {
+        //   return index;
+        // }
     },
-    onSizePerPageChange: function (page, sizePerPage) {
-      console.log('page', page);
-      console.log('sizePerPage', sizePerPage);
-    }
-  });
+    {
+        key: "fullname",
+        text: "CUSTOMER NAME",
+        sortable: true
+    },
+    {
+        key: "email",
+        text: "EMAIL",
+        sortable: true
+    },
+    {
+        key: "phonenumber",
+        text: "PHONE",
+        sortable: true
+    },
+    {
+        key: "location",
+        text: "ADDRESS",
+        sortable: true
+    },
 
-
-  columns = [{
-    dataField: 'id',
-    text: '#',
-    sort: true,
-    onSort: this.handleSort,
-    // isDummyField: true,
-    // formatter: (cellContent, row) => {
-    //   return this.state.index+=1;
-    // }
+    {
+        key: "isActive",
+        text: "STATUS",
+        sortable: true,
+        cell: (record, index) => {
+          if (record.isApproved == 0) {
+            return (
+              <span className="badge badge-warning">Pending</span>
+            );
+          }
+           if(record.isApproved == 1){
+            return  (<span className="badge badge-success">Approved</span>);
+          }
+    
+           if(record.isApproved==2) {
+            return (
+              <span className="badge badge-danger">Rejected</span>
+            );
+          }
+        }
+    },
+    {
+        key: "startDate",
+        text: "DATE REGISTERED",
+        sortable: true,
+        cell: (record, index) => {
+          return (this.formatDate(record.startDate))
+        }
+    }, {
+      key: "paymentType",
+      text: "PAYMENT TYPE",
+      sortable: true
   },
-  {
-    dataField: 'fullname',
-    text: 'CUSTOMER NAME'
-  },
-  {
-    dataField: 'email',
-    text: 'EMAIL'
-  }, {
-    dataField: 'phonenumber',
-    text: 'PHONE'
-  }, {
-    dataField: 'location',
-    text: 'ADDRESS'
-  },
-  {
-    dataField: 'isActive',
-    text: 'STATUS',
-    isDummyField: true,
-    sort: true,
-    formatter: (cellContent, row) => {
-      if (row.isApproved == 0) {
-        return (
-          <span className="badge badge-warning">Pending</span>
-        );
-      }
-       if(row.isApproved == 1){
-        return  (<span className="badge badge-success">Approved</span>);
-      }
-
-       if(row.isApproved==2) {
-        return (
-          <span className="badge badge-danger">Rejected</span>
-        );
-      }
-    }
+{
+  key: "id",
+  text: "ACTION",
+  cell: (record, index) => {
+    return (
+      <Button color="success" className="btn btn-success"
+        onClick={() => {
+          this.ViewCustomerDetails(record);
+        }}
+      >
+        <i className="fa fa-eye"></i>
+      </Button>
+    );
   }
-    , {
-    dataField: 'startDate',
-    text: 'DATE REGISTERED',
-    isDummyField: true,
-    formatter: (cellContent, row) => {
-      return (this.formatDate(row.startDate))
-    }
-  }, {
-    dataField: 'paymentType',
-    text: 'PAYMENT TYPE'
-  }, {
-    dataField: 'id',
-    text: 'ACTION',
-    isDummyField: true,
-    formatter: (cell, row, rowIndex, formatExtraData) => {
-      return (
-        <Button color="success" className="btn btn-success"
-          onClick={() => {
-            this.ViewCustomerDetails(row);
-          }}
-        >
-          <i className="fa fa-eye"></i>
-        </Button>
-      );
-    }
+}
 
-  }
+];
 
-  ]
 
 
 
@@ -160,18 +146,7 @@ class CustomerList extends Component {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect}/>
   }
-    let index=0;
-    const { SearchBar, ClearSearchButton } = Search;
-    const MyExportCSV = (props) => {
-      const handleClick = () => {
-        props.onExport();
-      };
-      return (
-        <div>
-          <button className="btn btn-success" onClick={handleClick}>Export to CSV</button>
-        </div>
-      );
-    };
+    let index=0
 
     return (
       <ContentWrapper>
@@ -192,36 +167,11 @@ class CustomerList extends Component {
             </CardHeader>
             <CardBody>
 
-
-              <ToolkitProvider
-                bootstrap4
-                keyField='id'
-                data={this.state.customersList}
-                columns={this.columns}
-                search
-              >
-                {
-                  props => (
-                    <div>
-                      {/* <h6>Input something at below input field:</h6>
-                      <SearchBar {...props.searchProps} />
-                      <ClearSearchButton {...props.searchProps} />
-                      <hr />
-                      <MyExportCSV {...props.csvProps} /> */}
-                      <BootstrapTable bootstrap4 striped keyField='id'
-                        data={this.state.customersList} columns={this.columns} condensed
-                        pagination={paginationFactory()}
-                        sort={{
-                          dataField: this.state.field,
-                          order: this.state.order
-                        }}
-                        noDataIndication="Customers Table Empty"
-                        rowEvents={this.rowEvents}
-                      />
-                    </div>
-                  )
-                }
-              </ToolkitProvider>
+            <ReactDatatable 
+              
+                config={this.config}
+                records={this.state.customersList}
+                columns={this.columns}/>
             </CardBody>
           </Card>
         </Container>
