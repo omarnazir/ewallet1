@@ -63,7 +63,7 @@ const Menu = [
                 path: '/admin/mobile-operators'
             },
             {
-                name: 'Sms log',
+                name: 'Sms logs',
                 path: '/admin/sms-log',
                 icon: 'icon-bubble'
             }

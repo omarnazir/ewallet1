@@ -51,6 +51,7 @@ import PrePaidInvoice from "./components/Pages/Public/PrePaid/PrePaidInvoice";
 import LandingPage from './components/Auth/landing';
 import Invoices from './components/Pages/Admin/Transactions/Invoices';
 import SingleUserPage from './components/Pages/Public/Users/SingleUserPage';
+import EditAdminUser from './components/Pages/Admin/UserManagement/EditAdminUser';
 
 const waitFor = Tag => props => <Tag {...props} />;
 
@@ -121,6 +122,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin/manage-tariff-bands/:id" component={waitFor(TarriffBand)} />
 
 
+                                    <Route path="/admin/manage-edit-user/:id" component={waitFor(EditAdminUser)}/>
                                     <Route path="/admin/add-new-user" component={waitFor(AddUser)} />
                                     <Route path="/admin/manage-users" component={waitFor(UsersManagement)} />
                                     <Route path="/admin/restricted-words" component={waitFor(RestrictedWords)} />
@@ -147,6 +149,7 @@ const Routes = ({ location }) => {
                                 <Route path="/add-user" component={waitFor(AddNormalUser)}/>
                                 <Route path="/manage-users" component={waitFor(UserPage)}/>
                                 <Route path="/manage-user" component={waitFor(SingleUserPage)}/>
+                                
 
                                 <Route path="/prepaid-invoices" component={waitFor(PrePaidInvoiceList)}/>
 

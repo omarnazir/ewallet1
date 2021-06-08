@@ -33,7 +33,8 @@ class EditAdminUser extends Component {
             username: "",
             phonenumber: "",
             monthlysmslimit: 0
-        }
+        },
+        user:{}
     }
 
     /**
@@ -41,6 +42,21 @@ class EditAdminUser extends Component {
  * @param  {String} formName The name of the form in the state object
  * @return {Function} a function used for the event
  */
+
+    componentDidMount(){
+        const { state } = this.props.history.location;
+        // console.log(state.id)
+        if (state == undefined) {
+            return this.props.history.push('/admin/customers-list/')
+        }
+
+        axios.get("/users/" + state.id)
+            .then(res => {
+                const response = res.data;
+                console.log(response)
+                this.setState({ user: response })
+            })
+    }
     validateOnChange = event => {
         const input = event.target;
         const form = input.form
@@ -79,8 +95,6 @@ class EditAdminUser extends Component {
 
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
 
-  
-
         if (!hasError) {
             const data={
                 "username":this.state.formRegister.username,
@@ -111,7 +125,7 @@ class EditAdminUser extends Component {
     }
 
     ViewAllAdminUsers = () => {
-        return this.props.history.push('/manage-users')
+        return this.props.history.push('/admin/manage-users')
     }
 
     AddActionButtonStyle = {
@@ -119,17 +133,15 @@ class EditAdminUser extends Component {
         background: "#003366"
     }
 
-    ViewUserPage = () => {
-        return this.props.history.push("/manage-users");
-      };
+ 
 
     render() {
         return (
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Create Admin User
-                     <small>Adding a new user.</small>
+                        Edit User
+                     <small>Updating user details</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewAllAdminUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
@@ -368,7 +380,7 @@ class EditAdminUser extends Component {
                                                 <span className="invalid-feedback">Field is required</span>
                                             </CustomInput> */}
                                             <div className="ml-auto">
-                                                <button className="btn btn-danger px-5 mr-2" onClick={this.ViewUserPage}>Cancel</button>
+                                                <button className="btn btn-danger px-5 mr-2" onClick={this.ViewAllAdminUsers}>Cancel</button>
                                                 <button type="submit" style={this.AddActionButtonStyle} className="btn btn-primary px-5">Save</button>
                                             </div>
                                         </div>

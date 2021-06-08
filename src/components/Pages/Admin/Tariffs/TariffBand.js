@@ -25,7 +25,8 @@ class TarriffBand extends Component {
     smsQuantity: 0,
     expireDurationDays: 0,
     vatAmount: 0,
-    mode:"add"
+    mode:"add",
+    tariffBandId:0,
   };
 
   componentDidMount() {
@@ -60,7 +61,29 @@ class TarriffBand extends Component {
     this.toggleModal();
    
 
+    if(this.state.mode=="edit"){
+      console.log("edit mode")
+
     const tariffBands = {
+      "id":this.state.tariffBandId,
+      "tariffId": this.state.tariffId,
+      "bandAmount": this.state.bandAmount,
+      "smsQuantity": this.state.smsQuantity,
+      "expireDurationDays": this.state.expireDurationDays,
+      "vatAmount": this.state.vatAmount
+
+  }
+  console.log(tariffBands)
+  
+      axios.put("/tariff-bands", tariffBands).then(res => {
+        console.log(res.data);
+        this.getTariffBands(this.state.tariffId)
+        
+    })
+  }
+    else{
+      console.log("add mode")
+      const tariffBands = {
         "tariffId": this.state.tariffId,
         "bandAmount": this.state.bandAmount,
         "smsQuantity": this.state.smsQuantity,
@@ -68,27 +91,24 @@ class TarriffBand extends Component {
         "vatAmount": this.state.vatAmount
 
     }
-    if(this.state.mode="add"){
-
-    axios.post("/tariff-bands", tariffBands).then(res => {
+      axios.post("/tariff-bands", tariffBands).then(res => {
         console.log(res.data);
         this.getTariffBands(this.state.tariffId)
         
-    })}
-    else{
-
+    })
     }
 }
 
 EditTariffBand(row){
   console.log("Clicked here"+row)
-
+  this.setState({mode:"edit"})
+  this.setState({tariffBandId:row.id})
   this.setState({tariffId:row.tariffId})
   this.setState({bandAmount:row.bandAmount})
   this.setState({smsQuantity:row.smsQuantity})
   this.setState({expireDurationDays:row.expireDurationDays})
   this.setState({vatAmount:row.vatAmount})
-  this.setState({mode:"edit"})
+  
   this.toggleModal();
 
 
@@ -106,9 +126,7 @@ handleChange = event => {
     return this.props.history.push('/admin/manage-tariff-bands')
   }
 
-  EditTestTariffBand(id) {
-   console.log(id)
-  }
+ 
 
   
   DeleteTariffBand(id) {
@@ -131,11 +149,15 @@ handleChange = event => {
     });
   }
 
+  AddTariffBandMode=()=>{
+    this.setState({mode:"add"})
+    this.toggleModal();
+  }
+
   hideToggelModal=()=>{
     this.setState({
       modal:false,
     })
-    this.setState(this.setState({AddTariffBand:true}))
   }
 
   render() {
@@ -149,10 +171,10 @@ handleChange = event => {
           </div>
           <div className="flex-row">
             <Button onClick={this.ViewTarrifs} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Tarrifs</Button>
-            <Button onClick={this.toggleModal} style={this.AddActionButtonStyle}  className="btn-pill-right">Add New Tariff Band</Button>
+            <Button onClick={this.AddTariffBandMode} style={this.AddActionButtonStyle}  className="btn-pill-right">Add New Tariff Band</Button>
 
             <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-              <ModalHeader toggle={this.toggleModal}>{this.state.AddTariffBandMode ? "Add Tariff Band" : "Edit Tariff Band"}</ModalHeader>
+              <ModalHeader toggle={this.toggleModal}>{this.state.mode=="add" ? "Add Tariff Band" : "Edit Tariff Band"}</ModalHeader>
               <form onSubmit={this.handleSubmit}>
                 <ModalBody>
                   <FormGroup>

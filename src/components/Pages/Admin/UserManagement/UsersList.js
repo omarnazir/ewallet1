@@ -10,32 +10,6 @@ import {Redirect} from 'react-router-dom';
 
 class UsersManagement extends Component {
   state = {
-    dtOptions: {
-      paging: true, // Table pagination
-      ordering: true, // Column ordering
-      info: true, // Bottom left status text
-      responsive: true,
-      oLanguage: {
-        sSearch: '<em class="fa fa-search"></em>',
-        sLengthMenu: "_MENU_ records per page",
-        info: "Showing page _PAGE_ of _PAGES_",
-        zeroRecords: "Nothing found - sorry",
-        infoEmpty: "No records available",
-        infoFiltered: "(filtered from _MAX_ total records)",
-        oPaginate: {
-          sNext: '<em class="fa fa-caret-right"></em>',
-          sPrevious: '<em class="fa fa-caret-left"></em>',
-        },
-      },
-      // Datatable Buttons setup
-      dom: "Bfrtip",
-      buttons: [
-        { extend: "csv", className: "btn-info" },
-        { extend: "excel", className: "btn-info", title: "XLS-File" },
-        { extend: "pdf", className: "btn-info", title: $("title").text() },
-        { extend: "print", className: "btn-info" },
-      ],
-    },
     usersList: []
   };
 
@@ -97,8 +71,9 @@ DisableUser=(row)=>{
 
 
 EditUser=(row)=>{
-  console.log(row.id)
+  return this.props.history.push('/admin/manage-edit-user/' + row.id, row)
 }
+
 
 EnableUser=(row)=>{
   console.log(row.id)

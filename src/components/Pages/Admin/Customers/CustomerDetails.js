@@ -284,6 +284,7 @@ class CustomerDetails extends Component {
                                                         <p className="mb-3 text-dark"><strong>Phone:</strong> &nbsp; <span name="phone">{this.state.customer.phonenumber}</span></p>
                                                         <p className="mb-3 text-dark"><strong>Address:</strong> &nbsp; <span name="address">{this.state.customer.location}</span></p>
                                                         <p className="mb-3 text-dark"><strong>Status:</strong> &nbsp;
+                                                        
                                                         <span name="status"></span>{this.state.customer.isActive == 1 ? "Active" : "Pending"}
                                                         </p>
                                                         <p className="mb-3 text-dark"><strong>Customer Type:</strong> &nbsp;
