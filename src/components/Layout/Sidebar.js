@@ -61,8 +61,8 @@ class Sidebar extends Component {
 
     componentDidMount() {
         /*
-        const token = sessionStorage.getItem('token');
-        const userRoles = JSON.parse(sessionStorage.getItem("user_roles"));
+        const token = localStorage.getItem('token');
+        const userRoles = JSON.parse(localStorage.getItem("user_roles"));
         if (token == null || token.length === 0||userRoles==null) {
             this.setState({redirect: '/login'});
         }*/
@@ -75,7 +75,7 @@ class Sidebar extends Component {
         // Listen for routes changes in order to hide the sidebar on mobile
         this.props.history.listen(this.closeSidebar);
 
-        const userRoles = JSON.parse(sessionStorage.getItem("user_roles"));
+        const userRoles = JSON.parse(localStorage.getItem("user_roles"));
         if(userRoles!=null){
         let userMenu = Menu.filter(menu => userRoles.some(role => role.name === menu.path));
         let subMenuIndex = Menu.findIndex(sub=>sub.submenu!=null);

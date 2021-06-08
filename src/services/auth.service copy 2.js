@@ -9,11 +9,11 @@ class AuthService {
         }
         return axios.post(API_URL + "/auth/login", logindata).then(res => {
             if(res.data){
-                localStorage.clear();
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('user', res.data.user)
-                localStorage.setItem('username', JSON.stringify(res.data.user.username));
-                localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
+                sessionStorage.clear();
+                sessionStorage.setItem('token', res.data.token);
+                sessionStorage.setItem('user', res.data.user)
+                sessionStorage.setItem('username', JSON.stringify(res.data.user.username));
+                sessionStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
             }
             return res.data;
         })
@@ -24,17 +24,17 @@ class AuthService {
     }
 
     logout(){
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("username");
-        localStorage.removeItem("user_roles");
-        localStorage.clear();
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("username");
+        sessionStorage.removeItem("user_roles");
+        sessionStorage.clear();
     }
 
     isAuthenticated(){
         let isloggedIn=false;
-        const token = localStorage.getItem('token');
-        const roles=localStorage.getItem("user_roles")
+        const token = sessionStorage.getItem('token');
+        const roles=sessionStorage.getItem("user_roles")
         if (token == null || token.length === 0) {
             isloggedIn=false;
         }else{
@@ -45,7 +45,7 @@ class AuthService {
 
     getUsername(){
        if(this.isAuthenticated()){
-           return localStorage.getItem("username")
+           return sessionStorage.getItem("username")
        }else {
            return "";
        }

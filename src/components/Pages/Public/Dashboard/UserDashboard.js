@@ -12,6 +12,7 @@ import Now from '../../../Common/Now';
 import { AuthService } from '../../../../services';
 import {Redirect} from 'react-router-dom'
 
+
 class UserDashboard extends Component {
 
     state = {
@@ -108,7 +109,7 @@ class UserDashboard extends Component {
     }
 
     componentDidMount() {
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
         if (token == null || token.length === 0) {
             this.setState({ redirect: '/login' });
         }

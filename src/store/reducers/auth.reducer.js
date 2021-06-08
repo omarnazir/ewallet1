@@ -8,9 +8,9 @@ import {
     AUTH_ERROR,
     LOGOUT} from "../types"
 
-const user=JSON.parse(sessionStorage.getItem("user"))
-const token=JSON.parse(sessionStorage.getItem("token"))
-const username=JSON.parse(sessionStorage.getItem("username"))
+const user=JSON.parse(localStorage.getItem("user"))
+const token=JSON.parse(localStorage.getItem("token"))
+const username=JSON.parse(localStorage.getItem("username"))
 
 let initialState={}
 if(user!=null && token !=null & username!=null & token.length>0){

@@ -18,7 +18,7 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
         if (token != null && token.length > 0) {
             this.setState({redirect: '/dashboard'});
         }
