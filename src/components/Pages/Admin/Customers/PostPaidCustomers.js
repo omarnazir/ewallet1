@@ -8,34 +8,10 @@ import $ from "jquery";
 import Moment from "moment"
 import { AuthService } from '../../../../services';
 import {Redirect} from 'react-router-dom';
-
+import ReactDatatable from '@ashvin27/react-datatable';
 class PostPaidCustomers extends Component {
   state = {
-    dtOptions: {
-      paging: true, // Table pagination
-      ordering: true, // Column ordering
-      info: true, // Bottom left status text
-      responsive: true,
-      oLanguage: {
-        sSearch: '<em class="fa fa-search"></em>',
-        sLengthMenu: "_MENU_ records per page",
-        info: "Showing page _PAGE_ of _PAGES_",
-        zeroRecords: "Nothing found - sorry",
-        infoEmpty: "No records available",
-        infoFiltered: "(filtered from _MAX_ total records)",
-        oPaginate: {
-          sNext: '<em class="fa fa-caret-right"></em>',
-          sPrevious: '<em class="fa fa-caret-left"></em>',
-        },
-      },
-      dom: "Bfrtip",
-      buttons: [
-        { extend: "csv", className: "btn-info" },
-        { extend: "excel", className: "btn-info", title: "XLS-File" },
-        { extend: "pdf", className: "btn-info", title: $("title").text() },
-        { extend: "print", className: "btn-info" },
-      ],
-    }, customersPostPaidList: []
+   customersPostPaidList: []
   };
 
 
@@ -57,15 +33,6 @@ class PostPaidCustomers extends Component {
     return this.props.history.push('/admin/customers-details/' + row.id, row)
   }
 
-  // Access to internal datatable instance for customizations
-  dtInstance = (dtInstance) => {
-    const inputSearchClass = "datatable_input_col_search";
-    const columnInputs = $("tfoot ." + inputSearchClass);
-    // On input keyup trigger filtering
-    columnInputs.keyup(function () {
-      dtInstance.fnFilter(this.value, columnInputs.index(this));
-    });
-  };
   AddActionButtonStyle = {
     color: 'white',
     background: "#003366"
@@ -74,6 +41,123 @@ class PostPaidCustomers extends Component {
   formatDate = (date) => {
     return Moment(date).format('DD-MM-YYYY')
   }
+
+  config = {
+    page_size: 10,
+    length_menu: [10, 25, 50],
+    show_filter: true,
+    show_pagination: true,
+    pagination:'advance',
+    filename: "Contact List",
+    button: {
+     
+    },
+    language: {
+      loading_text: "Please be patient while data loads..."
+  }
+  }
+
+
+  columns = [
+    {
+        key: "id",
+        text: "#",
+        sortable: true,
+        // cell: (record, index) => {
+        //   return index;
+        // }
+    },
+    {
+        key: "fullname",
+        text: "CUSTOMER NAME",
+        sortable: true
+    },
+    {
+        key: "email",
+        text: "EMAIL",
+        sortable: true
+    },
+    {
+        key: "phonenumber",
+        text: "PHONE",
+        sortable: true
+    },
+    {
+        key: "location",
+        text: "ADDRESS",
+        sortable: true
+    },
+    {
+      key: "vaccount",
+      text: "V_ACCOUNT",
+      sortable: true
+  },
+  {
+    key: "monthlyLimit",
+    text: "MONTHLY SMS LIMIT",
+    sortable: true,
+    cell: (record, index) => {
+
+    
+     
+      if (record.monthlyLimit == null) {
+        return (
+          'N/A'
+        );
+      }
+       else{
+        return  (monthlyLimit);
+      }
+    }
+},
+
+    {
+        key: "isActive",
+        text: "STATUS",
+        sortable: true,
+        cell: (record, index) => {
+          if (record.isApproved == 0) {
+            return (
+              <span className="badge badge-warning">Pending</span>
+            );
+          }
+           if(record.isApproved == 1){
+            return  (<span className="badge badge-success">Approved</span>);
+          }
+    
+           if(record.isApproved==2) {
+            return (
+              <span className="badge badge-danger">Rejected</span>
+            );
+          }
+        }
+    },
+    {
+        key: "startDate",
+        text: "DATE REGISTERED",
+        sortable: true,
+        cell: (record, index) => {
+          return (this.formatDate(record.startDate))
+        }
+    },
+{
+  key: "id",
+  text: "ACTION",
+  cell: (record, index) => {
+    return (
+      <Button color="success" className="btn btn-success"
+        onClick={() => {
+          this.ViewCustomerDetails(record);
+        }}
+      >
+        <i className="fa fa-eye"></i>
+      </Button>
+    );
+  }
+}
+
+];
+
 
   render() {
     if (this.state.redirect) {
@@ -106,62 +190,15 @@ class PostPaidCustomers extends Component {
               {/* <CardTitle>Export Buttons</CardTitle> */}
             </CardHeader>
             <CardBody>
-              {/* <Datatable options={this.state.dtOptions}> */}
-                <table className="table table-striped my-4 w-100">
-                  <thead>
-                    <tr>
-                      <th data-priority="1">#</th>
-                      <th>CUSTOMER NAME</th>
-                      <th>EMAIL</th>
-                      <th className="sort-numeric">PHONE</th>
-                      <th className="sort-alpha" data-priority="2">
-                        ADDRESS
-                      </th>
-                      <th>V_ACCOUNT</th>
-                      <th>MONTHLY SMS LIMIT</th>
-                      <th>STATUS</th>
-                      <th>DATE REGISTERED</th>
-                      <th>ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                    {this.state.customersPostPaidList.map(row => (
-                      <tr key={row.id}>
-                        <td>{index+=1}</td>
-                        <td>{row.fullname}</td>
-                        <td>{row.email}</td>
-                        <td>{row.phonenumber}</td>
-                        <td>{row.location}</td>
-                        <td>{row.vaccount}</td>
-                        {row.monthlyLimit != null && 
-                        <td>{row.monthlyLimit}</td>
-                        }
-                         {row.monthlyLimit == null && 
-                        <td>N/A</td>
-                        }
-                        {/* <td>{row.isActive}</td> */}
-                        <td>{row.isActive == 1 &&
-                          <span className="badge badge-success">Active</span>
-                        }
-                          {row.isActive != 1 &&
-                            <span className="badge badge-danger">Disabled</span>
-                          }
-                        </td>
-
-                        <td>{this.formatDate(row.createdAt)}</td>
-                        <td>  <Button color="success" className="btn btn-success"
-                          onClick={() => {
-                            this.ViewCustomerDetails(row);
-                          }}
-                        >
-                          <i className="fa fa-eye"></i>
-                        </Button></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              {/* </Datatable> */}
+              
+            <ReactDatatable
+                config={this.config}
+                records={this.state.customersPostPaidList}
+                columns={this.columns}
+                dynamic={true}
+               
+                
+                />
             </CardBody>
           </Card>
         </Container>

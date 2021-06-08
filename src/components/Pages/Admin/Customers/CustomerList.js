@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
+
 import axios from "../../../../services/axios";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
@@ -53,9 +53,14 @@ class CustomerList extends Component {
     pagination:'advance',
     filename: "Contact List",
     button: {
-      
-    }
+     
+    },
+    language: {
+      loading_text: "Please be patient while data loads..."
   }
+  }
+
+
 
 
   columns = [
@@ -168,10 +173,14 @@ class CustomerList extends Component {
             <CardBody>
 
             <ReactDatatable 
-              
+              extraButtons={this.extraButtons}
                 config={this.config}
                 records={this.state.customersList}
-                columns={this.columns}/>
+                columns={this.columns}
+                dynamic={true}
+               
+                
+                />
             </CardBody>
           </Card>
         </Container>
