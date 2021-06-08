@@ -125,8 +125,15 @@ AddActionButtonStyle={
                         </td>
                         <td>{row.lastLogin}</td>
                         <td> <span className="btn badge-success"> <i className="icon-pencil mr-2"></i>Edit</span> <br />
-                          <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/>
-                          <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span>
+                          {/* <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/> */}
+                          {/* <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span> */}
+                          {row.status == 1 &&
+                            <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span>
+                          }
+                          {
+                            row.status != 1 &&
+                            <span className="btn badge-success mt-1"> <i className="icon-tick mr-2"></i>Enable</span>
+                          }
                         </td>
                       </tr>
                     ))}

@@ -39,6 +39,25 @@ class UserContactList extends Component {
     return this.props.history.push("/add-contact-list");
   };
 
+  
+
+  DeleteUserContactList(id) {
+    axios.delete("/contact-lists/" + id)
+      .then(res => {
+        const response = res.data;
+        // this.setState({ tariffBandList: response })
+        const tariffBandList = this.state.tariffBandList.filter((item) => {
+          return item.id !== id;
+        });
+        this.setState({ tariffBandList })
+      })
+  }
+
+  ViewContactListDetails(id) {
+    console.log(id)
+    return this.props.history.push('/view-contactlist/' + id, id)
+  }
+
   render() {
     let index=0;
     return (
@@ -86,9 +105,9 @@ class UserContactList extends Component {
                         <td><span className="badge badge-success">Disabled</span></td>
                          }
                         <td>
-                        {/* <span className="btn badge-success mr-1">Edit</span> */}
-                      {/* <span className="btn badge-danger">Delete</span> */}
-                         N/A
+                        <span className="btn badge-success mr-1" onClick={()=>this.ViewContactListDetails(row.id)}>View</span>
+                        <span className="btn badge-danger" onClick={() => this.DeleteUserContactList(row.id)}>Delete</span>
+                         {/* N/A */}
                         </td>
                       </tr>
                     ))}  

@@ -17,6 +17,10 @@ import $ from "jquery";
 import axios from "../../../../services/axios";
 import Moment from 'moment';
 
+import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2"
+const MySwal = withReactContent(Swal)
+
 class SmsTemplatesRequested extends Component {
   state = {
     dtOptions: {
@@ -108,8 +112,22 @@ class SmsTemplatesRequested extends Component {
           return template.id !== id;
         });
         this.setState({ smsTemplateList })
+        this.showSweetAlert('success','Approved SMS Template Sucessfully');
       })
   }
+
+
+  showSweetAlert(icon,message) {
+    return MySwal.fire({
+        position: 'center',
+        icon: icon,
+        title: message,
+        text: "",
+        showConfirmButton: false,
+        timer: 2000
+    })
+}
+
   RejectTemplate = (id) => {
     axios.put("/sms-request/reject/" + id)
       .then(res => {

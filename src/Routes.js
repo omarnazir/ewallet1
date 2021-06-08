@@ -58,6 +58,8 @@ const Dashboard = lazy(() => import('./components/Pages/Admin/Dashboard/Dashboar
 const Login = lazy(() => import('./components/Auth/Login'));
 const Register = lazy(() => import('./components/Auth/Register'));
 
+const ViewContactList=lazy(()=>import("./components/Pages/Public/ContactList/ViewContactList"))
+
 const listofPages = [
     '/login',
     '/register',
@@ -152,6 +154,8 @@ const Routes = ({ location }) => {
                                 <Route path="/sms-requests" component={waitFor(UserRequestedSmsList)}/>
                                 <Route path="/add-sms-request" component={waitFor(AddUserRequestedSms)}/>
                                 <Route path="/invoice/:id" component={waitFor(PrePaidInvoice)}/>
+
+                                <Route path="/view-contactlist/:id" component={waitFor(ViewContactList)}/>
                                 
 
 

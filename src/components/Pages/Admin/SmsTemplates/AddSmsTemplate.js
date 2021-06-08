@@ -16,7 +16,9 @@ import {
 import Datetime from 'react-datetime';
 import $ from "jquery";
 import axios from "../../../../services/axios";
-
+import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2"
+const MySwal = withReactContent(Swal)
 
 class AddSmsTemplate extends Component {
 
@@ -39,9 +41,9 @@ class AddSmsTemplate extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
-    handleOnColumnChange= event =>{
-        const value=this.state.messageTemplate+event.target.value;
-        this.setState({messageTemplate:value})
+    handleOnColumnChange = event => {
+        const value = this.state.messageTemplate + event.target.value;
+        this.setState({ messageTemplate: value })
     }
 
 
@@ -49,7 +51,7 @@ class AddSmsTemplate extends Component {
         event.preventDefault();
 
         const smsTemplate = {
-            "messageTemplate": this.state.messageTemplate, 
+            "messageTemplate": this.state.messageTemplate,
             "recipientTab": this.state.messageTemplateType,
         }
         console.log(smsTemplate)
@@ -57,10 +59,22 @@ class AddSmsTemplate extends Component {
         axios.post("/sms-request/", smsTemplate).then(res => {
             console.log(res);
             console.log(res.data);
+            this.showSweetAlert();
             this.ViewAllSmsTemplates();
         })
     }
 
+
+    showSweetAlert() {
+        return MySwal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Added SMS Template Sucessfully',
+            text: "",
+            showConfirmButton: false,
+            timer: 2000
+        })
+    }
 
 
     handleChange = event => {
@@ -73,10 +87,10 @@ class AddSmsTemplate extends Component {
         return this.props.history.push('/admin/sms-templates')
     }
 
-    AddActionButtonStyle={
-        color:'white',
-        background:"#003366"
-      }
+    AddActionButtonStyle = {
+        color: 'white',
+        background: "#003366"
+    }
     render() {
         return (
             <ContentWrapper>
@@ -118,7 +132,7 @@ class AddSmsTemplate extends Component {
                                         <div className="form-group">
                                             <label>Message : </label>
                                             <textarea rows="5" className="form-control mb-2" type="text" name="messageTemplate" value={this.state.messageTemplate}
-                                                onChange={this.handleChange} required/>
+                                                onChange={this.handleChange} required />
                                             <span className="mt-2"><span className="text-danger">{this.state.messageTemplateLength}</span> <strong>characters</strong></span>
                                             <span className="mt-2 float-right">160 characters = 1 SMS</span>
                                         </div>

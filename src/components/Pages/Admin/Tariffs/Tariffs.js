@@ -79,10 +79,13 @@ class Tariffs extends Component {
       id:row.id,
       tariffName:row.tariffName
     }
+    this.setState({name:row.tariffName})
     this.setState({editedTariff:editedTariff})
     this.setState({AddTariffMode:false})
     this.toggleModal()
   }
+
+
 
   ViewTariffBand(row) {
     console.log(row.id)
@@ -121,17 +124,28 @@ class Tariffs extends Component {
       console.log(res);
       console.log(res.data);
       this.GetAllTariffs();
-      this.showSweetAlert();
+      this.showSweetAlert('Added Tariff Successfully');
     })
   }else{
-    console.log("Edit mode")
+    console.log(this.state.editedTariff)
+    const tariff={
+      id:this.state.editedTariff.id,
+      tariffName:this.state.name
+    }
+    axios.put("/tariff", tariff).then(res => {
+      console.log(res);
+      console.log(res.data);
+      this.GetAllTariffs();
+      this.setState({name:''})
+      this.showSweetAlert('Updated Tariff Successfully');
+    })
   }
   }
 
-  showSweetAlert(){
+  showSweetAlert(message){
     return MySwal.fire({position: 'center',
     icon: 'success',
-    title: 'Added Tariff Successfully',
+    title: message,
     text:"",
     showConfirmButton: false,
     timer: 1500})
@@ -144,9 +158,9 @@ class Tariffs extends Component {
   }
   hideToggelModal=()=>{
     this.setState({
-      modal:false,
+      modal:!this.state.modal,
     })
-    this.setState(this.setState({AddTariffMode:true}))
+    // this.setState(this.setState({AddTariffMode:true}))
   }
 
   AddTariffMode=()=>{
@@ -182,6 +196,7 @@ class Tariffs extends Component {
                   <div className="form-group px-md-2 px-1">
                     <label>Tarriff Name :</label>
                     <input className="form-control" name="name" onChange={this.handleChange}
+                    value={this.state.name}
                      required ></input>
                   </div>
                
@@ -190,12 +205,16 @@ class Tariffs extends Component {
                 <button className="btn btn-sm  mr-3 px-4" style={this.AddActionButtonStyle}>
                   Save
                   </button>
-                <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger px-4">
+                {/* <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger px-4">
                   Cancel
-                  </button>
+                  </button> */}
               </ModalFooter>
               </form>
             </Modal>
+
+
+
+      
           </div>
         </div>
         <Container fluid>

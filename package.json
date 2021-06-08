@@ -26,6 +26,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "@ashvin27/react-datatable": "^1.5.3",
     "@fortawesome/fontawesome-free": "5.15.3",
     "@fullcalendar/bootstrap": "4.4.2",
     "@fullcalendar/core": "4.4.2",

@@ -24,11 +24,15 @@ class TarriffBand extends Component {
     bandAmount:0,
     smsQuantity: 0,
     expireDurationDays: 0,
-    vatAmount: 0
+    vatAmount: 0,
+    mode:"add"
   };
 
   componentDidMount() {
     const { state } = this.props.history.location;
+    if (state == undefined) {
+      return this.props.history.push('/admin/manage-tariff-bands')
+  }
     this.setState({ tariff: state })
     this.setState({ tariffId: state.id })
     this.setState({tariffName:state.tariffName})
@@ -46,9 +50,15 @@ class TarriffBand extends Component {
     })
   }
 
+  AddActionButtonStyle = {
+    color: 'white',
+    background: "#003366"
+  }
+
   handleSubmit = event => {
     event.preventDefault();
     this.toggleModal();
+   
 
     const tariffBands = {
         "tariffId": this.state.tariffId,
@@ -66,6 +76,28 @@ class TarriffBand extends Component {
     })
 }
 
+EditTariffBand(row){
+  console.log("Clicked here"+row)
+  
+  const tariffBands = {
+    "tariffId": row.tariffId,
+    "bandAmount": row.bandAmount,
+    "smsQuantity": row.smsQuantity,
+    "expireDurationDays": row.expireDurationDays,
+    "vatAmount": row.vatAmount
+  }
+  this.setState({tariffId:row.tariffId})
+  this.setState({bandAmount:row.bandAmount})
+  this.setState({smsQuantity:row.smsQuantity})
+  this.setState({expireDurationDays:row.expireDurationDays})
+  this.setState({vatAmount:row.vatAmount})
+  this.setState({mode:"edit"})
+  this.toggleModal();
+
+
+
+}
+
 handleChange = event => {
   this.setState({ [event.target.name]: event.target.value });
 }
@@ -77,7 +109,11 @@ handleChange = event => {
     return this.props.history.push('/admin/manage-tariff-bands')
   }
 
+  EditTestTariffBand(id) {
+   console.log(id)
+  }
 
+  
   DeleteTariffBand(id) {
     axios.delete("/tariff-bands/" + id)
       .then(res => {
@@ -115,8 +151,8 @@ handleChange = event => {
             <small>Showing all tarriff bands.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.ViewTarrifs} outline color="danger" className="btn-pill-right mr-2">View All Tarrifs</Button>
-            <Button onClick={this.toggleModal} outline color="danger" className="btn-pill-right">Add New Tariff Band</Button>
+            <Button onClick={this.ViewTarrifs} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Tarrifs</Button>
+            <Button onClick={this.toggleModal} style={this.AddActionButtonStyle}  className="btn-pill-right">Add New Tariff Band</Button>
 
             <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
               <ModalHeader toggle={this.toggleModal}>{this.state.AddTariffBandMode ? "Add Tariff Band" : "Edit Tariff Band"}</ModalHeader>
@@ -124,19 +160,22 @@ handleChange = event => {
                 <ModalBody>
                   <FormGroup>
                     <label>Amount :</label>
-                    <input className="form-control" name="bandAmount" onChange={this.handleChange} type="number" required></input>
+                    <input className="form-control" name="bandAmount" value={this.state.bandAmount} onChange={this.handleChange} type="number" required></input>
                   </FormGroup>
                   <FormGroup>
                     <label>Vat Amount :</label>
-                    <input className="form-control" name="vatAmount" onChange={this.handleChange} type="number" required></input>
+                    <input className="form-control" name="vatAmount" value={this.state.vatAmount} onChange={this.handleChange} type="number" required></input>
                   </FormGroup>
                   <FormGroup>
                     <label>Number of SMS :</label>
-                    <input className="form-control" name="smsQuantity" onChange={this.handleChange} type="number" required></input>
+                    <input className="form-control" name="smsQuantity" value={this.state.smsQuantity}  onChange={this.handleChange} type="number" required></input>
                   </FormGroup>
                   <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1">Expire Time (Days): </label>
-                    <select className="form-control" id="exampleFormControlSelect1" name="expireDurationDays" onChange={this.handleChange}>
+                    <select className="form-control" id="exampleFormControlSelect1" name="expireDurationDays"
+                     onChange={this.handleChange}
+                     value={this.state.expireDurationDays}
+                     >
                       <option value="0">Select number days</option>
                       <option value="30">30 Days</option>
                       <option value="60">60 Days</option>
@@ -151,9 +190,9 @@ handleChange = event => {
                   <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
                     Save
                     </button>
-                  <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger  px-5">
+                  {/* <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger  px-5">
                     Cancel
-                   </button>
+                   </button> */}
                 </ModalFooter>
               </form>
             </Modal>
@@ -185,7 +224,9 @@ handleChange = event => {
                       <td>{row.smsQuantity}</td>
                       <td>{row.expireDurationDays}</td>
                       <td>
-                        <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}>
+                        <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}
+                       onClick={() => this.EditTariffBand(row)}
+                        >
                           <i className="icon-pencil mr-2"></i>
                               Edit</span>
                         <span className="btn bg-danger-dark" onClick={() => this.DeleteTariffBand(row.id)}>
