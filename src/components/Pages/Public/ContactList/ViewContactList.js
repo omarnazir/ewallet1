@@ -142,8 +142,6 @@ config = {
                 config={this.config}
                 records={this.state.customersList}
                 columns={this.columns}/>
-
-
             </CardBody>
           </Card>
         </Container>

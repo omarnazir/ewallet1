@@ -177,8 +177,6 @@ class CustomerList extends Component {
                 config={this.config}
                 records={this.state.customersList}
                 columns={this.columns}
-                dynamic={true}
-               
                 
                 />
             </CardBody>

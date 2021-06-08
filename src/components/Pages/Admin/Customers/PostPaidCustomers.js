@@ -9,6 +9,7 @@ import Moment from "moment"
 import { AuthService } from '../../../../services';
 import {Redirect} from 'react-router-dom';
 import ReactDatatable from '@ashvin27/react-datatable';
+import NumberFormat from 'react-number-format'
 class PostPaidCustomers extends Component {
   state = {
    customersPostPaidList: []
@@ -106,7 +107,11 @@ class PostPaidCustomers extends Component {
         );
       }
        else{
-        return  (monthlyLimit);
+       
+        return  (
+         
+          <NumberFormat value={ record.monthlyLimit} displayType={'text'} thousandSeparator={true} prefix={''} />
+          );
       }
     }
 },
@@ -195,7 +200,7 @@ class PostPaidCustomers extends Component {
                 config={this.config}
                 records={this.state.customersPostPaidList}
                 columns={this.columns}
-                dynamic={true}
+                
                
                 
                 />
