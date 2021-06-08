@@ -17,7 +17,9 @@ import {
 import Datetime from 'react-datetime';
 import $ from "jquery";
 
-
+import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2"
+const MySwal = withReactContent(Swal)
 
 
 
@@ -36,6 +38,7 @@ class AddUserSenderId extends Component {
         axios.post("sender-ids",sender).then(res=>{
             console.log(res);
             console.log(res.data);
+            this.showSweetAlert()
             this.ViewAllSenderIds();
           })
       }
@@ -52,6 +55,18 @@ class AddUserSenderId extends Component {
         color:'white',
         background:"#003366"
       }
+
+
+  showSweetAlert() {
+    return MySwal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Added SenderId Sucessfully',
+        text: "",
+        showConfirmButton: false,
+        timer: 2000
+    })
+}
     
     render() {
         return (

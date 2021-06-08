@@ -16,6 +16,9 @@ import {
 import $ from "jquery";
 import Moment from 'moment';
 
+
+
+
 class UserSenderIds extends Component {
   state = {
     dtOptions: {
@@ -80,6 +83,8 @@ class UserSenderIds extends Component {
     color:'white',
     background:"#003366"
   }
+
+
   deleteSenderId = (id) => {
     axios.delete("/sender-ids/" + id)
       .then(res => {

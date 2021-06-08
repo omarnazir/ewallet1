@@ -53,9 +53,8 @@ class UserContactList extends Component {
       })
   }
 
-  ViewContactListDetails(id) {
-    console.log(id)
-    return this.props.history.push('/view-contactlist/' + id, id)
+  ViewContactListDetails(row) {
+    return this.props.history.push('/view-contactlist/' + row.id, row)
   }
 
   render() {
@@ -105,7 +104,7 @@ class UserContactList extends Component {
                         <td><span className="badge badge-success">Disabled</span></td>
                          }
                         <td>
-                        <span className="btn badge-success mr-1" onClick={()=>this.ViewContactListDetails(row.id)}>View</span>
+                        <span className="btn badge-success mr-1" onClick={()=>this.ViewContactListDetails(row)}>View</span>
                         <span className="btn badge-danger" onClick={() => this.DeleteUserContactList(row.id)}>Delete</span>
                          {/* N/A */}
                         </td>

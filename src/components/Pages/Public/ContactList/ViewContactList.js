@@ -14,7 +14,8 @@ class ViewContactList extends Component {
     customersList: [],
     field: null,
     order: null,
-    index:0
+    index:0,
+    id:0
   };
 
   componentDidMount() {
@@ -25,10 +26,15 @@ class ViewContactList extends Component {
     }
 
     const { state } = this.props.history.location;
-    // console.log(state.id)
+    
+   
     if (state == undefined) {
         return this.props.history.push('/admin/customers-list/')
     }
+    this.setState({id:state.id})
+    console.log(state)
+    console.log("from id" +state.id)
+    console.log(this.state.id)
     
   
     axios.get("/contact-lists/numbers/"+state.id)
@@ -41,9 +47,18 @@ class ViewContactList extends Component {
 
 
 
+  AddActionButtonStyle = {
+    color: 'white',
+    background: "#003366"
+}
+
   formatDate = (date) => {
     return Moment(date).format('DD-MM-YYYY')
   }
+
+  ViewAddContactList = () => {
+    return this.props.history.push("/admin/customers-list/");
+  };
 
   columns = [
     {
