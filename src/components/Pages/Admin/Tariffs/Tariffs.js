@@ -245,9 +245,10 @@ class Tariffs extends Component {
                         <span className="btn badge-success mr-2" style={this.TableActionButtonStyle} onClick={() => this.EditTariff(row)} >
                           <i className="icon-pencil mr-2"></i>
                               Edit</span>
+                              { row.isDefault!=1 &&
                         <span className="btn bg-danger-dark" onClick={() => this.DeleteTariff(row.id)}>
                           <i className="icon-trash mr-2"></i>
-                              Delete</span>
+                              Delete</span> }
                         <button className="btn badge-success ml-2" onClick={() => this.ViewTariffBand(row)} style={this.TableActionButtonStyle}>
                           <i className="icon-info mr-2"></i>
                               View Bandwidth</button>

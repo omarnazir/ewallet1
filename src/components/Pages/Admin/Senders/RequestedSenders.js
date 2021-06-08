@@ -15,34 +15,13 @@ import {
 import $ from "jquery";
 import Moment from 'moment';
 
+import ReactDatatable from '@ashvin27/react-datatable';
+import NumberFormat from 'react-number-format';
+
+
 class SendersRequested extends Component {
     state = {
-        dtOptions: {
-            paging: true, // Table pagination
-            ordering: true, // Column ordering
-            info: true, // Bottom left status text
-            responsive: true,
-            oLanguage: {
-                sSearch: '<em class="fa fa-search"></em>',
-                sLengthMenu: "_MENU_ records per page",
-                info: "Showing page _PAGE_ of _PAGES_",
-                zeroRecords: "Nothing found - sorry",
-                infoEmpty: "No records available",
-                infoFiltered: "(filtered from _MAX_ total records)",
-                oPaginate: {
-                    sNext: '<em class="fa fa-caret-right"></em>',
-                    sPrevious: '<em class="fa fa-caret-left"></em>',
-                },
-            },
-            // Datatable Buttons setup
-            dom: "Bfrtip",
-            buttons: [
-                { extend: "csv", className: "btn-info" },
-                { extend: "excel", className: "btn-info", title: "XLS-File" },
-                { extend: "pdf", className: "btn-info", title: $("title").text() },
-                { extend: "print", className: "btn-info" },
-            ],
-        },
+       
         senderIdList: []
     };
 
@@ -55,15 +34,7 @@ class SendersRequested extends Component {
         })
     }
 
-    // Access to internal datatable instance for customizations
-    dtInstance = (dtInstance) => {
-        const inputSearchClass = "datatable_input_col_search";
-        const columnInputs = $("tfoot ." + inputSearchClass);
-        // On input keyup trigger filtering
-        columnInputs.keyup(function () {
-            dtInstance.fnFilter(this.value, columnInputs.index(this));
-        });
-    };
+   
 
     ViewSenders = () => {
         return this.props.history.push('/admin/senders')
@@ -108,6 +79,71 @@ class SendersRequested extends Component {
         )
     }
 
+    columns = [
+        {
+          key: "id",
+          text: "ID",
+          sortable: true
+        },
+        {
+          key: "customerEntity",
+          text: "Customer/Organization",
+          sortable: true,
+          cell: (record, index) => {
+            return (record.customerEntity.fullname)
+          }
+        },
+        {
+          key: "senderId",
+          text: "SENDER",
+          sortable: true
+        },
+        {
+          key: "dateCreated",
+          text: "DATE REGISTERED",
+          cell: (record, index) => {
+            return (this.formatDate(record.startDate))
+          }
+        },
+        {
+          key: "is_approved",
+          text: "STATUS",
+          sortable: true,
+          cell: (record, index) => {
+            if (record.is_approved == 1) {
+              return (
+                <span className="badge badge-success">Approved</span>
+              );
+            } else if (record.is_approved == 0) {
+              return (<span className="badge badge-warning">Pending</span>)
+            } else if (record.is_approved == 2) {
+              return (<span className="badge badge-danger">Rejected</span>)
+            }
+            else {
+              return (
+                <span className="badge badge-danger">Disabled</span>
+              );
+            }
+          }
+        },
+        {
+          key: "id",
+          text: "ACTION",
+          cell: (record, index) => {
+            if (record.is_approved == 1) {
+              return (
+                <span className="btn badge-danger" onClick={() => {
+                  this.DisableSenderId(record);
+                }}>Disable</span>
+              );
+            }
+          }
+        },
+    
+    
+    
+      ]
+    
     render() {
         let index=0;
         return (
@@ -169,7 +205,7 @@ class SendersRequested extends Component {
                             </div>
                         </CardHeader>
                         <CardBody>
-                            {/* <Datatable options={this.state.dtOptions}> */}
+                           
                             <table className="table table-striped my-4 w-100">
                                 <thead>
                                     <tr>
@@ -188,7 +224,7 @@ class SendersRequested extends Component {
                                     {this.state.senderIdList.map(row => (
                                         <tr key={row.id}>
                                             <td>{index+=1}</td>
-                                            <td>{row.senderId}</td>
+                                            <td>{row.customerEntity.fullname}</td>
                                             <td>{row.senderId}</td>
                                             <td>{this.formatDate(row.dateCreated)}</td>
                                             <td>
@@ -212,7 +248,7 @@ class SendersRequested extends Component {
                                     ))}
                                 </tbody>
                             </table>
-                            {/* </Datatable> */}
+                           
                         </CardBody>
                     </Card>
                 </Container>

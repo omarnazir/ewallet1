@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API_URL} from "./constants"
+import { API_URL } from "./constants"
 
 class AuthService {
     login(data) {
@@ -8,47 +8,68 @@ class AuthService {
             password: data.password
         }
         return axios.post(API_URL + "/auth/login", logindata).then(res => {
-            if(res.data){
+            if (res.data) {
                 localStorage.clear();
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('user', res.data.user)
                 localStorage.setItem('username', JSON.stringify(res.data.user.username));
                 localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
+                localStorage.setItem('user_plain_roles',res.data.user.roles)
             }
             return res.data;
         })
     }
 
-    register(data){
-        return axios.post(API_URL+"/auth/register",data,{ headers: { "Content-Type": "multipart/form-data" } })
+    register(data) {
+        return axios.post(API_URL + "/auth/register", data, { headers: { "Content-Type": "multipart/form-data" } })
     }
 
-    logout(){
+    logout() {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         localStorage.removeItem("username");
         localStorage.removeItem("user_roles");
+        localStorage.removeItem("user_plain_roles");
         localStorage.clear();
     }
 
-    isAuthenticated(){
-        let isloggedIn=false;
+    isAuthenticated() {
+        let isloggedIn = false;
         const token = localStorage.getItem('token');
-        const roles=localStorage.getItem("user_roles")
-        if (token == null || token.length === 0) {
-            isloggedIn=false;
-        }else{
-            isloggedIn=true
+        const roles = localStorage.getItem("user_roles")
+        const plainRoles = localStorage.getItem("user_plain_roles")
+        if (token == null || token.length === 0 || roles ==null || plainRoles==null) {
+            isloggedIn = false;
+        } else {
+            isloggedIn = true
         }
         return isloggedIn;
     }
 
-    getUsername(){
-       if(this.isAuthenticated()){
-           return localStorage.getItem("username")
-       }else {
-           return "";
-       }
+    getRedirectPath() {
+        if (this.isAuthenticated()) {
+            // const roles = res.user.roles;
+            const roles = localStorage.getItem("user_plain_roles")
+            const found = roles.findIndex((row) => row.name == "/admin/dashboard")
+            if (found === -1) {
+                return "/dashboard";
+
+            } else {
+                return "/admin/dashboard";
+
+            }
+        }
+        else {
+            return "/login";
+        }
+    }
+
+    getUsername() {
+        if (this.isAuthenticated()) {
+            return localStorage.getItem("username")
+        } else {
+            return "";
+        }
     }
 
 
@@ -100,7 +121,7 @@ class AuthService {
         // "sms_gateway_username": "",
         // "sms_gateway_password": ""
     } **/
-  
-  
+
+
 }
 export default new AuthService;

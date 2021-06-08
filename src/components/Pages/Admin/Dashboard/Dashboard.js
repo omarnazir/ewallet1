@@ -108,16 +108,11 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
+        
         const isAuthenticated = AuthService.isAuthenticated();
         if (!isAuthenticated) {
           this.setState({ redirect: "/login" })
         }
-
-        const token = localStorage.getItem('token');
-        if (token == null || token.length === 0) {
-            this.setState({redirect: '/login'});
-        }
-
 
         axios.get("/dashboard/admin")
         .then(res => {
@@ -125,7 +120,6 @@ class Dashboard extends Component {
             this.setState({ dashboardData: response })
             console.log(response);
         })
-
 
         // Easy pie
         let pieOptions1 = {

@@ -18,10 +18,12 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        const token = localStorage.getItem('token');
-        if (token != null && token.length > 0) {
-            this.setState({redirect: '/dashboard'});
+        
+        if(AuthService.isAuthenticated()){
+            const redirect=AuthService.getRedirectPath();
+            this.setState({redirect})
         }
+       
     }
 
     /**
@@ -74,15 +76,16 @@ class Login extends Component {
                 (res)=>{
                     console.log(res)
                     const roles=res.user.roles;
-
-                    console.dir(roles);
-                    const found=roles.findIndex((row)=>row.name=="/admin/dashboard")
-                    console.log(found);
+                    const found=roles.findIndex((row)=>row.name=="/admin/dashboard");
                     if(found===-1){
                         this.setState({redirect: '/dashboard'});
                     }else{
                         this.setState({redirect: '/admin/dashboard'});
                     }
+
+                    // const redirect=AuthService.getRedirectPath();
+                    // this.setState({redirect});
+
                     // window.location.reload();
                 },(err)=>{
                 // console.log(err.response.data);

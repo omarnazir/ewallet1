@@ -56,21 +56,63 @@ class UsersManagement extends Component {
       this.setState({ redirect: "/login" })
     }
 
-    axios.get("/users")
-      .then(res => {
-        const response = res.data;
-        this.setState({ usersList: response })
-        console.log(response);
-      })
+  this.GetAllUser();
   }
 
   AddNewUser = () => {
     return this.props.history.push('/admin/add-new-user')
 }
 
+
+GetAllUser=()=>{
+  axios.get("/users")
+  .then(res => {
+    const response = res.data;
+    this.setState({ usersList: response })
+    console.log(response);
+  })
+}
+
+ViewTariffBand(row) {
+  console.log(row.id)
+  return this.props.history.push('/admin/manage-tariff-bands/' + row.id, row)
+}
+
 AddActionButtonStyle={
   color:'white',
   background:"#003366"
+}
+DisableUser=(row)=>{
+  console.log(row.id)
+
+  axios.post("/users/disable/"+row.id)
+  .then(res => {
+    const response = res.data;
+  
+    console.log(response);
+  })
+    this.GetAllUser();
+
+}
+
+
+EditUser=(row)=>{
+  console.log(row.id)
+}
+
+EnableUser=(row)=>{
+  console.log(row.id)
+  axios.post("/users/enable/"+row.id)
+  .then(res => {
+    const response = res.data;
+    console.log(response);
+  })
+  this.GetAllUser();
+}
+
+
+sayHello() {
+  alert('Hello!');
 }
   render() {
     let index=0;
@@ -115,24 +157,24 @@ AddActionButtonStyle={
                         <td>{row.username}</td>
 
                         <td>
-                          {row.status == 1 &&
+                          {row.isActive == 1 &&
                             <span className="badge badge-success">Active</span>
                           }
                           {
-                            row.status != 1 &&
+                            row.isActive != 1 &&
                             <span className="badge badge-danger">Disabled</span>
                           }
                         </td>
                         <td>{row.lastLogin}</td>
-                        <td> <span className="btn badge-success"> <i className="icon-pencil mr-2"></i>Edit</span> <br />
+                        <td> <span className="btn badge-success"onClick={()=>this.EditUser(row)}> <i className="icon-pencil mr-2"  ></i>Edit</span> <br />
                           {/* <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/> */}
                           {/* <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span> */}
-                          {row.status == 1 &&
-                            <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span>
+                          {row.isActive == 1 &&
+                            <span className="btn badge-danger mt-1" onClick={()=>this.DisableUser(row)}> <i className="icon-info mr-2"></i>Disable</span>
                           }
                           {
-                            row.status != 1 &&
-                            <span className="btn badge-success mt-1"> <i className="icon-tick mr-2"></i>Enable</span>
+                            row.isActive != 1 &&
+                            <span className="btn badge-success mt-1" onClick={()=>this.EnableUser(row)}> <i className="icon-tick mr-2"></i>Enable</span>
                           }
                         </td>
                       </tr>

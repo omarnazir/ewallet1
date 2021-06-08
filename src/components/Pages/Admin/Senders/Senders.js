@@ -18,19 +18,15 @@ import $ from "jquery";
 import Moment from 'moment';
 import { SenderIdService } from "../../../../services"
 
+import ReactDatatable from '@ashvin27/react-datatable';
+import NumberFormat from 'react-number-format';
 
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.css';
-import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import { AuthService } from '../../../../services';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 class Senders extends Component {
   state = {
-    senderIdList: [],
-    field: null,
-    order: null
+    senderIdList: []
   };
 
 
@@ -40,77 +36,83 @@ class Senders extends Component {
       this.setState({ redirect: "/login" })
     }
     this.GetAllSenderIds();
-   
+
   }
 
-  GetAllSenderIds=()=>{
+  GetAllSenderIds = () => {
     SenderIdService.GetAllSenderIds().then(res => {
       const response = res.data;
       this.setState({ senderIdList: response })
     })
   }
 
-  columns = [{
-    dataField: 'id',
-    text: 'ID',
-    sort: true,
-    onSort: this.handleSort
-  }, {
-    dataField: 'senderId',
-    text: 'Customer/Organization',
-    sort: true
-  }, {
-    dataField: 'senderId',
-    text: 'SENDER',
-    sort: true
-  },
-  {
-    dataField: 'dateCreated',
-    text: 'DATE REGISTERED',
-    isDummyField: true,
-    sort: true,
-    formatter: (cellContent, row) => {
-      return (this.formatDate(row.dateCreated))
-    }
-  },
-  {
-    dataField: 'is_approved',
-    text: 'STATUS',
-    isDummyField: true,
-    sort: true,
-    formatter: (cellContent, row) => {
-      if (row.is_approved == 1) {
-        return (
-          <span className="badge badge-success">Approved</span>
-        );
-      } else if (row.is_approved == 0) {
-        return (<span className="badge badge-warning">Pending</span>)
-      } else if (row.is_approved == 2) {
-        return (<span className="badge badge-danger">Rejected</span>)
+
+  columns = [
+    {
+      key: "id",
+      text: "ID",
+      sortable: true
+    },
+    {
+      key: "customerEntity",
+      text: "Customer/Organization",
+      sortable: true,
+      cell: (record, index) => {
+        return (record.customerEntity.fullname)
       }
-      else {
-        return (
-          <span className="badge badge-danger">Disabled</span>
-        );
+    },
+    {
+      key: "senderId",
+      text: "SENDER",
+      sortable: true
+    },
+    {
+      key: "dateCreated",
+      text: "DATE REGISTERED",
+      cell: (record, index) => {
+        return (this.formatDate(record.startDate))
       }
-    }
-  },
-  {
-    dataField: 'is_approved',
-    text: 'ACTION',
-    isDummyField: true,
-    sort: true,
-    formatter: (cellContent, row) => {
-      if (row.is_approved == 1) {
-        return (
-          <span className="btn badge-danger" onClick={() => {
-            this.DisableSenderId(row);
-          }}>Disable</span>
-        );
+    },
+    {
+      key: "is_approved",
+      text: "STATUS",
+      sortable: true,
+      cell: (record, index) => {
+        if (record.is_approved == 1) {
+          return (
+            <span className="badge badge-success">Approved</span>
+          );
+        } else if (record.is_approved == 0) {
+          return (<span className="badge badge-warning">Pending</span>)
+        } else if (record.is_approved == 2) {
+          return (<span className="badge badge-danger">Rejected</span>)
+        }
+        else {
+          return (
+            <span className="badge badge-danger">Disabled</span>
+          );
+        }
       }
-    }
-  }
-  ];
+    },
+    {
+      key: "id",
+      text: "ACTION",
+      cell: (record, index) => {
+        if (record.is_approved == 1) {
+          return (
+            <span className="btn badge-danger" onClick={() => {
+              this.DisableSenderId(record);
+            }}>Disable</span>
+          );
+        }
+      }
+    },
+
+
+
+  ]
+
+
 
   ViewRequestedSenders = () => {
     return this.props.history.push('/admin/senders-requested')
@@ -125,13 +127,7 @@ class Senders extends Component {
     color: 'white',
     background: "#003366"
   }
-  handleSort = (field, order) => {
-    this.setState({
-      field,
-      order
-    });
-  }
-
+  
   DisableSenderId = (row) => {
     SenderIdService.DisableSenderId(row.id).then(res => {
       const response = res.data;
@@ -139,10 +135,25 @@ class Senders extends Component {
     })
   }
 
+  config = {
+    page_size: 10,
+    length_menu: [10, 25, 50],
+    show_filter: true,
+    show_pagination: true,
+    pagination:'advance',
+    filename: "Contact List",
+    button: {
+     
+    },
+    language: {
+      loading_text: "Please be patient while data loads..."
+  }
+  }
+
   render() {
     if (this.state.redirect) {
-      return <Redirect to={this.state.redirect}/>
-  }
+      return <Redirect to={this.state.redirect} />
+    }
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -202,15 +213,12 @@ class Senders extends Component {
               </div>
             </CardHeader>
             <CardBody>
-              <BootstrapTable bootstrap4 striped keyField='id'
-                data={this.state.senderIdList} columns={this.columns}
-                pagination={paginationFactory()}
-                sort={{
-                  dataField: this.state.field,
-                  order: this.state.order
-                }}
-                noDataIndication="No senders added"
-              />
+            
+              <ReactDatatable
+                config={this.config}
+                records={this.state.senderIdList}
+                columns={this.columns}
+                />
             </CardBody>
           </Card>
         </Container>

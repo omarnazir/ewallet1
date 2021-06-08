@@ -68,24 +68,21 @@ class TarriffBand extends Component {
         "vatAmount": this.state.vatAmount
 
     }
+    if(this.state.mode="add"){
 
     axios.post("/tariff-bands", tariffBands).then(res => {
         console.log(res.data);
         this.getTariffBands(this.state.tariffId)
         
-    })
+    })}
+    else{
+
+    }
 }
 
 EditTariffBand(row){
   console.log("Clicked here"+row)
-  
-  const tariffBands = {
-    "tariffId": row.tariffId,
-    "bandAmount": row.bandAmount,
-    "smsQuantity": row.smsQuantity,
-    "expireDurationDays": row.expireDurationDays,
-    "vatAmount": row.vatAmount
-  }
+
   this.setState({tariffId:row.tariffId})
   this.setState({bandAmount:row.bandAmount})
   this.setState({smsQuantity:row.smsQuantity})
@@ -229,6 +226,7 @@ handleChange = event => {
                         >
                           <i className="icon-pencil mr-2"></i>
                               Edit</span>
+                           
                         <span className="btn bg-danger-dark" onClick={() => this.DeleteTariffBand(row.id)}>
                           <i className="icon-trash mr-2"></i>
                               Delete</span>

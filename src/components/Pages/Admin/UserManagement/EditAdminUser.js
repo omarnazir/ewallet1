@@ -18,7 +18,7 @@ import $ from "jquery";
 import FormValidator from '../../../Common/FormValidator';
 import axios from '../../../../services/axios'
 
-class EditNormalUserPage extends Component {
+class EditAdminUser extends Component {
 
 
     state = {
@@ -93,7 +93,7 @@ class EditNormalUserPage extends Component {
             console.log(data)
            
 
-            axios.post("users",data).then(res=>{
+            axios.post("users/admin",data).then(res=>{
                 console.log(res);
                 console.log(res.data);
                 this.ViewUserPage();
@@ -110,7 +110,7 @@ class EditNormalUserPage extends Component {
             this.state[formName].errors[inputName][method]
     }
 
-    ViewAllUsers = () => {
+    ViewAllAdminUsers = () => {
         return this.props.history.push('/manage-users')
     }
 
@@ -128,11 +128,11 @@ class EditNormalUserPage extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Create User
+                        Create Admin User
                      <small>Adding a new user.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.ViewAllUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
+                        <Button onClick={this.ViewAllAdminUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
                     </div>
                 </div>
                 <Container fluid>
@@ -238,22 +238,121 @@ class EditNormalUserPage extends Component {
 
 
                                         </div>
-                                        <div className="row mt-2">
-
+                                     
+{/* 
+                                        <div className="row">
                                             <div className="col-md-12">
-                                                <div className="form-group">
-                                                    <label className="col-form-label">Monthly SMS Limit * :</label>
-                                                    <Input type="number"
-                                                        name="monthlysmslimit"
-                                                        invalid={this.hasError('formRegister', 'monthlysmslimit', 'required')}
-                                                        onChange={this.validateOnChange}
-                                                        data-validate='["required"]'
-                                                        value={this.state.formRegister.monthlysmslimit} />
-                                                    <span className="invalid-feedback">Field is required</span>
+
+                                                <h4 className="text-center"><strong>User Roles</strong></h4>
+                                                <div className="form-group px-md-4 px-1 mt-1">
+
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="vwconlist" value="vwconlist" />
+                                                            <label className="form-check-label" for="vwconlist">View Contact List</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="vwdashboard" value="vwdashboard" />
+                                                            <label className="form-check-label" for="vwdashboard">View Dashboard</label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="vwreports" value="vwreports" />
+                                                            <label className="form-check-label" for="vwreports">View Reports</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="vwsenderid" value="vwsenderid" />
+                                                            <label className="form-check-label" for="vwsenderid">View Sender IDs</label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="vwsyslogs" value="vwsyslogs" />
+                                                            <label className="form-check-label" for="vwsyslogs">View System Logs</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="vwusers" value="vwusers" />
+                                                            <label className="form-check-label" for="vwusers">View Users</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="adduser" value="adduser" />
+                                                            <label className="form-check-label" for="adduser">Add User</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="composesms" value="composesms" />
+                                                            <label className="form-check-label" for="composesms">Compose SMS</label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="compsmsnum" value="compsmsnum" />
+                                                            <label className="form-check-label" for="compsmsnum">Compose SMS using Enter number</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="compsmspb" value="compsmspb" />
+                                                            <label className="form-check-label" for="compsmspb">Compose SMS using Phonebook</label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="compsmsupnum" value="compsmsupnum" />
+                                                            <label className="form-check-label" for="compsmsupnum">Compose SMS using Upload number</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="crtcontactlist" value="crtcontactlist" />
+                                                            <label className="form-check-label" for="crtcontactlist">Create Contact List</label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="crtsenderid" value="crtsenderid" />
+                                                            <label className="form-check-label" for="crtsenderid">Create Sender Id</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="dltconlist" value="dltconlist" />
+                                                            <label className="form-check-label" for="dltconlist">Delete Contact List</label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="dltuser" value="dltuser" />
+                                                            <label className="form-check-label" for="dltuser">Delete User</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="edtconlist" value="edtconlist" />
+                                                            <label className="form-check-label" for="edtconlist">Edit Contact List</label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="edtuser" value="edtuser" />
+                                                            <label className="form-check-label" for="edtuser">Edit User</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="reqsms" value="reqsms" />
+                                                            <label className="form-check-label" for="reqsms">Request SMS</label>
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="snddynamsg" value="snddynamsg" />
+                                                            <label className="form-check-label" for="snddynamsg">Send dynamic messages</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline col-sm-5">
+                                                            <input className="form-check-input" type="checkbox" id="sndschmsg" value="sndschmsg" />
+                                                            <label className="form-check-label" for="sndschmsg">Send Schedule SMS</label>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
 
-                                        </div>
+
+                                        </div> */}
 
 
                                     </CardBody>
@@ -287,4 +386,4 @@ class EditNormalUserPage extends Component {
     }
 }
 
-export default EditNormalUserPage;
+export default EditAdminUser;

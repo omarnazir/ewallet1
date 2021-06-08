@@ -33,7 +33,7 @@ class SendSmsCompose extends Component {
         smsTemplateList: [],
         sendersList: [],
         contactLists: [],
-        sendScheduled: false,
+        sendScheduled: 0,
         selectedMessageTemplate: '',
         selectedMessageTemplateId: 0,
         selectedSenderId: 0,
@@ -109,6 +109,8 @@ class SendSmsCompose extends Component {
         if(this.state.recipientType=="file" || this.state.file!=undefined){
             data.append("file", this.state.file)
         }
+        data.append("isScheduled",this.state.sendScheduled)
+        // data.append("scheduledTime",this.state)
   
             axios.post("/sms/send-sms", data, { headers: { "Content-Type": "multipart/form-data" } })
         .then(res => {

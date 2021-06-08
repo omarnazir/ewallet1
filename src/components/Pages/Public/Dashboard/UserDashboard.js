@@ -109,16 +109,20 @@ class UserDashboard extends Component {
     }
 
     componentDidMount() {
-        const token = localStorage.getItem('token');
-        if (token == null || token.length === 0) {
-            this.setState({ redirect: '/login' });
+        // window.location.reload(false);
+
+        const isAuthenticated = AuthService.isAuthenticated();
+        if (!isAuthenticated) {
+          this.setState({ redirect: "/login" })
         }
+
+        
 
         axios.get("/dashboard")
             .then(res => {
                 const response = res.data;
                 this.setState({ dashboardData: response })
-                this.customerSmsPurchase()
+                this.customerSmsPurchase();
                 console.log(response);
             })
 
