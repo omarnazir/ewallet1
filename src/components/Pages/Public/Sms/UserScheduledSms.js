@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import Datatable from "../../../Common/Datatable";
+
+import axios from "../../../../services/axios"
 import {
   Container,
   Card,
@@ -14,7 +16,7 @@ import {
 } from "reactstrap";
 import Datetime from "react-datetime";
 import $ from "jquery";
-
+import Moment from "moment"
 
 
 class UserScheduledSms extends Component {
@@ -46,7 +48,8 @@ class UserScheduledSms extends Component {
         { extend: "pdf", className: "btn-info", title: $("title").text() },
         { extend: "print", className: "btn-info" },
       ],
-    }
+    },
+    smsSchedules:[]
   };
 
   // Access to internal datatable instance for customizations
@@ -63,6 +66,21 @@ class UserScheduledSms extends Component {
   addSenderId = () => {
     return this.props.history.push("/user/add-senderId");
   };
+
+  formatDate=(date)=>{
+    return Moment(date).format('lll')
+  }
+
+
+  componentDidMount() {
+    axios.get("/sms-schedules/customer")
+      .then(res => {
+        const response = res.data;
+        this.setState({ smsSchedules: response })
+        console.log(response);
+      })
+  }
+
   render() {
     return (
       <ContentWrapper>
@@ -75,7 +93,7 @@ class UserScheduledSms extends Component {
         <Container fluid>
           <Card>
             <CardBody>
-              <Datatable options={this.state.dtOptions}>
+              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
@@ -91,7 +109,7 @@ class UserScheduledSms extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="gradeA">
+                    {/* <tr className="gradeA">
                       <td>1</td>
                       <td>VODACOM</td>
                       <td>255656121885</td>
@@ -101,11 +119,50 @@ class UserScheduledSms extends Component {
                         <span className="badge badge-warning">Pending</span>
                       </td>
                       <td></td>
-                    </tr>
+                    </tr> */}
                     
+
+                    {this.state.smsSchedules.map(row => (
+                      <tr key={row.id} className="gradeA">
+                        <td>{row.id}</td>
+                        <td>{row.SENDER_ID}</td>
+                        {/* total mobile numbers */}
+                        <td></td> 
+                        {/* template */}
+                        <td>{row.SMS_REQUEST_FK}</td> 
+                        <td>{this.formatDate(row.RUN_DATE)}</td>
+                        <td>
+                          {row.status == "0" &&
+                            <span className="badge badge-warning">Pending</span>
+                          }
+                          {
+                            row.status == "1" &&
+                            <span className="badge badge-success">Sent</span>
+                          }
+                          {
+                            row.status == "2" &&
+                            <span className="badge badge-danger">Cancelled</span>
+                          }
+                        
+                        </td>
+                        
+                        { row.status == "0" &&
+                          <td>
+                             <span className="btn bg-danger-dark" onClick={() => this.DeleteSmsRequest(row.id)}>
+                              Cancel</span>
+                          </td>
+                        }
+                        {
+                          row.status != "0" &&
+                          <td>
+                            N/A
+                          </td>
+                        }
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
-              </Datatable>
+              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

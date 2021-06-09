@@ -29,7 +29,7 @@ class ViewContactList extends Component {
     
    
     if (state == undefined) {
-        return this.props.history.push('/admin/customers-list/')
+        return this.props.history.push('/contact-lists')
     }
     this.setState({id:state.id})
     console.log(state)
@@ -57,7 +57,7 @@ class ViewContactList extends Component {
   }
 
   ViewAddContactList = () => {
-    return this.props.history.push("/admin/customers-list/");
+    return this.props.history.push("/contact-lists");
   };
 
   columns = [

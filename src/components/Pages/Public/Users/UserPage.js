@@ -69,12 +69,39 @@ class UserPage extends Component {
       this.setState({ redirect: "/login" })
     }
 
+  this.GetAllUser();
+  }
+
+  GetAllUser(){
     axios.get("/users/list")
-      .then(res => {
-        const response = res.data;
-        this.setState({ usersList: response })
-        console.log(response);
-      })
+    .then(res => {
+      const response = res.data;
+      this.setState({ usersList: response })
+      console.log(response);
+    })
+  }
+
+  DisableUser=(row)=>{
+    console.log(row.id)
+  
+    axios.post("/users/disable/"+row.id)
+    .then(res => {
+      const response = res.data;
+    
+      console.log(response);
+    })
+      this.GetAllUser();
+  
+  }
+
+  EnableUser=(row)=>{
+    console.log(row.id)
+    axios.post("/users/enable/"+row.id)
+    .then(res => {
+      const response = res.data;
+      console.log(response);
+    })
+    this.GetAllUser();
   }
 
   ViewAddNormalUser = () => {
@@ -125,24 +152,26 @@ class UserPage extends Component {
                       <td>{row.username}</td>
                       <td>{row.userMonthlySmsLimit}</td>
                       <td>
-                        {row.isActive == 1 &&
-
-                          <span className="badge badge-success">Active</span>
-                        }
-                        {
-                          row.isActive !=1 &&
-                             <span className="badge badge-danger">Disabled</span>
-                        }
-                       
-                      {/* <span className="badge badge-danger">Rejected</span> */}
-
-                      </td>
+                          {row.isActive == 1 &&
+                            <span className="badge badge-success">Active</span>
+                          }
+                          {
+                            row.isActive != 1 &&
+                            <span className="badge badge-danger">Disabled</span>
+                          }
+                        </td>
                       <td>N/A</td>
-                      <td>
-                        <span className="btn " style={this.AddActionButtonStyle}>Edit</span>
-                        <br />
-                        <span className="btn badge-danger mt-1">Disable</span>
-                      </td>
+                      <td> <span className="btn badge-success"onClick={()=>this.EditUser(row)}> <i className="icon-pencil mr-2"  ></i>Edit</span> <br />
+                          {/* <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/> */}
+                          {/* <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span> */}
+                          {row.isActive == 1 &&
+                            <span className="btn badge-danger mt-1" onClick={()=>this.DisableUser(row)}>Disable</span>
+                          }
+                          {
+                            row.isActive != 1 &&
+                            <span className="btn badge-success mt-1" onClick={()=>this.EnableUser(row)}>Enable</span>
+                          }
+                        </td>
                     </tr>
                   )}
                 </tbody>

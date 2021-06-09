@@ -17,6 +17,7 @@ import $ from "jquery";
 import {AuthService} from "../../../../services"
 import {Redirect} from 'react-router-dom';
 import axios from '../../../../services/axios'
+import Moment from "moment";
 
 class UserOutbox extends Component {
   state = {
@@ -40,7 +41,7 @@ class UserOutbox extends Component {
     this.setState({redirect: "/login"})
     }
 
-    axios.get("/sms")
+    axios.get("/sms/customer")
     .then(res => {
       const response = res.data;
       this.setState({ smsList: response })
@@ -52,6 +53,9 @@ class UserOutbox extends Component {
     background: "#003366"
 }
 
+formatDate=(date)=>{
+  return Moment(date).format('lll')
+}
 
   //GO TO COMPOSE SMS
   ViewComposeSms = () => {
@@ -97,20 +101,20 @@ class UserOutbox extends Component {
                   {this.state.smsList.map(row => (
                     <tr className="gradeA">
                       <td>{row.id}</td>
-                      <td>{row.senderId}</td>
-                      <td>{row.msisdn}</td>
-                      <td>{row.network}</td>
-                      <td>{row.message}</td>
-                      <td>{1}</td>
-                      <td>{row.createdAt}</td>
-                      {row.status=="Delivered" && 
+                      <td>{row.SENDER_ID}</td>
+                      <td>{row.MSISDN}</td>
+                      <td>{row.NETWORK}</td>
+                      <td>{row.MESSAGE}</td>
+                      <td>{row.SMS_COUNT}</td>
+                      <td>{this.formatDate(row.CREATED_AT)}</td>
+                      {row.STATUS=="Delivered" && 
                       <td>
-                        <span className="badge badge-success">Delivered</span>
+                        <span className="badge badge-success">{row.STATUS}</span>
                       </td>
                        }
                         {row.status!="Delivered" && 
                       <td>
-                        <span className="badge badge-danger">{row.status}</span>
+                        <span className="badge badge-danger">{row.STATUS}</span>
                       </td>
                        }
                     </tr>

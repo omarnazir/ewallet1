@@ -93,7 +93,7 @@ class AddNormalUser extends Component {
             console.log(data)
            
 
-            axios.post("users",data).then(res=>{
+            axios.post("/users",data).then(res=>{
                 console.log(res);
                 console.log(res.data);
                 this.ViewUserPage();

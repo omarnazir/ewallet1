@@ -2,41 +2,24 @@ import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
-import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
+import { Container, Card, CardHeader, CardBody, CardTitle, Button,ModalHeader,Modal,
+    ModalBody,
+    ModalFooter,
+    FormGroup } from "reactstrap";
 import $ from "jquery";
 
 
 
 class MobileOperator extends Component {
     state = {
-        dtOptions: {
-            paging: true, // Table pagination
-            ordering: true, // Column ordering
-            info: true, // Bottom left status text
-            responsive: true,
-            oLanguage: {
-                sSearch: '<em class="fa fa-search"></em>',
-                sLengthMenu: "_MENU_ records per page",
-                info: "Showing page _PAGE_ of _PAGES_",
-                zeroRecords: "Nothing found - sorry",
-                infoEmpty: "No records available",
-                infoFiltered: "(filtered from _MAX_ total records)",
-                oPaginate: {
-                    sNext: '<em class="fa fa-caret-right"></em>',
-                    sPrevious: '<em class="fa fa-caret-left"></em>',
-                },
-            },
-            // Datatable Buttons setup
-            dom: "Bfrtip",
-            buttons: [
-                { extend: "csv", className: "btn-info" },
-                { extend: "excel", className: "btn-info", title: "XLS-File" },
-                { extend: "pdf", className: "btn-info", title: $("title").text() },
-                { extend: "print", className: "btn-info" },
-            ],
-        },
         operators: []
     };
+
+    toggleModal = () => {
+        this.setState({
+          modal: !this.state.modal
+        });
+      }
 
     componentDidMount() {
         axios.get("/operators")
@@ -47,16 +30,6 @@ class MobileOperator extends Component {
             })
     }
 
-    // Access to internal datatable instance for customizations
-    dtInstance = (dtInstance) => {
-        const inputSearchClass = "datatable_input_col_search";
-        const columnInputs = $("tfoot ." + inputSearchClass);
-        // On input keyup trigger filtering
-        columnInputs.keyup(function () {
-            dtInstance.fnFilter(this.value, columnInputs.index(this));
-        });
-    };
-
     render() {
         return (
             <ContentWrapper>
@@ -66,7 +39,38 @@ class MobileOperator extends Component {
             <small>Showing all mobile operators.</small>
                     </div>
                     <div className="flex-row">
-                        <Button outline color="danger" className="btn-pill-right">Add New Operator</Button>
+                        <Button onClick={this.toggleModal} className="btn-pill-right">Add New Operator</Button>
+
+                        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+              <ModalHeader toggle={this.toggleModal}>{this.state.AddTariffMode?"Add Mobile operator":"Edit Mobile operator"}</ModalHeader>
+              <form onSubmit={this.handleSubmit}>
+              <ModalBody>
+               
+                  <div className="form-group px-md-2 px-1">
+                    <label>Network Name :</label>
+                    <input className="form-control" name="name" onChange={this.handleChange}
+                    value={this.state.name}
+                     required ></input>
+                  </div>
+
+                  <div className="form-group px-md-2 px-1">
+                    <label>Code :</label>
+                    <input className="form-control" name="name" onChange={this.handleChange}
+                    value={this.state.name}
+                     required ></input>
+                  </div>
+               
+              </ModalBody>
+              <ModalFooter>
+                <button className="btn btn-sm  mr-3 px-4" style={this.AddActionButtonStyle}>
+                  Save
+                  </button>
+                {/* <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger px-4">
+                  Cancel
+                  </button> */}
+              </ModalFooter>
+              </form>
+            </Modal>
                     </div>
                 </div>
                 <Container fluid>
