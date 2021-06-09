@@ -25,7 +25,7 @@ export class SenderIdService {
         const sender={
             senderId:data.senderId
         }
-        return axios.post("/public/",sender)
+        return axios.post("/sender-ids/public/",sender)
     }
     
     

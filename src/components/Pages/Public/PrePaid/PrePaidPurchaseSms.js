@@ -14,6 +14,7 @@ import {
     FormGroup
 } from "reactstrap";
 import $ from "jquery";
+import { AuthService } from '../../../../services';
 
 
 
@@ -37,6 +38,10 @@ class PurchaseSms extends Component {
     }
 
     componentDidMount() {
+        const isAuthenticated = AuthService.isAuthenticated();
+        if (!isAuthenticated) {
+          this.setState({ redirect: "/login" })
+        }
         axios.get("/tariff/get-default-bands")
             .then(res => {
                 const response = res.data;

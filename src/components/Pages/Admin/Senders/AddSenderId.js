@@ -30,7 +30,7 @@ class AddSenderId extends Component {
             senderId: this.state.name,
 
         }
-        SenderIdService.AddSenderId(sender).then(
+        SenderIdService.AddDefaultSenderId(sender).then(
             res => {
                 console.log(res);
                 console.log(res.data);

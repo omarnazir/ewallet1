@@ -6,13 +6,17 @@ import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
 import $ from "jquery";
 import Moment from "moment"
 import NumberFormat from 'react-number-format'
-
+import { AuthService } from '../../../../services';
 class PrePaidInvoiceList extends Component {
   state = {
     billsList:[]
   };
 
   componentDidMount() {
+    const isAuthenticated = AuthService.isAuthenticated();
+    if (!isAuthenticated) {
+      this.setState({ redirect: "/login" })
+    }
     axios.get("/bills/customer")
         .then(res => {
             const response = res.data;
