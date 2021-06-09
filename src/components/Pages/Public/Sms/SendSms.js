@@ -21,7 +21,9 @@ import {
 } from "reactstrap";
 import classnames from 'classnames';
 import $ from "jquery";
-import axios from '../../../../services/axios'
+import axios from '../../../../services/axios';
+import Moment from "moment";
+
 
 
 class SendSmsCompose extends Component {
@@ -38,15 +40,21 @@ class SendSmsCompose extends Component {
         selectedMessageTemplateId: 0,
         selectedSenderId: 0,
         activeTab: '1',
-
         campaign:"",
         senderId: 0,
         templateId: 0,
         recipientType: "file",
         contactListId: 0,
         numbers: "",
-        file:""
+        file:"",
+        isScheduled:0,
+        scheduledTime:'',
+        scheduleddate:''
     }
+
+    formatDate = (date) => {
+        return Moment(date).format('YYYY-MM-DD HH:mm:ss')
+      }
 
     toggleTab = tab => {
         if (this.state.activeTab !== tab) {
@@ -99,7 +107,10 @@ class SendSmsCompose extends Component {
         console.log("file "+ this.state.file)
         console.log("ActiveTab "+ this.state.activeTab)
         console.log("SmsScheduled"+ this.state.sendScheduled)
-
+        console.log("isScheduled"+ this.state.isScheduled)
+        console.log("scheduledTime"+ this.state.scheduledTime)
+        
+        console.log("scheduledTime"+ this.formatDate(this.state.scheduledTime))
         const data = new FormData()
         data.append("senderId",this.state.senderId)
         data.append("templateId", this.state.selectedMessageTemplateId)
@@ -109,10 +120,13 @@ class SendSmsCompose extends Component {
         if(this.state.recipientType=="file" || this.state.file!=undefined){
             data.append("file", this.state.file)
         }
-        data.append("isScheduled",this.state.sendScheduled)
-        // data.append("scheduledTime",this.state)
-  
-            axios.post("/sms/send-sms", data, { headers: { "Content-Type": "multipart/form-data" } })
+        data.append("isScheduled ",this.state.isScheduled)
+        data.append("scheduledTime",this.formatDate(this.state.scheduledTime))
+
+        console.log("isScheduled: "+this.state.isScheduled)
+        console.log("scheduledTime: "+this.formatDate(this.state.scheduledTime))
+
+        axios.post("/sms/send-sms", data, { headers: { "Content-Type": "multipart/form-data" } })
         .then(res => {
             console.log(res);
             console.log(res.data);
@@ -126,10 +140,12 @@ class SendSmsCompose extends Component {
     }
 
     onChangeSendingOptions = event => {
-        if ([event.target.value] == "Now") {
+        if ([event.target.value] == "0") {
             this.setState({ sendScheduled: false })
+            this.setState({isScheduled:0})
         } else {
             this.setState({ sendScheduled: true })
+            this.setState({isScheduled:1})
         }
     }
 
@@ -145,11 +161,22 @@ class SendSmsCompose extends Component {
     }
 
     onChangeSendingOptions = event => {
-        if ([event.target.value] == "Now") {
+        if ([event.target.value] == "0") {
             this.setState({ sendScheduled: false })
+            this.setState({isScheduled:0})
         } else {
             this.setState({ sendScheduled: true })
+            this.setState({isScheduled:1})
         }
+    }
+
+    handleChange = event => {
+        this.setState({ name: event.target.value });
+    }
+
+    handleChangeDate = event => {
+        console.log([event.target.value])
+        this.setState({ scheduledTime: event.target.value });
     }
 
     handleSmsTemplateChange = event => {
@@ -288,15 +315,15 @@ class SendSmsCompose extends Component {
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect4">Sending Options : </label>
                                             <select className="form-control" id="exampleFormControlSelect4" onChange={this.onChangeSendingOptions}>
-                                                <option value="Now">Now</option>
-                                                <option value="Later">Later</option>
+                                                <option value="0">Now</option>
+                                                <option value="1">Later</option>
                                             </select>
                                         </div>
 
                                         {this.state.sendScheduled &&
                                             <FormGroup>
                                                 <label>Scheduled Date:</label>
-                                                <input className="form-control" name="date" type="datetime-local" onChange={this.handleChange}></input>
+                                                <input className="form-control" name="scheduledTime" type="datetime-local" onChange={this.handleChangeDate}></input>
                                             </FormGroup>
                                         }
                                         <button className="btn btn-sm btn-success mr-3" type="submit">
