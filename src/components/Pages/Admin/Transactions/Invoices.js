@@ -121,7 +121,7 @@ class Invoices extends Component {
                     <p style={this.InvoiceHeader}><strong>Invoice Total: &nbsp; <span>{this.state.bill.paidAmount}</span> Tsh.</strong></p>
                   </div>
                 </div>
-                <table class="table table-striped table-bordered my-4">
+                <table className="table table-striped table-bordered my-4">
                   <thead>
                     <tr>
                       <th scope="col" className="text-dark">Item Description</th>

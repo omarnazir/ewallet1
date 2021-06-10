@@ -101,20 +101,30 @@ formatDate=(date)=>{
                   {this.state.smsList.map(row => (
                     <tr className="gradeA">
                       <td>{row.id}</td>
-                      <td>{row.SENDER_ID}</td>
-                      <td>{row.MSISDN}</td>
-                      <td>{row.NETWORK}</td>
-                      <td>{row.MESSAGE}</td>
-                      <td>{row.SMS_COUNT}</td>
+                      <td>{row.senderId}</td>
+                      <td>{row.msisdn}</td>
+                      <td>{row.network}</td>
+                      <td>{row.message}</td>
+                      <td>{row.smsCount}</td>
                       <td>{this.formatDate(row.CREATED_AT)}</td>
-                      {row.STATUS=="Delivered" && 
+                      {row.status=="SENT" && 
                       <td>
-                        <span className="badge badge-success">{row.STATUS}</span>
+                        <span className="badge badge-success">{row.status}</span>
                       </td>
                        }
-                        {row.status!="Delivered" && 
+                        {row.status=="DELIVERED" && 
                       <td>
                         <span className="badge badge-danger">{row.STATUS}</span>
+                      </td>
+                       }
+                       {row.status=="PENDING" && 
+                      <td>
+                        <span className="badge badge-warning">{row.STATUS}</span>
+                      </td>
+                       }
+                        {row.status=="FAILED" && 
+                      <td>
+                        <span className="badge badge-warning">{row.STATUS}</span>
                       </td>
                        }
                     </tr>

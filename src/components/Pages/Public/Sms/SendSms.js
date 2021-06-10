@@ -171,7 +171,7 @@ class SendSmsCompose extends Component {
     }
 
     handleChange = event => {
-        this.setState({ name: event.target.value });
+        this.setState({ [event.target.name]: event.target.value });
     }
 
     handleChangeDate = event => {
@@ -320,7 +320,7 @@ class SendSmsCompose extends Component {
                                             </select>
                                         </div>
 
-                                        {this.state.sendScheduled &&
+                                        {this.state.sendScheduled ==1&&
                                             <FormGroup>
                                                 <label>Scheduled Date:</label>
                                                 <input className="form-control" name="scheduledTime" type="datetime-local" onChange={this.handleChangeDate}></input>
