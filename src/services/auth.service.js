@@ -37,8 +37,7 @@ class AuthService {
         let isloggedIn = false;
         const token = localStorage.getItem('token');
         const roles = localStorage.getItem("user_roles")
-        const plainRoles = localStorage.getItem("user_plain_roles")
-        if (token == null || token.length === 0 || roles ==null || plainRoles==null) {
+        if (token == null || token.length === 0 || roles ==null ) {
             isloggedIn = false;
         } else {
             isloggedIn = true
@@ -47,21 +46,23 @@ class AuthService {
     }
 
     getRedirectPath() {
-        if (this.isAuthenticated()) {
-            // const roles = res.user.roles;
-            const roles = localStorage.getItem("user_plain_roles")
-            const found = roles.findIndex((row) => row.name == "/admin/dashboard")
-            if (found === -1) {
+
+        // const roles=res.user.roles;
+        const roles = localStorage.getItem("user_roles")
+        const token = localStorage.getItem('token');
+        if(roles==null || !Array.isArray(roles) || token ==null){
+            return "/login"
+        }else {
+            // roles.filter(role => (role.name === "/admin/dashboard")).length === 0
+            const found=roles.findIndex((row)=>row.name=="/admin/dashboard");
+            if(found==undefined){
                 return "/dashboard";
 
-            } else {
-                return "/admin/dashboard";
-
+            }else {
+                return "/admin/dashboard"
             }
         }
-        else {
-            return "/login";
-        }
+       
     }
 
     getUsername() {

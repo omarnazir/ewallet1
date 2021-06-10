@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {Link, Redirect} from 'react-router-dom';
-import {Input, CustomInput,Button} from 'reactstrap';
+import React, { Component } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { Input, CustomInput, Button } from 'reactstrap';
 
 import FormValidator from '../Common/FormValidator.js';
-import {AuthService} from "../../services"
+import { AuthService } from "../../services"
 
 
 class Login extends Component {
@@ -18,12 +18,12 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        
-        if(AuthService.isAuthenticated()){
-            const redirect=AuthService.getRedirectPath();
-            this.setState({redirect})
-        }
-       
+
+        // if (AuthService.isAuthenticated()) {
+        //     const redirect = AuthService.getRedirectPath();
+        //     this.setState({ redirect })
+        // }
+
     }
 
     /**
@@ -55,7 +55,7 @@ class Login extends Component {
         const form = e.target;
         const inputs = [...form.elements].filter(i => ['INPUT', 'SELECT'].includes(i.nodeName))
 
-        const {errors, hasError} = FormValidator.bulkValidate(inputs)
+        const { errors, hasError } = FormValidator.bulkValidate(inputs)
 
         this.setState({
             [form.name]: {
@@ -68,28 +68,37 @@ class Login extends Component {
 
         e.preventDefault()
         if (!hasError) {
-            const data={
-                username:this.state.formLogin.username,
-                password:this.state.formLogin.password
+            const data = {
+                username: this.state.formLogin.username,
+                password: this.state.formLogin.password
             }
             AuthService.login(data).then(
-                (res)=>{
-                    console.log(res)
+                (res) => {
+
+
                     const roles=res.user.roles;
-                    const found=roles.findIndex((row)=>row.name=="/admin/dashboard");
-                    if(found===-1){
-                        this.setState({redirect: '/dashboard'});
-                    }else{
-                        this.setState({redirect: '/admin/dashboard'});
+                    if (roles == null || !Array.isArray(roles)) {
+                        this.setState({redirect: '/login'});
+                        
+                    } else {
+                        // roles.filter(role => (role.name === "/admin/dashboard")).length === 0
+                        const found = roles.find((row) => row.name == "/admin/dashboard");
+                        if (found == undefined) {
+                            this.setState({redirect: '/dashboard'});
+
+                        } else {
+                            this.setState({redirect: '/admin/dashboard'});
+                           
+                        }
                     }
 
                     // const redirect=AuthService.getRedirectPath();
                     // this.setState({redirect});
 
                     // window.location.reload();
-                },(err)=>{
-                // console.log(err.response.data);
-                this.setState({loginHasError: true})
+                }, (err) => {
+                    // console.log(err.response.data);
+                    this.setState({ loginHasError: true })
                 }
             )
         }
@@ -114,12 +123,12 @@ class Login extends Component {
     render() {
         const year = new Date().getFullYear()
         if (this.state.redirect) {
-            return <Redirect to={this.state.redirect}/>
+            return <Redirect to={this.state.redirect} />
         }
 
         return (
             <div>
-               <header>
+                <header>
                     { /* START Top Navbar */}
                     <nav className="navbar topnavbar py-2 px-5">
                         { /* START navbar header */}
@@ -140,19 +149,19 @@ class Login extends Component {
                         </div>
                     </nav>
                 </header>
-               
+
                 <div className="container-fluid px-0 mt-2">
                     <div className="block-center mt-5 wd-xl">
                         <div className="card card-flat">
                             <div className="card-header text-center bg-dark">
                                 <a href="/">
-                                    <img className="block-center rounded" src="img/logo.png" alt="Logo"/>
+                                    <img className="block-center rounded" src="img/logo.png" alt="Logo" />
                                 </a>
                             </div>
                             <div className="card-body">
                                 <p className="text-center py-2">SIGN IN TO CONTINUE.</p>
                                 {this.state.loginHasError ?
-                                <p className="text-danger">Invalid username or password, please try again</p> : null}
+                                    <p className="text-danger">Invalid username or password, please try again</p> : null}
                                 <form className="mb-3" name="formLogin" onSubmit={this.onSubmit}>
                                     <div className="form-group">
                                         <div className="input-group with-focus">
@@ -163,20 +172,19 @@ class Login extends Component {
                                                 invalid={this.hasError('formLogin', 'username', 'required')}
                                                 onChange={this.validateOnChange}
                                                 data-validate='["required"]'
-                                                value={this.state.formLogin.username}/>
+                                                value={this.state.formLogin.username} />
                                             <div className="input-group-append">
                                                 <span className="input-group-text text-muted bg-transparent border-left-0">
                                                     <em className="fa fa-envelope"></em>
                                                 </span>
                                             </div>
                                             {this.hasError('formLogin', 'username', 'required') &&
-                                            <span className="invalid-feedback">Username is required</span>}
+                                                <span className="invalid-feedback">Username is required</span>}
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <div className="input-group with-focus">
                                             <Input type="password"
-                                                id="id-password"
                                                 name="password"
                                                 className="border-right-0"
                                                 placeholder="Password"
@@ -195,9 +203,9 @@ class Login extends Component {
                                     </div>
                                     <div className="clearfix">
                                         <CustomInput type="checkbox" id="rememberme"
-                                                    className="float-left mt-0"
-                                                    name="remember"
-                                                    label="Remember Me">
+                                            className="float-left mt-0"
+                                            name="remember"
+                                            label="Remember Me">
                                         </CustomInput>
                                         <div className="float-right">
                                             <Link to="recover" className="text-muted">Forgot your password?</Link>
@@ -211,13 +219,13 @@ class Login extends Component {
                         </div>
                     </div>
                     <div className="p-3 text-center">
-                    <span className="mr-2">&copy;</span>
-                    <span>{year}</span>
-                    <span className="mx-2">-</span>
-                    <span>E-SMS</span>
-                    <br/>
-                    <span>Bulk SMS Platform</span>
-                </div>
+                        <span className="mr-2">&copy;</span>
+                        <span>{year}</span>
+                        <span className="mx-2">-</span>
+                        <span>E-SMS</span>
+                        <br />
+                        <span>Bulk SMS Platform</span>
+                    </div>
                 </div>
             </div>
         );
