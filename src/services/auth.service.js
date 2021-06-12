@@ -15,7 +15,7 @@ class AuthService {
                 localStorage.setItem('username', JSON.stringify(res.data.user.username));
                 localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
                 console.log(res.data.user.roles)
-                localStorage.setItem('user_plain_roles',res.data.user.roles)
+                localStorage.setItem('user_plain_roles', res.data.user.roles)
             }
             return res.data;
         })
@@ -38,7 +38,7 @@ class AuthService {
         let isloggedIn = false;
         const token = localStorage.getItem('token');
         const roles = localStorage.getItem("user_roles")
-        if (token == null || token.length === 0 || roles ==null ) {
+        if (token == null || token.length === 0 || roles == null) {
             isloggedIn = false;
         } else {
             isloggedIn = true
@@ -46,24 +46,41 @@ class AuthService {
         return isloggedIn;
     }
 
+    isAuthenticatedAdvanced() {
+        const token = localStorage.getItem('token');
+        const roles = localStorage.getItem("user_roles")
+        if (token == null || token.length === 0 || !Array.isArray(roles)) {
+            return "/login"
+        } else {
+            const found = roles.find((row) => row.name == "/admin-dashboard");
+            if (found == undefined) {
+                return "/dashboard";
+
+            } else {
+                return "/admin-dashboard"
+            }
+        }
+    }
+
     getRedirectPath() {
 
         // const roles=res.user.roles;
         const roles = localStorage.getItem("user_roles")
         const token = localStorage.getItem('token');
-        if(roles==null || !Array.isArray(roles) || token ==null){
+        if (roles == null || !Array.isArray(roles) || token == null) {
             return "/login"
-        }else {
+        } else {
             // roles.filter(role => (role.name === "/admin/dashboard")).length === 0
-            const found=roles.findIndex((row)=>row.name=="/admin/dashboard");
-            if(found==undefined){
+            // const found=roles.findIndex((row)=>row.name=="/admin/dashboard");
+            const found = roles.find((row) => row.name == "/admin-dashboard");
+            if (found == undefined) {
                 return "/dashboard";
 
-            }else {
-                return "/admin/dashboard"
+            } else {
+                return "/admin-dashboard"
             }
         }
-       
+
     }
 
     getUsername() {

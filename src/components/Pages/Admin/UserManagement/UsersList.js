@@ -34,7 +34,7 @@ class UsersManagement extends Component {
   }
 
   AddNewUser = () => {
-    return this.props.history.push('/admin/add-new-user')
+    return this.props.history.push('/admin-add-new-user')
 }
 
 
@@ -47,10 +47,6 @@ GetAllUser=()=>{
   })
 }
 
-ViewTariffBand(row) {
-  console.log(row.id)
-  return this.props.history.push('/admin/manage-tariff-bands/' + row.id, row)
-}
 
 AddActionButtonStyle={
   color:'white',
@@ -71,7 +67,7 @@ DisableUser=(row)=>{
 
 
 EditUser=(row)=>{
-  return this.props.history.push('/admin/manage-edit-user/' + row.id, row)
+  return this.props.history.push('/admin-manage-edit-user/' + row.id, row)
 }
 
 

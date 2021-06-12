@@ -22,6 +22,7 @@ class Login extends Component {
         // if (AuthService.isAuthenticated()) {
         //     const redirect = AuthService.getRedirectPath();
         //     this.setState({ redirect })
+        // roles.some((row)=>row.name==="/admin-dashboard"))
         // }
 
     }

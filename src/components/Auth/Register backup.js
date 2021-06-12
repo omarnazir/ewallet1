@@ -10,8 +10,6 @@ import { data } from 'jquery';
 class Register extends Component {
 
     state = {
-
-
         fullname: "",
         email: '',
         phonenumber: "",
@@ -58,10 +56,6 @@ class Register extends Component {
         //on post paid select: buss licence: buss licence number add Vaccount field
         data.append('id_number', this.state.id_number)
         data.append('attachment', this.state.attachment)
-
-
-
-
 
         AuthService.register(data).then((res) => {
             console.log(res)
