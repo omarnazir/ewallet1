@@ -107,30 +107,24 @@ formatDate=(date)=>{
                       <td>{row.message}</td>
                       <td>{row.smsCount}</td>
                       <td>{this.formatDate(row.CREATED_AT)}</td>
-                      {row.status=="SENT" && 
+                      {row.status=="Delivered" && 
                       <td>
                         <span className="badge badge-success">{row.status}</span>
                       </td>
                        }
-                        {row.status=="DELIVERED" && 
+                       {row.status=="Failed" && 
                       <td>
-                        <span className="badge badge-danger">{row.STATUS}</span>
+                        <span className="badge badge-danger">{row.status}</span>
                       </td>
                        }
-                       {row.status=="PENDING" && 
+                        {row.status=="PENDING" && 
                       <td>
-                        <span className="badge badge-warning">{row.STATUS}</span>
+                        <span className="badge badge-warning">Pending</span>
                       </td>
                        }
-                        {row.status=="FAILED" && 
-                      <td>
-                        <span className="badge badge-warning">{row.STATUS}</span>
-                      </td>
-                       }
+                       
                     </tr>
                   ))}
-                    
-                    
                   </tbody>
                 </table>
               {/* </Datatable> */}

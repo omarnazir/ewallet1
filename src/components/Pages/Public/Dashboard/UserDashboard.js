@@ -181,8 +181,8 @@ class UserDashboard extends Component {
                                 <em className="icon-layers fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-dark rounded-right">
-                                <div className="h2 mt-0">{this.state.purchasedSms}</div>
-                                <div className="text-uppercase">Purchased Sms</div>
+                                <div className="h2 mt-0">{this.state.dashboardData.totalSmsSent}</div>
+                                <div className="text-uppercase">Message Sent</div>
                             </div>
                         </div>
                     </Col>
@@ -194,8 +194,8 @@ class UserDashboard extends Component {
                                 <em className="icon-bubble fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-info rounded-right">
-                                <div className="h2 mt-0">{this.state.dashboardData.totalSmsSent}</div>
-                                <div className="text-uppercase">Message Sent</div>
+                                <div className="h2 mt-0">{this.state.dashboardData.totalSmsDelivered}</div>
+                                <div className="text-uppercase">Message Delivered</div>
                             </div>
                         </div>
                     </Col>
@@ -212,7 +212,7 @@ class UserDashboard extends Component {
                             </div>
                         </div>
                     </Col>
-                    {this.state.isPrePaid &&
+                    
                         <Col xl={3} lg={6} md={12}>
                             { /* START card */}
                             <div className="card flex-row align-items-center align-items-stretch border-0">
@@ -226,7 +226,7 @@ class UserDashboard extends Component {
                                 </div>
                             </div>
                         </Col>
-                    }
+                    
                 </Row>
                 { /* END cards box */}
                 <Row>
