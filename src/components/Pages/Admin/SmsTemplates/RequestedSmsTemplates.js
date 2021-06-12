@@ -16,39 +16,14 @@ import Datetime from 'react-datetime';
 import $ from "jquery";
 import axios from "../../../../services/axios";
 import Moment from 'moment';
-
+import ReactDatatable from '@ashvin27/react-datatable';
+import NumberFormat from 'react-number-format';
 import withReactContent from 'sweetalert2-react-content'
 import Swal from "sweetalert2"
 const MySwal = withReactContent(Swal)
 
 class SmsTemplatesRequested extends Component {
   state = {
-    dtOptions: {
-      paging: true, // Table pagination
-      ordering: true, // Column ordering
-      info: true, // Bottom left status text
-      responsive: true,
-      oLanguage: {
-        sSearch: '<em class="fa fa-search"></em>',
-        sLengthMenu: "_MENU_ records per page",
-        info: "Showing page _PAGE_ of _PAGES_",
-        zeroRecords: "Nothing found - sorry",
-        infoEmpty: "No records available",
-        infoFiltered: "(filtered from _MAX_ total records)",
-        oPaginate: {
-          sNext: '<em class="fa fa-caret-right"></em>',
-          sPrevious: '<em class="fa fa-caret-left"></em>',
-        },
-      },
-      // Datatable Buttons setup
-      dom: "Bfrtip",
-      buttons: [
-        { extend: "csv", className: "btn-info" },
-        { extend: "excel", className: "btn-info", title: "XLS-File" },
-        { extend: "pdf", className: "btn-info", title: $("title").text() },
-        { extend: "print", className: "btn-info" },
-      ],
-    },
     smsTemplateList: []
   };
 
@@ -78,14 +53,14 @@ class SmsTemplatesRequested extends Component {
   };
 
   AddSmsTemplates = () => {
-    return this.props.history.push('/admin/add-sms-templates')
+    return this.props.history.push('/admin-add-sms-templates')
   }
 
   formatDate = (date) => {
     return Moment(date).format('lll')
   }
   ViewAllSmsTemplates = () => {
-    return this.props.history.push('/admin/sms-templates')
+    return this.props.history.push('/admin-sms-templates')
   }
 
   // ApproveTemplate(row){
@@ -104,12 +79,12 @@ class SmsTemplatesRequested extends Component {
     console.log("clicked" + id)
   };
 
-  ApproveTemplate = (id) => {
-    axios.put("/sms-request/approve/" + id)
+  ApproveTemplate = (record) => {
+    axios.put("/sms-request/approve/" + record.id)
       .then(res => {
         const response = res.data;
         const smsTemplateList = this.state.smsTemplateList.filter((template) => {
-          return template.id !== id;
+          return template.id !== record.id;
         });
         this.setState({ smsTemplateList })
         this.showSweetAlert('success','Approved SMS Template Sucessfully');
@@ -128,17 +103,106 @@ class SmsTemplatesRequested extends Component {
     })
 }
 
-  RejectTemplate = (id) => {
-    axios.put("/sms-request/reject/" + id)
+  RejectTemplate = (record) => {
+    axios.put("/sms-request/reject/" + record.id)
       .then(res => {
         const response = res.data;
         const smsTemplateList = this.state.smsTemplateList.filter((template) => {
-          return template.id !== id;
+          return template.id !== record.id;
         });
         this.setState({ smsTemplateList })
       })
   }
 
+
+  columns = [
+    {
+        key: "id",
+        text: "#",
+        sortable: true,
+    },
+    {
+        key: "fullname",
+        text: "CUSTOMER NAME",
+        sortable: true,
+        cell: (record, index) => {
+          return (record.customerEntity.fullname)
+        }
+    },
+    {
+        key: "messageTemplate",
+        text: "MESSAGE",
+        sortable: true
+    },
+    {
+      key: "dateCreated",
+      text: "DATE ",
+      sortable: true,
+      cell: (record, index) => {
+        return (this.formatDate(record.dateCreated))
+      }
+  },
+
+    {
+        key: "isActive",
+        text: "STATUS",
+        sortable: true,
+        cell: (record, index) => {
+          if (record.status == 0) {
+            return (
+              <span className="badge badge-warning">Pending</span>
+            );
+          }
+           if(record.status == 1){
+            return  (<span className="badge badge-success">Approved</span>);
+          }
+    
+           if(record.status==2) {
+            return (
+              <span className="badge badge-danger">Rejected</span>
+            );
+          }
+        }
+    },
+ {
+      key: "paymentType",
+      text: "Reason for rejection",
+      sortable: true
+  },
+{
+  key: "status",
+  text: "ACTION",
+  cell: (record, index) => {
+  
+      if(record.status ==0){
+        return ( 
+          <div>
+        <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveTemplate(record)}>Approve</span>
+        <span className="btn badge-danger" onClick={() => this.RejectTemplate(record)}>Reject</span>
+        </div>
+        )
+      }
+
+    
+  }
+}
+
+];
+
+config = {
+  page_size: 10,
+  length_menu: [10, 25, 50],
+  show_filter: true,
+  show_pagination: true,
+  pagination:'advance',
+  filename: "Contact List",
+  button: {
+   
+  },
+  language: {
+    loading_text: "Please be patient while data loads..."
+}
+}
 
   render() {
 
@@ -206,23 +270,11 @@ class SmsTemplatesRequested extends Component {
               </div>
             </CardHeader>
             <CardBody>
-              <table className="table table-striped my-4 w-100">
-                <thead>
-                  <tr>
-                    <th data-priority="1">#</th>
-                    <th>Customer Name</th>
-                    <th>MESSAGE</th>
-                    <th>DATE</th>
-                    <th>STATUS</th>
-                    <th>Reason for rejection</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.smsTemplateList.map(row => (
+           
+                  {/* {this.state.smsTemplateList.map(row => (
                     <tr key={row.id}>
                       <td>{index+=1}</td>
-                      {/* <td>SCANIA TANZANIA LTD</td> */}
+                     
                       <td>{row.customerEntity.fullname}</td>
                       <td>{row.messageTemplate}</td>
                       <td>{this.formatDate(row.dateCreated)}</td>
@@ -254,10 +306,15 @@ class SmsTemplatesRequested extends Component {
                           </td>
                       }
                     </tr>
-                  ))}
+                  ))} */}
 
-                </tbody>
-              </table>
+
+                <ReactDatatable
+                config={this.config}
+                records={this.state.smsTemplateList}
+                columns={this.columns}
+                />
+              
             </CardBody>
           </Card>
         </Container>

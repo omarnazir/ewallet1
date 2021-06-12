@@ -95,39 +95,39 @@ const Routes = ({ location }) => {
                             <Suspense fallback={<PageLoader />}>
                                 <Switch location={location}>
                                     {/* <Route path="/dashboard" component={waitFor(Dashboard)}/> */}
-                                    <Route path="/admin/dashboard" component={waitFor(Dashboard)} />
+                                    <Route path="/admin-dashboard" component={waitFor(Dashboard)} />
 
-                                    <Route path="/admin/mobile-operators" component={waitFor(MobileOperator)} />
-                                    <Route path="/admin/sms-log" component={waitFor(SmsLogs)} />
+                                    <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
+                                    <Route path="/admin-sms-log" component={waitFor(SmsLogs)} />
 
-                                    <Route path="/admin/customers-list" component={waitFor(CustomerList)} />
-                                    <Route path="/admin/customers-details/:id" component={waitFor(CustomerDetails)}/>
-                                    <Route path="/admin/customers-postpaid" component={waitFor(PostPaidCustomers)} />
-                                    <Route path="/admin/transactions" component={waitFor(Transactions)} />
+                                    <Route path="/admin-customers-list" component={waitFor(CustomerList)} />
+                                    <Route path="/admin-customers-details/:id" component={waitFor(CustomerDetails)}/>
+                                    <Route path="/admin-customers-postpaid" component={waitFor(PostPaidCustomers)} />
+                                    <Route path="/admin-transactions" component={waitFor(Transactions)} />
 
 
-                                    <Route path="/admin/add-senderid" component={waitFor(AddSenderId)} />
-                                    <Route path="/admin/senders" component={waitFor(Senders)} />
+                                    <Route path="/admin-add-senderid" component={waitFor(AddSenderId)} />
+                                    <Route path="/admin-senders" component={waitFor(Senders)} />
 
                                    
 
-                                    <Route path="/admin/add-sms-templates" component={waitFor(AddSmsTemplate)} />
-                                    <Route path="/admin/senders-requested" component={waitFor(SendersRequested)} />
-                                    <Route path="/admin/sms-requested-templates" component={waitFor(SmsTemplatesRequested)}/>
-                                    <Route path="/admin/sms-templates" component={waitFor(SmsTemplates)} />
+                                    <Route path="/admin-add-sms-templates" component={waitFor(AddSmsTemplate)} />
+                                    <Route path="/admin-senders-requested" component={waitFor(SendersRequested)} />
+                                    <Route path="/admin-sms-requested-templates" component={waitFor(SmsTemplatesRequested)}/>
+                                    <Route path="/admin-sms-templates" component={waitFor(SmsTemplates)} />
 
-                                    <Route path="/admin/add-tariff" component={waitFor(AddTariff)} />
-                                    <Route path="/admin/manage-tariffs" component={waitFor(Tariffs)} />
-                                    <Route path="/admin/add-tariff-band" component={waitFor(AddTariffBand)} />
-                                    <Route path="/admin/manage-tariff-bands/:id" component={waitFor(TarriffBand)} />
+                                    <Route path="/admin-add-tariff" component={waitFor(AddTariff)} />
+                                    <Route path="/admin-manage-tariffs" component={waitFor(Tariffs)} />
+                                    <Route path="/admin-add-tariff-band" component={waitFor(AddTariffBand)} />
+                                    <Route path="/admin-manage-tariff-bands/:id" component={waitFor(TarriffBand)} />
 
 
-                                    <Route path="/admin/manage-edit-user/:id" component={waitFor(EditAdminUser)}/>
-                                    <Route path="/admin/add-new-user" component={waitFor(AddUser)} />
-                                    <Route path="/admin/manage-users" component={waitFor(UsersManagement)} />
-                                    <Route path="/admin/restricted-words" component={waitFor(RestrictedWords)} />
-                                    <Route path="/admin/reserved-numbers" component={waitFor(ReservedNumbers)} />
-                                    <Route path="/admin/invoices/:id" component={waitFor(Invoices)} />
+                                    <Route path="/admin-manage-edit-user/:id" component={waitFor(EditAdminUser)}/>
+                                    <Route path="/admin-add-new-user" component={waitFor(AddUser)} />
+                                    <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
+                                    <Route path="/admin-restricted-words" component={waitFor(RestrictedWords)} />
+                                    <Route path="/admin-reserved-numbers" component={waitFor(ReservedNumbers)} />
+                                    <Route path="/admininvoices/:id" component={waitFor(Invoices)} />
 
 
                                 {/* User Roles -{type Prepaid & Post Paid}  */}

@@ -47,7 +47,7 @@ class CustomerDetails extends Component {
 
 
     ViewCustomerList = () => {
-        return this.props.history.push("/admin/customers-list")
+        return this.props.history.push("/admin-customers-list")
     }
 
 
@@ -63,7 +63,7 @@ class CustomerDetails extends Component {
         const { state } = this.props.history.location;
         // console.log(state.id)
         if (state == undefined) {
-            return this.props.history.push('/admin/customers-list/')
+            return this.props.history.push('/admin-customers-list/')
         }
 
         this.setState({ isApproved: state.isApproved })

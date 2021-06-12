@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import axios from "../../../../services/axios";
-// import 'datatables.net-dt/css/jquery.dataTables.css'
-// import 'datatables.net-bs/css/dataTables.bootstrap.css'
+import axios from 'axios';
+import 'datatables.net-dt/css/jquery.dataTables.css'
+import 'datatables.net-bs/css/dataTables.bootstrap.css'
 
 const $ = require('jquery')
 $.DataTable = require('datatables.net')
 
-export default class ReservedNumbers extends Component {
+export class ReactTable extends Component {
 
     state = {
         data: null
@@ -15,7 +15,7 @@ export default class ReservedNumbers extends Component {
     componentDidMount() {
         //console.log(this.el);
 
-        axios.get('/tariff').then(res => {
+        axios.get('/report.html').then(res => {
             const data = res.data;
             console.log(data)
             this.setState({data});

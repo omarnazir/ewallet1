@@ -21,7 +21,7 @@ class Invoices extends Component {
     const { state } = this.props.history.location;
     // console.log(state.id)
     if (state == undefined) {
-      return this.props.history.push('/admin/transactions/')
+      return this.props.history.push('/admin-transactions/')
     }
     this.setState({ invoiceId: state.id })
     this.setState({ paidStatus: state.status })

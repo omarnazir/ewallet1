@@ -40,7 +40,7 @@ class AddSenderId extends Component {
     }
 
     ViewAllSenderIds = () => {
-        return this.props.history.push('/admin/senders')
+        return this.props.history.push('/admin-senders')
     }
 
     handleChange = event => {

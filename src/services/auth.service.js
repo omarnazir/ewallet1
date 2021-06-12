@@ -14,6 +14,7 @@ class AuthService {
                 localStorage.setItem('user', res.data.user)
                 localStorage.setItem('username', JSON.stringify(res.data.user.username));
                 localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
+                console.log(res.data.user.roles)
                 localStorage.setItem('user_plain_roles',res.data.user.roles)
             }
             return res.data;
@@ -72,56 +73,6 @@ class AuthService {
             return "";
         }
     }
-
-
-    /*
-    registeredUser = {
-        "fullname": this.state.fullname,
-        "email": this.state.email,
-        "phonenumber": this.state.phoneNumber,
-        "username": this.state.username,
-        "password": this.state.password,
-        // "image": "",
-        // "status": 1,
-        // "third_party": "EWALLET",
-        "location": this.state.physicalAddress,
-        // "contact_person": "Imani Mwendamseke",
-        // "start_date": null,
-        // "is_active": 1,
-        // "is_deleted": 0,
-        // "freelancer_fk": null,
-        // "logo_url": "",
-        // "side_bar_bg": "",
-        // "header_bg": "",
-        // "flag": "",
-        "customer_type": this.state.customerType,
-        // "v_account": "",
-        // "monthly_limit": 500,
-        // "sms_balance": 0,
-        // "total_sms_sent": 0,
-        // "total_sms_delivered": 0,
-        // "total_sms_failed": 0,
-        // "total_sms_purchased": 0,
-        // "sms_account": 1,
-        // "sms_account_type": "User",
-        // "sms_expire": null,
-        // "sms_expire_days": 30,
-
-        //**Assign on approval 
-        // "tariff_fk": 1,
-
-
-        "payment_type": this.state.AccountType,
-        // "post_paid_approved": 0,
-        "nin": this.state.nidaNumber,
-        "nida_attachment": this.state.nidaFile,
-        // "ind_org": "",
-        "business_licence": "",
-
-        /**Set the gateway on approval 
-        // "sms_gateway_username": "",
-        // "sms_gateway_password": ""
-    } **/
 
 
 }

@@ -89,11 +89,11 @@ class Tariffs extends Component {
 
   ViewTariffBand(row) {
     console.log(row.id)
-    return this.props.history.push('/admin/manage-tariff-bands/' + row.id, row)
+    return this.props.history.push('/admin-manage-tariff-bands/' + row.id, row)
   }
 
   AddTarriff = () => {
-    return this.props.history.push('/admin/add-tariff')
+    return this.props.history.push('/admin-add-tariff')
   }
 
   AddActionButtonStyle = {

@@ -82,12 +82,12 @@ class Login extends Component {
                         
                     } else {
                         // roles.filter(role => (role.name === "/admin/dashboard")).length === 0
-                        const found = roles.find((row) => row.name == "/admin/dashboard");
+                        const found = roles.find((row) => row.name == "/admin-dashboard");
                         if (found == undefined) {
                             this.setState({redirect: '/dashboard'});
 
                         } else {
-                            this.setState({redirect: '/admin/dashboard'});
+                            this.setState({redirect: '/admin-dashboard'});
                            
                         }
                     }

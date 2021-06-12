@@ -81,7 +81,7 @@ class SmsTemplates extends Component {
   };
 
   AddSmsTemplates = () => {
-    return this.props.history.push('/admin/add-sms-templates')
+    return this.props.history.push('/admin-add-sms-templates')
   }
 
   disableTemplate(id){
@@ -100,7 +100,7 @@ class SmsTemplates extends Component {
   }
 
   ViewRequestedTemplates = () => {
-    return this.props.history.push('/admin/sms-requested-templates')
+    return this.props.history.push('/admin-sms-requested-templates')
   }
 
 

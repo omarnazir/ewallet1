@@ -33,7 +33,7 @@ class Transactions extends Component {
 
       ViewPrePaidInvoice(row){
         console.log(row)
-        return this.props.history.push('/admin/invoices/' + row.id, row)
+        return this.props.history.push('/admin-invoices/' + row.id, row)
       }
 
       AddActionButtonStyle = {
