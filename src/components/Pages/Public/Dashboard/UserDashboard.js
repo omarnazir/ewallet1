@@ -153,6 +153,11 @@ class UserDashboard extends Component {
         }
     }
 
+    AddActionButtonStyle = {
+        color: 'white',
+        background: "#003366"
+    }
+
     logout=()=>{
         AuthService.logout();
         this.setState({redirect:"/login"})
@@ -167,9 +172,18 @@ class UserDashboard extends Component {
         return (
             <ContentWrapper>
                 <div className="content-heading">
-                    <div>Dashboard
-                        <small>Welcome to esms</small>
-                    </div>
+                   
+
+                    <div className="mr-auto flex-row">
+                    Dashboard
+                    <small>Welcome to esms</small>
+          </div>
+          <div className="flex-row">
+          <Button  style={this.AddActionButtonStyle} className="btn-pill-right">
+          {this.state.dashboardData.paymentType}
+            </Button>
+          
+          </div>
                 </div>
                 { /* START cards box */}
                 <Row>

@@ -22,7 +22,7 @@ class Login extends Component {
         // if (AuthService.isAuthenticated()) {
         //     const redirect = AuthService.getRedirectPath();
         //     this.setState({ redirect })
-        // roles.some((row)=>row.name==="/admin-dashboard"))
+        // // roles.some((row)=>row.name==="/admin-dashboard"))
         // }
 
     }
@@ -91,6 +91,9 @@ class Login extends Component {
                             this.setState({redirect: '/admin-dashboard'});
                            
                         }
+
+                        // const redirect=localStorage.getItem("dashboard");
+                        // this.setState({redirect})
                     }
 
                     // const redirect=AuthService.getRedirectPath();

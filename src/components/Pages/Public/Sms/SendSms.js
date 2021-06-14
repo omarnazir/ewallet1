@@ -23,7 +23,9 @@ import classnames from 'classnames';
 import $ from "jquery";
 import axios from '../../../../services/axios';
 import Moment from "moment";
-
+import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2"
+const MySwal = withReactContent(Swal)
 
 
 class SendSmsCompose extends Component {
@@ -130,11 +132,23 @@ class SendSmsCompose extends Component {
         .then(res => {
             console.log(res);
             console.log(res.data);
-            this.ViewDashboard();
+            this.showSweetAlert();
+            setTimeout(this.ViewDashboard,3000)
+            // this.ViewDashboard();
         })
     }
 
 
+    showSweetAlert() {
+        return MySwal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'SMS Sent Sucessfully',
+            text: "",
+            showConfirmButton: false,
+            timer: 2000
+        })
+    }
     ViewDashboard = () => {
         return this.props.history.push('/dashboard')
     }

@@ -107,12 +107,12 @@ class AddUserRequestedSms extends Component {
                                                 <label htmlFor="exampleFormControlSelect1">Dynamic sms field: </label>
                                                 <select className="form-control" id="exampleFormControlSelect1" onChange={this.handleOnColumnChange}>
                                                     <option>Insert field</option>
-                                                    <option value=" {Column_B} ">Column B</option>
-                                                    <option value=" {Column_C} ">Column C</option>
-                                                    <option value=" {Column_D} ">Column D</option>
-                                                    <option value=" {Column_E} ">Column E</option>
-                                                    <option value=" {Column_F} ">Column F</option>
-                                                    <option value=" {Column_G} ">Column G</option>
+                                                    <option value=" {ColumnB} ">Column B</option>
+                                                    <option value=" {ColumnC} ">Column C</option>
+                                                    <option value=" {ColumnD} ">Column D</option>
+                                                    <option value=" {ColumnE} ">Column E</option>
+                                                    <option value=" {ColumnF} ">Column F</option>
+                                                   
                                                 </select>
                                             </div>}
                                         <div className="form-group">

@@ -9,13 +9,14 @@ class AuthService {
         }
         return axios.post(API_URL + "/auth/login", logindata).then(res => {
             if (res.data) {
-                localStorage.clear();
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('user', res.data.user)
-                localStorage.setItem('username', JSON.stringify(res.data.user.username));
-                localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
+             
+               window.localStorage.clear();
+                window.localStorage.setItem('token', res.data.token);
+                window.localStorage.setItem('user', res.data.user)
+                window.localStorage.setItem('username', JSON.stringify(res.data.user.username));
+                window.localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
                 console.log(res.data.user.roles)
-                localStorage.setItem('user_plain_roles', res.data.user.roles)
+                window.localStorage.setItem('user_plain_roles', res.data.user.roles)
             }
             return res.data;
         })
@@ -26,18 +27,18 @@ class AuthService {
     }
 
     logout() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("username");
-        localStorage.removeItem("user_roles");
-        localStorage.removeItem("user_plain_roles");
-        localStorage.clear();
+        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("user");
+        window.localStorage.removeItem("username");
+        window.localStorage.removeItem("user_roles");
+        window.localStorage.removeItem("user_plain_roles");
+        window.localStorage.clear();
     }
 
     isAuthenticated() {
         let isloggedIn = false;
-        const token = localStorage.getItem('token');
-        const roles = localStorage.getItem("user_roles")
+        const token = window.localStorage.getItem('token');
+        const roles = window.localStorage.getItem("user_roles")
         if (token == null || token.length === 0 || roles == null) {
             isloggedIn = false;
         } else {
@@ -47,8 +48,8 @@ class AuthService {
     }
 
     isAuthenticatedAdvanced() {
-        const token = localStorage.getItem('token');
-        const roles = localStorage.getItem("user_roles")
+        const token = window.localStorage.getItem('token');
+        const roles = window.localStorage.getItem("user_roles")
         if (token == null || token.length === 0 || !Array.isArray(roles)) {
             return "/login"
         } else {
@@ -85,7 +86,7 @@ class AuthService {
 
     getUsername() {
         if (this.isAuthenticated()) {
-            return localStorage.getItem("username")
+            return window.localStorage.getItem("username")
         } else {
             return "";
         }

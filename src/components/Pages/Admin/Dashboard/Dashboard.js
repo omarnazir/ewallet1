@@ -114,12 +114,7 @@ class Dashboard extends Component {
           this.setState({ redirect: "/login" })
         }
 
-        axios.get("/dashboard/admin")
-        .then(res => {
-            const response = res.data;
-            this.setState({ dashboardData: response })
-            console.log(response);
-        })
+        
 
         // Easy pie
         let pieOptions1 = {
@@ -135,10 +130,17 @@ class Dashboard extends Component {
             size: 145
         };
         new EasyPieChart(this.refs.easypie, pieOptions1);
-
        
-    
-    
+        this.getDashboardData();
+    }
+
+    getDashboardData=()=>{
+        axios.get("/dashboard/admin")
+        .then(res => {
+            const response = res.data;
+            this.setState({ dashboardData: response })
+            console.log(response);
+        })
     }
 
     changeLanguage = lng => {
@@ -151,8 +153,8 @@ class Dashboard extends Component {
         });
     }
     logout = () => {
-        sessionStorage.clear();
-        this.setState({redirect: '/login'});
+        AuthService.logout();
+        this.setState({redirect:"/login"})
     }
 
 

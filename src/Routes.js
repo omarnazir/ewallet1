@@ -127,7 +127,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
                                     <Route path="/admin-restricted-words" component={waitFor(RestrictedWords)} />
                                     <Route path="/admin-reserved-numbers" component={waitFor(ReservedNumbers)} />
-                                    <Route path="/admininvoices/:id" component={waitFor(Invoices)} />
+                                    <Route path="/admin-invoices/:id" component={waitFor(Invoices)} />
 
 
                                 {/* User Roles -{type Prepaid & Post Paid}  */}
