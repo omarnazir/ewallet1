@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import axios from "../../../../services/axios";
 import Datatable from "../../../Common/Datatable";
-import { Container, Card, CardHeader, CardBody, CardTitle } from "reactstrap";
+import { Container, Card, CardHeader, CardBody, CardTitle,Button } from "reactstrap";
 import $ from "jquery";
 import Moment from "moment"
 import NumberFormat from 'react-number-format'
 import { AuthService } from '../../../../services';
 import {Redirect} from 'react-router-dom';
-
+import ReactDatatable from '@ashvin27/react-datatable';
 class Transactions extends Component {
   state = {
     billsList:[]
@@ -41,6 +41,112 @@ class Transactions extends Component {
         background: "#003366"
     }
 
+
+    columns = [
+      {
+          key: "id",
+          text: "#",
+          sortable: true,
+          // cell: (record, index) => {
+          //   return index;
+          // }
+      },
+      {
+          key: "billNumber",
+          text: "INVOICE",
+          sortable: true
+      },
+      {
+          key: "smsQuantity",
+          text: "QUANTITY",
+          sortable: true,
+          record:(record,index)=>{
+            return (<NumberFormat value={record.smsQuantity} displayType={'text'} thousandSeparator={true} prefix={''} />)
+          }
+      },
+      {
+        key: "billAmount",
+        text: "AMOUNT",
+        sortable: true,
+        cell:(record,index)=>{
+          return (<NumberFormat value={record.billAmount} displayType={'text'} thousandSeparator={true} prefix={''} />)
+        }
+    },
+      {
+        key: "status",
+        text: "PAYMENT STATUS",
+        sortable: true,
+        cell: (record, index) => {
+          if (record.status == 0) {
+            return (
+              <span className="badge badge-warning">Not Paid</span>
+            );
+          }
+           if(record.status == 1){
+            return  (<span className="badge badge-success">Paid</span>);
+          }
+        }
+    },
+      {
+          key: "paymentMethod",
+          text: "METHOD",
+          sortable: true
+      },
+      {
+        key: "paymentDate",
+        text: "PAYMENT DATE",
+        sortable: true,
+        cell: (record, index) => {
+            if(record.paymentDate==null){
+              return ("N/A")
+            }else {
+          return    this.formatDate(record.createdAt)
+            }
+           
+        }
+    },
+    {
+      key: "createdAt",
+      text: "DATE CREATED",
+      sortable: true,
+      cell: (record, index) => {
+        return (this.formatDate(record.createdAt))
+      }
+  },
+  {
+    key: "id",
+    text: "ACTION",
+    cell: (record, index) => {
+      return (
+        <Button color="success" className="btn btn-success"
+          onClick={() => {
+            this.ViewPrePaidInvoice(record);
+          }}
+        >
+          VIEW
+        </Button>
+      );
+    }
+  }
+
+  
+  ];
+  
+  config = {
+    page_size: 10,
+    length_menu: [10, 25, 50],
+    show_filter: true,
+    show_pagination: true,
+    pagination:'advance',
+    filename: "Contact List",
+    button: {
+     
+    },
+    language: {
+      loading_text: "Please be patient while data loads..."
+  }
+  }
+
   render() {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect}/>
@@ -59,8 +165,17 @@ class Transactions extends Component {
             <CardHeader>
             </CardHeader>
             <CardBody>
-              {/* <Datatable options={this.state.dtOptions}> */}
-                <table className="table table-striped my-4 w-100">
+
+            <ReactDatatable 
+              extraButtons={this.extraButtons}
+                config={this.config}
+                records={this.state.billsList}
+                columns={this.columns}
+                
+                />
+
+
+                {/* <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>
                       <th data-priority="1">#</th>
@@ -74,8 +189,8 @@ class Transactions extends Component {
                       <th>ACTION</th>
                     </tr>
                   </thead>
-                  <tbody>
-
+                  <tbody> */}
+{/* 
                     {
                       this.state.billsList.map((bill)=>(
 
@@ -84,7 +199,7 @@ class Transactions extends Component {
                         <td>{bill.billNumber}</td>
                         <td><NumberFormat value={bill.smsQuantity} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
                         <td><NumberFormat value={bill.billAmount} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
-                        {/* <td>{bill.billAmount}</td> */}
+                      
                         {bill.status==0 &&
                         <td> <span className="badge badge-danger">Not Paid</span> </td>  
                         }
@@ -101,10 +216,11 @@ class Transactions extends Component {
                           </span> </td>                   
                       </tr> 
                       ))
-                    }
+                    } */}
+
                   
-                  </tbody>
-                </table>
+                  {/* </tbody>
+                </table> */}
               {/* </Datatable> */}
             </CardBody>
           </Card>
