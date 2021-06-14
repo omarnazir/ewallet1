@@ -99,7 +99,7 @@ class Login extends Component {
                     // const redirect=AuthService.getRedirectPath();
                     // this.setState({redirect});
 
-                    // window.location.reload();
+                    window.location.reload();
                 }, (err) => {
                     // console.log(err.response.data);
                     this.setState({ loginHasError: true })

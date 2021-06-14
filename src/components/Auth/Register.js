@@ -12,6 +12,11 @@ import FormValidator from '../Common/FormValidator.js';
 import { AuthService } from '../../services';
 import { data } from 'jquery';
 
+import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2"
+const MySwal = withReactContent(Swal)
+
+
 class Register extends Component {
 
     state = {
@@ -181,11 +186,23 @@ class Register extends Component {
         AuthService.register(data).then((res) => {
             console.log(res)
             this.ViewLoginPage()
+            window.location.reload();
         }, (err) => {
-            console.log(err)
+            this.showSweetAlert(err.message);
+            console.log(err.message)
         })
 
 
+    }
+
+    showSweetAlert(message) {
+        return MySwal.fire({
+            position: 'center',
+            icon: 'info',
+            title: 'Strong Password required',
+            showConfirmButton: false,
+            timer: 2000
+        })
     }
 
     /* Simplify error check */
