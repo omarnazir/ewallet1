@@ -158,9 +158,9 @@ class Invoices extends Component {
                   <li className="mb-1">Dial *150*00#</li>
                   <li className="mb-1">Select <strong>'Pay bill'</strong></li>
                   <li className="mb-1">Select <strong>'Enter Business Number'</strong></li>
-                  <li className="mb-1">Enter <strong>'921413'</strong></li>
+                  <li className="mb-1">Enter <strong>'{this.state.bill.billNumber}'</strong></li>
                   <li className="mb-1">Enter Reference Number <strong>'221088'</strong></li>
-                  <li className="mb-2">Enter Amount <strong>'100'</strong></li>
+                  <li className="mb-2">Enter Amount <strong>'{this.state.bill.paidAmount}'</strong></li>
                 </ol>
               </div>
             </div>
