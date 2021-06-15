@@ -47,14 +47,13 @@ class Transactions extends Component {
           key: "id",
           text: "#",
           sortable: true,
-          // cell: (record, index) => {
-          //   return index;
-          // }
+          cell: (record, index) => {
+            return index+=1;
+          }
       },
       {
           key: "billNumber",
-          text: "INVOICE",
-          sortable: true
+          text: "INVOICE"
       },
       {
           key: "smsQuantity",

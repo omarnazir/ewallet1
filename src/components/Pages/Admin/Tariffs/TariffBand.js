@@ -120,10 +120,10 @@ handleChange = event => {
 }
 
   AddTariffBand = () => {
-    return this.props.history.push('/admin/add-tariff-band/' + this.state.tariff.id, this.state.tariff)
+    return this.props.history.push('/admin-add-tariff-band/' + this.state.tariff.id, this.state.tariff)
   }
   ViewTarriffBand = () => {
-    return this.props.history.push('/admin/manage-tariff-bands')
+    return this.props.history.push('/admin-manage-tariff-bands')
   }
 
  
@@ -141,7 +141,7 @@ handleChange = event => {
   }
 
   ViewTarrifs = () => {
-    return this.props.history.push('/admin/manage-tariffs')
+    return this.props.history.push('/admin-manage-tariffs')
   }
   toggleModal = () => {
     this.setState({

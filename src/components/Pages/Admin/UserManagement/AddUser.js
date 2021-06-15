@@ -111,7 +111,7 @@ class AddUser extends Component {
     }
 
     ViewAllAdminUsers = () => {
-        return this.props.history.push('/manage-users')
+        return this.props.history.push('/admin-manage-users')
     }
 
     AddActionButtonStyle = {
@@ -120,7 +120,7 @@ class AddUser extends Component {
     }
 
     ViewUserPage = () => {
-        return this.props.history.push("/manage-users");
+        return this.props.history.push("/admin-manage-users");
       };
 
     render() {

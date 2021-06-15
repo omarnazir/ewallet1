@@ -83,7 +83,12 @@ class SendersRequested extends Component {
         {
           key: "id",
           text: "ID",
-          sortable: true
+          sortable: true,
+          cell: (record, index) => {
+            return (
+                index+1
+            )
+          }
         },
         {
           key: "customerEntity",

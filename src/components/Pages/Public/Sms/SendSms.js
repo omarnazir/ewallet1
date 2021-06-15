@@ -238,8 +238,8 @@ class SendSmsCompose extends Component {
                                             <input className="form-control" name="campaign" onChange={this.handleChange} required></input>
                                         </FormGroup>
                                         <div className="form-group">
-                                            <label htmlFor="exampleFormControlSelect1">Sender Id : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1" onChange={this.handleSenderIdChange}>
+                                            <label>Sender Id : </label>
+                                            <select className="form-control" onChange={this.handleSenderIdChange}>
                                                 <option key="0" value="0">Select a sender id</option>
                                                 {this.state.sendersList.map(row => (
                                                     <option key={row.id} value={row.id} >
@@ -310,8 +310,8 @@ class SendSmsCompose extends Component {
                                             </TabContent>
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="exampleFormControlSelect13">Sms Template : </label>
-                                            <select className="form-control" id="exampleFormControlSelect13" onChange={this.handleSmsTemplateChange}>
+                                            <label>Sms Template : </label>
+                                            <select className="form-control" onChange={this.handleSmsTemplateChange}>
                                                 <option>Select a template</option>
                                                 {this.state.smsTemplateList.map(row => (
                                                     <option key={row.id} value={row.id}>

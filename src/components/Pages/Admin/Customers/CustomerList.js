@@ -68,9 +68,9 @@ class CustomerList extends Component {
         key: "id",
         text: "#",
         sortable: true,
-        // cell: (record, index) => {
-        //   return index;
-        // }
+        cell: (record, index) => {
+          return index+1;
+        }
     },
     {
         key: "fullname",

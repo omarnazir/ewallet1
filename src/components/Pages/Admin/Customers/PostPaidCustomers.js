@@ -64,9 +64,9 @@ class PostPaidCustomers extends Component {
         key: "id",
         text: "#",
         sortable: true,
-        // cell: (record, index) => {
-        //   return index;
-        // }
+        cell: (record, index) => {
+          return index+=1;
+        }
     },
     {
         key: "fullname",
@@ -75,8 +75,7 @@ class PostPaidCustomers extends Component {
     },
     {
         key: "email",
-        text: "EMAIL",
-        sortable: true
+        text: "EMAIL"
     },
     {
         key: "phonenumber",
@@ -90,17 +89,13 @@ class PostPaidCustomers extends Component {
     },
     {
       key: "vaccount",
-      text: "V_ACCOUNT",
-      sortable: true
+      text: "V_ACCOUNT"
   },
   {
     key: "monthlyLimit",
     text: "MONTHLY SMS LIMIT",
     sortable: true,
     cell: (record, index) => {
-
-    
-     
       if (record.monthlyLimit == null) {
         return (
           'N/A'
@@ -148,6 +143,7 @@ class PostPaidCustomers extends Component {
 {
   key: "id",
   text: "ACTION",
+  sort:false,
   cell: (record, index) => {
     return (
       <Button color="success" className="btn btn-success"
