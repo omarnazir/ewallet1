@@ -40,9 +40,7 @@ class SmsTemplatesRequested extends Component {
     color: 'white',
     background: "#003366"
   }
-  AddSmsTemplates = () => {
-    return this.props.history.push('/admin-add-sms-templates')
-  }
+ 
 
   formatDate = (date) => {
     return Moment(date).format('lll')
@@ -200,9 +198,6 @@ config = {
           </div>
           <div className="flex-row">
             <Button onClick={this.ViewAllSmsTemplates} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Sms Templates</Button>
-            <Button onClick={this.AddSmsTemplates} style={this.AddActionButtonStyle} className="btn-pill-right">
-              <i className="fa fa-plus mr-2"></i>
-              Add New SMS Template</Button>
           </div>
         </div>
         <Container fluid>

@@ -22,10 +22,8 @@ import Transactions from './components/Pages/Admin/Transactions/Transactions';
 import Senders from './components/Pages/Admin/Senders/Senders';
 import SendersRequested from './components/Pages/Admin/Senders/RequestedSenders';
 import AddSenderId from './components/Pages/Admin/Senders/AddSenderId';
-import AddSmsTemplate from './components/Pages/Admin/SmsTemplates/AddSmsTemplate';
 import SmsTemplates from './components/Pages/Admin/SmsTemplates/SmsTemplates';
 import Tariffs from "./components/Pages/Admin/Tariffs/Tariffs"
-import AddTariffBand from './components/Pages/Admin/Tariffs/AddTariffBand';
 import TarriffBand from './components/Pages/Admin/Tariffs/TariffBand';
 import AddUser from './components/Pages/Admin/UserManagement/AddUser';
 import UsersManagement from './components/Pages/Admin/UserManagement/UsersList';
@@ -110,12 +108,11 @@ const Routes = ({ location }) => {
 
                                    
 
-                                    <Route path="/admin-add-sms-templates" component={waitFor(AddSmsTemplate)} />
+        
                                     <Route path="/admin-senders-requested" component={waitFor(SendersRequested)} />
                                     <Route path="/admin-sms-requested-templates" component={waitFor(SmsTemplatesRequested)}/>
                                     <Route path="/admin-sms-templates" component={waitFor(SmsTemplates)} />
                                     <Route path="/admin-manage-tariffs" component={waitFor(Tariffs)} />
-                                    <Route path="/admin-add-tariff-band" component={waitFor(AddTariffBand)} />
                                     <Route path="/admin-manage-tariff-bands/:id" component={waitFor(TarriffBand)} />
 
 

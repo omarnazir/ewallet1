@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
 // import Swal from "../../../Common/Swal";
 import Swal from "sweetalert2"
@@ -163,6 +162,7 @@ class Tariffs extends Component {
 
   AddTariffMode=()=>{
     this.setState({AddTariffMode:true})
+    this.setState({name:""})
     this.toggleModal();
   }
 
