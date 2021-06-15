@@ -497,7 +497,7 @@ class Register extends Component {
                                         <div className="form-row">
                                             <div className="form-group col-md-6 px-2">
                                                 <label htmlFor="nidafile"> {this.state.showIndividualFields ? "NIDA ID (Scanned PDF required)" : "Bussiness License (Scanned PDF required)"}
-                                                    <span className="text-danger"> (Max. size 250KB)</span>
+                                                    <span className="text-danger"> (Max. size 500KB)</span>
                                                 </label>
 
                                                 <div className="custom-file">
