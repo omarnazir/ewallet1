@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import axios from "../../../../services/axios"
-import Datatable from "../../../Common/Datatable"
 import {
   Container,
   Card,
@@ -76,7 +75,6 @@ class UserRequestedSmsList extends Component {
         <Container fluid>
           <Card>
             <CardBody>
-              {/* <Datatable options={this.state.dtOptions}> */}
                 <table className="table table-striped my-4 w-100">
                   <thead>
                     <tr>

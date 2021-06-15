@@ -21,7 +21,6 @@ import PostPaidCustomers from './components/Pages/Admin/Customers/PostPaidCustom
 import Transactions from './components/Pages/Admin/Transactions/Transactions';
 import Senders from './components/Pages/Admin/Senders/Senders';
 import SendersRequested from './components/Pages/Admin/Senders/RequestedSenders';
-import AddSenderId from './components/Pages/Admin/Senders/AddSenderId';
 import SmsTemplates from './components/Pages/Admin/SmsTemplates/SmsTemplates';
 import Tariffs from "./components/Pages/Admin/Tariffs/Tariffs"
 import TarriffBand from './components/Pages/Admin/Tariffs/TariffBand';
@@ -91,7 +90,6 @@ const Routes = ({ location }) => {
                         <div>
                             <Suspense fallback={<PageLoader />}>
                                 <Switch location={location}>
-                                    {/* <Route path="/dashboard" component={waitFor(Dashboard)}/> */}
                                     <Route path="/admin-dashboard" component={waitFor(Dashboard)} />
 
                                     <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
@@ -102,16 +100,12 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-customers-postpaid" component={waitFor(PostPaidCustomers)} />
                                     <Route path="/admin-transactions" component={waitFor(Transactions)} />
 
-
-                                    <Route path="/admin-add-senderid" component={waitFor(AddSenderId)} />
                                     <Route path="/admin-senders" component={waitFor(Senders)} />
-
-                                   
-
-        
                                     <Route path="/admin-senders-requested" component={waitFor(SendersRequested)} />
+
                                     <Route path="/admin-sms-requested-templates" component={waitFor(SmsTemplatesRequested)}/>
                                     <Route path="/admin-sms-templates" component={waitFor(SmsTemplates)} />
+
                                     <Route path="/admin-manage-tariffs" component={waitFor(Tariffs)} />
                                     <Route path="/admin-manage-tariff-bands/:id" component={waitFor(TarriffBand)} />
 
@@ -121,6 +115,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
                                     <Route path="/admin-restricted-words" component={waitFor(RestrictedWords)} />
                                     <Route path="/admin-reserved-numbers" component={waitFor(ReservedNumbers)} />
+                                    
                                     <Route path="/admin-invoices/:id" component={waitFor(Invoices)} />
 
 
@@ -162,7 +157,8 @@ const Routes = ({ location }) => {
                                 <Route path="/sender-reports" component={waitFor(SenderReports)}/>
                                 */}
 
-                                    <Redirect to="/dashboard" />
+                                    {/* <Redirect to="/dashboard" /> */}
+                                    <Redirect to="/login" />
                                 </Switch>
                             </Suspense>
                         </div>

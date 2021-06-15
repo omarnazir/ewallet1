@@ -5,7 +5,11 @@ import {
   Card,
   CardHeader,
   CardBody,
-  Button
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import $ from "jquery";
 import Moment from 'moment';
@@ -17,7 +21,9 @@ import { Redirect } from 'react-router-dom';
 
 class Senders extends Component {
   state = {
-    senderIdList: []
+    senderIdList: [],
+    senderId:'',
+    modal: false,
   };
 
 
@@ -60,10 +66,10 @@ class Senders extends Component {
       sortable: true
     },
     {
-      key: "dateCreated",
+      key: "createdAt",
       text: "DATE REGISTERED",
       cell: (record, index) => {
-        return (this.formatDate(record.dateCreated))
+        return (this.formatDate(record.createdAt))
       }
     },
     {
@@ -110,11 +116,43 @@ class Senders extends Component {
   ViewRequestedSenders = () => {
     return this.props.history.push('/admin-senders-requested')
   }
-  AddSenderId = () => {
-    return this.props.history.push('/admin-add-senderid')
+  // AddSenderId = () => {
+  //   return this.props.history.push('/admin-add-senderid')
+  // }
+  AddSenderId=()=>{
+    this.toggleModal();
   }
+
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const sender = {
+        senderId: this.state.senderId,
+
+    }
+    SenderIdService.AddDefaultSenderId(sender).then(
+        res => {
+            console.log(res);
+            console.log(res.data);
+            console.log("saved")
+            this.toggleModal();
+            this.GetAllSenderIds();
+        }
+    )
+}
+
+  toggleModal = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
   formatDate = (date) => {
-    return Moment(date).format('DD-MM-YYYY')
+    return Moment(date).format('lll')
   }
   AddActionButtonStyle = {
     color: 'white',
@@ -158,7 +196,28 @@ class Senders extends Component {
             <Button onClick={this.ViewRequestedSenders} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View Requested SenderId's</Button>
             <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
-              Add New Default SenderId</Button>
+              Add New Default SenderId </Button>
+
+              <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+              <ModalHeader toggle={this.toggleModal}>Add New Default Sender Id</ModalHeader>
+              <form onSubmit={this.handleSubmit}>
+              <ModalBody>
+               
+                  <div className="form-group px-md-2 px-1">
+                    <label>Sender Id :</label>
+                    <input className="form-control" name="senderId" onChange={this.handleChange}
+                    value={this.state.name}
+                     required ></input>
+                  </div>
+               
+              </ModalBody>
+              <ModalFooter>
+                <button className="btn btn-sm  mr-3 px-4" style={this.AddActionButtonStyle}>
+                  Save
+                  </button>
+              </ModalFooter>
+              </form>
+            </Modal>
           </div>
         </div>
         <Container fluid>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
+import Moment from "moment";
 import axios from "../../../../services/axios";
 import {
     Container, Card, CardHeader, CardBody, CardTitle, Button, FormGroup,
@@ -162,6 +162,10 @@ class CustomerDetails extends Component {
         })
     }
 
+    formatDate = (date) => {
+        return Moment(date).format('lll')
+    }
+
 
     render() {
         const id = this.state.customer.id;
@@ -293,7 +297,7 @@ class CustomerDetails extends Component {
                                                         <p className="mb-3 text-dark"><strong>Payment Type:</strong> &nbsp;
                                                         <span name="status"></span>{this.state.customer.paymentType}
                                                         </p>
-                                                        <p className="mb-3 text-dark"><strong>Date registered:</strong> &nbsp; <span name="regdate">{this.state.customer.createdAt}</span></p>
+                                                        <p className="mb-3 text-dark"><strong>Date registered:</strong> &nbsp; <span name="regdate">{this.formatDate(this.state.customer.createdAt)}</span></p>
                                                         <p className="mb-3 text-dark"><strong>ID number:</strong> &nbsp; <span name="nidaid">19900302-600123-456791</span></p>
                                                         {/* <p className="mb-3 text-dark"><strong>Attachment:</strong> &nbsp; <span name="attachment"><a href="#">View Attachment</a></span></p> */}
                                                         {/* <p className="mb-3 text-dark"><strong>SMSC ID:</strong> &nbsp; <span name="smsc">ID-01XXXX</span></p> */}
@@ -384,7 +388,7 @@ class CustomerDetails extends Component {
                                                                                 <span className="badge badge-danger">Disabled</span>
                                                                             }
                                                                         </td>
-                                                                        <td>{row.registrationDate}</td>
+                                                                        <td>{this.formatDate(row.registrationDate)}</td>
 
                                                                     </tr>
                                                                 )}

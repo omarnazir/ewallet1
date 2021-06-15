@@ -160,9 +160,6 @@ class SendersRequested extends Component {
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewSenders} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Sender Id's</Button>
-                        <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
-                            <i className="fa fa-plus mr-2"></i>
-                            Add New Default SenderId</Button>
                     </div>
                 </div>
                 <Container fluid>
@@ -216,10 +213,9 @@ class SendersRequested extends Component {
                                     <tr>
                                         <th data-priority="1">ID</th>
                                         <th>Customer/Organization</th>
-
                                         <th className="" data-priority="2">
                                             Sender
-                      </th>
+                                         </th>
                                         <th>DATE REGISTERED</th>
                                         <th>STATUS</th>
                                         <th>ACTION</th>
@@ -231,7 +227,7 @@ class SendersRequested extends Component {
                                             <td>{index+=1}</td>
                                             <td>{row.customerEntity.fullname}</td>
                                             <td>{row.senderId}</td>
-                                            <td>{this.formatDate(row.dateCreated)}</td>
+                                            <td>{this.formatDate(row.createdAt)}</td>
                                             <td>
                                                 {row.is_approved == 1 &&
                                                     <span className="badge badge-success">Approved</span>

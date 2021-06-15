@@ -203,9 +203,6 @@ class Tariffs extends Component {
                 <button className="btn btn-sm  mr-3 px-4" style={this.AddActionButtonStyle}>
                   Save
                   </button>
-                {/* <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger px-4">
-                  Cancel
-                  </button> */}
               </ModalFooter>
               </form>
             </Modal>

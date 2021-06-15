@@ -6,10 +6,6 @@ import {
     Card,
     CardHeader,
     CardBody,
-    CardTitle,
-    InputGroup,
-    InputGroupAddon,
-    Input,
     Button,
     FormGroup
 } from "reactstrap";
@@ -26,7 +22,7 @@ class PurchaseSms extends Component {
 
     state = {
         tariffBand: "",
-        paymentMethod: "",
+        paymentMethod: "1",
         phoneNumber: "",
         tarriffBandList: [],
         paymentTypeList:[]
@@ -56,11 +52,6 @@ class PurchaseSms extends Component {
             })
     }
 
-
-
-
-
-
     handleSubmit = event => {
         event.preventDefault();
         const bill={
@@ -68,13 +59,6 @@ class PurchaseSms extends Component {
             "payment_type_id":this.state.paymentMethod,
             "msisdn":this.state.phoneNumber
         }
-        console.log(bill)
-
-        // const bill2={
-        //     "tariff_band_id":21,
-        //     "payment_type_id":1,
-        //     "msisdn":"0745252650"
-        // }
         axios.post("/bills", bill).then(res => {
             console.log(res);
             console.log(res.data);
@@ -128,7 +112,7 @@ class PurchaseSms extends Component {
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Payment method : </label>
                                             <select className="form-control" id="exampleFormControlSelect1" name="paymentMethod" required onChange={this.handlePaymentMethodChange} onClick={this.handlePaymentMethodChange}>
-                                            <option value="0">Select payment method</option>
+                                            {/* <option value="0">Select payment method</option> */}
                                             {this.state.paymentTypeList.map(row => (
                                                     <option key={row.id} value={row.id} >
                                                         {row.name}
