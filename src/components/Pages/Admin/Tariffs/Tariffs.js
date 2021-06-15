@@ -122,7 +122,6 @@ class Tariffs extends Component {
 
     axios.post("/tariff", tarriff).then(res => {
       console.log(res);
-      console.log(res.data);
       this.GetAllTariffs();
       this.showSweetAlert('Added Tariff Successfully');
     })
@@ -134,7 +133,6 @@ class Tariffs extends Component {
     }
     axios.put("/tariff", tariff).then(res => {
       console.log(res);
-      console.log(res.data);
       this.GetAllTariffs();
       this.setState({name:''})
       this.showSweetAlert('Updated Tariff Successfully');

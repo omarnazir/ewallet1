@@ -11,8 +11,6 @@ import {
 } from "reactstrap";
 import $ from "jquery";
 
-
-
 class TarriffBand extends Component {
   state = {
     tariffBandList: [],
@@ -72,9 +70,7 @@ class TarriffBand extends Component {
       "expireDurationDays": this.state.expireDurationDays,
       "vatAmount": this.state.vatAmount
 
-  }
-  console.log(tariffBands)
-  
+  } 
       axios.put("/tariff-bands", tariffBands).then(res => {
         console.log(res.data);
         this.getTariffBands(this.state.tariffId)
@@ -89,7 +85,6 @@ class TarriffBand extends Component {
         "smsQuantity": this.state.smsQuantity,
         "expireDurationDays": this.state.expireDurationDays,
         "vatAmount": this.state.vatAmount
-
     }
       axios.post("/tariff-bands", tariffBands).then(res => {
         console.log(res.data);

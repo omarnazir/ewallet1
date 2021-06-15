@@ -1,26 +1,17 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
-import axios from "../../../../services/axios";
 import {
   Container,
   Card,
   CardHeader,
   CardBody,
-  CardTitle,
-  InputGroup,
-  InputGroupAddon,
-  Input,
-  Button,
-  Breadcrumb
+  Button
 } from "reactstrap";
 import $ from "jquery";
 import Moment from 'moment';
 import { SenderIdService } from "../../../../services"
 
 import ReactDatatable from '@ashvin27/react-datatable';
-import NumberFormat from 'react-number-format';
-
 import { AuthService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
 
@@ -72,7 +63,7 @@ class Senders extends Component {
       key: "dateCreated",
       text: "DATE REGISTERED",
       cell: (record, index) => {
-        return (this.formatDate(record.startDate))
+        return (this.formatDate(record.dateCreated))
       }
     },
     {
