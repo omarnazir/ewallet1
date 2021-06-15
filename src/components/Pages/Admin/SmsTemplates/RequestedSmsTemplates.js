@@ -119,7 +119,10 @@ class SmsTemplatesRequested extends Component {
     {
         key: "id",
         text: "#",
-        sortable: true,
+       cell:(record,index)=>{
+         return index+=1;
+       }
+
     },
     {
         key: "fullname",
@@ -177,7 +180,7 @@ class SmsTemplatesRequested extends Component {
       if(record.status ==0){
         return ( 
           <div>
-        <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveTemplate(record)}>Approve</span>
+        <span className="btn badge-success mr-1 mb-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveTemplate(record)}>Approve</span>
         <span className="btn badge-danger" onClick={() => this.RejectTemplate(record)}>Reject</span>
         </div>
         )
