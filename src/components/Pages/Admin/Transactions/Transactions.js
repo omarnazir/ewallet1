@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import axios from "../../../../services/axios";
-import Datatable from "../../../Common/Datatable";
 import { Container, Card, CardHeader, CardBody, CardTitle,Button } from "reactstrap";
 import $ from "jquery";
 import Moment from "moment"
@@ -150,7 +149,6 @@ class Transactions extends Component {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect}/>
   }
-    let index=0;
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -172,55 +170,6 @@ class Transactions extends Component {
                 columns={this.columns}
                 
                 />
-
-
-                {/* <table className="table table-striped my-4 w-100">
-                  <thead>
-                    <tr>
-                      <th data-priority="1">#</th>
-                      <th>INVOICE</th>
-                      <th>QUANTITY</th>
-                      <th>AMOUNT</th>
-                      <th>PAYMENT STATUS</th>
-                      <th>METHOD</th>
-                      <th>PAYMENT DATE</th>
-                      <th>DATE CREATED</th>
-                      <th>ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody> */}
-{/* 
-                    {
-                      this.state.billsList.map((bill)=>(
-
-                        <tr className="gradeX" key={bill.id}>
-                        <td>{index+=1}</td>
-                        <td>{bill.billNumber}</td>
-                        <td><NumberFormat value={bill.smsQuantity} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
-                        <td><NumberFormat value={bill.billAmount} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
-                      
-                        {bill.status==0 &&
-                        <td> <span className="badge badge-danger">Not Paid</span> </td>  
-                        }
-                        {bill.status==1 && 
-                        <td> <span className="badge badge-success">Paid</span> </td>  
-                        }
-                        <td>{bill.paymentMethod}</td> 
-                        <td>N/A</td> 
-                        <td>{this.formatDate(bill.createdAt)}</td>
-                        <td> <span className="btn" style={this.AddActionButtonStyle} onClick={() => {
-                            this.ViewPrePaidInvoice(bill);
-                          }}>
-                          VIEW
-                          </span> </td>                   
-                      </tr> 
-                      ))
-                    } */}
-
-                  
-                  {/* </tbody>
-                </table> */}
-              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

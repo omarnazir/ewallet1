@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable";
 import {
   Container,
   Card,
@@ -41,17 +40,6 @@ class SmsTemplatesRequested extends Component {
     color: 'white',
     background: "#003366"
   }
-
-  // Access to internal datatable instance for customizations
-  dtInstance = (dtInstance) => {
-    const inputSearchClass = "datatable_input_col_search";
-    const columnInputs = $("tfoot ." + inputSearchClass);
-    // On input keyup trigger filtering
-    columnInputs.keyup(function () {
-      dtInstance.fnFilter(this.value, columnInputs.index(this));
-    });
-  };
-
   AddSmsTemplates = () => {
     return this.props.history.push('/admin-add-sms-templates')
   }
@@ -62,12 +50,6 @@ class SmsTemplatesRequested extends Component {
   ViewAllSmsTemplates = () => {
     return this.props.history.push('/admin-sms-templates')
   }
-
-  // ApproveTemplate(row){
-  //   console.log("clicked")
-  //   // const value=e.target.value;
-  //   // console.log(value)
-  // }
 
   RejectTemplate = (e) => {
     const value = e.target.value;
@@ -208,8 +190,6 @@ config = {
 }
 
   render() {
-
-    let index=0;
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -273,45 +253,6 @@ config = {
               </div>
             </CardHeader>
             <CardBody>
-           
-                  {/* {this.state.smsTemplateList.map(row => (
-                    <tr key={row.id}>
-                      <td>{index+=1}</td>
-                     
-                      <td>{row.customerEntity.fullname}</td>
-                      <td>{row.messageTemplate}</td>
-                      <td>{this.formatDate(row.dateCreated)}</td>
-                      <td>
-                        {row.status == "1" &&
-                          <span className="badge badge-success">Approved</span>
-                        }
-                        {
-                          row.status == "0" &&
-                          <span className="badge badge-warning">Pending</span>
-                        }
-                        {
-                          row.status == "2" &&
-                          <span className="badge badge-danger">Rejected</span>
-                        }
-                      </td>
-                      <td>N/A</td>
-                      { row.status == "0" &&
-
-                        <td>
-                          <span className="btn badge-success mr-1" style={this.AddActionButtonStyle} onClick={() => this.ApproveTemplate(row.id)}>Approve</span>
-                          <span className="btn badge-danger" onClick={() => this.RejectTemplate(row.id)}>Reject</span>
-                        </td>
-                      }
-                      {
-                        row.status != "0" &&
-                        <td>
-                          N/A
-                          </td>
-                      }
-                    </tr>
-                  ))} */}
-
-
                 <ReactDatatable
                 config={this.config}
                 records={this.state.smsTemplateList}
