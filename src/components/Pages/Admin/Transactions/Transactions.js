@@ -116,7 +116,8 @@ class Transactions extends Component {
     text: "ACTION",
     cell: (record, index) => {
       return (
-        <Button color="success" className="btn btn-success"
+        <Button style={{color: 'white',
+        background: "#003366"  }} className="btn "
           onClick={() => {
             this.ViewPrePaidInvoice(record);
           }}
@@ -126,8 +127,6 @@ class Transactions extends Component {
       );
     }
   }
-
-  
   ];
   
   config = {

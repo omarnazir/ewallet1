@@ -131,7 +131,8 @@ class CustomerList extends Component {
   text: "ACTION",
   cell: (record, index) => {
     return (
-      <Button color="success" className="btn btn-success"
+      <Button  style={{color: 'white',
+      background: "#003366"  }} className="btn btn-success"
         onClick={() => {
           this.ViewCustomerDetails(record);
         }}

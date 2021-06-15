@@ -55,7 +55,7 @@ class Invoices extends Component {
 
 
   ViewAllInvoices = () => {
-    return this.props.history.push("/prepaid-invoices");
+    return this.props.history.push("/admin-transactions");
   };
 
   AddActionButtonStyle = {

@@ -209,10 +209,6 @@ class Tariffs extends Component {
               </ModalFooter>
               </form>
             </Modal>
-
-
-
-      
           </div>
         </div>
         <Container fluid>
