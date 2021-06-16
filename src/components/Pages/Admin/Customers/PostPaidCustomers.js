@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
-import { Link } from 'react-router-dom';
 import $ from "jquery";
 import Moment from "moment"
 import { AuthService } from '../../../../services';
@@ -70,8 +68,7 @@ class PostPaidCustomers extends Component {
     },
     {
         key: "fullname",
-        text: "CUSTOMER NAME",
-        sortable: true
+        text: "CUSTOMER NAME"
     },
     {
         key: "email",
@@ -79,13 +76,11 @@ class PostPaidCustomers extends Component {
     },
     {
         key: "phonenumber",
-        text: "PHONE",
-        sortable: true
+        text: "PHONE"
     },
     {
         key: "location",
-        text: "ADDRESS",
-        sortable: true
+        text: "ADDRESS"
     },
     {
       key: "vaccount",
@@ -137,7 +132,7 @@ class PostPaidCustomers extends Component {
         text: "DATE REGISTERED",
         sortable: true,
         cell: (record, index) => {
-          return (this.formatDate(record.startDate))
+          return (this.formatDate(record.registrationDate))
         }
     },
 {
@@ -178,12 +173,6 @@ class PostPaidCustomers extends Component {
             {/* <Button className="btn-pill-right" style={this.AddActionButtonStyle}>
               <i className="fa fa-plus mr-2"></i>
               Add Post Paid Customer</Button> */}
-
-
-            {/* <Link outline color="danger" className="btn-pill-right">Add Post Paid Customer</Link> */}
-            {/* <Link to="dashboard" className="btn btn-pill-right">
-            <span outline color="danger" className="btn-pill-right">Add Post Paid Customer</span>
-              </Link> */}
           </div>
         </div>
         <Container fluid>
@@ -197,9 +186,6 @@ class PostPaidCustomers extends Component {
                 config={this.config}
                 records={this.state.customersPostPaidList}
                 columns={this.columns}
-                
-               
-                
                 />
             </CardBody>
           </Card>

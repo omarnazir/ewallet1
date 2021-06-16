@@ -26,9 +26,6 @@ class Transactions extends Component {
         })
       }
   
-      formatDate = (date) => {
-        return Moment(date).format('lll')
-      }
 
       ViewPrePaidInvoice(row){
         console.log(row)
@@ -41,6 +38,10 @@ class Transactions extends Component {
     }
 
 
+    formatDate = (date) => {
+      return Moment(date).format('lll')
+    }
+    
     columns = [
       {
           key: "id",

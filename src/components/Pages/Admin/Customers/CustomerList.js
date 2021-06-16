@@ -30,7 +30,7 @@ class CustomerList extends Component {
   }
 
   formatDate = (date) => {
-    return Moment(date).format('DD-MM-YYYY')
+    return Moment(date).format('lll')
   }
 
   ViewCustomerDetails = (row) => {
@@ -75,22 +75,18 @@ class CustomerList extends Component {
     {
         key: "fullname",
         text: "CUSTOMER NAME",
-        sortable: true
     },
     {
         key: "email",
         text: "EMAIL",
-        sortable: true
     },
     {
         key: "phonenumber",
         text: "PHONE",
-        sortable: true
     },
     {
         key: "location",
         text: "ADDRESS",
-        sortable: true
     },
 
     {
@@ -119,7 +115,7 @@ class CustomerList extends Component {
         text: "DATE REGISTERED",
         sortable: true,
         cell: (record, index) => {
-          return (this.formatDate(record.startDate))
+          return (this.formatDate(record.registrationDate))
         }
     }, {
       key: "paymentType",
