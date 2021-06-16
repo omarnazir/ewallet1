@@ -239,7 +239,7 @@ class AddUser extends Component {
 
                                         </div>
                                      
-{/* 
+
                                         <div className="row">
                                             <div className="col-md-12">
 
@@ -352,7 +352,7 @@ class AddUser extends Component {
                                             </div>
 
 
-                                        </div> */}
+                                        </div>
 
 
                                     </CardBody>
