@@ -27,7 +27,7 @@ class Transactions extends Component {
       }
   
       formatDate = (date) => {
-        return Moment(date).format('DD-MM-YYYY')
+        return Moment(date).format('lll')
       }
 
       ViewPrePaidInvoice(row){
