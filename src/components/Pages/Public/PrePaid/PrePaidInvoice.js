@@ -110,10 +110,10 @@ class PrePaidInvoiceList extends Component {
                     {/* Mar 24, 2021 */}
                     <p style={this.InvoiceHeader}>Invoice Date: &nbsp; <span>{this.formatDate(this.state.bill.createdAt)}</span></p>
                     <p style={this.InvoiceHeader}>Invoice Status: &nbsp;
-                    {this.state.bill.status != "1" &&
+                    {this.state.bill.status != "Success" &&
                         <span className="alert alert-danger px-3 py-1">Unpaid</span>
                       }
-                      {this.state.bill.status == "1" &&
+                      {this.state.bill.status == "Success" &&
                         <span className="alert alert-danger px-3 py-1">Paid</span>
                       }
 

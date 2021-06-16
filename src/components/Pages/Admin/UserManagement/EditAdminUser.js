@@ -125,7 +125,7 @@ class EditAdminUser extends Component {
     }
 
     ViewAllAdminUsers = () => {
-        return this.props.history.push('/admin/manage-users')
+        return this.props.history.push('/admin-manage-users')
     }
 
     AddActionButtonStyle = {

@@ -80,10 +80,10 @@ class PrePaidInvoiceList extends Component {
                         <td><NumberFormat value={bill.smsQuantity} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
                         <td><NumberFormat value={bill.billAmount} displayType={'text'} thousandSeparator={true} prefix={''} /></td>
                         {/* <td>{bill.billAmount}</td> */}
-                        {bill.status==0 &&
+                        {bill.status=="Pending" &&
                         <td> <span className="badge badge-danger">Not Paid</span> </td>  
                         }
-                        {bill.status==1 && 
+                        {bill.status=="Success" && 
                         <td> <span className="badge badge-success">Paid</span> </td>  
                         }
                         <td>{bill.paymentMethod}</td> 

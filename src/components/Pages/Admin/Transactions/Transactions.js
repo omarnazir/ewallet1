@@ -75,12 +75,12 @@ class Transactions extends Component {
         text: "PAYMENT STATUS",
         sortable: true,
         cell: (record, index) => {
-          if (record.status == 0) {
+          if (record.status == "Pending") {
             return (
               <span className="badge badge-warning">Not Paid</span>
             );
           }
-           if(record.status == 1){
+           if(record.status == "Success"){
             return  (<span className="badge badge-success">Paid</span>);
           }
         }
