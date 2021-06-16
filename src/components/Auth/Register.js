@@ -355,13 +355,13 @@ class Register extends Component {
                                             <div className="form-group col-md-6 px-2">
                                                 <label>Email address</label>
                                                 <div className="input-group with-focus">
-                                                    <Input type="text"
+                                                    <Input type="email"
                                                         name="email"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
                                                         placeholder="Enter email address"
                                                         invalid={this.hasError('formRegister', 'email', 'required')}
                                                         onChange={this.validateOnChange}
-                                                        data-validate='["required","email"]'
+                                                        data-validate='["email","required"]'
                                                         value={this.state.formRegister.email} />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text text-muted bg-transparent border-left-0">
@@ -423,7 +423,9 @@ class Register extends Component {
                                                 </div>
                                                 {this.hasError('formRegister', 'password', 'minlen') &&
                                                 <small className="text-danger">
-                                                    <strong>Must contain at least one upper and one lower letter, one special character and number</strong>
+                                                    <strong>Must contain at least one upper and one lower letter, one special character and number. 
+                                                        Number of characters should be greater than 10
+                                                    </strong>
                                                 </small>}
 
                                             </div>
@@ -475,6 +477,7 @@ class Register extends Component {
                                                 <label> {this.state.showIndividualFields ? "NIDA ID Number" : "Bussiness License Number"}</label>
 
                                                 <div className="input-group with-focus">
+                                                    
                                                     <Input type="number"
                                                         name="id_number"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
@@ -482,21 +485,27 @@ class Register extends Component {
                                                         invalid={this.hasError('formRegister', 'id_number', 'minlen')}
                                                         onChange={this.validateOnChange}
                                                         data-validate='["required","minlen"]'
-                                                        data-param="6"
+                                                        
+                                                        data-param={this.state.showIndividualFields?"20":"6"}
                                                         value={this.state.formRegister.id_number} />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text text-muted bg-transparent border-left-0">
                                                             <em className="fa fa-phone-user"></em>
                                                         </span>
                                                     </div>
-                                                    {this.hasError('formRegister', 'id_number', 'minlen') &&
-                                                        <span className="invalid-feedback">Field is required</span>}
+
+                                                    {this.state.showIndividualFields?( this.hasError('formRegister', 'id_number', 'minlen') &&
+                                                        <span className="invalid-feedback">Valid Nida Number is required</span>):
+                                                        (
+                                                            this.hasError('formRegister', 'id_number', 'minlen') &&
+                                                        <span className="invalid-feedback">Valid Bussiness Number is required</span>
+                                                        )}
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="form-row">
                                             <div className="form-group col-md-6 px-2">
-                                                <label htmlFor="nidafile"> {this.state.showIndividualFields ? "NIDA ID (Scanned PDF required)" : "Bussiness License (Scanned PDF required)"}
+                                                <label htmlFor="nidafile"> {this.state.showIndividualFields ? "NIDA ID (Scanned PDF or Image is required)" : "Bussiness License (Scanned PDF or Image is required)"}
                                                     <span className="text-danger"> (Max. size 500KB)</span>
                                                 </label>
 
@@ -507,8 +516,6 @@ class Register extends Component {
                                                         className="form-control form-control-file"
                                                         name="attachment"
                                                         id="csvupload"
-
-
                                                         invalid={this.hasError('formRegister', 'attachment', 'required')}
                                                         onChange={this.validateOnChange}
                                                         data-validate='["required"]'
