@@ -359,16 +359,16 @@ class Register extends Component {
                                                         name="email"
                                                         className="border-right-0 form-control form-control-lg rounded-0"
                                                         placeholder="Enter email address"
-                                                        invalid={this.hasError('formRegister', 'email', 'required')}
+                                                        invalid={this.hasError('formRegister', 'email', 'required') || this.hasError('formRegister', 'email', 'email')}
                                                         onChange={this.validateOnChange}
-                                                        data-validate='["email","required"]'
+                                                        data-validate='["required", "email"]'
                                                         value={this.state.formRegister.email} />
                                                     <div className="input-group-append">
                                                         <span className="input-group-text text-muted bg-transparent border-left-0">
                                                             <em className="fa fa-envelope"></em>
                                                         </span>
                                                     </div>
-                                                    {this.hasError('formRegister', 'email', 'required') &&
+                                                    {this.hasError('formRegister', 'email', 'email') &&
                                                         <span className="invalid-feedback">Email is required</span>}
                                                 </div>
                                             </div>
