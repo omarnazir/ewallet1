@@ -22,8 +22,6 @@ class EditAdminUser extends Component {
 
 
     state = {
-        /* Group each form state in an object.
-           Property name MUST match the form name */
         formRegister: {
             email: '',
             password: '',
@@ -36,13 +34,6 @@ class EditAdminUser extends Component {
         },
         user:{}
     }
-
-    /**
- * Validate input using onChange event
- * @param  {String} formName The name of the form in the state object
- * @return {Function} a function used for the event
- */
-
     componentDidMount(){
         const { state } = this.props.history.location;
         // console.log(state.id)
@@ -53,8 +44,11 @@ class EditAdminUser extends Component {
         axios.get("/users/" + state.id)
             .then(res => {
                 const response = res.data;
+                const user=response;
                 console.log(response)
-                this.setState({ user: response })
+                const formRegister=this.state.formRegister;
+            
+                this.setState({ user })
             })
     }
     validateOnChange = event => {
@@ -107,16 +101,14 @@ class EditAdminUser extends Component {
             console.log(data)
            
 
-            axios.post("users/admin",data).then(res=>{
-                console.log(res);
-                console.log(res.data);
-                this.ViewUserPage();
-              })
+            // axios.post("users/admin",data).then(res=>{
+            //     console.log(res);
+            //     console.log(res.data);
+            //     this.ViewUserPage();
+            //   })
         }
     }
 
-
-    /* Simplify error check */
     hasError = (formName, inputName, method) => {
         return this.state[formName] &&
             this.state[formName].errors &&
@@ -370,15 +362,6 @@ class EditAdminUser extends Component {
                                     </CardBody>
                                     <CardFooter>
                                         <div className="d-flex align-items-center">
-                                            {/* <CustomInput type="checkbox" id="terms"
-                                                name="terms"
-                                                label="I agree with the terms"
-                                                invalid={this.hasError('formRegister', 'terms', 'required')}
-                                                onChange={this.validateOnChange}
-                                                data-validate='["required"]'
-                                                checked={this.state.formRegister.terms}>
-                                                <span className="invalid-feedback">Field is required</span>
-                                            </CustomInput> */}
                                             <div className="ml-auto">
                                                 <button className="btn btn-danger px-5 mr-2" onClick={this.ViewAllAdminUsers}>Cancel</button>
                                                 <button type="submit" style={this.AddActionButtonStyle} className="btn btn-primary px-5">Save</button>

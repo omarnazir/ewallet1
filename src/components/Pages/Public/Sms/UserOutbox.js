@@ -106,7 +106,7 @@ formatDate=(date)=>{
                       <td>{row.network}</td>
                       <td>{row.message}</td>
                       <td>{row.smsCount}</td>
-                      <td>{this.formatDate(row.CREATED_AT)}</td>
+                      <td>{this.formatDate(row.createdAt)}</td>
                       {row.status=="Delivered" && 
                       <td>
                         <span className="badge badge-success">{row.status}</span>

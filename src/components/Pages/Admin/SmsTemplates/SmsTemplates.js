@@ -95,11 +95,11 @@ class SmsTemplates extends Component {
         sortable: true
     },
     {
-      key: "dateCreated",
+      key: "createdAt",
       text: "DATE ",
       sortable: true,
       cell: (record, index) => {
-        return (this.formatDate(record.dateCreated))
+        return (this.formatDate(record.createdAt))
       }
   },
 

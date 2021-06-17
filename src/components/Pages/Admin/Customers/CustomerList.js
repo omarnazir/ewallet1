@@ -111,11 +111,11 @@ class CustomerList extends Component {
         }
     },
     {
-        key: "startDate",
+        key: "createdAt",
         text: "DATE REGISTERED",
         sortable: true,
         cell: (record, index) => {
-          return (this.formatDate(record.registrationDate))
+          return (this.formatDate(record.createdAt))
         }
     }, {
       key: "paymentType",

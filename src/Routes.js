@@ -48,6 +48,7 @@ import LandingPage from './components/Auth/landing';
 import Invoices from './components/Pages/Admin/Transactions/Invoices';
 import SingleUserPage from './components/Pages/Public/Users/SingleUserPage';
 import EditAdminUser from './components/Pages/Admin/UserManagement/EditAdminUser';
+import EditNormalUserPage from "./components/Pages/Public/Users/EditPage";
 
 const waitFor = Tag => props => <Tag {...props} />;
 
@@ -136,6 +137,7 @@ const Routes = ({ location }) => {
 
 
                                 <Route path="/add-user" component={waitFor(AddNormalUser)}/>
+                                <Route path="/edit-user" component={waitFor(EditNormalUserPage)}/>
                                 <Route path="/manage-users" component={waitFor(UserPage)}/>
                                 <Route path="/manage-user" component={waitFor(SingleUserPage)}/>
                                 

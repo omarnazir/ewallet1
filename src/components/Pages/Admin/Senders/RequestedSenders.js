@@ -33,22 +33,17 @@ class SendersRequested extends Component {
             console.log(response);
         })
     }
-
-   
-
     ViewSenders = () => {
         return this.props.history.push('/admin-senders')
     }
-
-
     ViewRequestedSenders = () => {
         return this.props.history.push('/admin-senders-requested')
     }
     AddSenderId = () => {
         return this.props.history.push('/admin-add-senderid')
     }
-    formatDate = (date) => {
-        return Moment(date).format('DD-MM-YYYY')
+    formatDate = (mydate) => {
+        return moment(mydate).format('DD-MM-YYYY')
     }
     AddActionButtonStyle = {
         color: 'white',
@@ -104,10 +99,10 @@ class SendersRequested extends Component {
           sortable: true
         },
         {
-          key: "dateCreated",
+          key: "createdAt",
           text: "DATE REGISTERED",
           cell: (record, index) => {
-            return (this.formatDate(record.startDate))
+            return (this.formatDate(record.createdAt))
           }
         },
         {

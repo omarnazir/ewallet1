@@ -6,23 +6,13 @@ import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reacts
 import $ from "jquery";
 import { AuthService } from '../../../../services';
 import {Redirect} from 'react-router-dom';
-
-
+import ReactDatatable from '@ashvin27/react-datatable';
+import Moment from "moment"
+import { Fragment } from "react";
 class UsersManagement extends Component {
   state = {
     usersList: []
   };
-
-  // Access to internal datatable instance for customizations
-  dtInstance = (dtInstance) => {
-    const inputSearchClass = "datatable_input_col_search";
-    const columnInputs = $("tfoot ." + inputSearchClass);
-    // On input keyup trigger filtering
-    columnInputs.keyup(function () {
-      dtInstance.fnFilter(this.value, columnInputs.index(this));
-    });
-  };
-
 
   componentDidMount() {
     const isAuthenticated = AuthService.isAuthenticated();
@@ -70,6 +60,10 @@ EditUser=(row)=>{
   return this.props.history.push('/admin-manage-edit-user/' + row.id, row)
 }
 
+formatDate = (date) => {
+  return Moment(date).format('lll')
+}
+
 
 EnableUser=(row)=>{
   console.log(row.id)
@@ -82,9 +76,98 @@ EnableUser=(row)=>{
 }
 
 
-sayHello() {
-  alert('Hello!');
+columns = [
+  {
+      key: "id",
+      text: "#",
+      sortable: true,
+      cell: (record, index) => {
+        return index+=1;
+      }
+  },
+  {
+      key: "name",
+      text: "FULL NAME"
+  },
+  {
+    key: "username",
+    text: "USERNAME"
+},
+  {
+    key: "isActive",
+    text: "STATUS",
+    sortable: true,
+    cell: (record, index) => {
+      if (record.isActive == 1) {
+        return (
+          <span className="badge badge-success">Active</span>
+        );
+      }
+       if(record.isActive != 1){
+        return  (<span className="badge badge-danger">Disabled</span>);
+      }
+    }
+},
+  {
+      key: "lastLogin",
+      text: "LAST LOGIN",
+      cell: (record, index) => {
+        if(record.lastLogin == null){
+          return "N/A"
+        }else {
+        return (this.formatDate(record.lastLogin))
+        }
+      }
+
+  },
+{
+  key: "createdAt",
+  text: "DATE CREATED",
+  sortable: true,
+  cell: (record, index) => {
+    return (this.formatDate(record.registrationDate))
+  }
+},
+{
+key: "isActive",
+text: "ACTION",
+cell: (record, index) => {
+    if(record.isActive == 1){
+     return (
+       <Fragment>
+          <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+          <span className="btn badge-danger px-4" onClick={()=>this.DisableUser(record)}> <i className="fa fa-power-off mr-2"></i>Disable</span>
+       </Fragment>
+     )
+    }else {
+     return ( 
+       <Fragment>
+    <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+     <span className="btn badge-success  px-4" onClick={()=>this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
+       </Fragment>
+     )}
+    
+  
 }
+}
+];
+
+config = {
+  page_size: 10,
+  length_menu: [10, 25, 50],
+  show_filter: true,
+  show_pagination: true,
+  pagination:'advance',
+  filename: "Contact List",
+  button: {
+   
+  },
+  language: {
+    loading_text: "Please be patient while data loads..."
+}
+}
+
+
   render() {
     let index=0;
     if (this.state.redirect) {
@@ -107,52 +190,15 @@ sayHello() {
           <Card>
             <CardHeader>
             </CardHeader>
-            <CardBody>
-              {/* <Datatable options={this.state.dtOptions}> */}
-                <table className="table table-striped my-4 w-100">
-                  <thead>
-                    <tr>
-                      <th data-priority="1">#</th>
-                      <th>FULL NAME</th>
-                      <th>USERNAME</th>
-                      <th>STATUS</th>
-                      <th>LAST LOGIN</th>
-                      <th>ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.usersList.map(row => (
-                      <tr key={row.id}>
-                        <td>{index+=1}</td>
-                        <td>{row.name}</td>
-                        <td>{row.username}</td>
-
-                        <td>
-                          {row.isActive == 1 &&
-                            <span className="badge badge-success">Active</span>
-                          }
-                          {
-                            row.isActive != 1 &&
-                            <span className="badge badge-danger">Disabled</span>
-                          }
-                        </td>
-                        <td>{row.lastLogin}</td>
-                        <td> <span className="btn badge-success"onClick={()=>this.EditUser(row)}> <i className="icon-pencil mr-2"  ></i>Edit</span> <br />
-                          {/* <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/> */}
-                          {/* <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span> */}
-                          {row.isActive == 1 &&
-                            <span className="btn badge-danger mt-1" onClick={()=>this.DisableUser(row)}> <i className="icon-info mr-2"></i>Disable</span>
-                          }
-                          {
-                            row.isActive != 1 &&
-                            <span className="btn badge-success mt-1" onClick={()=>this.EnableUser(row)}> <i className="icon-tick mr-2"></i>Enable</span>
-                          }
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              {/* </Datatable> */}
+            <CardBody>     
+            {/* <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/>  */}
+              <ReactDatatable 
+              extraButtons={this.extraButtons}
+                config={this.config}
+                records={this.state.usersList}
+                columns={this.columns}
+                 />
+                
             </CardBody>
           </Card>
         </Container>

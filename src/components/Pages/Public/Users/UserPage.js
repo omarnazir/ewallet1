@@ -13,56 +13,17 @@ import {
 } from "reactstrap";
 import Datetime from 'react-datetime';
 import $ from "jquery";
-
-import Datatable from "../../../Common/Datatable";
 import axios from '../../../../services/axios';
 import { AuthService } from '../../../../services';
 import {Redirect} from 'react-router-dom';
-
+import ReactDatatable from '@ashvin27/react-datatable';
+import Moment from "moment"
+import { Fragment } from "react";
 
 class UserPage extends Component {
   state = {
-    dtOptions: {
-      paging: true, // Table pagination
-      ordering: true, // Column ordering
-      info: true, // Bottom left status text
-      responsive: true,
-      // Text translation options
-      // Note the required keywords between underscores (e.g _MENU_)
-      oLanguage: {
-        sSearch: '<em class="fa fa-search"></em>',
-        sLengthMenu: "_MENU_ records per page",
-        info: "Showing page _PAGE_ of _PAGES_",
-        zeroRecords: "Nothing found - sorry",
-        infoEmpty: "No records available",
-        infoFiltered: "(filtered from _MAX_ total records)",
-        oPaginate: {
-          sNext: '<em class="fa fa-caret-right"></em>',
-          sPrevious: '<em class="fa fa-caret-left"></em>',
-        },
-      },
-      // Datatable Buttons setup
-      dom: "Bfrtip",
-      buttons: [
-        { extend: "csv", className: "btn-info" },
-        { extend: "excel", className: "btn-info", title: "XLS-File" },
-        { extend: "pdf", className: "btn-info", title: $("title").text() },
-        { extend: "print", className: "btn-info" },
-      ],
-    },
     usersList: []
   };
-
-  // Access to internal datatable instance for customizations
-  dtInstance = (dtInstance) => {
-    const inputSearchClass = "datatable_input_col_search";
-    const columnInputs = $("tfoot ." + inputSearchClass);
-    // On input keyup trigger filtering
-    columnInputs.keyup(function () {
-      dtInstance.fnFilter(this.value, columnInputs.index(this));
-    });
-  };
-
   componentDidMount() {
     const isAuthenticated = AuthService.isAuthenticated();
     if (!isAuthenticated) {
@@ -104,6 +65,112 @@ class UserPage extends Component {
     this.GetAllUser();
   }
 
+  formatDate = (date) => {
+    return Moment(date).format('lll')
+  }
+
+  EditUser=(row)=>{
+    return this.props.history.push('/edit-user/' + row.id, row)
+  }
+
+  columns = [
+    {
+        key: "id",
+        text: "#",
+        sortable: true,
+        cell: (record, index) => {
+          return index+=1;
+        }
+    },
+    {
+        key: "name",
+        text: "FULL NAME"
+    },
+    {
+      key: "username",
+      text: "USERNAME"
+  },
+
+    {
+      key: "userMonthlySmsLimit",
+      text: "SMS MONTHLY LIMIT"
+  },
+    
+    {
+      key: "isActive",
+      text: "STATUS",
+      sortable: true,
+      cell: (record, index) => {
+        if (record.isActive == 1) {
+          return (
+            <span className="badge badge-success">Active</span>
+          );
+        }
+         if(record.isActive != 1){
+          return  (<span className="badge badge-danger">Disabled</span>);
+        }
+      }
+  },
+    {
+        key: "lastLogin",
+        text: "LAST LOGIN",
+        cell: (record, index) => {
+          if(record.lastLogin == null){
+            return "N/A"
+          }else {
+          return (this.formatDate(record.lastLogin))
+          }
+        }
+  
+    },
+  {
+    key: "createdAt",
+    text: "DATE CREATED",
+    sortable: true,
+    cell: (record, index) => {
+      return (this.formatDate(record.registrationDate))
+    }
+  },
+  {
+  key: "isActive",
+  text: "ACTION",
+  cell: (record, index) => {
+      if(record.isActive == 1){
+       return (
+         <Fragment>
+            <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+            <span className="btn badge-danger px-4" onClick={()=>this.DisableUser(record)}> <i className="fa fa-power-off mr-2"></i>Disable</span>
+         </Fragment>
+       )
+      }else {
+       return ( 
+         <Fragment>
+      <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+       <span className="btn badge-success  px-4" onClick={()=>this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
+         </Fragment>
+       )}
+      
+    
+  }
+  }
+  ];
+
+  config = {
+    page_size: 10,
+    length_menu: [10, 25, 50],
+    show_filter: true,
+    show_pagination: true,
+    pagination:'advance',
+    filename: "Contact List",
+    button: {
+     
+    },
+    language: {
+      loading_text: "Please be patient while data loads..."
+  }
+  }
+  
+
   ViewAddNormalUser = () => {
     return this.props.history.push('/add-user')
   }
@@ -131,52 +198,12 @@ class UserPage extends Component {
         <Container fluid>
           <Card>
             <CardBody>
-              {/* <Datatable options={this.state.dtOptions}> */}
-              <table className="table table-striped my-4 w-100">
-                <thead>
-                  <tr>
-                    <th data-priority="1">#</th>
-                    <th>FULL NAME</th>
-                    <th>USERNAME</th>
-                    <th>SMS MONTHLY LIMIT</th>
-                    <th>STATUS</th>
-                    <th>LAST LOGIN</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.usersList.map(row =>
-                    <tr className="gradeA" key={row.id}>
-                      <td>{index += 1}</td>
-                      <td>{row.name}</td>
-                      <td>{row.username}</td>
-                      <td>{row.userMonthlySmsLimit}</td>
-                      <td>
-                          {row.isActive == 1 &&
-                            <span className="badge badge-success">Active</span>
-                          }
-                          {
-                            row.isActive != 1 &&
-                            <span className="badge badge-danger">Disabled</span>
-                          }
-                        </td>
-                      <td>N/A</td>
-                      <td> <span className="btn badge-success"onClick={()=>this.EditUser(row)}> <i className="icon-pencil mr-2"  ></i>Edit</span> <br />
-                          {/* <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/> */}
-                          {/* <span className="btn badge-danger mt-1"> <i className="icon-info mr-2"></i>Disable</span> */}
-                          {row.isActive == 1 &&
-                            <span className="btn badge-danger mt-1" onClick={()=>this.DisableUser(row)}>Disable</span>
-                          }
-                          {
-                            row.isActive != 1 &&
-                            <span className="btn badge-success mt-1" onClick={()=>this.EnableUser(row)}>Enable</span>
-                          }
-                        </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-              {/* </Datatable> */}
+              <ReactDatatable 
+              extraButtons={this.extraButtons}
+                config={this.config}
+                records={this.state.usersList}
+                columns={this.columns}
+                 />
             </CardBody>
           </Card>
         </Container>

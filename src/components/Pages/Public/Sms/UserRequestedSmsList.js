@@ -94,7 +94,7 @@ class UserRequestedSmsList extends Component {
                         {/* <td>SCANIA TANZANIA LTD</td> */}
                         <td>{row.customerEntity.fullname}</td>
                         <td>{row.messageTemplate}</td>
-                        <td>{this.formatDate(row.dateCreated)}</td>
+                        <td>{this.formatDate(row.createdAt)}</td>
                         <td>
                           {row.status == "0" &&
                             <span className="badge badge-warning">Pending</span>
