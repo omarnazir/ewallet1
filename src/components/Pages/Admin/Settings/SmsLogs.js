@@ -1,8 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
-import {Row, Col, Card, CardHeader, CardBody, Table} from 'reactstrap';
+import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
+import ReactDatatable from '@ashvin27/react-datatable';
+import Moment from "moment"
+import { Fragment } from "react";
 
 class SmsLogs extends Component {
 
@@ -17,56 +20,88 @@ class SmsLogs extends Component {
         axios.get("/sms")
             .then(res => {
                 const operators = res.data;
-                this.setState({operators})
+                this.setState({ operators })
                 console.log(operators);
             })
     }
+
+
+    columns = [
+        {
+            key: "id",
+            text: "ID",
+            cell: (record, index) => {
+                return index + 1;
+            }
+        },
+        {
+            key: "senderId",
+            text: "Sender"
+        },
+        {
+            key: "type",
+            text: "Type"
+        },
+        {
+            key: "status",
+            text: "Status"
+        },
+        {
+            key: "network",
+            text: "Network"
+        },
+        {
+            key: "message",
+            text: "Message"
+        },
+        {
+            key: "msisdn",
+            text: "Recipient"
+        }
+    ]
+
+    config = {
+        page_size: 10,
+        length_menu: [10, 25, 50],
+        show_filter: true,
+        show_pagination: true,
+        pagination: 'advance',
+        filename: "Contact List",
+        button: {
+
+        },
+        language: {
+            loading_text: "Please be patient while data loads..."
+        }
+    }
+
 
     render() {
         return (
             <ContentWrapper>
                 <div className="content-heading">
-                    <div>SMS
-                        <small>List of all SMSes sent</small>
+                    <div className="mr-auto flex-row">
+                        SMS
+    <small>List of all SMS's sent.</small>
+                    </div>
+                    <div className="flex-row">
+                    
                     </div>
                 </div>
-                {/* START row */}
-                <Row>
-                    <Col xl="12">
-                        <Card className="card-default">
-                            <CardHeader>Striped Rows</CardHeader>
-                            <CardBody>
-                                <Table striped hover responsive>
-                                    <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Sender</th>
-                                        <th>Type</th>
-                                        <th>Status</th>
-                                        <th>Network</th>
-                                        <th>Message</th>
-                                        <th>Recipient</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {this.state.operators.map(row => (
-                                        <tr>
-                                            <td>{row.id}</td>
-                                            <td>{row.sender}</td>
-                                            <td>{row.type}</td>
-                                            <td>{row.status}</td>
-                                            <td>{row.network}</td>
-                                            <td>{row.message}</td>
-                                            <td>{row.msisdn}</td>
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                                </Table>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-                {/* END row */}
+                <Container fluid>
+                    <Card>
+                        <CardHeader>
+                        </CardHeader>
+                        <CardBody>
+                            <ReactDatatable
+                                extraButtons={this.extraButtons}
+                                config={this.config}
+                                records={this.state.operators}
+                                columns={this.columns}
+                            />
+                        </CardBody>
+                    </Card>
+                </Container>
             </ContentWrapper>
         );
     }

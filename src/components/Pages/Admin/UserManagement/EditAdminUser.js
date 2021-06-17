@@ -208,7 +208,7 @@ class EditAdminUser extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="row">
+                                        {/* <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Password *</label>
@@ -241,9 +241,9 @@ class EditAdminUser extends Component {
                                             <span className="text-center ml-3"><strong>NOTE: &nbsp;</strong>Must contain at least one upper and one lower letter, one special character and number</span>
 
 
-                                        </div>
+                                        </div> */}
                                      
-{/* 
+
                                         <div className="row">
                                             <div className="col-md-12">
 
@@ -251,24 +251,19 @@ class EditAdminUser extends Component {
                                                 <div className="form-group px-md-4 px-1 mt-1">
 
                                                     <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwconlist" value="vwconlist" />
-                                                            <label className="form-check-label" for="vwconlist">View Contact List</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
+                                                    <div className="form-check form-check-inline col-sm-12">
                                                             <input className="form-check-input" type="checkbox" id="vwdashboard" value="vwdashboard" />
                                                             <label className="form-check-label" for="vwdashboard">View Dashboard</label>
                                                         </div>
+                                                        
                                                     </div>
                                                     <div className="form-row my-2">
                                                         <div className="form-check form-check-inline col-sm-5">
                                                             <input className="form-check-input" type="checkbox" id="vwreports" value="vwreports" />
                                                             <label className="form-check-label" for="vwreports">View Reports</label>
                                                         </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwsenderid" value="vwsenderid" />
-                                                            <label className="form-check-label" for="vwsenderid">View Sender IDs</label>
-                                                        </div>
+
+                             
                                                     </div>
                                                     <div className="form-row my-2">
                                                         <div className="form-check form-check-inline col-sm-5">
@@ -356,7 +351,7 @@ class EditAdminUser extends Component {
                                             </div>
 
 
-                                        </div> */}
+                                        </div>
 
 
                                     </CardBody>

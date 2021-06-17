@@ -1,70 +1,129 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable";
 import {
   Container,
   Card,
   CardHeader,
   CardBody,
-  CardTitle,
-  InputGroup,
-  InputGroupAddon,
-  Input,
   Button,
 } from "reactstrap";
-import Datetime from "react-datetime";
-import $ from "jquery";
-import {AuthService} from "../../../../services"
-import {Redirect} from 'react-router-dom';
+import { AuthService } from "../../../../services"
+import { Redirect } from 'react-router-dom';
 import axios from '../../../../services/axios'
 import Moment from "moment";
+import ReactDatatable from '@ashvin27/react-datatable';
 
 class UserOutbox extends Component {
   state = {
-    isAuthenticated:false,
-    smsList:[]
+    isAuthenticated: false,
+    smsList: []
   };
 
-  // Access to internal datatable instance for customizations
-  dtInstance = (dtInstance) => {
-    const inputSearchClass = "datatable_input_col_search";
-    const columnInputs = $("tfoot ." + inputSearchClass);
-    // On input keyup trigger filtering
-    columnInputs.keyup(function () {
-      dtInstance.fnFilter(this.value, columnInputs.index(this));
-    });
-  };
-
-  componentDidMount(){
-    const isAuthenticated=AuthService.isAuthenticated();
-    if(!isAuthenticated){
-    this.setState({redirect: "/login"})
+  componentDidMount() {
+    const isAuthenticated = AuthService.isAuthenticated();
+    if (!isAuthenticated) {
+      this.setState({ redirect: "/login" })
     }
 
     axios.get("/sms/customer")
-    .then(res => {
-      const response = res.data;
-      this.setState({ smsList: response })
-      console.log(response);
-    })
+      .then(res => {
+        const response = res.data;
+        this.setState({ smsList: response })
+        console.log(response);
+      })
   }
   AddActionButtonStyle = {
     color: 'white',
     background: "#003366"
-}
+  }
 
-formatDate=(date)=>{
-  return Moment(date).format('lll')
-}
+  formatDate = (date) => {
+    return Moment(date).format('lll')
+  }
 
   //GO TO COMPOSE SMS
   ViewComposeSms = () => {
     return this.props.history.push("/send-sms");
   };
+
+
+
+
+
+  columns = [
+    {
+      key: "id",
+      text: "ID",
+      cell: (record, index) => {
+        return index + 1;
+      }
+    },
+    {
+      key: "senderId",
+      text: "Sender"
+    },
+    {
+      key: "msisdn",
+      text: "SENT TO"
+    },
+    {
+      key: "network",
+      text: "NETWORK"
+    },
+    {
+      key: "message",
+      text: "MESSAGE"
+    },
+    {
+      key: "smsCount",
+      text: "UNITS"
+    },
+    {
+      key: "createdAt",
+      text: "DATE",
+      cell:(record,index)=>{
+        return (this.formatDate(record.createdAt))
+      }
+
+    },
+    {
+      key: "message",
+      text: "STATUS",
+      cell: (record, index) => {
+        if (record.status == "Delivered") {
+          return (<span className="badge badge-success">{record.status}</span>)
+        }
+        if (record.status == "Failed") {
+          return (<span className="badge badge-danger">{record.status}</span>)
+        }
+        if (record.status == "PENDING") {
+          return (<span className="badge badge-warning">Pending</span>)
+        }
+      }
+    },
+
+  ]
+
+  config = {
+    page_size: 10,
+    length_menu: [10, 25, 50],
+    show_filter: true,
+    show_pagination: true,
+    pagination: 'advance',
+    filename: "Contact List",
+    button: {
+
+    },
+    language: {
+      loading_text: "Please be patient while data loads..."
+    }
+  }
+
+
   render() {
     if (this.state.redirect) {
-      return <Redirect to="/login"/>
-  }
+      return <Redirect to="/login" />
+    }
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -73,7 +132,7 @@ formatDate=(date)=>{
             <small>Showing all sent messages.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.ViewComposeSms}  style={this.AddActionButtonStyle} className="btn-pill-right">
+            <Button onClick={this.ViewComposeSms} style={this.AddActionButtonStyle} className="btn-pill-right">
               Compose SMS
             </Button>
           </div>
@@ -81,53 +140,13 @@ formatDate=(date)=>{
         <Container fluid>
           <Card>
             <CardBody>
-              {/* <Datatable options={this.state.dtOptions}> */}
-                <table className="table table-striped my-4 w-100">
-                  <thead>
-                    <tr>
-                      <th data-priority="1">ID</th>
-                      <th className="" data-priority="2">
-                        Sender
-                      </th>
-                      <th>SENT TO</th>
-                      <th>NETWORK</th>
-                      <th>MESSAGE</th>
-                      <th>UNITS</th>
-                      <th>DATE</th>
-                      <th>STATUS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {this.state.smsList.map(row => (
-                    <tr className="gradeA">
-                      <td>{row.id}</td>
-                      <td>{row.senderId}</td>
-                      <td>{row.msisdn}</td>
-                      <td>{row.network}</td>
-                      <td>{row.message}</td>
-                      <td>{row.smsCount}</td>
-                      <td>{this.formatDate(row.createdAt)}</td>
-                      {row.status=="Delivered" && 
-                      <td>
-                        <span className="badge badge-success">{row.status}</span>
-                      </td>
-                       }
-                       {row.status=="Failed" && 
-                      <td>
-                        <span className="badge badge-danger">{row.status}</span>
-                      </td>
-                       }
-                        {row.status=="PENDING" && 
-                      <td>
-                        <span className="badge badge-warning">Pending</span>
-                      </td>
-                       }
-                       
-                    </tr>
-                  ))}
-                  </tbody>
-                </table>
-              {/* </Datatable> */}
+              <ReactDatatable
+                extraButtons={this.extraButtons}
+                config={this.config}
+                records={this.state.smsList}
+                columns={this.columns}
+              />
+
             </CardBody>
           </Card>
         </Container>

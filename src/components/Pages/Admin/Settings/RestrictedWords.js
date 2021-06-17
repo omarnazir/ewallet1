@@ -10,8 +10,17 @@ import { Fragment } from "react";
 
 class RestrictedWords extends Component {
   state = {
-   
+   words:[]
   };
+
+  componentDidMount(){
+      axios.get("/reserved-words")
+          .then(res => {
+              const words = res.data;
+              this.setState({ words })
+             
+          })
+  }
 
   AddActionButtonStyle = {
     color: 'white',
@@ -79,7 +88,7 @@ class RestrictedWords extends Component {
                 <ReactDatatable 
               extraButtons={this.extraButtons}
                 config={this.config}
-                records={this.state.usersList}
+                records={this.state.words}
                 columns={this.columns}
                  />
             </CardBody>

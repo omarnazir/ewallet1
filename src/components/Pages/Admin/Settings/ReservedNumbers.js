@@ -10,9 +10,18 @@ import { Fragment } from "react";
 
 class ReservedNumbers extends Component {
   state = {
+    numbers:[]
   };
 
-
+  //@TODo backend Unsubscribe Numbers
+  componentDidMount(){
+    axios.get("/reserved-words")
+        .then(res => {
+            const numbers = res.data;
+            this.setState({ numbers })
+           
+        })
+}
 
   columns = [
     {
@@ -80,7 +89,7 @@ class ReservedNumbers extends Component {
               <ReactDatatable
                 extraButtons={this.extraButtons}
                 config={this.config}
-                records={this.state.operators}
+                records={this.state.numbers}
                 columns={this.columns}
               />
 
