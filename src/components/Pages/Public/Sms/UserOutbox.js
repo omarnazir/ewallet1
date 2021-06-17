@@ -41,14 +41,9 @@ class UserOutbox extends Component {
     return Moment(date).format('lll')
   }
 
-  //GO TO COMPOSE SMS
   ViewComposeSms = () => {
     return this.props.history.push("/send-sms");
   };
-
-
-
-
 
   columns = [
     {
@@ -132,9 +127,9 @@ class UserOutbox extends Component {
             <small>Showing all sent messages.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.ViewComposeSms} style={this.AddActionButtonStyle} className="btn-pill-right">
+            {/* <Button onClick={this.ViewComposeSms} style={this.AddActionButtonStyle} className="btn-pill-right">
               Compose SMS
-            </Button>
+            </Button> */}
           </div>
         </div>
         <Container fluid>

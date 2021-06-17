@@ -117,7 +117,7 @@ class Header extends Component {
                             <ToggleFullscreen className="nav-link"/>
                         </li>
                         <li className="nav-item d-none d-md-block">
-                            <Link onClick={this.logout} title="Lock screen" className="nav-link">
+                            <Link onClick={this.logout} title="Log out" className="nav-link">
                                 <em className="icon-logout"></em>
                             </Link>
                         </li>

@@ -1,38 +1,43 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
 import {
   Container,
   Card,
-  CardHeader,
   CardBody,
-  CardTitle,
-  InputGroup,
-  InputGroupAddon,
-  Input,
-  Button
+  Button, Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import $ from "jquery";
 import Moment from 'moment';
 import ReactDatatable from '@ashvin27/react-datatable';
-
+import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2"
+const MySwal = withReactContent(Swal)
 
 
 
 class UserSenderIds extends Component {
   state = {
-    senderIdList: []
+    senderIdList: [],
+    formSenderId:"",
+    moda:false
   };
 
 
   componentDidMount() {
+   this.ViewAllSenderIds()
+  }
+
+  ViewAllSenderIds(){
     axios.get("/sender-ids/my-sender-ids")
-      .then(res => {
-        const response = res.data;
-        this.setState({ senderIdList: response })
-        console.log(response);
-      })
+    .then(res => {
+      const response = res.data;
+      this.setState({ senderIdList: response })
+      console.log(response);
+    })
   }
 
 
@@ -50,6 +55,52 @@ class UserSenderIds extends Component {
     background:"#003366"
   }
 
+  showSweetAlert() {
+    return MySwal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Added SenderId Sucessfully',
+        text: "",
+        showConfirmButton: false,
+        timer: 2000
+    })
+}
+
+showFailedSweetAlert() {
+  return MySwal.fire({
+      position: 'center',
+      icon: 'info',
+      title: 'Sender ID is already taken',
+      text: "",
+      showConfirmButton: false,
+      timer: 2000
+  })
+}
+
+  handleSubmit = event => {
+
+    event.preventDefault();
+    const sender = {
+        "senderId": this.state.formSenderId,
+   
+    }
+  
+  
+    axios.post("/sender-ids",sender).then(res=>{
+      this.toggleModal();
+        console.log(res);
+        console.log(res.data);
+        this.showSweetAlert()
+        this.ViewAllSenderIds();
+      },err =>{
+        this.toggleModal();
+        this.showFailedSweetAlert()
+      })
+  }
+
+  handleChange = event =>{
+    this.setState({ [event.target.name]: event.target.value});
+  }
 
   deleteSenderId = (id) => {
     axios.delete("/sender-ids/" + id)
@@ -60,6 +111,12 @@ class UserSenderIds extends Component {
         });
         this.setState({ senderIdList })
       })
+  }
+
+  toggleModal = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
   }
 
   columns = [
@@ -80,11 +137,7 @@ class UserSenderIds extends Component {
     },
     {
         key: "senderId",
-        text: "Sender ID",
-        sortable: true,
-        record:(record,index)=>{
-          return (<NumberFormat value={record.smsQuantity} displayType={'text'} thousandSeparator={true} prefix={''} />)
-        }
+        text: "Sender ID"
     },
     {
       key: "createdAt",
@@ -133,6 +186,7 @@ class UserSenderIds extends Component {
 }
 ];
 
+
 config = {
   page_size: 10,
   length_menu: [10, 25, 50],
@@ -148,7 +202,6 @@ config = {
 }
 }
   render() {
-    let index=0;
     return (
       <ContentWrapper>
        <div className="content-heading">
@@ -157,9 +210,33 @@ config = {
             <small>Showing all Sender IDs .</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
+
+          {/* <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
+              Add Sender IDadfadfa
+            </Button> */}
+            <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right">
               Add Sender ID
             </Button>
+
+            <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+              <ModalHeader toggle={this.toggleModal}>Add Sender ID</ModalHeader>
+              <form onSubmit={this.handleSubmit}>
+              <ModalBody>
+               
+                  <div className="form-group px-md-2 px-1">
+                    <label>Sender Id :</label>
+                    <input className="form-control" name="formSenderId" onChange={this.handleChange}
+                     required ></input>
+                  </div>
+               
+              </ModalBody>
+              <ModalFooter>
+                <button className="btn btn-sm  mr-3 px-4" style={this.AddActionButtonStyle}>
+                  Save
+                  </button>
+              </ModalFooter>
+              </form>
+            </Modal>
           </div>
         </div>
         <Container fluid>
