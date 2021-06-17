@@ -20,10 +20,7 @@ import axios from '../../../../services/axios'
 
 class AddUser extends Component {
 
-
     state = {
-        /* Group each form state in an object.
-           Property name MUST match the form name */
         formRegister: {
             email: '',
             password: '',
@@ -32,15 +29,11 @@ class AddUser extends Component {
             fullname: "",
             username: "",
             phonenumber: "",
-            monthlysmslimit: 0
+            monthlysmslimit: 0,
+            settings:false,
+
         }
     }
-
-    /**
- * Validate input using onChange event
- * @param  {String} formName The name of the form in the state object
- * @return {Function} a function used for the event
- */
     validateOnChange = event => {
         const input = event.target;
         const form = input.form
@@ -48,18 +41,18 @@ class AddUser extends Component {
 
         const result = FormValidator.validate(input);
 
-        if(result !=null){
-        this.setState({
-            [form.name]: {
-                ...this.state[form.name],
-                [input.name]: value,
-                errors: {
-                    ...this.state[form.name].errors,
-                    [input.name]: result
+        if (result != null) {
+            this.setState({
+                [form.name]: {
+                    ...this.state[form.name],
+                    [input.name]: value,
+                    errors: {
+                        ...this.state[form.name].errors,
+                        [input.name]: result
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
     }
 
 
@@ -79,25 +72,25 @@ class AddUser extends Component {
 
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
 
-  
+
 
         if (!hasError) {
-            const data={
-                "username":this.state.formRegister.username,
-                "email":this.state.formRegister.email,
-                "password":this.state.formRegister.password,
-                "name":this.state.formRegister.fullname,
-                "msisdn":this.state.formRegister.phonenumber,
-                "userMonthlySmsLimit":this.state.formRegister.monthlysmslimit
+            const data = {
+                "username": this.state.formRegister.username,
+                "email": this.state.formRegister.email,
+                "password": this.state.formRegister.password,
+                "name": this.state.formRegister.fullname,
+                "msisdn": this.state.formRegister.phonenumber,
+                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit
             }
             console.log(data)
-           
 
-            axios.post("users/admin",data).then(res=>{
-                console.log(res);
-                console.log(res.data);
-                this.ViewUserPage();
-              })
+
+            // axios.post("users/admin", data).then(res => {
+            //     console.log(res);
+            //     console.log(res.data);
+            //     this.ViewUserPage();
+            // })
         }
     }
 
@@ -121,7 +114,7 @@ class AddUser extends Component {
 
     ViewUserPage = () => {
         return this.props.history.push("/admin-manage-users");
-      };
+    };
 
     render() {
         return (
@@ -152,10 +145,10 @@ class AddUser extends Component {
                                                         onChange={this.validateOnChange}
                                                         data-validate='["required"]'
                                                         value={this.state.formRegister.fullname}
-                                                        
-                                                         />
-                                                        
-                                                   
+
+                                                    />
+
+
                                                     <span className="invalid-feedback">Field is required</span>
                                                 </div>
                                             </div>
@@ -217,6 +210,8 @@ class AddUser extends Component {
                                                         value={this.state.formRegister.password}
                                                     />
                                                     <span className="invalid-feedback">Password is required</span>
+                                                    <span className="text-center  invalid-feedback"><strong>NOTE: &nbsp;</strong>Must contain at least one upper and one lower letter, one special character and number</span>
+
                                                 </div>
                                             </div>
 
@@ -234,11 +229,11 @@ class AddUser extends Component {
                                                 </div>
                                             </div>
 
-                                            <span className="text-center ml-3"><strong>NOTE: &nbsp;</strong>Must contain at least one upper and one lower letter, one special character and number</span>
+                                            {/* <span className="text-center ml-3"><strong>NOTE: &nbsp;</strong>Must contain at least one upper and one lower letter, one special character and number</span> */}
 
 
                                         </div>
-                                     
+
 
                                         <div className="row">
                                             <div className="col-md-12">
@@ -247,107 +242,91 @@ class AddUser extends Component {
                                                 <div className="form-group px-md-4 px-1 mt-1">
 
                                                     <div className="form-row my-2">
+
                                                         <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwconlist" value="vwconlist" />
-                                                            <label className="form-check-label" for="vwconlist">View Contact List</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwdashboard" value="vwdashboard" />
+                                                            <input className="form-check-input" type="checkbox" id="vwdashboard" value="2" />
                                                             <label className="form-check-label" for="vwdashboard">View Dashboard</label>
                                                         </div>
                                                     </div>
                                                     <div className="form-row my-2">
                                                         <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwreports" value="vwreports" />
-                                                            <label className="form-check-label" for="vwreports">View Reports</label>
+                                                            <input className="form-check-input" type="checkbox" id="vwreports" value="2" />
+                                                            <label className="form-check-label" for="vwreports">View Customer List</label>
                                                         </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwsenderid" value="vwsenderid" />
-                                                            <label className="form-check-label" for="vwsenderid">View Sender IDs</label>
-                                                        </div>
+
                                                     </div>
                                                     <div className="form-row my-2">
                                                         <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwsyslogs" value="vwsyslogs" />
-                                                            <label className="form-check-label" for="vwsyslogs">View System Logs</label>
+                                                            <input className="form-check-input" type="checkbox" id="vwsyslogs" value="3" />
+                                                            <label className="form-check-label" for="vwsyslogs">Post Paid Customer</label>
                                                         </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwusers" value="vwusers" />
-                                                            <label className="form-check-label" for="vwusers">View Users</label>
-                                                        </div>
+
                                                     </div>
 
                                                     <div className="form-row my-2">
                                                         <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="adduser" value="adduser" />
-                                                            <label className="form-check-label" for="adduser">Add User</label>
+                                                            <input className="form-check-input" type="checkbox" id="adduser" value="4" />
+                                                            <label className="form-check-label" for="adduser">View Transactions</label>
                                                         </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="composesms" value="composesms" />
-                                                            <label className="form-check-label" for="composesms">Compose SMS</label>
-                                                        </div>
+
                                                     </div>
                                                     <div className="form-row my-2">
                                                         <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="compsmsnum" value="compsmsnum" />
-                                                            <label className="form-check-label" for="compsmsnum">Compose SMS using Enter number</label>
+                                                            <input className="form-check-input" type="checkbox" id="compsmsnum" value="5" />
+                                                            <label className="form-check-label" for="compsmsnum">Manage Sender Id's</label>
                                                         </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="compsmspb" value="compsmspb" />
-                                                            <label className="form-check-label" for="compsmspb">Compose SMS using Phonebook</label>
-                                                        </div>
+
                                                     </div>
                                                     <div className="form-row my-2">
                                                         <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="compsmsupnum" value="compsmsupnum" />
-                                                            <label className="form-check-label" for="compsmsupnum">Compose SMS using Upload number</label>
+                                                            <input className="form-check-input" type="checkbox" id="compsmsupnum" value="6" />
+                                                            <label className="form-check-label" for="compsmsupnum">Manage Templates</label>
                                                         </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="crtcontactlist" value="crtcontactlist" />
-                                                            <label className="form-check-label" for="crtcontactlist">Create Contact List</label>
-                                                        </div>
+
                                                     </div>
                                                     <div className="form-row my-2">
                                                         <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="crtsenderid" value="crtsenderid" />
-                                                            <label className="form-check-label" for="crtsenderid">Create Sender Id</label>
+                                                            <input className="form-check-input" type="checkbox" id="crtsenderid" value="7" />
+                                                            <label className="form-check-label" for="crtsenderid">Manage Tariffs</label>
                                                         </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="dltconlist" value="dltconlist" />
-                                                            <label className="form-check-label" for="dltconlist">Delete Contact List</label>
-                                                        </div>
+
                                                     </div>
                                                     <div className="form-row my-2">
                                                         <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="dltuser" value="dltuser" />
-                                                            <label className="form-check-label" for="dltuser">Delete User</label>
+                                                            <input className="form-check-input" type="checkbox" id="dltuser" value="8" />
+                                                            <label className="form-check-label" for="dltuser">Manage Users</label>
+                                                              {/* <CustomInput type="checkbox" id="terms"
+                                                                name="terms"
+                                                                label="System Settings"
+                                                                invalid={this.hasError('formRegister', 'terms', 'required')}
+                                                                onChange={this.validateOnChange}
+                                                                
+                                                                checked={this.state.formRegister.terms}> 
+
+        </CustomInput> */}
                                                         </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="edtconlist" value="edtconlist" />
-                                                            <label className="form-check-label" for="edtconlist">Edit Contact List</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="edtuser" value="edtuser" />
-                                                            <label className="form-check-label" for="edtuser">Edit User</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="reqsms" value="reqsms" />
-                                                            <label className="form-check-label" for="reqsms">Request SMS</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="snddynamsg" value="snddynamsg" />
-                                                            <label className="form-check-label" for="snddynamsg">Send dynamic messages</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="sndschmsg" value="sndschmsg" />
-                                                            <label className="form-check-label" for="sndschmsg">Send Schedule SMS</label>
-                                                        </div>
+
                                                     </div>
 
+                                                    {/* add 9 12 10 11 */}
+                                                    <div className="form-row my-2">
+                                                        <div className="form-check form-check-inline col-sm-5">
+
+                                                            <CustomInput type="checkbox" id="settings"
+                                                                name="settings"
+                                                                label="System Settings"
+                                                                invalid={this.hasError('formRegister', 'settings', 'required')}
+                                                                onChange={this.validateOnChange}
+                                                                checked={this.state.formRegister.terms}
+                                                               
+                                                                >
+
+                                                            </CustomInput>
+                                                            {/* <input className="form-check-input" type="checkbox" id="edtuser" value="25" />
+                                                            <label className="form-check-label" for="edtuser">System Settings</label> */}
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -358,15 +337,6 @@ class AddUser extends Component {
                                     </CardBody>
                                     <CardFooter>
                                         <div className="d-flex align-items-center">
-                                            {/* <CustomInput type="checkbox" id="terms"
-                                                name="terms"
-                                                label="I agree with the terms"
-                                                invalid={this.hasError('formRegister', 'terms', 'required')}
-                                                onChange={this.validateOnChange}
-                                                data-validate='["required"]'
-                                                checked={this.state.formRegister.terms}>
-                                                <span className="invalid-feedback">Field is required</span>
-                                            </CustomInput> */}
                                             <div className="ml-auto">
                                                 <button className="btn btn-danger px-5 mr-2" onClick={this.ViewUserPage}>Cancel</button>
                                                 <button type="submit" style={this.AddActionButtonStyle} className="btn btn-primary px-5">Save</button>

@@ -1,16 +1,64 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import axios from "../../../../services/axios";
-import { Container, Card, CardHeader, CardBody, CardTitle,Button } from "reactstrap";
+import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import $ from "jquery";
-import 'datatables.net-dt/css/jquery.dataTables.css'
-import 'datatables.net-bs/css/dataTables.bootstrap.css'
-$.DataTable = require('datatables.net')
+import ReactDatatable from '@ashvin27/react-datatable';
+import Moment from "moment"
+import { Fragment } from "react";
 
 
 class ReservedNumbers extends Component {
   state = {
   };
+
+
+
+  columns = [
+    {
+      key: "id",
+      text: "ID",
+      cell: (record, index) => {
+        return index + 1;
+      }
+    },
+    {
+      key: "customerEntity",
+      text: "NUMBER"
+    },
+    {
+      key: "customerEntity",
+      text: "ACTION",
+      cell: (record, index) => {
+        return (
+          <Fragment>
+            <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+            <span className="btn badge-success  px-4" onClick={() => this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
+          </Fragment>
+        )
+      }
+    }
+  ]
+
+  config = {
+    page_size: 10,
+    length_menu: [10, 25, 50],
+    show_filter: true,
+    show_pagination: true,
+    pagination: 'advance',
+    filename: "Contact List",
+    button: {
+
+    },
+    language: {
+      loading_text: "Please be patient while data loads..."
+    }
+  }
+
+  AddActionButtonStyle = {
+    color: 'white',
+    background: "#003366"
+}
 
   render() {
     return (
@@ -21,7 +69,7 @@ class ReservedNumbers extends Component {
             <small>Sms should not be sent to these numbers.</small>
           </div>
           <div className="flex-row">
-          <Button outline color="danger" className="btn-pill-right">Add New Number</Button>
+          <Button onClick={this.ViewSenders} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add New Number</Button>
           </div>
         </div>
         <Container fluid>
@@ -29,28 +77,14 @@ class ReservedNumbers extends Component {
             <CardHeader>
             </CardHeader>
             <CardBody>
-              <Datatable>
-                <table className="table table-striped my-4 w-100">
-                  <thead>
-                    <tr>
-                      <th data-priority="1">ID</th>
-                      <th>NUMBER</th>
-                      <th>ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* <tr className="gradeA">
-                      <td>Gecko</td>
-                      <td>Netscape 7.2</td>
-                      <td>Win 95+ / Mac OS 8.6-9.2</td>
-                      <td>1.7</td>
-                      <td>A</td>
-                    </tr> */}
+              <ReactDatatable
+                extraButtons={this.extraButtons}
+                config={this.config}
+                records={this.state.operators}
+                columns={this.columns}
+              />
 
-                    
-                  </tbody>
-                </table>
-              </Datatable>
+
             </CardBody>
           </Card>
         </Container>

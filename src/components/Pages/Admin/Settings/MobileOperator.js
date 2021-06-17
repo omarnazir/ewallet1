@@ -2,12 +2,16 @@ import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
-import { Container, Card, CardHeader, CardBody, CardTitle, Button,ModalHeader,Modal,
+import {
+    Container, Card, CardHeader, CardBody, CardTitle, Button, ModalHeader, Modal,
     ModalBody,
     ModalFooter,
-    FormGroup } from "reactstrap";
+    FormGroup
+} from "reactstrap";
 import $ from "jquery";
-
+import ReactDatatable from '@ashvin27/react-datatable';
+import Moment from "moment"
+import { Fragment } from "react";
 
 
 class MobileOperator extends Component {
@@ -17,9 +21,9 @@ class MobileOperator extends Component {
 
     toggleModal = () => {
         this.setState({
-          modal: !this.state.modal
+            modal: !this.state.modal
         });
-      }
+    }
 
     componentDidMount() {
         axios.get("/operators")
@@ -30,77 +34,101 @@ class MobileOperator extends Component {
             })
     }
 
+    AddActionButtonStyle = {
+        color: 'white',
+        background: "#003366"
+    }
+
+    columns = [
+        {
+            key: "id",
+            text: "ID",
+            cell: (record, index) => {
+                return index + 1;
+            }
+        },
+        {
+            key: "network",
+            text: "NETWORK"
+        },
+        {
+            key: "code",
+            text: "CODE"
+        },
+        {
+            key: "id",
+            text: "ACTION",
+            cell: (record, index) => {
+                return (
+                    <Fragment>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+                        <span className="btn badge-danger  px-4" onClick={() => this.EnableUser(record)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                    </Fragment>
+                )
+            }
+        }
+    ]
+
+
     render() {
         return (
             <ContentWrapper>
+
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
                         Mobile operator
             <small>Showing all mobile operators.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.toggleModal} className="btn-pill-right">Add New Operator</Button>
+                        <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add New Operator</Button>
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-              <ModalHeader toggle={this.toggleModal}>{this.state.AddTariffMode?"Add Mobile operator":"Edit Mobile operator"}</ModalHeader>
-              <form onSubmit={this.handleSubmit}>
-              <ModalBody>
-               
-                  <div className="form-group px-md-2 px-1">
-                    <label>Network Name :</label>
-                    <input className="form-control" name="name" onChange={this.handleChange}
-                    value={this.state.name}
-                     required ></input>
-                  </div>
+                            <ModalHeader toggle={this.toggleModal}>{this.state.AddTariffMode ? "Add Mobile operator" : "Edit Mobile operator"}</ModalHeader>
+                            <form onSubmit={this.handleSubmit}>
+                                <ModalBody>
 
-                  <div className="form-group px-md-2 px-1">
-                    <label>Code :</label>
-                    <input className="form-control" name="name" onChange={this.handleChange}
-                    value={this.state.name}
-                     required ></input>
-                  </div>
-               
-              </ModalBody>
-              <ModalFooter>
-                <button className="btn btn-sm  mr-3 px-4" style={this.AddActionButtonStyle}>
-                  Save
-                  </button>
-                {/* <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger px-4">
-                  Cancel
-                  </button> */}
-              </ModalFooter>
-              </form>
-            </Modal>
+                                    <div className="form-group px-md-2 px-1">
+                                        <label>Network Name :</label>
+                                        <input className="form-control" name="name" onChange={this.handleChange}
+                                            value={this.state.name}
+                                            required ></input>
+                                    </div>
+
+                                    <div className="form-group px-md-2 px-1">
+                                        <label>Code :</label>
+                                        <input className="form-control" name="name" onChange={this.handleChange}
+                                            value={this.state.name}
+                                            required ></input>
+                                    </div>
+
+                                </ModalBody>
+                                <ModalFooter>
+                                    <button className="btn btn-sm  mr-3 px-4" style={this.AddActionButtonStyle}>
+                                        Save
+                                     </button>
+
+                                </ModalFooter>
+                            </form>
+                        </Modal>
                     </div>
                 </div>
+
+
+
                 <Container fluid>
                     <Card>
                         <CardHeader>
                         </CardHeader>
                         <CardBody>
-                            <Datatable options={this.state.dtOptions}>
-                                <table className="table table-striped my-4 w-100">
-                                    <thead>
-                                        <tr>
-                                            <th data-priority="1">ID</th>
-                                            <th>Network</th>
-                                            <th>Code</th>
-                                            <th>ACTION</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {this.state.operators.map(row => (
-                                            <tr className="gradeA">
-                                                <td>{row.id}</td>
-                                                <td>{row.network}</td>
-                                                <td>{row.code}</td>
-                                                <td></td>
-                                            </tr>
-                                        ))}
 
-                                    </tbody>
-                                </table>
-                            </Datatable>
+                            <ReactDatatable
+                                extraButtons={this.extraButtons}
+                                config={this.config}
+                                records={this.state.operators}
+                                columns={this.columns}
+                            />
+
+
                         </CardBody>
                     </Card>
                 </Container>
