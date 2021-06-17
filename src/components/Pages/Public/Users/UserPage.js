@@ -3,22 +3,16 @@ import ContentWrapper from "../../../Layout/ContentWrapper";
 import {
   Container,
   Card,
-  CardHeader,
   CardBody,
-  CardTitle,
-  InputGroup,
-  InputGroupAddon,
-  Input,
   Button
 } from "reactstrap";
-import Datetime from 'react-datetime';
-import $ from "jquery";
 import axios from '../../../../services/axios';
 import { AuthService } from '../../../../services';
 import {Redirect} from 'react-router-dom';
 import ReactDatatable from '@ashvin27/react-datatable';
 import Moment from "moment"
 import { Fragment } from "react";
+import NumberFormat from 'react-number-format'
 
 class UserPage extends Component {
   state = {
@@ -93,7 +87,10 @@ class UserPage extends Component {
 
     {
       key: "userMonthlySmsLimit",
-      text: "SMS MONTHLY LIMIT"
+      text: "SMS MONTHLY LIMIT",
+      cell:(record,index)=>{
+        return (<NumberFormat value={record.userMonthlySmsLimit} displayType={'text'} thousandSeparator={true} prefix={''} />)
+      }
   },
     
     {
@@ -180,7 +177,6 @@ class UserPage extends Component {
   }
 
   render() {
-    let index = 0;
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect}/>
   }

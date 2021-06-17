@@ -1,23 +1,13 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable";
 import axios from "../../../../services/axios"
 import {
     Container,
     Card,
-    CardHeader,
     CardBody,
-    CardTitle,
-    InputGroup,
-    InputGroupAddon,
-    Input,
     Button,
     FormGroup
 } from "reactstrap";
-import Datetime from 'react-datetime';
-import $ from "jquery";
-
-
 
 class AddUserContactList extends Component {
 

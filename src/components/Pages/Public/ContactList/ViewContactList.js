@@ -64,7 +64,10 @@ class ViewContactList extends Component {
     {
         key: "id",
         text: "Id",
-        sortable: true
+        sortable: true,
+        cell: (record, index) => {
+          return index+=1;
+        }
     },
     {
         key: "phoneNumber",

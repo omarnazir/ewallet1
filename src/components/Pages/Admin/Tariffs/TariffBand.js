@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
 import {
   Container, Card, CardHeader, CardBody, CardTitle, Button, Modal,
@@ -97,24 +96,16 @@ class TarriffBand extends Component {
     this.setState({ vatAmount: row.vatAmount })
 
     this.toggleModal();
-
-
-
   }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  // AddTariffBand = () => {
-  //   return this.props.history.push('/admin-add-tariff-band/' + this.state.tariff.id, this.state.tariff)
-  // }
+
   ViewTarriffBand = () => {
     return this.props.history.push('/admin-manage-tariff-bands')
   }
-
-
-
 
   DeleteTariffBand(id) {
     axios.delete("/tariff-bands/" + id)
@@ -201,9 +192,6 @@ class TarriffBand extends Component {
                   <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
                     Save
                     </button>
-                  {/* <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger  px-5">
-                    Cancel
-                   </button> */}
                 </ModalFooter>
               </form>
             </Modal>

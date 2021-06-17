@@ -21,50 +21,9 @@ import axios from '../../../../services/axios'
 
 class SingleUserPage extends Component {
   state = {
-    dtOptions: {
-      paging: true, // Table pagination
-      ordering: true, // Column ordering
-      info: true, // Bottom left status text
-      responsive: true,
-      // Text translation options
-      // Note the required keywords between underscores (e.g _MENU_)
-      oLanguage: {
-        sSearch: '<em class="fa fa-search"></em>',
-        sLengthMenu: "_MENU_ records per page",
-        info: "Showing page _PAGE_ of _PAGES_",
-        zeroRecords: "Nothing found - sorry",
-        infoEmpty: "No records available",
-        infoFiltered: "(filtered from _MAX_ total records)",
-        oPaginate: {
-          sNext: '<em class="fa fa-caret-right"></em>',
-          sPrevious: '<em class="fa fa-caret-left"></em>',
-        },
-      },
-      // Datatable Buttons setup
-      dom: "Bfrtip",
-      buttons: [
-        { extend: "csv", className: "btn-info" },
-        { extend: "excel", className: "btn-info", title: "XLS-File" },
-        { extend: "pdf", className: "btn-info", title: $("title").text() },
-        { extend: "print", className: "btn-info" },
-      ],
-    },
     user: {}
   };
-
-  // Access to internal datatable instance for customizations
-  dtInstance = (dtInstance) => {
-    const inputSearchClass = "datatable_input_col_search";
-    const columnInputs = $("tfoot ." + inputSearchClass);
-    // On input keyup trigger filtering
-    columnInputs.keyup(function () {
-      dtInstance.fnFilter(this.value, columnInputs.index(this));
-    });
-  };
-
   componentDidMount() {
-
-
     axios.get("/users/me")
       .then(res => {
         const response = res.data;
@@ -93,7 +52,6 @@ class SingleUserPage extends Component {
         <Container fluid>
           <Card>
             <CardBody>
-              {/* <Datatable options={this.state.dtOptions}> */}
               <table className="table table-striped my-4 w-100">
                 <thead>
                   <tr>
@@ -121,10 +79,7 @@ class SingleUserPage extends Component {
                         {
                           isActive !=1 &&
                              <span className="badge badge-danger">Disabled</span>
-                        }
-                       
-                      {/* <span className="badge badge-danger">Rejected</span> */}
-
+  }
                       </td>
                       <td>N/A</td>
                   
@@ -133,10 +88,8 @@ class SingleUserPage extends Component {
                       </td>
                      
                     </tr>
-                 
                 </tbody>
               </table>
-              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

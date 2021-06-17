@@ -1,25 +1,18 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import axios from '../../../../services/axios'
-import Datatable from "../../../Common/Datatable";
 import {
   Container,
   Card,
-  CardHeader,
   CardBody,
-  CardTitle,
-  InputGroup,
-  InputGroupAddon,
-  Input,
   Button,
 } from "reactstrap";
-import Datetime from "react-datetime";
-import $ from "jquery";
-
+import ReactDatatable from '@ashvin27/react-datatable';
+import { Fragment } from "react";
 
 class UserContactList extends Component {
   state = {
-   contactList: []
+    contactList: []
   };
 
   componentDidMount() {
@@ -34,12 +27,80 @@ class UserContactList extends Component {
   AddActionButtonStyle = {
     color: 'white',
     background: "#003366"
-}
+  }
   ViewAddContactList = () => {
     return this.props.history.push("/add-contact-list");
   };
 
-  
+  columns = [
+    {
+      key: "id",
+      text: "#",
+      sortable: true,
+      cell: (record, index) => {
+        return index += 1;
+      }
+    },
+    {
+      key: "title",
+      text: "TITLE"
+    },
+    {
+      key: "description",
+      text: "DESCRIPTION"
+    },
+    {
+      key: "count",
+      text: "COUNT"
+    },
+    {
+      key: "isActive",
+      text: "STATUS",
+      sortable: true,
+      cell: (record, index) => {
+        if (record.isActive == 1) {
+          return (
+            <span className="badge badge-success">Active</span>
+          );
+        }
+        if (record.isActive != 1) {
+          return (<span className="badge badge-danger">Disabled</span>);
+        }
+      }
+    },
+    {
+      key: "isActive",
+      text: "ACTION",
+      cell: (record, index) => {
+
+        return (
+          <Fragment>
+            <span className="btn badge-success mr-2 px-4" onClick={() => this.ViewContactListDetails(record)}> <i className="fa fa-eye mr-2"  ></i>View</span>
+            <span className="btn badge-danger px-4" onClick={() => this.DeleteUserContactList(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+          </Fragment>
+        )
+
+
+
+      }
+    }
+  ];
+
+  config = {
+    page_size: 10,
+    length_menu: [10, 25, 50],
+    show_filter: true,
+    show_pagination: true,
+    pagination: 'advance',
+    filename: "Contact List",
+    button: {
+
+    },
+    language: {
+      loading_text: "Please be patient while data loads..."
+    }
+  }
+
 
   DeleteUserContactList(id) {
     axios.delete("/contact-lists/" + id)
@@ -58,7 +119,6 @@ class UserContactList extends Component {
   }
 
   render() {
-    let index=0;
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -75,44 +135,13 @@ class UserContactList extends Component {
         <Container fluid>
           <Card>
             <CardBody>
-              {/* <Datatable options={this.state.dtOptions}> */}
-                <table className="table table-striped my-4 w-100">
-                  <thead>
-                    <tr>
-                      <th data-priority="1">ID</th>
-                      <th className="" data-priority="2">
-                        TITLE
-                      </th>
-                      <th>COUNT</th>
-                      <th>DESCRIPTION</th>
-                      <th>STATUS</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+              <ReactDatatable
+                extraButtons={this.extraButtons}
+                config={this.config}
+                records={this.state.contactList}
+                columns={this.columns}
+              />
 
-                  {this.state.contactList.map(row => (
-                      <tr key={row.id}>
-                        <td>{index+=1}</td>
-                        <td>{row.title}</td>
-                        <td>{row.count}</td>
-                        <td>{row.description}</td>
-                        {row.isActive== 1 &&
-                        <td><span className="badge badge-success">Active</span></td>
-                         }
-                         {row.isActive!= 1 &&
-                        <td><span className="badge badge-success">Disabled</span></td>
-                         }
-                        <td>
-                        <span className="btn badge-success mr-1" onClick={()=>this.ViewContactListDetails(row)}>View</span>
-                        <span className="btn badge-danger" onClick={() => this.DeleteUserContactList(row.id)}>Delete</span>
-                         {/* N/A */}
-                        </td>
-                      </tr>
-                    ))}  
-                  </tbody>
-                </table>
-              {/* </Datatable> */}
             </CardBody>
           </Card>
         </Container>

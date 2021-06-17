@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
-import Moment from "moment"
-import { Fragment } from "react";
+
 
 class SmsLogs extends Component {
 
