@@ -185,21 +185,28 @@ class Register extends Component {
 
         AuthService.register(data).then((res) => {
             console.log(res)
-            this.ViewLoginPage()
-            window.location.reload();
+            this.showSweetAlert("Account successfully created");
+            setTimeout(this.ViewLoginPage(),3000)
+            setTimeout( window.location.reload(),3000)
         }, (err) => {
-            this.showSweetAlert(err.message);
+            console.log(err)
+          
+                if(err.response.data !=null){
+                    this.showSweetAlert(err.response.data.message);
+                  }   
+            
             console.log(err.message)
         })
 
 
     }
 
+    // Strong Password required
     showSweetAlert(message) {
         return MySwal.fire({
             position: 'center',
             icon: 'info',
-            title: 'Strong Password required',
+            title: message,
             showConfirmButton: false,
             timer: 2000
         })
