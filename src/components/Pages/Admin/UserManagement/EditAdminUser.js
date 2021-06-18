@@ -32,7 +32,9 @@ class EditAdminUser extends Component {
             phonenumber: "",
             monthlysmslimit: 0
         },
-        user:{}
+        user:{},
+        selectedRoleList:[],
+        roles:[]
     }
     componentDidMount(){
         const { state } = this.props.history.location;
@@ -43,11 +45,36 @@ class EditAdminUser extends Component {
 
         axios.get("/users/" + state.id)
             .then(res => {
-                const response = res.data;
-                const user=response;
-                console.log(response)
-                const formRegister=this.state.formRegister;
-            
+                const user=res.data;
+
+                // [form.name]: {
+                //     ...this.state[form.name],
+                //     [input.name]: value,
+
+                // this.setState({formRegister:{...this.state.formRegister,}})
+                this.setState({...this.state.formRegister,fullname:user.name})
+
+                this.setState({
+                    formRegister: Object.assign({}, this.state.formRegister, {
+                      fullname: user.name,
+                    }),
+                  });
+                  this.setState({
+                    formRegister: Object.assign({}, this.state.formRegister, {
+                      username: user.username,
+                    }),
+                  }); this.setState({
+                    formRegister: Object.assign({}, this.state.formRegister, {
+                      email: user.status,
+                    }),
+                  }); this.setState({
+                    formRegister: Object.assign({}, this.state.formRegister, {
+                        monthlysmslimit: user.userMonthlySmsLimit,
+                    }),
+                  });
+                 
+                const roles=res.data.roles;
+                this.setState({roles})
                 this.setState({ user })
             })
     }
@@ -128,6 +155,7 @@ class EditAdminUser extends Component {
  
 
     render() {
+        let index=0;
         return (
             <ContentWrapper>
                 <div className="content-heading">
@@ -151,6 +179,7 @@ class EditAdminUser extends Component {
                                                 <div className="form-group">
                                                     <label className="col-form-label">Full Name *:</label>
                                                     <Input type="text"
+                                                    disabled
                                                         name="fullname"
                                                         invalid={this.hasError('formRegister', 'fullname', 'required')}
                                                         onChange={this.validateOnChange}
@@ -169,6 +198,7 @@ class EditAdminUser extends Component {
                                                     <label className="col-form-label">Username *:</label>
                                                     <Input type="text"
                                                         name="username"
+                                                        
                                                         invalid={this.hasError('formRegister', 'username', 'required')}
                                                         onChange={this.validateOnChange}
                                                         data-validate='["required"]'
@@ -181,9 +211,10 @@ class EditAdminUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label className="col-form-label">Email Address *</label>
+                                                    <label className="col-form-label">Status *</label>
                                                     <Input type="email"
                                                         name="email"
+                                                        disabled
                                                         invalid={this.hasError('formRegister', 'email', 'required') || this.hasError('formRegister', 'email', 'email')}
                                                         onChange={this.validateOnChange}
                                                         data-validate='["required", "email"]'
@@ -194,163 +225,50 @@ class EditAdminUser extends Component {
 
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label className="col-form-label">Phone Number * :</label>
+                                                    <label className="col-form-label">Monthly SMS Limit * :</label>
                                                     <Input type="number"
-                                                        name="phonenumber"
-                                                        invalid={this.hasError('formRegister', 'phonenumber', 'minlen')}
-                                                        onChange={this.validateOnChange}
-                                                        data-validate='["required","minlen"]'
-                                                        value={this.state.formRegister.phonenumber}
-                                                        data-param="10" />
-                                                    {/* <span className="invalid-feedback">Field is required</span> */}
-                                                    <span className="invalid-feedback">Valid phone number is required</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* <div className="row">
-                                            <div className="col-md-6">
-                                                <div className="form-group">
-                                                    <label className="col-form-label">Password *</label>
-                                                    <Input type="password"
-                                                        id="id-password"
-                                                        name="password"
-                                                        invalid={this.hasError('formRegister', 'password', 'required')}
+                                                        name="monthlysmslimit"
+                                                        invalid={this.hasError('formRegister', 'monthlysmslimit', 'required')}
                                                         onChange={this.validateOnChange}
                                                         data-validate='["required"]'
-                                                        value={this.state.formRegister.password}
-                                                    />
-                                                    <span className="invalid-feedback">Password is required</span>
+                                                        value={this.state.formRegister.monthlysmslimit} />
+                                                    <span className="invalid-feedback">Field is required</span>
                                                 </div>
                                             </div>
+                                            
+                                        </div>
 
-                                            <div className="col-md-6">
-                                                <div className="form-group">
-                                                    <label className="col-form-label">Confirm Password *</label>
-                                                    <Input type="password" name="password2"
-                                                        invalid={this.hasError('formRegister', 'password2', 'equalto')}
-                                                        onChange={this.validateOnChange}
-                                                        data-validate='["equalto"]'
-                                                        value={this.state.formRegister.password2}
-                                                        data-param="id-password"
-                                                    />
-                                                    <span className="invalid-feedback">Passwords must match</span>
-                                                </div>
-                                            </div>
-
-                                            <span className="text-center ml-3"><strong>NOTE: &nbsp;</strong>Must contain at least one upper and one lower letter, one special character and number</span>
-
-
-                                        </div> */}
-                                     
-
+                                    
                                         <div className="row">
-                                            <div className="col-md-12">
+                                    
+                                        {/* <h4 className="text-center"><strong>User Roles</strong></h4> */}
+                                        <table className="table table-striped my-4 w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th data-priority="1">ID</th>
+                                                    <th>ROLE NAME</th>
+                                                    <th>DESCRIPTION</th>
+                                                    <th>ACTIONS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {this.state.roles.map(row => (
+                                                    <tr key={row.id}>
+                                                        <td>{index += 1}</td>
+                                                        <td>{row.name}</td>
+                                                        <td>{row.description}</td>
+                                                        <td>
+                                                            <span className="btn bg-danger-dark" onClick={() => this.DeleteUserRole(row.id)}>
+                                                                <i className="icon-trash mr-2"></i>
+                                                                     Delete</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
 
-                                                <h4 className="text-center"><strong>User Roles</strong></h4>
-                                                <div className="form-group px-md-4 px-1 mt-1">
+                                            </tbody>
+                                        </table>
 
-                                                    <div className="form-row my-2">
-                                                    <div className="form-check form-check-inline col-sm-12">
-                                                            <input className="form-check-input" type="checkbox" id="vwdashboard" value="vwdashboard" />
-                                                            <label className="form-check-label" for="vwdashboard">View Dashboard</label>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwreports" value="vwreports" />
-                                                            <label className="form-check-label" for="vwreports">View Reports</label>
-                                                        </div>
-
-                             
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwsyslogs" value="vwsyslogs" />
-                                                            <label className="form-check-label" for="vwsyslogs">View System Logs</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwusers" value="vwusers" />
-                                                            <label className="form-check-label" for="vwusers">View Users</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="adduser" value="adduser" />
-                                                            <label className="form-check-label" for="adduser">Add User</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="composesms" value="composesms" />
-                                                            <label className="form-check-label" for="composesms">Compose SMS</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="compsmsnum" value="compsmsnum" />
-                                                            <label className="form-check-label" for="compsmsnum">Compose SMS using Enter number</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="compsmspb" value="compsmspb" />
-                                                            <label className="form-check-label" for="compsmspb">Compose SMS using Phonebook</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="compsmsupnum" value="compsmsupnum" />
-                                                            <label className="form-check-label" for="compsmsupnum">Compose SMS using Upload number</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="crtcontactlist" value="crtcontactlist" />
-                                                            <label className="form-check-label" for="crtcontactlist">Create Contact List</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="crtsenderid" value="crtsenderid" />
-                                                            <label className="form-check-label" for="crtsenderid">Create Sender Id</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="dltconlist" value="dltconlist" />
-                                                            <label className="form-check-label" for="dltconlist">Delete Contact List</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="dltuser" value="dltuser" />
-                                                            <label className="form-check-label" for="dltuser">Delete User</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="edtconlist" value="edtconlist" />
-                                                            <label className="form-check-label" for="edtconlist">Edit Contact List</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="edtuser" value="edtuser" />
-                                                            <label className="form-check-label" for="edtuser">Edit User</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="reqsms" value="reqsms" />
-                                                            <label className="form-check-label" for="reqsms">Request SMS</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="snddynamsg" value="snddynamsg" />
-                                                            <label className="form-check-label" for="snddynamsg">Send dynamic messages</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="sndschmsg" value="sndschmsg" />
-                                                            <label className="form-check-label" for="sndschmsg">Send Schedule SMS</label>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-
+                                                
                                         </div>
 
 
