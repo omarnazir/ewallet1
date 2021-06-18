@@ -259,15 +259,6 @@ class EditNormalUserPage extends Component {
                                     </CardBody>
                                     <CardFooter>
                                         <div className="d-flex align-items-center">
-                                            {/* <CustomInput type="checkbox" id="terms"
-                                                name="terms"
-                                                label="I agree with the terms"
-                                                invalid={this.hasError('formRegister', 'terms', 'required')}
-                                                onChange={this.validateOnChange}
-                                                data-validate='["required"]'
-                                                checked={this.state.formRegister.terms}>
-                                                <span className="invalid-feedback">Field is required</span>
-                                            </CustomInput> */}
                                             <div className="ml-auto">
                                                 <button className="btn btn-danger px-5 mr-2" onClick={this.ViewUserPage}>Cancel</button>
                                                 <button type="submit" style={this.AddActionButtonStyle} className="btn btn-primary px-5">Save</button>

@@ -101,7 +101,7 @@ class Login extends Component {
 
                     window.location.reload();
                 }, (err) => {
-                    // console.log(err.response.data);
+                    console.log(err.response.data.message);
                     this.setState({ loginHasError: true })
                 }
             )

@@ -6,17 +6,19 @@ import {
     Card,
     CardHeader,
     CardBody,
-    CardTitle,
-    InputGroup,
-    InputGroupAddon,
     Button,
     FormGroup,
-    Row, Col, Input, CardFooter, CustomInput
+    Input, CardFooter,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
 } from "reactstrap";
 import $ from "jquery";
 
 import FormValidator from '../../../Common/FormValidator';
 import axios from '../../../../services/axios'
+
 
 class AddUser extends Component {
 
@@ -30,9 +32,23 @@ class AddUser extends Component {
             username: "",
             phonenumber: "",
             monthlysmslimit: 0,
-            settings:false,
+            settings: false,
 
-        }
+        },
+        rolesList: [],
+        description: "",
+        selectedRoleList: [],
+        role: "",
+        roleId: 0,
+        roleDescription: ""
+    }
+
+    componentDidMount() {
+        axios.get("/roles/admin")
+            .then(res => {
+                const response = res.data;
+                this.setState({ rolesList: response })
+            })
     }
     validateOnChange = event => {
         const input = event.target;
@@ -55,6 +71,35 @@ class AddUser extends Component {
         }
     }
 
+    handleSubmit = event => {
+        this.toggleModal();
+        event.preventDefault()
+
+        console.log(event.target.value)
+        const roleId = this.state.roleId;
+        const role = this.state.rolesList.find(item => item.id == roleId);
+        const found = this.state.selectedRoleList.find((row) => row.id == roleId);
+
+        if (found == undefined) {
+            const selectedRoleList = [...this.state.selectedRoleList, role]
+            this.setState({ selectedRoleList })
+        }
+        console.log(this.state.roleId)
+        console.log(this.state.role)
+        console.log(this.state.description)
+
+    }
+
+    DeleteUserRole = (id) => {
+        const role = this.state.rolesList.find(item => item.id == id);
+        const selectedRoleList = this.state.selectedRoleList.filter(row => row.id != role.id)
+        this.setState({ selectedRoleList })
+
+    }
+    handleChange = event => {
+        console.log("am hree")
+        this.setState({ [event.target.name]: event.target.value });
+    }
 
     onSubmit = e => {
         e.preventDefault()
@@ -72,10 +117,18 @@ class AddUser extends Component {
 
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
 
+        console.log(this.state.selectedRoleList)
+
+
+        const UserRoles = [];
+        this.state.selectedRoleList.forEach(item => {
+            const newItem = { role_id: item.id }
+            UserRoles.push(newItem)
+        });
 
 
         if (!hasError) {
-            const data = {
+            const User = {
                 "username": this.state.formRegister.username,
                 "email": this.state.formRegister.email,
                 "password": this.state.formRegister.password,
@@ -83,15 +136,32 @@ class AddUser extends Component {
                 "msisdn": this.state.formRegister.phonenumber,
                 "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit
             }
+            console.log(User)
+
+            const data = { user:User,role_ids:UserRoles }
             console.log(data)
 
 
-            // axios.post("users/admin", data).then(res => {
-            //     console.log(res);
-            //     console.log(res.data);
-            //     this.ViewUserPage();
-            // })
+            axios.post("users/admin", data).then(res => {
+                console.log(res);
+                console.log(res.data);
+                this.ViewUserPage();
+            })
         }
+    }
+
+    toggleModal = () => {
+        this.setState({
+            modal: !this.state.modal
+        });
+    }
+
+    handleSmsTemplateChange = event => {
+        const templateId = event.target.value
+        const template = this.state.rolesList.find(item => item.id == templateId);
+        this.setState({ role: template.name })
+        this.setState({ description: template.description })
+        this.setState({ roleId: template.id })
     }
 
 
@@ -117,6 +187,7 @@ class AddUser extends Component {
     };
 
     render() {
+        let index = 0;
         return (
             <ContentWrapper>
                 <div className="content-heading">
@@ -125,7 +196,44 @@ class AddUser extends Component {
                      <small>Adding a new user.</small>
                     </div>
                     <div className="flex-row">
+                        <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add Role</Button>
                         <Button onClick={this.ViewAllAdminUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
+                        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+                            <ModalHeader toggle={this.toggleModal}>Add Role : </ModalHeader>
+                            <form onSubmit={this.handleSubmit}>
+                                <ModalBody>
+
+                                    <div className="form-group">
+                                        <label htmlFor="exampleFormControlSelect1">Select Role: </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="role"
+                                            onChange={this.handleSmsTemplateChange}
+                                            value={this.state.handleChange}
+                                        >
+                                            <option >Select role</option>
+                                            {this.state.rolesList.map(row => (
+                                                <option key={row.id} value={row.id}>
+                                                    {row.name}
+                                                </option>
+                                            ))}
+
+                                        </select>
+                                    </div>
+                                    <FormGroup>
+                                        <label>Description :</label>
+                                        <textarea col="5" className="form-control" name="description" value={this.state.description}
+                                            type="text" disabled></textarea>
+                                    </FormGroup>
+
+
+                                </ModalBody>
+                                <ModalFooter>
+                                    <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
+                                        Add Role
+                    </button>
+                                </ModalFooter>
+                            </form>
+                        </Modal>
+
                     </div>
                 </div>
                 <Container fluid>
@@ -235,103 +343,31 @@ class AddUser extends Component {
                                         </div>
 
 
-                                        <div className="row">
-                                            <div className="col-md-12">
+                                        <table className="table table-striped my-4 w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th data-priority="1">ID</th>
+                                                    <th>ROLE NAME</th>
+                                                    <th>DESCRIPTION</th>
+                                                    <th>ACTIONS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {this.state.selectedRoleList.map(row => (
+                                                    <tr key={row.id}>
+                                                        <td>{index += 1}</td>
+                                                        <td>{row.name}</td>
+                                                        <td>{row.description}</td>
+                                                        <td>
+                                                            <span className="btn bg-danger-dark" onClick={() => this.DeleteUserRole(row.id)}>
+                                                                <i className="icon-trash mr-2"></i>
+                                                                     Delete</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
 
-                                                <h4 className="text-center"><strong>User Roles</strong></h4>
-                                                <div className="form-group px-md-4 px-1 mt-1">
-
-                                                    <div className="form-row my-2">
-
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwdashboard" value="2" />
-                                                            <label className="form-check-label" for="vwdashboard">View Dashboard</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwreports" value="2" />
-                                                            <label className="form-check-label" for="vwreports">View Customer List</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="vwsyslogs" value="3" />
-                                                            <label className="form-check-label" for="vwsyslogs">Post Paid Customer</label>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="adduser" value="4" />
-                                                            <label className="form-check-label" for="adduser">View Transactions</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="compsmsnum" value="5" />
-                                                            <label className="form-check-label" for="compsmsnum">Manage Sender Id's</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="compsmsupnum" value="6" />
-                                                            <label className="form-check-label" for="compsmsupnum">Manage Templates</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="crtsenderid" value="7" />
-                                                            <label className="form-check-label" for="crtsenderid">Manage Tariffs</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-                                                            <input className="form-check-input" type="checkbox" id="dltuser" value="8" />
-                                                            <label className="form-check-label" for="dltuser">Manage Users</label>
-                                                              {/* <CustomInput type="checkbox" id="terms"
-                                                                name="terms"
-                                                                label="System Settings"
-                                                                invalid={this.hasError('formRegister', 'terms', 'required')}
-                                                                onChange={this.validateOnChange}
-                                                                
-                                                                checked={this.state.formRegister.terms}> 
-
-        </CustomInput> */}
-                                                        </div>
-
-                                                    </div>
-
-                                                    {/* add 9 12 10 11 */}
-                                                    <div className="form-row my-2">
-                                                        <div className="form-check form-check-inline col-sm-5">
-
-                                                            <CustomInput type="checkbox" id="settings"
-                                                                name="settings"
-                                                                label="System Settings"
-                                                                invalid={this.hasError('formRegister', 'settings', 'required')}
-                                                                onChange={this.validateOnChange}
-                                                                checked={this.state.formRegister.terms}
-                                                               
-                                                                >
-
-                                                            </CustomInput>
-                                                            {/* <input className="form-check-input" type="checkbox" id="edtuser" value="25" />
-                                                            <label className="form-check-label" for="edtuser">System Settings</label> */}
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
+                                            </tbody>
+                                        </table>
 
 
                                     </CardBody>
