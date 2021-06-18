@@ -56,6 +56,11 @@ class Transactions extends Component {
           text: "INVOICE"
       },
       {
+        key: "paymentMsisdn",
+        text: "MSISDN",
+        sortable: true
+    },
+      {
           key: "smsQuantity",
           text: "QUANTITY",
           sortable: true,

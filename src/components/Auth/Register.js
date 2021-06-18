@@ -187,10 +187,9 @@ class Register extends Component {
             console.log(res)
             this.showSweetAlert("Account successfully created");
             setTimeout(this.ViewLoginPage(),3000)
-            setTimeout( window.location.reload(),3000)
+            setTimeout( window.location.reload(),5000)
         }, (err) => {
             console.log(err)
-          
                 if(err.response.data !=null){
                     this.showSweetAlert(err.response.data.message);
                   }   

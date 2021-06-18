@@ -38,7 +38,7 @@ class PostPaidCustomers extends Component {
   }
 
   formatDate = (date) => {
-    return Moment(date).format('DD-MM-YYYY')
+    return Moment(date).format('lll')
   }
 
   config = {
