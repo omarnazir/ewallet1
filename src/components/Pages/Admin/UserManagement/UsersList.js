@@ -90,6 +90,10 @@ columns = [
       text: "FULL NAME"
   },
   {
+    key: "roleName",
+    text: "ROLE"
+},
+  {
     key: "username",
     text: "USERNAME"
 },

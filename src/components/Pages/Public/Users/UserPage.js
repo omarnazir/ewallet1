@@ -59,6 +59,8 @@ class UserPage extends Component {
     this.GetAllUser();
   }
 
+
+
   formatDate = (date) => {
     return Moment(date).format('lll')
   }
@@ -84,6 +86,10 @@ class UserPage extends Component {
       key: "username",
       text: "USERNAME"
   },
+  {
+    key: "roleName",
+    text: "ROLE"
+},
 
     {
       key: "userMonthlySmsLimit",
