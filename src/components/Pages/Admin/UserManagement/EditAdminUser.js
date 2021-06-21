@@ -11,6 +11,10 @@ import {
     InputGroupAddon,
     Button,
     FormGroup,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
     Row, Col, Input, CardFooter, CustomInput
 } from "reactstrap";
 import $ from "jquery";
@@ -23,25 +27,42 @@ class EditAdminUser extends Component {
 
     state = {
         formRegister: {
-            email: '',
-            password: '',
-            password2: '',
-            terms: false,
+           
+        
             fullname: "",
             username: "",
             phonenumber: "",
-            monthlysmslimit: 0
+            monthlysmslimit: 0,
+            status:""
         },
         user:{},
         selectedRoleList:[],
-        roles:[]
+        roles:[],
+        rolesList:[],
+        
     }
     componentDidMount(){
         const { state } = this.props.history.location;
-        // console.log(state.id)
+        console.log(state)
         if (state == undefined) {
             return this.props.history.push('/admin-customers-list/')
         }
+
+        let url="";
+        if(state.roleName =="ADMIN"){
+            url="/roles/admin";
+        }
+        else if(state.roleName=="CUSTOMER_ADMIN"){
+            url="roles/customer-admin";
+        }
+        else{
+            url="roles/user";
+        }
+        axios.get(url)
+            .then(res => {
+                const response = res.data;
+                this.setState({ rolesList: response })
+            })
 
         axios.get("/users/" + state.id)
             .then(res => {
@@ -65,7 +86,7 @@ class EditAdminUser extends Component {
                     }),
                   }); this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
-                      email: user.status,
+                      status: user.status,
                     }),
                   }); this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
@@ -97,6 +118,34 @@ class EditAdminUser extends Component {
             }
         });
     }
+    }
+
+    handleSmsTemplateChange = event => {
+        const templateId = event.target.value
+        const template = this.state.rolesList.find(item => item.id == templateId);
+        this.setState({ role: template.name })
+        this.setState({ description: template.description })
+        this.setState({ roleId: template.id })
+    }
+
+
+    handleSubmit = event => {
+        this.toggleModal();
+        event.preventDefault()
+
+        console.log(event.target.value)
+        const roleId = this.state.roleId;
+        const role = this.state.rolesList.find(item => item.id == roleId);
+        const found = this.state.roles.find((row) => row.id == roleId);
+
+        if (found == undefined) {
+            const selectedRoleList = [...this.state.roles, role]
+            this.setState({  roles:selectedRoleList })
+        }
+        console.log(this.state.roleId)
+        console.log(this.state.role)
+        console.log(this.state.description)
+
     }
 
 
@@ -140,6 +189,13 @@ class EditAdminUser extends Component {
             this.state[formName].errors[inputName][method]
     }
 
+
+    toggleModal = () => {
+        this.setState({
+            modal: !this.state.modal
+        });
+    }
+
     ViewAllAdminUsers = () => {
         return this.props.history.push('/admin-manage-users')
     }
@@ -166,7 +222,43 @@ class EditAdminUser extends Component {
                      <small>Updating user details</small>
                     </div>
                     <div className="flex-row">
+                    <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add Role</Button>
                         <Button onClick={this.ViewAllAdminUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
+                        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+                            <ModalHeader toggle={this.toggleModal}>Add Role : </ModalHeader>
+                            <form onSubmit={this.handleSubmit}>
+                                <ModalBody>
+
+                                    <div className="form-group">
+                                        <label htmlFor="exampleFormControlSelect1">Select Role: </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="role"
+                                            onChange={this.handleSmsTemplateChange}
+                                            value={this.state.handleChange}
+                                        >
+                                            <option >Select role</option>
+                                            {this.state.rolesList.map(row => (
+                                                <option key={row.id} value={row.id}>
+                                                    {row.name}
+                                                </option>
+                                            ))}
+
+                                        </select>
+                                    </div>
+                                    <FormGroup>
+                                        <label>Description :</label>
+                                        <textarea col="5" className="form-control" name="description" value={this.state.description}
+                                            type="text" disabled></textarea>
+                                    </FormGroup>
+
+
+                                </ModalBody>
+                                <ModalFooter>
+                                    <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
+                                        Add Role
+                    </button>
+                                </ModalFooter>
+                            </form>
+                        </Modal>
                     </div>
                 </div>
                 <Container fluid>
@@ -214,14 +306,14 @@ class EditAdminUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Status *</label>
-                                                    <Input type="email"
-                                                        name="email"
+                                                    <Input type="text"
+                                                        name="status"
                                                         disabled
-                                                        invalid={this.hasError('formRegister', 'email', 'required') || this.hasError('formRegister', 'email', 'email')}
+                                                        invalid={this.hasError('formRegister', 'status', 'required')}
                                                         onChange={this.validateOnChange}
-                                                        data-validate='["required", "email"]'
-                                                        value={this.state.formRegister.email} />
-                                                    {this.hasError('formRegister', 'email', 'email') && <span className="invalid-feedback">Field must be valid email</span>}
+                                                        data-validate='["required"]'
+                                                        value={this.state.formRegister.status} />
+                                                    {this.hasError('formRegister', 'status', 'required') && <span className="invalid-feedback">Field must be valid status</span>}
                                                 </div>
                                             </div>
 
