@@ -89,13 +89,14 @@ columns = [
       key: "name",
       text: "FULL NAME"
   },
-  {
-    key: "roleName",
-    text: "ROLE"
-},
+
   {
     key: "username",
     text: "USERNAME"
+},
+{
+  key: "roleName",
+  text: "ROLE"
 },
   {
     key: "isActive",
