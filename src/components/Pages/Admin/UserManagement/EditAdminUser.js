@@ -118,11 +118,8 @@ class EditAdminUser extends Component {
 
         if (!hasError) {
             const data={
-                "username":this.state.formRegister.username,
-                "email":this.state.formRegister.email,
-                "password":this.state.formRegister.password,
                 "name":this.state.formRegister.fullname,
-                "msisdn":this.state.formRegister.phonenumber,
+                "username":this.state.formRegister.username,
                 "userMonthlySmsLimit":this.state.formRegister.monthlysmslimit
             }
             console.log(data)
@@ -152,7 +149,12 @@ class EditAdminUser extends Component {
         background: "#003366"
     }
 
- 
+    DeleteUserRole = (id) => {
+        const role = this.state.roles.find(item => item.id == id);
+        const selectedRoleList = this.state.roles.filter(row => row.id != role.id)
+        this.setState({ roles:selectedRoleList })
+
+    }
 
     render() {
         let index=0;
