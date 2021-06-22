@@ -49,19 +49,32 @@ class UserScheduledSms extends Component {
     },
     {
       key: "senderId",
-      text: "Sender ID"
+      text: "SENDER ID"
     },
+    // {
+    //   key: "senderId",
+    //   text: "MOBILE NUMBERS"
+    // },
     {
-      key: "senderId",
-      text: "MOBILE NUMBERS"
+      key:"contactType",
+      text:"METHOD"
     },
+    // {
+    //   key: "senderId",
+    //   text: "CAMPAIGN"
+    // },
     {
-      key: "senderId",
-      text: "CAMPAIGN"
+      key: "runDate",
+      text: "RUN DATE",
+      sortable: true,
+      cell: (record, index) => {
+        return (this.formatDate(record.runDate))
+
+      }
     },
     {
       key: "createdAt",
-      text: "SCHEDULED DATE",
+      text: "CREATED DATE",
       sortable: true,
       cell: (record, index) => {
         return (this.formatDate(record.createdAt))
@@ -70,17 +83,17 @@ class UserScheduledSms extends Component {
     },
 
     {
-      key: "status",
+      key: "isExecuted",
       text: "STATUS",
       sortable: true,
       cell: (record, index) => {
 
-        if (record.is_approved == 1) {
-          return (<span className="badge badge-success">Approved</span>)
+        if (record.isExecuted == 1) {
+          return (<span className="badge badge-success">RUNNED</span>)
         }
 
-        if (record.is_approved == 0) {
-          return (<span className="badge badge-warning">Pending</span>)
+        if (record.isExecuted == 0) {
+          return (<span className="badge badge-warning">PENDING</span>)
         }
         if (record.is_approved == 2) {
           return (<span className="badge badge-danger">Rejected</span>)
@@ -154,7 +167,7 @@ class UserScheduledSms extends Component {
               <ReactDatatable
                 extraButtons={this.extraButtons}
                 config={this.config}
-                records={this.state.senderIdList}
+                records={this.state.smsSchedules}
                 columns={this.columns}
 
               />

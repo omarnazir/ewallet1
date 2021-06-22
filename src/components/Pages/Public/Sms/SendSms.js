@@ -114,6 +114,7 @@ class SendSmsCompose extends Component {
         
         console.log("scheduledTime"+ this.formatDate(this.state.scheduledTime))
         const data = new FormData()
+        data.append("campaign",this.state.campaign)
         data.append("senderId",this.state.senderId)
         data.append("templateId", this.state.selectedMessageTemplateId)
         data.append("recipientType", this.state.recipientType)
