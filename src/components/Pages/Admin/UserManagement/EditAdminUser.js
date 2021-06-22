@@ -166,19 +166,27 @@ class EditAdminUser extends Component {
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
 
         if (!hasError) {
-            const data={
+            const User={
                 "name":this.state.formRegister.fullname,
                 "username":this.state.formRegister.username,
                 "userMonthlySmsLimit":this.state.formRegister.monthlysmslimit
             }
-            console.log(data)
            
+            const UserRoles = [];
+            this.state.roles.forEach(item => {
+                const newItem = { role_id: item.id }
+                UserRoles.push(newItem)
+            });
 
-            // axios.post("users/admin",data).then(res=>{
-            //     console.log(res);
-            //     console.log(res.data);
-            //     this.ViewUserPage();
-            //   })
+            const data = { user:User,role_ids:UserRoles }
+            console.log(data)
+
+
+            axios.put("users/admin",data).then(res=>{
+                console.log(res);
+                console.log(res.data);
+                this.ViewUserPage();
+              })
         }
     }
 
