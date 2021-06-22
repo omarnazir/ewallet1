@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Datatable from "../../../Common/Datatable"
 import axios from "../../../../services/axios";
 import {
     Container, Card, CardHeader, CardBody, CardTitle, Button, ModalHeader, Modal,
@@ -10,35 +9,113 @@ import {
 } from "reactstrap";
 import $ from "jquery";
 import ReactDatatable from '@ashvin27/react-datatable';
-import Moment from "moment"
 import { Fragment } from "react";
-
+import Swal from "sweetalert2"
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 
 class MobileOperator extends Component {
     state = {
-        operators: []
+        operators: [],
+        operator:{
+            code:"",
+            network:""
+        },
+        editedOperator:{},
+        AddMode:true
     };
 
-    toggleModal = () => {
-        this.setState({
-            modal: !this.state.modal
-        });
+    componentDidMount() {
+        this.GetMobileOperators();
+       }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.toggleModal();
+
+    if(this.state.AddMode){
+    axios.post("/operators", this.state.operator).then(res => {
+      console.log(res);
+      this.GetMobileOperators();
+      this.showSweetAlert('Added Mobile Operator Successfully');
+    })
+
+  }else{
+    axios.put("/operators", this.state.editedOperator).then(res => {
+      console.log(res);
+      this.GetMobileOperators();
+      this.showSweetAlert('Updated Mobile Operator Successfully');
+    })
+  }
+  }
+
+  toggleModal = () => {
+    this.setState({
+        modal: !this.state.modal
+    });
+}
+    GetMobileOperators(){
+        axios.get("/operators")
+        .then(res => {
+            const operators = res.data;
+            this.setState({ operators })
+            console.log(operators);
+        })
     }
 
-    componentDidMount() {
-        axios.get("/operators")
-            .then(res => {
-                const operators = res.data;
-                this.setState({ operators })
-                console.log(operators);
-            })
+    DeleteOperator(id) {
+        axios.delete("/operators/" + id)
+          .then(res => {
+            const response = res.data;
+            const operators = this.state.operators.filter((item) => {
+              return item.id !== id;
+            });
+            this.setState({ operators })
+          })
+      }
+
+      showSweetAlert(message){
+        return MySwal.fire({position: 'center',
+        icon: 'success',
+        title: message,
+        text:"",
+        showConfirmButton: false,
+        timer: 1500})
+      }
+
+
+  EditOperator(row){
+    const editedOperator={
+        id:row.id,
+        code:row.code,
+        network:row.network,
     }
+    this.setState({editedOperator:editedOperator})
+    this.setState({AddMode:false})
+    this.toggleModal()
+  }
+
+
 
     AddActionButtonStyle = {
         color: 'white',
         background: "#003366"
     }
 
+    handleChange = event => {       
+        if(this.state.AddMode){
+        this.setState({operator:Object.assign({},
+            this.state.operator,{[event.target.name]:event.target.value})})
+        }else {
+            this.setState({editedOperator:Object.assign({},this.state.editedOperator,
+                {[event.target.name]:event.target.value})})
+        }
+      }
+
+    setAddOperatorMode =()=>{
+        this.setState({AddMode:true})
+        this.toggleModal();
+    }
     columns = [
         {
             key: "id",
@@ -61,13 +138,28 @@ class MobileOperator extends Component {
             cell: (record, index) => {
                 return (
                     <Fragment>
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn badge-danger  px-4" onClick={() => this.EnableUser(record)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditOperator(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+                        <span className="btn badge-danger  px-4" onClick={() => this.DeleteOperator(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
         }
     ]
+
+    config = {
+        page_size: 10,
+        length_menu: [10, 25, 50],
+        show_filter: true,
+        show_pagination: true,
+        pagination:'advance',
+        filename: "Contact List",
+        button: {
+         
+        },
+        language: {
+          loading_text: "Please be patient while data loads..."
+      }
+      }
 
 
     render() {
@@ -80,24 +172,24 @@ class MobileOperator extends Component {
             <small>Showing all mobile operators.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add New Operator</Button>
+                        <Button onClick={this.setAddOperatorMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add New Operator</Button>
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                            <ModalHeader toggle={this.toggleModal}>{this.state.AddTariffMode ? "Add Mobile operator" : "Edit Mobile operator"}</ModalHeader>
+                            <ModalHeader toggle={this.toggleModal}>{this.state.AddMode ? "Add Mobile operator" : "Edit Mobile operator"}</ModalHeader>
                             <form onSubmit={this.handleSubmit}>
                                 <ModalBody>
 
                                     <div className="form-group px-md-2 px-1">
                                         <label>Network Name :</label>
-                                        <input className="form-control" name="name" onChange={this.handleChange}
-                                            value={this.state.name}
+                                        <input className="form-control" name="network" onChange={this.handleChange}
+                                            value={ this.state.AddMode? this.state.network :this.state.editedOperator.network}
                                             required ></input>
                                     </div>
 
                                     <div className="form-group px-md-2 px-1">
                                         <label>Code :</label>
-                                        <input className="form-control" name="name" onChange={this.handleChange}
-                                            value={this.state.name}
+                                        <input className="form-control" name="code" onChange={this.handleChange}
+                                            value={ this.state.AddMode? this.state.code :this.state.editedOperator.code}
                                             required ></input>
                                     </div>
 
@@ -127,8 +219,6 @@ class MobileOperator extends Component {
                                 records={this.state.operators}
                                 columns={this.columns}
                             />
-
-
                         </CardBody>
                     </Card>
                 </Container>
