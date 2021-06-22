@@ -13,17 +13,24 @@ import $ from "jquery";
 class TarriffBand extends Component {
   state = {
     tariffBandList: [],
-    tariffId: 0,
-    tariff: {},
     tariffName: "",
+    tariffId:"",
     modal: false,
-    AddTariffBandMode: true,
-    bandAmount: '',
-    smsQuantity: '',
-    expireDurationDays: '',
-    vatAmount: '',
-    AddTariffBandMode: true,
-    tariffBandId: 0,
+    mode: true,
+    editedTariffBand:{
+      id:0,
+      fromAmount:"",
+      toAmount:"",
+      pricePerSms:"",
+      expireDurationDays:0
+    },
+    tariffBand:{
+      fromAmount:"",
+      toAmount:"",
+      pricePerSms:"",
+      expireDurationDays:0
+    }
+    
   };
 
   componentDidMount() {
@@ -31,7 +38,6 @@ class TarriffBand extends Component {
     if (state == undefined) {
       return this.props.history.push('/admin/manage-tariff-bands')
     }
-    this.setState({ tariff: state })
     this.setState({ tariffId: state.id })
     this.setState({ tariffName: state.tariffName })
 
@@ -56,28 +62,16 @@ class TarriffBand extends Component {
   handleSubmit = event => {
     event.preventDefault();
     this.toggleModal();
-
-    const mode = this.state.AddTariffBandMode;
-
-    const tariffBands = {
-      "id": this.state.tariffBandId,
-      "tariffId": this.state.tariffId,
-      "bandAmount": this.state.bandAmount,
-      "smsQuantity": this.state.smsQuantity,
-      "expireDurationDays": this.state.expireDurationDays,
-      "vatAmount": this.state.vatAmount
-    }
-
-    if (mode) {
+    if (this.state.mode) {
       console.log("Add mode")
-      axios.post("/tariff-bands", tariffBands).then(res => {
+      axios.post("/tariff-bands",{...this.state.tariffBand,tariffId:this.state.tariffId} ).then(res => {
         console.log(res.data);
         this.getTariffBands(this.state.tariffId)
 
       })
     } else {
       console.log("Edit mode")
-      axios.put("/tariff-bands", tariffBands).then(res => {
+      axios.put("/tariff-bands",{...this.state.editedTariffBand,tariffId:this.state.tariffId}).then(res => {
         console.log(res.data);
         this.getTariffBands(this.state.tariffId)
 
@@ -87,19 +81,31 @@ class TarriffBand extends Component {
 
   EditTariffBand(row) {
     console.log("Clicked here" + row)
-    this.setState({ AddTariffBandMode: false })
-    this.setState({ tariffBandId: row.id })
-    this.setState({ tariffId: row.tariffId })
-    this.setState({ bandAmount: row.bandAmount })
-    this.setState({ smsQuantity: row.smsQuantity })
-    this.setState({ expireDurationDays: row.expireDurationDays })
-    this.setState({ vatAmount: row.vatAmount })
-
+   const editedTariffBand={
+      id:row.id,
+      fromAmount:row.fromAmount,
+      toAmount:row.toAmount,
+      pricePerSms:row.pricePerSms,
+      expireDurationDays:row.expireDurationDays
+    }
+    this.setState({editedTariffBand})
+    this.setState({ mode: false })
     this.toggleModal();
   }
 
-  handleChange = event => {
+  handleSelectChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+  }
+
+
+  handleChange = event => {       
+    if(this.state.mode){
+    this.setState({tariffBand:Object.assign({},
+        this.state.tariffBand,{[event.target.name]:event.target.value})})
+    }else {
+        this.setState({editedTariffBand:Object.assign({},this.state.editedTariffBand,
+            {[event.target.name]:event.target.value})})
+    }
   }
 
 
@@ -128,12 +134,7 @@ class TarriffBand extends Component {
   }
 
   AddTariffBandMode = () => {
-    this.setState({ AddTariffBandMode: true })
-    this.setState({ tariffBandsId: 0 })
-    this.setState({ bandAmount: '' })
-    this.setState({ smsQuantity: '' })
-    this.setState({ expireDurationDays: '' })
-    this.setState({ vatAmount: '' })
+    this.setState({ mode: true })
     this.toggleModal();
   }
 
@@ -157,26 +158,31 @@ class TarriffBand extends Component {
             <Button onClick={this.AddTariffBandMode} style={this.AddActionButtonStyle} className="btn-pill-right">Add New Tariff Band</Button>
 
             <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-              <ModalHeader toggle={this.toggleModal}>{this.state.mode == "add" ? "Add Tariff Band" : "Edit Tariff Band"}</ModalHeader>
+              <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Tariff Band" : "Edit Tariff Band"}</ModalHeader>
               <form onSubmit={this.handleSubmit}>
                 <ModalBody>
                   <FormGroup>
-                    <label>Amount :</label>
-                    <input className="form-control" name="bandAmount" value={this.state.bandAmount} onChange={this.handleChange} type="number" required></input>
+                    <label>From Amount :</label>
+                    <input className="form-control" name="fromAmount" 
+                    value={this.state.mode? this.state.tariffBand.fromAmount:this.state.editedTariffBand.fromAmount} onChange={this.handleChange} type="number" required></input>
                   </FormGroup>
                   <FormGroup>
-                    <label>Vat Amount :</label>
-                    <input className="form-control" name="vatAmount" value={this.state.vatAmount} onChange={this.handleChange} type="number" required></input>
+                    <label>To Amount :</label>
+                    <input className="form-control" name="toAmount"
+                     value={this.state.mode? this.state.tariffBand.toAmount:this.state.editedTariffBand.toAmount}
+                     onChange={this.handleChange} type="number" required></input>
                   </FormGroup>
                   <FormGroup>
-                    <label>Number of SMS :</label>
-                    <input className="form-control" name="smsQuantity" value={this.state.smsQuantity} onChange={this.handleChange} type="number" required></input>
+                    <label>Price per SMS :</label>
+                    <input className="form-control" name="pricePerSms"
+                    value={this.state.mode? this.state.tariffBand.pricePerSms:this.state.editedTariffBand.pricePerSms}
+                     onChange={this.handleChange} type="number" required></input>
                   </FormGroup>
                   <div className="form-group">
                     <label htmlFor="exampleFormControlSelect1">Expire Time (Days): </label>
                     <select className="form-control" id="exampleFormControlSelect1" name="expireDurationDays"
                       onChange={this.handleChange}
-                      value={this.state.expireDurationDays}
+                      value={this.state.mode? this.state.tariffBand.expireDurationDays:this.state.editedTariffBand.expireDurationDays}
                     >
                       <option value="0">Select number days</option>
                       <option value="30">30 Days</option>
@@ -208,8 +214,9 @@ class TarriffBand extends Component {
                   <tr>
                     <th data-priority="1">ID</th>
                     <th>TARIFF NAME</th>
-                    <th>TARIFF (Tshs)</th>
-                    <th>SMS VOLUME</th>
+                    <th>FROM AMOUNT (Tshs)</th>
+                    <th>TO AMOUNT (Tshs) </th>
+                    <th>PRICE PER SMS</th>
                     <th>EXPIRATION (Days)</th>
                     <th>ACTIONS</th>
                   </tr>
@@ -218,9 +225,10 @@ class TarriffBand extends Component {
                   {this.state.tariffBandList.map(row => (
                     <tr key={row.id}>
                       <td>{index += 1}</td>
-                      <td>{this.state.tariff.tariffName}</td>
-                      <td>{row.bandAmount}</td>
-                      <td>{row.smsQuantity}</td>
+                      <td>{this.state.tariffName}</td>
+                      <td>{row.fromAmount}</td>
+                      <td>{row.toAmount}</td>
+                      <td>{row.pricePerSms}</td>
                       <td>{row.expireDurationDays}</td>
                       <td>
                         <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}
