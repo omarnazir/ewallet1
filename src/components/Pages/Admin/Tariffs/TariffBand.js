@@ -30,7 +30,6 @@ class TarriffBand extends Component {
       pricePerSms:"",
       expireDurationDays:0
     }
-    
   };
 
   componentDidMount() {
@@ -40,8 +39,6 @@ class TarriffBand extends Component {
     }
     this.setState({ tariffId: state.id })
     this.setState({ tariffName: state.tariffName })
-
-
     this.getTariffBands(state.id)
   }
 
@@ -67,6 +64,7 @@ class TarriffBand extends Component {
       axios.post("/tariff-bands",{...this.state.tariffBand,tariffId:this.state.tariffId} ).then(res => {
         console.log(res.data);
         this.getTariffBands(this.state.tariffId)
+        // this.setState({tariffBand:this.state.getInitialState().tariffBand})
 
       })
     } else {
@@ -138,11 +136,7 @@ class TarriffBand extends Component {
     this.toggleModal();
   }
 
-  hideToggelModal = () => {
-    this.setState({
-      modal: false,
-    })
-  }
+ 
 
   render() {
     let index = 0;
@@ -163,8 +157,9 @@ class TarriffBand extends Component {
                 <ModalBody>
                   <FormGroup>
                     <label>From Amount :</label>
-                    <input className="form-control" name="fromAmount" 
-                    value={this.state.mode? this.state.tariffBand.fromAmount:this.state.editedTariffBand.fromAmount} onChange={this.handleChange} type="number" required></input>
+                    <input className="form-control" name="fromAmount"
+                    value={this.state.mode? this.state.tariffBand.fromAmount:this.state.editedTariffBand.fromAmount}
+                     onChange={this.handleChange} type="number" required></input>
                   </FormGroup>
                   <FormGroup>
                     <label>To Amount :</label>

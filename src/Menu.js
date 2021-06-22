@@ -48,11 +48,18 @@ const Menu = [
         name: 'System Settings',
         icon: 'icon-settings',
         path:"/admin-settings",
-        submenu: [{
+        submenu: [
+            {
+                name:"Manage SMSC",
+                path:"/admin-manage-smsc",
+                icon:"fa fa-globe"
+            },
+            {
             name: 'Restricted words to filter',
             icon: 'fa fa-download',
             path: '/admin-restricted-words'
         },
+
             {
                 name: 'Do not disturb',
                 icon: 'fa fa-phone',
