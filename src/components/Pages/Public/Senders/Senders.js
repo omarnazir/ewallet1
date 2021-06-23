@@ -207,13 +207,10 @@ config = {
        <div className="content-heading">
           <div className="mr-auto flex-row">
             Sender IDs
-            <small>Showing all Sender IDs .</small>
+            <small>Showing all Sender IDs . *(You can send message with public sender ids without approval.
+              For personalized sender Ids requires approval from VODACOM)</small>
           </div>
           <div className="flex-row">
-
-          {/* <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
-              Add Sender IDadfadfa
-            </Button> */}
             <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right">
               Add Sender ID
             </Button>
