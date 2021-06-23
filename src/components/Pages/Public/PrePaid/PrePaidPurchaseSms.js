@@ -62,6 +62,12 @@ class PurchaseSms extends Component {
             "payment_type_id":this.state.paymentMethod,
             "msisdn":this.state.phoneNumber
         }
+
+        // const bill2={
+        //     "tariff_band_id":148,
+        //     "payment_type_id":1,
+        //     "msisdn":"0754710183"
+        // }
         console.log(bill);
         axios.post("/bills", bill).then(res => {
             console.log(res);
