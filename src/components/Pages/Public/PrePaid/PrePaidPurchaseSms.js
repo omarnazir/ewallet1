@@ -22,7 +22,7 @@ class PurchaseSms extends Component {
 
     state = {
         tariffBand: "",
-        paymentMethod: "1",
+        paymentMethod: 1,
         phoneNumber: "",
         amount:"",
         smsCount:0,
@@ -58,10 +58,11 @@ class PurchaseSms extends Component {
     handleSubmit = event => {
         event.preventDefault();
         const bill={
-            "amount":this.state.amount,
+            "tariff_band_id":this.state.tariffBand,
             "payment_type_id":this.state.paymentMethod,
             "msisdn":this.state.phoneNumber
         }
+        console.log(bill);
         axios.post("/bills", bill).then(res => {
             console.log(res);
             console.log(res.data);
@@ -74,19 +75,16 @@ class PurchaseSms extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
-    handleOnAmountChange=event=>{
-        this.setState({ [event.target.name]: event.target.value });
-        
-      
-    }
-
-  
     handlePaymentMethodChange = event => {
         const paymentMethod = event.target.value;
         this.setState({ paymentMethod:paymentMethod })
     }
     handleSelectBundleChange = event => {
         const tariff = event.target.value;
+        const selectedBand=this.state.tarriffBandList.filter((item)=>item.id==tariff);
+        // console.log("selected band:",selectedBand)
+        // this.setState({smsCount:selectedBand.smsQuantity})
+        // this.setState({smsCount:40})
         this.setState({ tariffBand:tariff })
     }
     render() {
@@ -107,16 +105,25 @@ class PurchaseSms extends Component {
                             <Card className="card-default">
                                 <CardBody>
                                     <form onSubmit={this.handleSubmit}>
-                                        <FormGroup>
-                                            <label>Select tariff band (TShs):</label>
-                                            <input className="form-control" name="amount" type="number" required onChange={this.handleOnAmountChange} ></input>
-                                        </FormGroup>
-                                        <FormGroup>
+
+                                    <div className="form-group">
+                                            <label htmlFor="exampleFormControlSelect12">Select tariff band  : </label>
+                                            <select className="form-control" id="exampleFormControlSelect12" name="tariffBand" required
+                                             onChange={this.handleSelectBundleChange} onClick={this.handleSelectBundleChange}>
+                                             <option value="0">Select tariff band</option>
+                                            {this.state.tarriffBandList.map(row => (
+                                                    <option key={row.id} value={row.id} >
+                                                        {row.bandAmount} Tshs -- {row.smsQuantity} Sms
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        {/* <FormGroup>
                                             <label>Number of SMS:</label>
                                             <input className="form-control" name="smsCount" type="number" required disabled 
                                             value={this.state.smsCount}
                                             ></input>
-                                        </FormGroup>
+                                        </FormGroup> */}
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Payment method : </label>
                                             <select className="form-control" id="exampleFormControlSelect1" name="paymentMethod" required onChange={this.handlePaymentMethodChange} onClick={this.handlePaymentMethodChange}>
