@@ -19,15 +19,13 @@ class TarriffBand extends Component {
     mode: true,
     editedTariffBand:{
       id:0,
-      fromAmount:"",
-      toAmount:"",
-      pricePerSms:"",
+      bandAmount:"",
+      smsQuantity:"",
       expireDurationDays:0
     },
     tariffBand:{
-      fromAmount:"",
-      toAmount:"",
-      pricePerSms:"",
+      bandAmount:"",
+      smsQuantity:"",
       expireDurationDays:0
     }
   };
@@ -81,9 +79,8 @@ class TarriffBand extends Component {
     console.log("Clicked here" + row)
    const editedTariffBand={
       id:row.id,
-      fromAmount:row.fromAmount,
-      toAmount:row.toAmount,
-      pricePerSms:row.pricePerSms,
+      bandAmount:row.bandAmount,
+      smsQuantity:row.smsQuantity,
       expireDurationDays:row.expireDurationDays
     }
     this.setState({editedTariffBand})
@@ -156,21 +153,16 @@ class TarriffBand extends Component {
               <form onSubmit={this.handleSubmit}>
                 <ModalBody>
                   <FormGroup>
-                    <label>From Amount :</label>
-                    <input className="form-control" name="fromAmount"
-                    value={this.state.mode? this.state.tariffBand.fromAmount:this.state.editedTariffBand.fromAmount}
+                    <label>Amount :</label>
+                    <input className="form-control" name="bandAmount"
+                    value={this.state.mode? this.state.tariffBand.bandAmount:this.state.editedTariffBand.bandAmount}
                      onChange={this.handleChange} type="number" required></input>
                   </FormGroup>
+
                   <FormGroup>
-                    <label>To Amount :</label>
-                    <input className="form-control" name="toAmount"
-                     value={this.state.mode? this.state.tariffBand.toAmount:this.state.editedTariffBand.toAmount}
-                     onChange={this.handleChange} type="number" required></input>
-                  </FormGroup>
-                  <FormGroup>
-                    <label>Price per SMS :</label>
-                    <input className="form-control" name="pricePerSms"
-                    value={this.state.mode? this.state.tariffBand.pricePerSms:this.state.editedTariffBand.pricePerSms}
+                    <label>Sms Quantity :</label>
+                    <input className="form-control" name="smsQuantity"
+                    value={this.state.mode? this.state.tariffBand.smsQuantity:this.state.editedTariffBand.smsQuantity}
                      onChange={this.handleChange} type="number" required></input>
                   </FormGroup>
                   <div className="form-group">
@@ -209,9 +201,8 @@ class TarriffBand extends Component {
                   <tr>
                     <th data-priority="1">ID</th>
                     <th>TARIFF NAME</th>
-                    <th>FROM AMOUNT (Tshs)</th>
-                    <th>TO AMOUNT (Tshs) </th>
-                    <th>PRICE PER SMS</th>
+                    <th>AMOUNT (Tshs)</th>
+                    <th>SMS QUANTITY</th>
                     <th>EXPIRATION (Days)</th>
                     <th>ACTIONS</th>
                   </tr>
@@ -221,9 +212,8 @@ class TarriffBand extends Component {
                     <tr key={row.id}>
                       <td>{index += 1}</td>
                       <td>{this.state.tariffName}</td>
-                      <td>{row.fromAmount}</td>
-                      <td>{row.toAmount}</td>
-                      <td>{row.pricePerSms}</td>
+                      <td>{row.bandAmount}</td>
+                      <td>{row.smsQuantity}</td>
                       <td>{row.expireDurationDays}</td>
                       <td>
                         <span className="btn badge-success mr-2" style={this.TableActionButtonStyle}
