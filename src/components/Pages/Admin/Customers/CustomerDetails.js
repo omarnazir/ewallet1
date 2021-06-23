@@ -179,7 +179,7 @@ class CustomerDetails extends Component {
                     </div>
                     <div className="flex-row d-block d-md-flex">
                         {this.state.isApproved == 1 &&
-                            <Button onClick={() => this.ViewRequestedSenders} className="btn btn-pill mr-2 bg-danger">Disable Customer</Button>
+                            <Button onClick={() => this.RejectCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-danger">Disable Customer</Button>
                         }
                         {this.state.isApproved == 0 &&
                             <span>

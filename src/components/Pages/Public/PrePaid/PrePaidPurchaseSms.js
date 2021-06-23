@@ -96,11 +96,11 @@ class PurchaseSms extends Component {
         })
         if(bandId!=0){
             const band =this.state.tarriffBandList.find((item)=>item.id==bandId)
-            return amount/band.pricePerSms;
+            return Math.floor(amount/band.pricePerSms);
         }else{
             const band=this.state.largestTariffBand;
             if(band.id !=null){
-                return amount/band.pricePerSms; 
+                return Math.floor(amount/band.pricePerSms); 
             }
         }
     }
