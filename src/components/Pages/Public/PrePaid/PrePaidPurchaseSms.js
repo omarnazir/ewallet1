@@ -54,7 +54,7 @@ class PurchaseSms extends Component {
                 this.setState({ paymentTypeList: response })
             })
 
-        axios.get("/tariff-bands/largest")
+        axios.get("/tariff-bands/customer/largest")
             .then(res => {
                 const response = res.data;
                 this.setState({ largestTariffBand: response })
