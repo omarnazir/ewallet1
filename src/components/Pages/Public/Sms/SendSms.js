@@ -133,18 +133,22 @@ class SendSmsCompose extends Component {
         .then(res => {
             console.log(res);
             console.log(res.data);
-            this.showSweetAlert();
+            if(this.state.isScheduled ==1){
+                this.showSweetAlert("SMS sheduled  successfully")
+            }else {
+            this.showSweetAlert("SMS Sent Sucessfully");
+            }
             setTimeout(this.ViewDashboard,3000)
             // this.ViewDashboard();
         })
     }
 
 
-    showSweetAlert() {
+    showSweetAlert(message) {
         return MySwal.fire({
             position: 'center',
             icon: 'success',
-            title: 'SMS Sent Sucessfully',
+            title:message,
             text: "",
             showConfirmButton: false,
             timer: 2000

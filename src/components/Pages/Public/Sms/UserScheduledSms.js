@@ -30,11 +30,22 @@ class UserScheduledSms extends Component {
 
 
   componentDidMount() {
+    this.getSmsSchedules();
+  }
+
+  getSmsSchedules=()=>{
     axios.get("/sms-schedules/customer")
+    .then(res => {
+      const response = res.data;
+      this.setState({ smsSchedules: response })
+      console.log(response);
+    })
+  }
+  CancelScheduled(id) {
+    axios.post("/sms-schedules/cancel" + id)
       .then(res => {
         const response = res.data;
-        this.setState({ smsSchedules: response })
-        console.log(response);
+       this.getSmsSchedules();
       })
   }
 
@@ -89,26 +100,22 @@ class UserScheduledSms extends Component {
       cell: (record, index) => {
 
         if (record.isExecuted == 1) {
-          return (<span className="badge badge-success">RUNNED</span>)
+          return (<span className="badge badge-success">Runned</span>)
         }
 
         if (record.isExecuted == 0) {
-          return (<span className="badge badge-warning">PENDING</span>)
+          return (<span className="badge badge-warning">Pending</span>)
         }
-        if (record.is_approved == 2) {
-          return (<span className="badge badge-danger">Rejected</span>)
+        if (record.isExecuted == 2) {
+          return (<span className="badge badge-danger">Cancelled</span>)
         }
-        if (record.is_approved == 3) {
-          return (<span className="badge badge-danger">Disabled</span>)
-        }
-
       }
     },
     {
       key: "is_approved",
       text: "ACTION",
       cell: (record, index) => {
-        if (record.is_approved == 0) {
+        if (record.isExecuted == 0) {
           return (
             <span className="btn bg-danger-dark" onClick={() => this.deleteSenderId(record.id)}>
               <i className="icon-trash mr-2"></i>

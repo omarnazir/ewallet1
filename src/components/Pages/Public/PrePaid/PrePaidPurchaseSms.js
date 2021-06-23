@@ -24,6 +24,8 @@ class PurchaseSms extends Component {
         tariffBand: "",
         paymentMethod: "1",
         phoneNumber: "",
+        amount:"",
+        smsCount:0,
         tarriffBandList: [],
         paymentTypeList:[]
     };
@@ -38,7 +40,7 @@ class PurchaseSms extends Component {
         if (!isAuthenticated) {
           this.setState({ redirect: "/login" })
         }
-        axios.get("/tariff/get-default-bands")
+        axios.get("/tariff-bands/customer")
             .then(res => {
                 const response = res.data;
                 this.setState({ tarriffBandList: response })
@@ -55,7 +57,7 @@ class PurchaseSms extends Component {
     handleSubmit = event => {
         event.preventDefault();
         const bill={
-            "tariff_band_id":this.state.tariffBand,
+            "amount":this.state.amount,
             "payment_type_id":this.state.paymentMethod,
             "msisdn":this.state.phoneNumber
         }
@@ -69,6 +71,26 @@ class PurchaseSms extends Component {
 
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
+    }
+
+    handleOnAmountChange=event=>{
+        this.setState({ [event.target.name]: event.target.value });
+        const smsCount=this.computeNumberOfSms([event.target.value])
+        this.setState({smsCount:smsCount})
+    }
+
+    computeNumberOfSms=amount=>{
+    let bandId=0;
+     this.state.tarriffBandList.forEach(item => {
+            if(amount >=item.fromAmount && amount<=item.toAmount){
+                bandId=item.id
+            }
+        })
+
+        if(bandId!=0){
+            const band =this.state.tarriffBandList.find((item)=>item.id==bandId)
+            return amount/band.pricePerSms;
+        }
     }
 
     handlePaymentMethodChange = event => {
@@ -97,18 +119,16 @@ class PurchaseSms extends Component {
                             <Card className="card-default">
                                 <CardBody>
                                     <form onSubmit={this.handleSubmit}>
-
-                                        <div className="form-group">
-                                            <label htmlFor="exampleFormControlSelect1">Bundle : </label>
-                                            <select className="form-control" id="exampleFormControlSelect1" required name="tariffBand" onChange={this.handleSelectBundleChange} onClick={this.handleSelectBundleChange} >
-                                            <option value="0">Select a bundle band</option>
-                                                {this.state.tarriffBandList.map(row => (
-                                                    <option key={row.id} value={row.id} >
-                                                        {row.smsQuantity} sms -  Tsh {row.bandAmount}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
+                                        <FormGroup>
+                                            <label>Enter amount (TShs):</label>
+                                            <input className="form-control" name="amount" type="number" required onChange={this.handleOnAmountChange} ></input>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <label>Number of SMS:</label>
+                                            <input className="form-control" name="smsCount" type="number" required disabled 
+                                            value={this.state.smsCount}
+                                            ></input>
+                                        </FormGroup>
                                         <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect1">Payment method : </label>
                                             <select className="form-control" id="exampleFormControlSelect1" name="paymentMethod" required onChange={this.handlePaymentMethodChange} onClick={this.handlePaymentMethodChange}>
