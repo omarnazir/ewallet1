@@ -27,7 +27,8 @@ class PurchaseSms extends Component {
         amount:"",
         smsCount:0,
         tarriffBandList: [],
-        paymentTypeList:[]
+        paymentTypeList:[],
+        largestTariffBand:{}
     };
 
     AddActionButtonStyle = {
@@ -51,6 +52,13 @@ class PurchaseSms extends Component {
             .then(res => {
                 const response = res.data;
                 this.setState({ paymentTypeList: response })
+            })
+
+        axios.get("/tariff-bands/largest")
+            .then(res => {
+                const response = res.data;
+                this.setState({ largestTariffBand: response })
+
             })
     }
 
@@ -82,14 +90,18 @@ class PurchaseSms extends Component {
     computeNumberOfSms=amount=>{
     let bandId=0;
      this.state.tarriffBandList.forEach(item => {
-            if(amount >=item.fromAmount && amount<=item.toAmount){
+            if(amount >item.fromAmount && amount<=item.toAmount){
                 bandId=item.id
             }
         })
-
         if(bandId!=0){
             const band =this.state.tarriffBandList.find((item)=>item.id==bandId)
             return amount/band.pricePerSms;
+        }else{
+            const band=this.state.largestTariffBand;
+            if(band.id !=null){
+                return amount/band.pricePerSms; 
+            }
         }
     }
 

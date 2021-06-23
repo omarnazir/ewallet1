@@ -30,7 +30,6 @@ import RestrictedWords from './components/Pages/Admin/Settings/RestrictedWords';
 import ReservedNumbers from './components/Pages/Admin/Settings/ReservedNumbers';
 import UserSenderIds from './components/Pages/Public/Senders/Senders';
 import UserDashboard from './components/Pages/Public/Dashboard/UserDashboard';
-import AddUserSenderId from './components/Pages/Public/Senders/AddSenderId';
 import SendSmsCompose from './components/Pages/Public/Sms/SendSms';
 import UserOutbox from "./components/Pages/Public/Sms/UserOutbox"
 import UserScheduledSms from "./components/Pages/Public/Sms/UserScheduledSms"
@@ -124,7 +123,7 @@ const Routes = ({ location }) => {
 
                                 <Route path="/dashboard" component={waitFor(UserDashboard)}/>
                                 <Route path="/senderId" component={waitFor(UserSenderIds)}/>
-                                <Route path="/add-senderId" component={waitFor(AddUserSenderId)}/>
+                         
 
 
                                 <Route path="/send-sms" component={waitFor(SendSmsCompose)}/>
