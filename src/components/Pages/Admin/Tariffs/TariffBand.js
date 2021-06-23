@@ -30,6 +30,14 @@ class TarriffBand extends Component {
     }
   };
 
+  initialState={
+    tariffBand:{
+      bandAmount:"",
+      smsQuantity:"",
+      expireDurationDays:0
+    }
+  }
+
   componentDidMount() {
     const { state } = this.props.history.location;
     if (state == undefined) {
@@ -62,8 +70,7 @@ class TarriffBand extends Component {
       axios.post("/tariff-bands",{...this.state.tariffBand,tariffId:this.state.tariffId} ).then(res => {
         console.log(res.data);
         this.getTariffBands(this.state.tariffId)
-        // this.setState({tariffBand:this.state.getInitialState().tariffBand})
-
+        this.setState({tariffBand:this.initialState.tariffBand})
       })
     } else {
       console.log("Edit mode")
@@ -76,7 +83,6 @@ class TarriffBand extends Component {
   }
 
   EditTariffBand(row) {
-    console.log("Clicked here" + row)
    const editedTariffBand={
       id:row.id,
       bandAmount:row.bandAmount,

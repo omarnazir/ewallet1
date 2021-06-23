@@ -27,8 +27,7 @@ class PurchaseSms extends Component {
         amount:"",
         smsCount:0,
         tarriffBandList: [],
-        paymentTypeList:[],
-        largestTariffBand:{}
+        paymentTypeList:[]
     };
 
     AddActionButtonStyle = {
@@ -54,12 +53,6 @@ class PurchaseSms extends Component {
                 this.setState({ paymentTypeList: response })
             })
 
-        axios.get("/tariff-bands/customer/largest")
-            .then(res => {
-                const response = res.data;
-                this.setState({ largestTariffBand: response })
-
-            })
     }
 
     handleSubmit = event => {
@@ -83,28 +76,11 @@ class PurchaseSms extends Component {
 
     handleOnAmountChange=event=>{
         this.setState({ [event.target.name]: event.target.value });
-        const smsCount=this.computeNumberOfSms([event.target.value])
-        this.setState({smsCount:smsCount})
+        
+      
     }
 
-    computeNumberOfSms=amount=>{
-    let bandId=0;
-     this.state.tarriffBandList.forEach(item => {
-            if(amount >item.fromAmount && amount<=item.toAmount){
-                bandId=item.id
-            }
-        })
-        if(bandId!=0){
-            const band =this.state.tarriffBandList.find((item)=>item.id==bandId)
-            return Math.floor(amount/band.pricePerSms);
-        }else{
-            const band=this.state.largestTariffBand;
-            if(band.id !=null){
-                return Math.floor(amount/band.pricePerSms); 
-            }
-        }
-    }
-
+  
     handlePaymentMethodChange = event => {
         const paymentMethod = event.target.value;
         this.setState({ paymentMethod:paymentMethod })
@@ -132,7 +108,7 @@ class PurchaseSms extends Component {
                                 <CardBody>
                                     <form onSubmit={this.handleSubmit}>
                                         <FormGroup>
-                                            <label>Enter amount (TShs):</label>
+                                            <label>Select tariff band (TShs):</label>
                                             <input className="form-control" name="amount" type="number" required onChange={this.handleOnAmountChange} ></input>
                                         </FormGroup>
                                         <FormGroup>
