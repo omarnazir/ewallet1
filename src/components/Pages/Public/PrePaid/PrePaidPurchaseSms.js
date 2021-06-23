@@ -62,6 +62,12 @@ class PurchaseSms extends Component {
             "payment_type_id":this.state.paymentMethod,
             "msisdn":this.state.phoneNumber
         }
+
+        // const bill2={
+        //     "tariff_band_id":148,
+        //     "payment_type_id":1,
+        //     "msisdn":"0754710183"
+        // }
         console.log(bill);
         axios.post("/bills", bill).then(res => {
             console.log(res);
@@ -109,7 +115,7 @@ class PurchaseSms extends Component {
                                     <div className="form-group">
                                             <label htmlFor="exampleFormControlSelect12">Select tariff band  : </label>
                                             <select className="form-control" id="exampleFormControlSelect12" name="tariffBand" required
-                                             onChange={this.handleSelectBundleChange} onClick={this.handleSelectBundleChange}>
+                                             onChange={this.handleSelectBundleChange}>
                                              <option value="0">Select tariff band</option>
                                             {this.state.tarriffBandList.map(row => (
                                                     <option key={row.id} value={row.id} >
