@@ -48,6 +48,9 @@ import Invoices from './components/Pages/Admin/Transactions/Invoices';
 import SingleUserPage from './components/Pages/Public/Users/SingleUserPage';
 import EditAdminUser from './components/Pages/Admin/UserManagement/EditAdminUser';
 import EditNormalUserPage from "./components/Pages/Public/Users/EditPage";
+import ManageEmail from './components/Pages/Admin/Settings/ManageEmail';
+import ManageRole from './components/Pages/Admin/Settings/ManageRole';
+import ManageSmsc from './components/Pages/Admin/Settings/ManageSmsc';
 
 const waitFor = Tag => props => <Tag {...props} />;
 
@@ -115,6 +118,9 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
                                     <Route path="/admin-restricted-words" component={waitFor(RestrictedWords)} />
                                     <Route path="/admin-reserved-numbers" component={waitFor(ReservedNumbers)} />
+                                    <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
+                                    <Route path="/admin-manage-roles" component={waitFor(ManageRole)}/>
+                                    <Route path="/admin-manage-smsc" component={waitFor(ManageSmsc)}/>
                                     
                                     <Route path="/admin-invoices/:id" component={waitFor(Invoices)} />
 

@@ -55,6 +55,16 @@ const Menu = [
                 icon:"fa fa-globe"
             },
             {
+                name:"Manage Mail",
+                path:"/admin-manage-mail",
+                icon:"fa fa-inbox"
+            },
+            {
+                name:"Manage Roles",
+                path:"/admin-manage-roles",
+                icon:"fa fa-users"
+            },
+            {
             name: 'Restricted words to filter',
             icon: 'fa fa-download',
             path: '/admin-restricted-words'
