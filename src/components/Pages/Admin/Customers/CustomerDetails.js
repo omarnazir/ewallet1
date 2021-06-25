@@ -34,7 +34,14 @@ class CustomerDetails extends Component {
         tariffId: 22,
         monthlySmsLimit: 0,
         smscUsername: "",
-        smscPassword: ""
+        smscPassword: "",
+        customerModal: false,
+        editedCustomer: {
+            tariffFk: 0,
+            monthlyLimit: 0,
+            autoRenewal: 1
+        }
+
     };
 
     toggleTab = tab => {
@@ -69,6 +76,10 @@ class CustomerDetails extends Component {
         this.setState({ isApproved: state.isApproved })
         this.setState({ customerId: state.id })
         this.setState({ paymentType: state.paymentType })
+        console.log(state.tariffId)
+        console.log(state.autoRenewal)
+        console.log(state.monthlySmsLimit)
+     
 
         axios.get("/customers/" + state.id)
             .then(res => {
@@ -108,7 +119,6 @@ class CustomerDetails extends Component {
         axios.put("/customers/approve/" + id)
             .then(res => {
                 const response = res.data;
-
                 this.ViewCustomerList();
             })
 
@@ -132,13 +142,23 @@ class CustomerDetails extends Component {
 
         axios.put("/customers/approve", data).then(res => {
             const response = res.data;
-
             this.ViewCustomerList();
         })
     }
 
+    handleCustomerUpdateFomSubmission =event =>{
+
+    }
+
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
+    }
+
+    handleChangeDetails = event => {
+        this.setState({
+            editedCustomer: Object.assign({},
+                this.state.editedCustomer, { [event.target.name]: event.target.value })
+        })
     }
 
     RejectCustomer(id) {
@@ -146,9 +166,36 @@ class CustomerDetails extends Component {
         axios.put("/customers/reject/" + id)
             .then(res => {
                 const response = res.data;
-
                 this.ViewCustomerList();
             })
+    }
+
+    EditCustomer() {
+        console.log("edit")
+        console.log(this.state.customer)
+        console.log(this.state.customer.tariffFk)
+        console.log(this.state.customer.autoRenewal)
+        console.log(this.state.customer.monthlyLimit)
+        this.setState({
+            editedCustomer: Object.assign({},
+                this.state.editedCustomer, { tariffFk:this.state.customer.tariffFk })
+        })
+        this.setState({
+            editedCustomer: Object.assign({},
+                this.state.editedCustomer, { autoRenewal:this.state.customer.autoRenewal })
+        })
+
+        this.setState({
+            editedCustomer: Object.assign({},
+                this.state.editedCustomer, { monthlyLimit:this.state.customer.monthlyLimit })
+        })
+        this.toggleModalCustomer();
+
+    }
+    toggleModalCustomer = () => {
+        this.setState({
+            customerModal: !this.state.customerModal
+        })
     }
 
     toggleModal = () => {
@@ -156,6 +203,7 @@ class CustomerDetails extends Component {
             modal: !this.state.modal
         });
     }
+
     hideToggelModal = () => {
         this.setState({
             modal: false,
@@ -179,10 +227,15 @@ class CustomerDetails extends Component {
                     </div>
                     <div className="flex-row d-block d-md-flex">
                         {this.state.isApproved == 1 &&
+                            this.state.paymentType == "Post-Paid" &&
+                            <Button onClick={() => this.EditCustomer()} className="btn btn-pill mr-2 bg-success">Edit Customer</Button>
+                        }
+                        {this.state.isApproved == 1 &&
                             <Button onClick={() => this.RejectCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-danger">Disable Customer</Button>
                         }
                         {this.state.isApproved == 0 &&
                             <span>
+
                                 <Button onClick={() => this.RejectCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-danger">Reject Customer</Button>
                                 {/* <Button onClick={() => this.ApproveCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-success">Approve Customer</Button> */}
                                 <Button onClick={() => this.toggleModal()} className="btn btn-pill mr-2 bg-success">Approve Customer</Button>
@@ -198,6 +251,49 @@ class CustomerDetails extends Component {
                     </div>
                 </div>
                 <Container fluid>
+                    <Modal isOpen={this.state.customerModal} toggle={this.toggleModalCustomer}>
+                        <ModalHeader toggle={this.toggleModalCustomer}>Edit Customer</ModalHeader>
+                        <form onSubmit={this.handleCustomerUpdateFomSubmission}>
+                            <ModalBody>
+                                <div className="form-group">
+                                    <label htmlFor="exampleFormControlSelect1">Tariff : </label>
+                                    <select className="form-control" id="exampleFormControlSelect1" name="tariffFk" onChange={this.handleChangeDetails}
+                                        value={this.state.editedCustomer.tariffFk}
+                                    >
+                                        <option value="0">Select a tariff</option>
+                                        {this.state.tarrifsList.map(row => (
+                                            <option key={row.id} value={row.id} >
+                                                {row.tariffName}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <FormGroup>
+                                    <label>Monthly sms limit :</label>
+                                    <input className="form-control" name="monthlyLimit"
+                                        value={this.state.editedCustomer.monthlyLimit}
+                                        onChange={this.handleChangeDetails} type="number" required></input>
+                                </FormGroup>
+                                <div className="form-group">
+                                    <label htmlFor="exampleFormControlSelect1">Auto Renew : </label>
+                                    <select className="form-control" id="exampleFormControlSelect1" name="autoRenewal"
+                                        onChange={this.handleChangeDetails}
+                                        value={this.state.editedCustomer.autoRenewal}
+                                    >
+                                        <option value="">Select Status</option>
+                                        <option value="1">ACTIVE</option>
+                                        <option value="0">DISABLED</option>
+                                    </select>
+                                </div>
+
+                            </ModalBody>
+                            <ModalFooter>
+                                <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
+                                    Save
+                                </button>
+                            </ModalFooter>
+                        </form>
+                    </Modal>
 
                     <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
                         <ModalHeader toggle={this.toggleModal}>Approve Customer</ModalHeader>
@@ -233,32 +329,31 @@ class CustomerDetails extends Component {
                             <ModalFooter>
                                 <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
                                     Approve
-                    </button>
-                                <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger  px-5">
+                                </button>
+                                {/* <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger  px-5">
                                     Cancel
-                   </button>
+                   </button> */}
                             </ModalFooter>
                         </form>
                     </Modal>
 
                     <div role="tabpanel card card-body">
-                        {/* Nav tabs */}
                         <Nav tabs>
                             <NavItem>
                                 <NavLink
                                     className={classnames({ active: this.state.activeTab === '1' })}
                                     onClick={() => { this.toggleTab('1'); }}>
                                     <span className="icon-people mr-2"></span>
-                                             Customer Details
-                                            </NavLink>
+                                    Customer Details
+                                </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink
                                     className={classnames({ active: this.state.activeTab === '2' })}
                                     onClick={() => { this.toggleTab('2'); }}>
                                     <span className="icon-wallet mr-2"></span>
-                                              Attachments
-                                            </NavLink>
+                                    Attachments
+                                </NavLink>
                             </NavItem>
 
                             <NavItem>
@@ -266,8 +361,8 @@ class CustomerDetails extends Component {
                                     className={classnames({ active: this.state.activeTab === '4' })}
                                     onClick={() => { this.toggleTab('3'); }}>
                                     <span className="fa fa-users mr-2"></span>
-                                                 User Accounts
-                                            </NavLink>
+                                    User Accounts
+                                </NavLink>
                             </NavItem>
                         </Nav>
                         <TabContent activeTab={this.state.activeTab}>
@@ -288,17 +383,18 @@ class CustomerDetails extends Component {
                                                         <p className="mb-3 text-dark"><strong>Phone:</strong> &nbsp; <span name="phone">{this.state.customer.phonenumber}</span></p>
                                                         <p className="mb-3 text-dark"><strong>Address:</strong> &nbsp; <span name="address">{this.state.customer.location}</span></p>
                                                         <p className="mb-3 text-dark"><strong>Status:</strong> &nbsp;
-                                                        
-                                                        <span name="status"></span>{this.state.customer.isActive == 1 ? "Active" : "Pending"}
+
+                                                            <span name="status"></span>{this.state.customer.isActive == 1 ? "Active" : "Pending"}
                                                         </p>
                                                         <p className="mb-3 text-dark"><strong>Customer Type:</strong> &nbsp;
-                                                        <span name="status"></span>{this.state.customer.customerType}
+                                                            <span name="status"></span>{this.state.customer.customerType}
                                                         </p>
                                                         <p className="mb-3 text-dark"><strong>Payment Type:</strong> &nbsp;
-                                                        <span name="status"></span>{this.state.customer.paymentType}
+                                                            <span name="status"></span>{this.state.customer.paymentType}
                                                         </p>
                                                         <p className="mb-3 text-dark"><strong>Date registered:</strong> &nbsp; <span name="regdate">{this.formatDate(this.state.customer.createdAt)}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>ID number:</strong> &nbsp; <span name="nidaid">19900302-600123-456791</span></p>
+                                                        <p className="mb-3 text-dark"><strong>ID number:</strong> &nbsp; <span name="idnumber">{this.state.customer.idNumber}</span></p>
+                                                        {/* <p className="mb-3 text-dark"><strong>Monthly Sms Limit:</strong> &nbsp; <span name="smsLimit">19900302-600123-456791</span></p> */}
                                                         {/* <p className="mb-3 text-dark"><strong>Attachment:</strong> &nbsp; <span name="attachment"><a href="#">View Attachment</a></span></p> */}
                                                         {/* <p className="mb-3 text-dark"><strong>SMSC ID:</strong> &nbsp; <span name="smsc">ID-01XXXX</span></p> */}
                                                         {/* <p className="mb-3 text-dark"><strong>Tariff:</strong> &nbsp; <span name="tariff">Dabo Bando</span></p> */}
@@ -362,7 +458,7 @@ class CustomerDetails extends Component {
                                                                     <th data-priority="1">#</th>
                                                                     <th>FULL NAME</th>
                                                                     <th>USERNAME</th>
-                                                                    <th className="sort-numeric">SMS MONTHLY LIMIT</th>
+                                                                    <th className="sort-numeric">USER MONTHLY SMS LIMIT</th>
 
                                                                     <th>STATUS</th>
                                                                     <th>LAST LOGIN</th>

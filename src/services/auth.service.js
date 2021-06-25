@@ -13,6 +13,7 @@ class AuthService {
                window.localStorage.clear();
                 window.localStorage.setItem('token', res.data.token);
                 window.localStorage.setItem('user', res.data.user)
+                window.localStorage.setItem('userId',res.data.user.id)
                 window.localStorage.setItem('username', JSON.stringify(res.data.user.username));
                 window.localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
                 console.log(res.data.user.roles)
@@ -29,6 +30,7 @@ class AuthService {
     logout() {
         window.localStorage.removeItem("token");
         window.localStorage.removeItem("user");
+        window.localStorage.removeItem("userId")
         window.localStorage.removeItem("username");
         window.localStorage.removeItem("user_roles");
         window.localStorage.removeItem("user_plain_roles");
@@ -45,6 +47,16 @@ class AuthService {
             isloggedIn = true
         }
         return isloggedIn;
+    }
+
+    getCurrentUser(){
+        const user = window.localStorage.getItem('user');
+        return user;
+    }
+    getCurrentUserId(){
+        const userId = window.localStorage.getItem('userId');
+        return userId;
+
     }
 
     isAuthenticatedAdvanced() {
