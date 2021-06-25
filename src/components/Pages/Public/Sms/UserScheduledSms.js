@@ -42,7 +42,7 @@ class UserScheduledSms extends Component {
     })
   }
   CancelScheduled(id) {
-    axios.post("/sms-schedules/cancel" + id)
+    axios.post("/sms-schedules/cancel/" + id)
       .then(res => {
         const response = res.data;
        this.getSmsSchedules();
@@ -68,7 +68,20 @@ class UserScheduledSms extends Component {
     // },
     {
       key:"contactType",
-      text:"METHOD"
+      text:"METHOD",
+      cell: (record, index) => {
+
+        if (record.contactType == "numbers") {
+          return ("Phone Numbers")
+        }
+
+        if (record.contactType == "contactList") {
+          return ("Contact List")
+        }
+        if (record.contactType == "file") {
+          return ("Contacts File")
+        }
+      }
     },
     // {
     //   key: "senderId",
@@ -117,7 +130,7 @@ class UserScheduledSms extends Component {
       cell: (record, index) => {
         if (record.isExecuted == 0) {
           return (
-            <span className="btn bg-danger-dark" onClick={() => this.deleteSenderId(record.id)}>
+            <span className="btn bg-danger-dark" onClick={() => this.CancelScheduled(record.id)}>
               <i className="icon-trash mr-2"></i>
           CANCEL </span>
           )
@@ -155,22 +168,6 @@ class UserScheduledSms extends Component {
         <Container fluid>
           <Card>
             <CardBody>
-
-              {/* <tr className="gradeA">
-                      <td>1</td>
-                      <td>VODACOM</td>
-                      <td>255656121885</td>
-                      <td>TESTING SMS</td>
-                      <td>Mar 20, 2021 at 22:03</td>
-                      <td>
-                        <span className="badge badge-warning">Pending</span>
-                      </td>
-                      <td> CANCEL WHEN PENDING</td>
-                    </tr> */}
-
-
-
-
               <ReactDatatable
                 extraButtons={this.extraButtons}
                 config={this.config}

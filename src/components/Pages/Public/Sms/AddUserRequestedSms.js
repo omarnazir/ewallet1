@@ -24,7 +24,8 @@ class AddUserRequestedSms extends Component {
         messageTemplate: '',
         messageTemplateType: '',
         showDynamicSmsField: false,
-        messageTemplateLength: 0
+        messageTemplateLength: 0,
+        currentPosition:0
     };
 
     handleOnSelectChange = event => {
@@ -40,8 +41,16 @@ class AddUserRequestedSms extends Component {
     }
 
     handleOnColumnChange= event =>{
-        const value=this.state.messageTemplate+event.target.value;
-        this.setState({messageTemplate:value})
+
+        const currentPosition=this.state.currentPosition;
+        const currentTemplate=this.state.messageTemplate;
+        const valueToInsert=event.target.value;
+        const finalTemplate=currentTemplate.slice(0,currentPosition)+valueToInsert+currentTemplate.slice(currentPosition);
+        this.setState({messageTemplate:finalTemplate})
+        this.setState({ messageTemplateLength: finalTemplate.length })
+
+        // const value=this.state.messageTemplate+event.target.value;
+        // this.setState({messageTemplate:value})
     }
 
 
@@ -66,6 +75,7 @@ class AddUserRequestedSms extends Component {
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
         const message = event.target.value;
+        this.setState({currentPosition:event.target.selectionStart})
         this.setState({ messageTemplateLength: message.length })
     }
 
@@ -117,7 +127,7 @@ class AddUserRequestedSms extends Component {
                                             </div>}
                                         <div className="form-group">
                                             <label>Message : </label>
-                                            <textarea rows="5" className="form-control mb-2" type="text" name="messageTemplate" value={this.state.messageTemplate}
+                                            <textarea rows="8" className="form-control mb-2" type="text" name="messageTemplate" value={this.state.messageTemplate}
                                                 onChange={this.handleChange} required/>
                                             <span className="mt-2"><span className="text-danger">{this.state.messageTemplateLength}</span> <strong>characters</strong></span>
                                             <span className="mt-2 float-right">160 characters = 1 SMS</span>
