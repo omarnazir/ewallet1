@@ -106,11 +106,10 @@ class UserContactList extends Component {
     axios.delete("/contact-lists/" + id)
       .then(res => {
         const response = res.data;
-        // this.setState({ tariffBandList: response })
-        const tariffBandList = this.state.tariffBandList.filter((item) => {
+        const contactList = this.state.contactList.filter((item) => {
           return item.id !== id;
         });
-        this.setState({ tariffBandList })
+        this.setState({ contactList })
       })
   }
 
