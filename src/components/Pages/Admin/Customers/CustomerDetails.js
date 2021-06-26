@@ -3,7 +3,7 @@ import ContentWrapper from "../../../Layout/ContentWrapper";
 import Moment from "moment";
 import axios from "../../../../services/axios";
 import {
-    Container, Card, CardHeader, CardBody, CardTitle, Button, FormGroup,
+    Container, Button, FormGroup,
     TabContent,
     TabPane,
     Nav,
@@ -16,7 +16,6 @@ import {
     ModalFooter,
 } from "reactstrap";
 import classnames from 'classnames';
-import $ from "jquery";
 import { Document, Page } from 'react-pdf';
 
 
@@ -39,7 +38,7 @@ class CustomerDetails extends Component {
         editedCustomer: {
             tariffFk: 0,
             monthlyLimit: 0,
-            autoRenewal: 1
+            autoRenewal: ""
         }
 
     };
@@ -76,10 +75,6 @@ class CustomerDetails extends Component {
         this.setState({ isApproved: state.isApproved })
         this.setState({ customerId: state.id })
         this.setState({ paymentType: state.paymentType })
-        console.log(state.tariffId)
-        console.log(state.autoRenewal)
-        console.log(state.monthlySmsLimit)
-     
 
         axios.get("/customers/" + state.id)
             .then(res => {
@@ -146,7 +141,26 @@ class CustomerDetails extends Component {
         })
     }
 
-    handleCustomerUpdateFomSubmission =event =>{
+    handleCustomerUpdateFomSubmission = event => {
+
+        event.preventDefault();
+        this.toggleModalCustomer();
+
+
+        const data = {
+            customerId: this.state.customer.id,
+            tariffId: this.state.editedCustomer.tariffFk,
+            monthlySmsLimit: this.state.editedCustomer.monthlyLimit,
+            autoRenew: this.state.editedCustomer.autoRenewal,
+
+        }
+        console.log("data", data)
+       
+         axios.put("/customers/auto-renew",data)
+         .then(res => {
+             const response = res.data;
+             this.ViewCustomerList();
+         }) 
 
     }
 
@@ -173,22 +187,39 @@ class CustomerDetails extends Component {
     EditCustomer() {
         console.log("edit")
         console.log(this.state.customer)
-        console.log(this.state.customer.tariffFk)
+        console.log("TariffFk", this.state.customer.tariffFk)
         console.log(this.state.customer.autoRenewal)
         console.log(this.state.customer.monthlyLimit)
+
+
         this.setState({
             editedCustomer: Object.assign({},
-                this.state.editedCustomer, { tariffFk:this.state.customer.tariffFk })
+                this.state.editedCustomer, { tariffFk: this.state.customer.tariffFk })
         })
+
+        console.log(this.state.editedCustomer);
+        this.setState({ editedCustomer: { ...this.state.editedCustomer, tariffFk: this.state.customer.tariffFk } })
+
+        this.setState({editedCustomer:Object.assign({},
+            this.state.editedCustomer,{tariffFk:this.state.customer.tariffFk})})
+
+        //     this.setState({editedCustomer:Object.assign({},
+        //         this.state.editedCustomer,{[event.target.name]:event.target.value})})
+       
+
         this.setState({
             editedCustomer: Object.assign({},
-                this.state.editedCustomer, { autoRenewal:this.state.customer.autoRenewal })
+                this.state.editedCustomer, { autoRenewal: this.state.customer.autoRenewal })
         })
 
         this.setState({
             editedCustomer: Object.assign({},
-                this.state.editedCustomer, { monthlyLimit:this.state.customer.monthlyLimit })
+                this.state.editedCustomer, { monthlyLimit: this.state.customer.monthlyLimit })
         })
+        
+
+        console.log(this.state.editedCustomer);
+
         this.toggleModalCustomer();
 
     }
@@ -237,7 +268,6 @@ class CustomerDetails extends Component {
                             <span>
 
                                 <Button onClick={() => this.RejectCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-danger">Reject Customer</Button>
-                                {/* <Button onClick={() => this.ApproveCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-success">Approve Customer</Button> */}
                                 <Button onClick={() => this.toggleModal()} className="btn btn-pill mr-2 bg-success">Approve Customer</Button>
                             </span>
                         }
@@ -274,6 +304,8 @@ class CustomerDetails extends Component {
                                         value={this.state.editedCustomer.monthlyLimit}
                                         onChange={this.handleChangeDetails} type="number" required></input>
                                 </FormGroup>
+
+
                                 <div className="form-group">
                                     <label htmlFor="exampleFormControlSelect1">Auto Renew : </label>
                                     <select className="form-control" id="exampleFormControlSelect1" name="autoRenewal"
