@@ -133,9 +133,9 @@ class Login extends Component {
         return (
             <div>
                 <header>
-                    { /* START Top Navbar */}
+                   
                     <nav className="navbar topnavbar py-2 px-5">
-                        { /* START navbar header */}
+                      
                         <div className="navbar-header">
                             <a className="navbar-brand" href="#/">
                                 <div className="brand-logo">
@@ -146,7 +146,7 @@ class Login extends Component {
                                 </div>
                             </a>
                         </div>
-                        { /* END navbar header */}
+                   
 
                         <div className="navbar-nav flex-row">
                             <Button onClick={this.ViewSignUp} outline color="success" className="btn-pill mr-3">Sign Up</Button>

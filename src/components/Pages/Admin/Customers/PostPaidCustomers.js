@@ -97,9 +97,7 @@ class PostPaidCustomers extends Component {
         );
       }
        else{
-       
         return  (
-         
           <NumberFormat value={ record.monthlyLimit} displayType={'text'} thousandSeparator={true} prefix={''} />
           );
       }
@@ -160,7 +158,6 @@ class PostPaidCustomers extends Component {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect}/>
   }
-    let index=0;
     return (
       <ContentWrapper>
         <div className="content-heading">
@@ -178,7 +175,6 @@ class PostPaidCustomers extends Component {
         <Container fluid>
           <Card>
             <CardHeader>
-              {/* <CardTitle>Export Buttons</CardTitle> */}
             </CardHeader>
             <CardBody>
               

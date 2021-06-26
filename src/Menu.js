@@ -72,7 +72,7 @@ const Menu = [
 
             {
                 name: 'Do not disturb',
-                icon: 'fa fa-phone',
+                icon: 'fa fa-ban',
                 path: '/admin-reserved-numbers'
             }, {
                 name: 'Operators',
