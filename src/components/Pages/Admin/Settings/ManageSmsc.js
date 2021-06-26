@@ -158,17 +158,17 @@ formatDate = (date) => {
       key: "status",
       text: "STATUS",
       cell: (record, index) => {
-        if (record.status == "Pending") {
+        if (record.status == "Pending" && record.isPublic == 0) {
           return (
             <span className="badge badge-warning">Not Assigned</span>
           );
         }
-        if(record.status == "Active"){
+        if(record.status == "Active" && record.isPublic == 0){
           return  (<span className="badge badge-success">Assigned</span>)
         }
-        if(record.status == null){
+        if(record.isPublic == 1){
           return (
-            <span className="badge badge-warning">Not Assigned</span>
+            <span className="badge badge-success">Active</span>
           );
         }
       }

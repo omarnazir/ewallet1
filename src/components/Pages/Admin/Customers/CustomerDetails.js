@@ -28,12 +28,16 @@ class CustomerDetails extends Component {
         isApproved: 0,
         usersList: [],
         tarrifsList: [],
+
+        smscList:[],
+        smscId:0,
+        showSmscDetails:false,
+        smscType:-1,
         paymentType: "",
 
         tariffId: 22,
         monthlySmsLimit: 0,
-        smscUsername: "",
-        smscPassword: "",
+        
         customerModal: false,
         editedCustomer: {
             tariffFk: 0,
@@ -67,7 +71,6 @@ class CustomerDetails extends Component {
     componentDidMount() {
 
         const { state } = this.props.history.location;
-        // console.log(state.id)
         if (state == undefined) {
             return this.props.history.push('/admin-customers-list/')
         }
@@ -98,6 +101,14 @@ class CustomerDetails extends Component {
                 console.log(response);
             })
 
+            axios.get("/smsc/dedicated-pending")
+            .then(res => {
+                const response = res.data;
+                this.setState({ smscList: response })
+                console.log(response);
+            })
+            
+
     }
     AddActionButtonStyle = {
         color: 'white',
@@ -122,14 +133,11 @@ class CustomerDetails extends Component {
     handleSubmit = event => {
         event.preventDefault();
         this.hideToggelModal();
-
-
         const data =
         {
             "customerId": this.state.customerId,
             "tariffId": this.state.tariffId,
-            "smscUsername": this.state.smscUsername,
-            "smscPassword": this.state.smscPassword,
+             "smscId":this.state.smscId,
             "monthlySmsLimit": this.state.monthlySmsLimit
         }
 
@@ -155,12 +163,11 @@ class CustomerDetails extends Component {
 
         }
         console.log("data", data)
-       
-         axios.put("/customers/auto-renew",data)
-         .then(res => {
-             const response = res.data;
-             this.ViewCustomerList();
-         }) 
+        axios.put("/customers/auto-renew", data)
+            .then(res => {
+                const response = res.data;
+                this.ViewCustomerList();
+            })
 
     }
 
@@ -175,8 +182,20 @@ class CustomerDetails extends Component {
         })
     }
 
-    RejectCustomer(id) {
+    handleSmsTypeChange = event => {
+        console.log("Am here")
+        if ([event.target.value] == "0") {
+            this.setState({ showSmscDetails: false })
+            this.setState({smscId:0})
+            this.setState({smscType:0})
+        } else {
+            this.setState({ showSmscDetails: true })
+            this.setState({smscType:1})
+           
+        }
+    }
 
+    RejectCustomer(id) {
         axios.put("/customers/reject/" + id)
             .then(res => {
                 const response = res.data;
@@ -200,12 +219,14 @@ class CustomerDetails extends Component {
         console.log(this.state.editedCustomer);
         this.setState({ editedCustomer: { ...this.state.editedCustomer, tariffFk: this.state.customer.tariffFk } })
 
-        this.setState({editedCustomer:Object.assign({},
-            this.state.editedCustomer,{tariffFk:this.state.customer.tariffFk})})
+        this.setState({
+            editedCustomer: Object.assign({},
+                this.state.editedCustomer, { tariffFk: this.state.customer.tariffFk })
+        })
 
         //     this.setState({editedCustomer:Object.assign({},
         //         this.state.editedCustomer,{[event.target.name]:event.target.value})})
-       
+
 
         this.setState({
             editedCustomer: Object.assign({},
@@ -216,10 +237,7 @@ class CustomerDetails extends Component {
             editedCustomer: Object.assign({},
                 this.state.editedCustomer, { monthlyLimit: this.state.customer.monthlyLimit })
         })
-        
-
         console.log(this.state.editedCustomer);
-
         this.toggleModalCustomer();
 
     }
@@ -331,15 +349,41 @@ class CustomerDetails extends Component {
                         <ModalHeader toggle={this.toggleModal}>Approve Customer</ModalHeader>
                         <form onSubmit={this.handleSubmit}>
                             <ModalBody>
-                                <FormGroup>
-                                    <label>Sms Username :</label>
-                                    <input className="form-control" name="smscUsername" onChange={this.handleChange} type="text" required></input>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label>Smsc Password :</label>
-                                    <input className="form-control" name="smscPassword" onChange={this.handleChange} type="text" required></input>
-                                </FormGroup>
 
+
+                            {this.state.paymentType == "Post-Paid" &&
+                                <div className="form-group">
+                                    <label htmlFor="exampleFormControlSelect1">Smsc Type : </label>
+                                    <select className="form-control" id="exampleFormControlSelect1" name="smscType"
+                                        onChange={this.handleSmsTypeChange}
+                                        value={this.state.smscType}
+                                    >
+                                        <option value="-1">Select type</option>
+                                        <option value="0">Shared SMSC</option>
+                                        <option value="1">Dedicate SMSC</option>
+                                    </select>
+                                </div>
+
+                             }
+
+
+                            {this.state.showSmscDetails  &&
+                                <div className="form-group">
+                                    <label htmlFor="exampleFormControlSelect1">Smsc Account : </label>
+                                    <select className="form-control" id="exampleFormControlSelect1" name="smscId"
+                                        onChange={this.handleChange}
+                                        value={this.state.smscId}
+                                    >
+                                        <option value="-1">Select account</option>
+                                        {this.state.smscList.map(row => (
+                                            <option key={row.id} value={row.id} >
+                                                {row.smscUsername}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                             }
                                 {this.state.paymentType == "Post-Paid" &&
                                     <FormGroup>
                                         <label>Monthly sms limit :</label>
