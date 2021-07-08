@@ -43,5 +43,22 @@ export class SenderIdService {
         return axios.put("/sender-ids/disable/"+id)
     }
 
+    logout() {
+        const id=window.localStorage.getItem("userId");
+        return axios.get("/auth/logout/"+id).then(res => {
+            if (res.data) {
+                window.localStorage.removeItem("token");
+                window.localStorage.removeItem("user");
+                window.localStorage.removeItem("userId")
+                window.localStorage.removeItem("username");
+                window.localStorage.removeItem("user_roles");
+                window.localStorage.removeItem("user_plain_roles");
+                window.localStorage.clear();
+            }
+            return res.data;
+        })
+    }
+  
+
 }
 export default new SenderIdService();

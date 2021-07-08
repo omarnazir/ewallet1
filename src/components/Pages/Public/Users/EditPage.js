@@ -133,6 +133,7 @@ class EditNormalUserPage extends Component {
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewAllUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
+                        <Button onClick={this.ViewAllUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Change Password</Button>
                     </div>
                 </div>
                 <Container fluid>

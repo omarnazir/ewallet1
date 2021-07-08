@@ -43,7 +43,8 @@ class CustomerDetails extends Component {
             tariffFk: 0,
             monthlyLimit: 0,
             autoRenewal: ""
-        }
+        },
+        imgURl:""
 
     };
 
@@ -81,8 +82,13 @@ class CustomerDetails extends Component {
 
         axios.get("/customers/" + state.id)
             .then(res => {
-                const response = res.data;
-                this.setState({ customer: response })
+                const customer = res.data;
+                // const blob=customer.imageBlob.toString("base64");
+                const encodedString = Buffer.from(customer.imageBlob).toString('base64');
+                const blob=btoa(customer.imageBlob);
+                console.log(encodedString)
+                this.setPdf(customer.imageBlobType,encodedString);
+                this.setState({ customer})
             })
 
         axios.get("/customers/users-list/" + state.id)
@@ -107,9 +113,43 @@ class CustomerDetails extends Component {
                 this.setState({ smscList: response })
                 console.log(response);
             })
+
+    }
+
+    setPdf=(contentType,b64Data)=>{
+        // const contentType=this.state.customer.imageBlobType;
+        // const b64Data=this.state.customer.imageBlob;
+        const dataUrl = `data:${contentType};base64,${b64Data}`;
+        this.setState({imgURl:dataUrl}) 
+    }
+
+    ViewPdf=()=>{
+           // Create a Blog object for selected file & define MIME type
+        //    console.log(customer.imageBlob)
+        //    console.log(customer.imageBlobType)
+        //    var blob = new Blob(customer.imageBlob, {type: "text/plain;charset=utf-8"} );
+
+        //    // Create Blog URL 
+        //    var url = window.URL.createObjectURL(blob);
+        //    console.log(url)
+
+        //    var blob = new Blob([this.state.customer.imageBlob], {type: 'application/pdf'});
+        //     var blobURL = URL.createObjectURL(blob);
+        //      blobURL= blobURL.replace("blob:","") 
+        //      this.setState({imgURl:blobURL})
+        //     window.open(blobURL);
+        const contentType=this.state.customer.imageBlobType;
+        const b64Data=this.state.customer.imageBlob;
+
+        const dataUrl = `data:${contentType};base64,${b64Data}`;
+             this.setState({imgURl:dataUrl})
+        // window.open(dataUrl);
+        // window.location = dataUrl;
+        // console.log(dataUrl)
             
 
     }
+
     AddActionButtonStyle = {
         color: 'white',
         background: "#003366"
@@ -496,12 +536,18 @@ class CustomerDetails extends Component {
                                             <div className="card-body mt-2 py-1">
                                                 <div className="px-md-3 px-2">
                                                     <div className="px-2">
+                                                        {/* <Button onClick={this.ViewPdf}>View Attachment</Button> */}
                                                         {/* <img className="img-fluid" src={this.state.customer.attachment} alt="Attachment" /> */}
-                                                        <Document
-                                                            file={this.state.customer.attachment}
-                                                        >
-                                                            <Page pageNumber={1} />
-                                                        </Document>
+                                                        {/* <Document
+                                                            file={`data:application/pdf;base64,${this.state.customer.imageBlob}`}
+                                                        > 
+
+
+                                                        <Page pageNumber={1} />
+                                                        </Document> */}
+
+                                                        <iframe src={this.state.imgURl} width="100%" height="500px">
+    </iframe>
                                                     </div>
                                                 </div>
                                             </div>

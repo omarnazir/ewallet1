@@ -7,7 +7,7 @@ import * as actions from '../../store/actions/actions';
 
 import ToggleFullscreen from '../Common/ToggleFullscreen';
 import HeaderRun from './Header.run'
-import { AuthService } from '../../services';
+import { AuthService,SenderIdService } from '../../services';
 class Header extends Component {
 
     componentDidMount() {
@@ -44,10 +44,10 @@ class Header extends Component {
     }
 
     logout=()=>{
-        AuthService.logout().then((res) => {
+        SenderIdService.logout().then((res) => {
             this.setState({redirect:"/login"})
         }, (err) => {
-            this.setState({redirect:"/login"})
+            // this.setState({redirect:"/login"})
         })
     }
 

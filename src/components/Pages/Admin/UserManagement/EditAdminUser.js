@@ -27,19 +27,22 @@ class EditAdminUser extends Component {
 
     state = {
         formRegister: {
-           
-        
             fullname: "",
             username: "",
             phonenumber: "",
             monthlysmslimit: 0,
             status:""
         },
+        passwordReset: {
+            userId:"",
+            newPassword: "",
+            confirmPassword: ""
+        },
         user:{},
         selectedRoleList:[],
         roles:[],
         rolesList:[],
-        
+        passwordModal:false,
     }
     componentDidMount(){
         const { state } = this.props.history.location;
@@ -119,6 +122,12 @@ class EditAdminUser extends Component {
         });
     }
     }
+
+
+    handleChange = event => {       
+        this.setState({passwordReset:Object.assign({},
+            this.state.passwordReset,{[event.target.name]:event.target.value})})
+      }
 
     handleSmsTemplateChange = event => {
         const templateId = event.target.value
@@ -204,6 +213,12 @@ class EditAdminUser extends Component {
         });
     }
 
+    togglePasswordModal=()=>{
+        this.setState({
+            passwordModal: !this.state.passwordModal
+        }); 
+    }
+
     ViewAllAdminUsers = () => {
         return this.props.history.push('/admin-manage-users')
     }
@@ -230,8 +245,10 @@ class EditAdminUser extends Component {
                      <small>Updating user details</small>
                     </div>
                     <div className="flex-row">
+                    <Button onClick={this.togglePasswordModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Password Reset</Button>
                     <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add Role</Button>
                         <Button onClick={this.ViewAllAdminUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
+                      
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
                             <ModalHeader toggle={this.toggleModal}>Add Role : </ModalHeader>
                             <form onSubmit={this.handleSubmit}>
@@ -263,6 +280,36 @@ class EditAdminUser extends Component {
                                 <ModalFooter>
                                     <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
                                         Add Role
+                    </button>
+                                </ModalFooter>
+                            </form>
+                        </Modal>
+
+
+                        <Modal isOpen={this.state.passwordModal} toggle={this.togglePasswordModal}>
+                            <ModalHeader toggle={this.togglePasswordModal}>Password Reset : </ModalHeader>
+                            <form onSubmit={this.handleSubmit}>
+                                <ModalBody>
+
+                                <FormGroup>
+                    <label>New Password :</label>
+                    <input className="form-control" name="newPassword"
+                    value={this.state.passwordReset.newPassword}
+                     onChange={this.handleChange} type="text" required></input>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <label>Confirm Password :</label>
+                    <input className="form-control" name="confirmPassword"
+                    value={this.state.passwordReset.confirmPassword}
+                     onChange={this.handleChange} type="text" required></input>
+                  </FormGroup>
+
+
+                                </ModalBody>
+                                <ModalFooter>
+                                    <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
+                                        Save
                     </button>
                                 </ModalFooter>
                             </form>
@@ -310,6 +357,36 @@ class EditAdminUser extends Component {
                                             </div>
 
                                         </div>
+
+                                        {/* <div className="row">
+                                            <div className="col-md-6">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Email *</label>
+                                                    <Input type="text"
+                                                        name="status"
+                                                        disabled
+                                                        invalid={this.hasError('formRegister', 'status', 'required')}
+                                                        onChange={this.validateOnChange}
+                                                        data-validate='["required"]'
+                                                        value={this.state.formRegister.email} />
+                                                    {this.hasError('formRegister', 'status', 'required') && <span className="invalid-feedback">Field must be valid status</span>}
+                                                </div>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Phone Number * :</label>
+                                                    <Input type="number"
+                                                        name="monthlysmslimit"
+                                                        invalid={this.hasError('formRegister', 'monthlysmslimit', 'required')}
+                                                        onChange={this.validateOnChange}
+                                                        data-validate='["required"]'
+                                                        value={this.state.formRegister.phoneNumber} />
+                                                    <span className="invalid-feedback">Field is required</span>
+                                                </div>
+                                            </div>
+                                            
+                                        </div> */}
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
@@ -339,6 +416,8 @@ class EditAdminUser extends Component {
                                             </div>
                                             
                                         </div>
+
+                                       
 
                                     
                                         <div className="row">
