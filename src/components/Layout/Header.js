@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, ListGroup, ListGroupItem,Button } from 'reactstrap';
-
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../store/actions/actions';
@@ -46,9 +44,11 @@ class Header extends Component {
     }
 
     logout=()=>{
-        AuthService.logout();
-        this.setState({redirect:"/login"})
-        
+        AuthService.logout().then((res) => {
+            this.setState({redirect:"/login"})
+        }, (err) => {
+            this.setState({redirect:"/login"})
+        })
     }
 
     getUsername(){
