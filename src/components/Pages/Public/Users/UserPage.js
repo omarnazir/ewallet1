@@ -141,15 +141,15 @@ class UserPage extends Component {
       if(record.isActive == 1){
        return (
          <Fragment>
-            <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-            <span className="btn badge-danger px-4" onClick={()=>this.DisableUser(record)}> <i className="fa fa-power-off mr-2"></i>Disable</span>
+            <span className="btn badge-success mr-2  px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+            <span className="btn badge-danger px-4 mt-1" onClick={()=>this.DisableUser(record)}> <i className="fa fa-power-off mr-2"></i>Disable</span>
          </Fragment>
        )
       }else {
        return ( 
          <Fragment>
-      <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-       <span className="btn badge-success  px-4" onClick={()=>this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
+      <span className="btn badge-success mr-2  px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+       <span className="btn badge-success mt-1  px-4" onClick={()=>this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
          </Fragment>
        )}
       
