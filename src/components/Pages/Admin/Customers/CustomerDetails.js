@@ -84,8 +84,8 @@ class CustomerDetails extends Component {
             .then(res => {
                 const customer = res.data;
                 // const blob=customer.imageBlob.toString("base64");
-                const encodedString = Buffer.from(customer.imageBlob).toString('base64');
-                const blob=btoa(customer.imageBlob);
+                const encodedString = Buffer.from([customer.imageBlob]).toString('base64');
+                // const blob=btoa(customer.imageBlob);
                 console.log(encodedString)
                 this.setPdf(customer.imageBlobType,encodedString);
                 this.setState({ customer})
