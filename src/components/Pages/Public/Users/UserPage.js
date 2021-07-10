@@ -152,8 +152,6 @@ class UserPage extends Component {
        <span className="btn badge-success mt-1  px-4" onClick={()=>this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
          </Fragment>
        )}
-      
-    
   }
   }
   ];

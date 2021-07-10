@@ -3,11 +3,7 @@ import ContentWrapper from "../../../Layout/ContentWrapper";
 import {
     Container,
     Card,
-    CardHeader,
     CardBody,
-    CardTitle,
-    InputGroup,
-    InputGroupAddon,
     Button,
     FormGroup,
     Modal,
@@ -30,9 +26,6 @@ class EditNormalUserPage extends Component {
     state = {
         formUpdate: {
             email: '',
-            password: '',
-            password2: '',
-            terms: false,
             fullname: "",
             username: "",
             phonenumber: "",
@@ -44,6 +37,7 @@ class EditNormalUserPage extends Component {
             newPassword: "",
             newPassword2: ""
         },
+        userId:"",
         adminRole:false
     }
 
@@ -68,7 +62,7 @@ class EditNormalUserPage extends Component {
             url = "roles/user";
         }
         this.setState({...this.state.passwordReset,userId:state.id})
-       
+       this.setState({userId:state.id})
 
         axios.get("/users/" + state.id)
             .then(res => {
@@ -164,22 +158,30 @@ class EditNormalUserPage extends Component {
 
         if (!hasError) {
             const data={
+                "userId":this.state.userId,
                 "username":this.state.formUpdate.username,
                 "email":this.state.formUpdate.email,
-                "password":this.state.formUpdate.password,
                 "name":this.state.formUpdate.fullname,
                 "msisdn":this.state.formUpdate.phonenumber,
                 "userMonthlySmsLimit":this.state.formUpdate.monthlysmslimit
             }
             console.log(data)
-           
-
-            axios.post("users",data).then(res=>{
-                console.log(res);
-                console.log(res.data);
+            axios.put("users",data).then(res=>{
+                this.showSweetAlert("success","Updated User Successfully")
                 this.ViewUserPage();
               })
         }
+    }
+
+    showSweetAlertSimple(message) {
+        return MySwal.fire({
+            position: 'center',
+            icon: 'success',
+            title:message,
+            text: "",
+            showConfirmButton: false,
+            timer: 2000
+        })
     }
 
     handleChange = event => {
@@ -333,6 +335,7 @@ class EditNormalUserPage extends Component {
                                                 <div className="form-group">
                                                     <label className="col-form-label">Username *:</label>
                                                     <Input type="text"
+                                                        disabled
                                                         name="username"
                                                         invalid={this.hasError('formUpdate', 'username', 'required')}
                                                         onChange={this.validateOnChange}

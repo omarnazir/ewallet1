@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import axios from "../../../../services/axios";
-// import Swal from "../../../Common/Swal";
-import Swal from "sweetalert2"
-import withReactContent from 'sweetalert2-react-content'
 import { AuthService } from '../../../../services';
 import {Redirect} from 'react-router-dom';
 
+import Swal from "sweetalert2"
+import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
+
 import {
   Container, Card, CardHeader, CardBody, CardTitle, Button, Modal,
   ModalHeader,
@@ -15,8 +15,7 @@ import {
   ModalFooter,
   FormGroup
 } from "reactstrap";
-import $ from "jquery";
-import update from 'immutability-helper';
+
 
 class Tariffs extends Component {
   state = {
