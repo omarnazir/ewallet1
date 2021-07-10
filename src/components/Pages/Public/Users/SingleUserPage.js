@@ -83,9 +83,9 @@ class SingleUserPage extends Component {
                       </td>
                       <td>N/A</td>
                   
-                      <td>
+                      {/* <td>
                         <span className="btn " style={this.AddActionButtonStyle}>Edit</span>
-                      </td>
+                      </td> */}
                      
                     </tr>
                 </tbody>

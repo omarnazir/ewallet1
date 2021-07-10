@@ -411,10 +411,25 @@ class EditNormalUserPage extends Component {
 
                                         </div> */}
                                         <div className="row mt-2">
-
+                                        {/* {this.state.adminRole && 
                                             <div className="col-md-12">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Monthly SMS Limit * :</label>
+                                                   
+                                                    <Input type="number"
+                                                        name="monthlysmslimit"
+                                                        invalid={this.hasError('formUpdate', 'monthlysmslimit', 'required')}
+                                                        onChange={this.validateOnChange}
+                                                        data-validate='["required"]'
+                                                        value={this.state.formUpdate.monthlysmslimit} />
+                                                    <span className="invalid-feedback">Field is required</span>
+                                                </div>
+                                            </div>} */}
+                                            
+                                            <div className="col-md-12">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Monthly SMS Limit * :</label>
+                                                   
                                                     <Input type="number"
                                                         name="monthlysmslimit"
                                                         invalid={this.hasError('formUpdate', 'monthlysmslimit', 'required')}
@@ -424,6 +439,7 @@ class EditNormalUserPage extends Component {
                                                     <span className="invalid-feedback">Field is required</span>
                                                 </div>
                                             </div>
+
 
                                         </div>
 
