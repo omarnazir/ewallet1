@@ -3,19 +3,10 @@ import ContentWrapper from "../../../Layout/ContentWrapper";
 import {
   Container,
   Card,
-  CardHeader,
   CardBody,
-  CardTitle,
-  InputGroup,
-  InputGroupAddon,
-  Input,
-  Button
 } from "reactstrap";
-import Datetime from 'react-datetime';
-import $ from "jquery";
 
-import Datatable from "../../../Common/Datatable";
-import { AuthService } from "../../../../services/auth.service";
+
 import axios from '../../../../services/axios'
 
 
@@ -32,10 +23,16 @@ class SingleUserPage extends Component {
       })
   }
 
+
+
  
   AddActionButtonStyle = {
     color: 'white',
     background: "#003366"
+  }
+
+  EditUser=(id)=>{
+    return this.props.history.push('/update-user/' + id,id)
   }
 
   render() {
@@ -44,11 +41,12 @@ class SingleUserPage extends Component {
     return (
       <ContentWrapper>
         <div className="content-heading">
-          <div className="mr-auto flex-row">
-            Manage User
-            <small>User management panel </small>
-          </div>
-        </div>
+                    <div className="mr-auto flex-row">
+                    Manage User
+                     <small>User management panel</small>
+                    </div>
+                   
+                </div>
         <Container fluid>
           <Card>
             <CardBody>
@@ -83,9 +81,9 @@ class SingleUserPage extends Component {
                       </td>
                       <td>N/A</td>
                   
-                      {/* <td>
-                        <span className="btn " style={this.AddActionButtonStyle}>Edit</span>
-                      </td> */}
+                      <td>
+                        <span className="btn " style={this.AddActionButtonStyle} onClick={()=>this.EditUser(id)} >Edit</span>
+                      </td>
                      
                     </tr>
                 </tbody>

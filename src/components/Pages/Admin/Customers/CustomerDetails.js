@@ -44,7 +44,8 @@ class CustomerDetails extends Component {
             monthlyLimit: 0,
             autoRenewal: ""
         },
-        imgURl:""
+        imgURl:"",
+        img:{}
 
     };
 
@@ -83,11 +84,6 @@ class CustomerDetails extends Component {
         axios.get("/customers/" + state.id)
             .then(res => {
                 const customer = res.data;
-                // const blob=customer.imageBlob.toString("base64");
-                const encodedString = Buffer.from([customer.imageBlob]).toString('base64');
-                // const blob=btoa(customer.imageBlob);
-                console.log(encodedString)
-                this.setPdf(customer.imageBlobType,encodedString);
                 this.setState({ customer})
             })
 
@@ -98,6 +94,18 @@ class CustomerDetails extends Component {
                 console.log(response);
             })
 
+            axios.get("/customers/img/" + state.id)
+            .then(res => {
+                const img = res.data;
+                 // const blob=customer.imageBlob.toString("base64");
+                 const encodedString = Buffer.from([img.imageBlob]).toString('base64');
+                 // const blob=btoa(customer.imageBlob);
+                 console.log(encodedString)
+                 this.setPdf(img.imageBlobType,encodedString);
+                this.setState({ img })
+                
+            })
+        
 
 
         axios.get("/tariff")
@@ -142,7 +150,7 @@ class CustomerDetails extends Component {
         const b64Data=this.state.customer.imageBlob;
 
         const dataUrl = `data:${contentType};base64,${b64Data}`;
-             this.setState({imgURl:dataUrl})
+        this.setState({imgURl:dataUrl})
         // window.open(dataUrl);
         // window.location = dataUrl;
         // console.log(dataUrl)
