@@ -51,6 +51,7 @@ import EditNormalUserPage from "./components/Pages/Public/Users/EditPage";
 import ManageEmail from './components/Pages/Admin/Settings/ManageEmail';
 import ManageRole from './components/Pages/Admin/Settings/ManageRole';
 import ManageSmsc from './components/Pages/Admin/Settings/ManageSmsc';
+import EditSingleUserPage from './components/Pages/Public/Users/EditSingleUserPage';
 
 const waitFor = Tag => props => <Tag {...props} />;
 
@@ -145,6 +146,7 @@ const Routes = ({ location }) => {
                                 <Route path="/edit-user" component={waitFor(EditNormalUserPage)}/>
                                 <Route path="/manage-users" component={waitFor(UserPage)}/>
                                 <Route path="/manage-user" component={waitFor(SingleUserPage)}/>
+                                <Route path="/update-user/:id" component={waitFor(EditSingleUserPage)}/>
                                 
 
                                 <Route path="/prepaid-invoices" component={waitFor(PrePaidInvoiceList)}/>
