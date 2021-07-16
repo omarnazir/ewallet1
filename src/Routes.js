@@ -53,10 +53,12 @@ import ManageRole from './components/Pages/Admin/Settings/ManageRole';
 import ManageSmsc from './components/Pages/Admin/Settings/ManageSmsc';
 import EditSingleUserPage from './components/Pages/Public/Users/EditSingleUserPage';
 
+
 const waitFor = Tag => props => <Tag {...props} />;
 
 const Dashboard = lazy(() => import('./components/Pages/Admin/Dashboard/Dashboard'));
 const Login = lazy(() => import('./components/Auth/Login'));
+const TwoFaToken = lazy(() => import('./components/Auth/TwofaToken'));
 const Register = lazy(() => import('./components/Auth/Register'));
 
 const ViewContactList=lazy(()=>import("./components/Pages/Public/ContactList/ViewContactList"))
@@ -64,6 +66,7 @@ const ViewContactList=lazy(()=>import("./components/Pages/Public/ContactList/Vie
 const listofPages = [
     '/login',
     '/register',
+    '/otp-token',
     '/'
 ];
 
@@ -79,6 +82,7 @@ const Routes = ({ location }) => {
             <BasePage>
                 <Suspense fallback={<PageLoader />}>
                     <Switch location={location}>
+                        <Route path="/otp-token" component={waitFor(TwoFaToken)} />
                         <Route path="/login" component={waitFor(Login)} />
                         <Route path="/register" component={waitFor(Register)} />
                         <Route path="/" component={waitFor(LandingPage)}/>

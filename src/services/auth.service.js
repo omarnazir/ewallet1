@@ -23,6 +23,41 @@ class AuthService {
         })
     }
 
+    loginTest(data) {
+        const logindata = {
+            username: data.username,
+            password: data.password
+        }
+        return axios.post(API_URL + "/auth/test", logindata).then(res => {
+            if (res.data) {
+                window.localStorage.clear();
+                window.localStorage.setItem('id', res.data.userId)
+            }
+            return res.data;
+        })
+    }
+
+    verifyToken(data){
+        const logindata = {
+            id: data.id,
+            token: data.token
+        }
+        return axios.post(API_URL + "/auth/verify", logindata).then(res => {
+            if (res.data) {
+             
+               window.localStorage.clear();
+                window.localStorage.setItem('token', res.data.token);
+                window.localStorage.setItem('user', res.data.user)
+                window.localStorage.setItem('userId',res.data.user.id)
+                window.localStorage.setItem('username', JSON.stringify(res.data.user.username));
+                window.localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
+                console.log(res.data.user.roles)
+                window.localStorage.setItem('user_plain_roles', res.data.user.roles)
+            }
+            return res.data;
+        })
+    }
+
     register(data) {
         return axios.post(API_URL + "/auth/register", data, { headers: { "Content-Type": "multipart/form-data" } })
     }

@@ -27,6 +27,10 @@ class Login extends Component {
 
     }
 
+    ViewTokenPage = () => {
+        return this.props.history.push('/otp-token')
+      }
+
     /**
      * Validate input using onChange event
      * @param  {String} formName The name of the form in the state object
@@ -73,33 +77,33 @@ class Login extends Component {
                 username: this.state.formLogin.username,
                 password: this.state.formLogin.password
             }
-            AuthService.login(data).then(
+            AuthService.loginTest(data).then(
                 (res) => {
-
-
-                    const roles=res.user.roles;
-                    if (roles == null || !Array.isArray(roles)) {
-                        this.setState({redirect: '/login'});
+                    //  this.setState({redirect:'/otp-token'});
+                    this.ViewTokenPage();
+                    // this.setState({redirect: '/token'});
+                    // const roles=res.user.roles;
+                    // if (roles == null || !Array.isArray(roles)) {
+                    //     this.setState({redirect: '/login'});
                         
-                    } else {
-                        // roles.filter(role => (role.name === "/admin/dashboard")).length === 0
-                        const found = roles.find((row) => row.name == "/admin-dashboard");
-                        if (found == undefined) {
-                            this.setState({redirect: '/dashboard'});
+                    // } else {
+                    //     // roles.filter(role => (role.name === "/admin/dashboard")).length === 0
+                    //     const found = roles.find((row) => row.name == "/admin-dashboard");
+                    //     if (found == undefined) {
+                    //         this.setState({redirect: '/dashboard'});
 
-                        } else {
-                            this.setState({redirect: '/admin-dashboard'});
+                    //     } else {
+                    //         this.setState({redirect: '/admin-dashboard'});
                            
-                        }
+                    //     }
 
-                        // const redirect=localStorage.getItem("dashboard");
-                        // this.setState({redirect})
-                    }
+                    //     // const redirect=localStorage.getItem("dashboard");
+                    //     // this.setState({redirect})
+                    // }
 
                     // const redirect=AuthService.getRedirectPath();
                     // this.setState({redirect});
 
-                    window.location.reload();
                 }, (err) => {
                     console.log(err.response.data.message);
                     this.setState({ loginHasError: true })
