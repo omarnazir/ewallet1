@@ -18,7 +18,7 @@ class TwofaToken extends Component {
 
     componentDidMount() {
         const id=window.localStorage.getItem("id");
-        if (id==undefined) {
+        if (id==null || id == undefined) {
             this.setState({ redirect:"/login" })
         }
 
@@ -121,9 +121,9 @@ class TwofaToken extends Component {
 
     render() {
         const year = new Date().getFullYear()
-        // if (this.state.redirect) {
-        //     return <Redirect to={this.state.redirect} />
-        // }
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
 
         return (
             <div>
