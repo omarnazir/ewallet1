@@ -18,7 +18,7 @@ import $ from "jquery";
 
 import FormValidator from '../../../Common/FormValidator';
 import axios from '../../../../services/axios'
-
+import Moment from "moment";
 
 class AddUser extends Component {
 
@@ -33,6 +33,7 @@ class AddUser extends Component {
             phonenumber: "",
             monthlysmslimit: 0,
             settings: false,
+            accountExpiration:""
 
         },
         rolesList: [],
@@ -100,6 +101,12 @@ class AddUser extends Component {
         console.log("am hree")
         this.setState({ [event.target.name]: event.target.value });
     }
+    formatDate = (date) => {
+        //07/19/2021 10:49:10
+        // YYYY-MM-DD HH:mm:ss
+        return Moment(date).format('MM/DD/YYYY HH:mm:ss')
+      }
+
 
     onSubmit = e => {
         e.preventDefault()
@@ -128,14 +135,18 @@ class AddUser extends Component {
 
 
         if (!hasError) {
+            const accountExpiration=this.formatDate(this.state.formRegister.accountExpiration);
             const User = {
                 "username": this.state.formRegister.username,
                 "email": this.state.formRegister.email,
                 "password": this.state.formRegister.password,
                 "name": this.state.formRegister.fullname,
                 "msisdn": this.state.formRegister.phonenumber,
-                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit
+                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit,
+                "accountExpiration":accountExpiration
             }
+
+            console.log(this.formatDate(this.state.formRegister.accountExpiration))
             console.log(User)
 
             const data = { user:User,role_ids:UserRoles }
@@ -341,6 +352,28 @@ class AddUser extends Component {
 
 
                                         </div>
+
+
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Account Expiration *</label>
+                                                    <Input 
+                                                        name="accountExpiration"
+                                                        type="date"
+                                                        invalid={this.hasError('formRegister', 'accountExpiration', 'required')}
+                                                        onChange={this.validateOnChange}
+                                                        data-validate='["required"]'
+                                                        value={this.state.formRegister.accountExpiration}
+                                                    />
+                                                    <span className="invalid-feedback">Account expiration is required</span>
+                                                  
+
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                        {/* <input className="form-control" name="scheduledTime" type="datetime-local" onChange={this.handleChangeDate}></input> */}
 
 
                                         <table className="table table-striped my-4 w-100">
