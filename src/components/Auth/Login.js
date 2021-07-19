@@ -105,7 +105,9 @@ class Login extends Component {
                     // this.setState({redirect});
 
                 }, (err) => {
+                    if(err.response !=undefined){
                     console.log(err.response.data.message);
+                    }
                     this.setState({ loginHasError: true })
                 }
             )
