@@ -52,6 +52,8 @@ import ManageEmail from './components/Pages/Admin/Settings/ManageEmail';
 import ManageRole from './components/Pages/Admin/Settings/ManageRole';
 import ManageSmsc from './components/Pages/Admin/Settings/ManageSmsc';
 import EditSingleUserPage from './components/Pages/Public/Users/EditSingleUserPage';
+import UserSelfManagement from './components/Pages/Admin/UserManagement/UserSelfManage';
+import EditSelfManage from './components/Pages/Admin/UserManagement/EditSelfManage';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -121,6 +123,8 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-manage-edit-user/:id" component={waitFor(EditAdminUser)}/>
                                     <Route path="/admin-add-new-user" component={waitFor(AddUser)} />
                                     <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
+                                    <Route path="/admin-self-manage" component={waitFor(UserSelfManagement)} />
+                                    <Route path="/admin-self-edit/:id" component={waitFor(EditSelfManage)}/>
                                     <Route path="/admin-restricted-words" component={waitFor(RestrictedWords)} />
                                     <Route path="/admin-reserved-numbers" component={waitFor(ReservedNumbers)} />
                                     <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>

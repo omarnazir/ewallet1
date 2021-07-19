@@ -45,6 +45,11 @@ const Menu = [
         path: '/admin-manage-users'
     },
     {
+        name: 'Account Management',
+        icon: 'fa fa-user',
+        path: '/admin-self-manage'
+    },
+    {
         name: 'System Settings',
         icon: 'icon-settings',
         path:"/admin-settings",
