@@ -47,6 +47,7 @@ class EditAdminUser extends Component {
         roles: [],
         rolesList: [],
         passwordModal: false,
+        id:0
     }
     componentDidMount() {
         const { state } = this.props.history.location;
@@ -66,6 +67,7 @@ class EditAdminUser extends Component {
             url = "roles/user";
         }
         this.setState({...this.state.passwordReset,userId:state.id})
+        this.setState({id:state.id})
         axios.get(url)
             .then(res => {
                 const response = res.data;
@@ -225,6 +227,15 @@ class EditAdminUser extends Component {
         
     }
 
+    deleteCurrentUser(){
+        const userId=this.state.id;
+        axios.post("users/delete/"+ userId).then(res => {
+            console.log(res);
+            this.showSweetAlert('success','User deleted Sucessfully')
+            this.ViewUserPage();
+        })
+    }
+
     onSubmit = e => {
         e.preventDefault()
         const form = e.target;
@@ -295,6 +306,10 @@ class EditAdminUser extends Component {
         color: 'white',
         background: "#003366"
     }
+    DeleteActionButtonStyle={
+        color: 'white',
+        background: "#ec2121" 
+    }
 
     DeleteUserRole = (id) => {
         const role = this.state.roles.find(item => item.id == id);
@@ -313,6 +328,7 @@ class EditAdminUser extends Component {
                         <small>Updating user details</small>
                     </div>
                     <div className="flex-row">
+                    {/* <Button onClick={this.deleteCurrentUser}  style={this.DeleteActionButtonStyle}   className="btn-pill-right mr-2">Delete Account</Button> */}
                         <Button onClick={this.togglePasswordModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Password Reset</Button>
                         <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add Role</Button>
                         <Button onClick={this.ViewAllAdminUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>

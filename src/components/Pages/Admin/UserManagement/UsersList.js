@@ -9,6 +9,11 @@ import {Redirect} from 'react-router-dom';
 import ReactDatatable from '@ashvin27/react-datatable';
 import Moment from "moment"
 import { Fragment } from "react";
+
+import Swal from "sweetalert2"
+const MySwal = withReactContent(Swal)
+import withReactContent from 'sweetalert2-react-content'
+
 class UsersManagement extends Component {
   state = {
     usersList: []
@@ -75,6 +80,24 @@ EnableUser=(row)=>{
   this.GetAllUser();
 }
 
+deleteCurrentUser(row){
+  axios.post("/users/delete/"+ row.id).then(res => {
+      console.log(res);
+      this.showSweetAlert('success','User deleted Sucessfully')
+      this.GetAllUser();
+  })
+}
+
+showSweetAlert(icon,title) {
+  return MySwal.fire({
+      position: 'center',
+      icon: icon,
+      title: title,
+      text: "",
+      showConfirmButton: false,
+      timer: 2000
+  })
+}
 
 columns = [
   {
@@ -141,14 +164,16 @@ cell: (record, index) => {
      return (
        <Fragment>
           <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-          <span className="btn badge-danger px-4" onClick={()=>this.DisableUser(record)}> <i className="fa fa-power-off mr-2"></i>Disable</span>
+          <span className="btn badge-danger px-4 mr-2" onClick={()=>this.DisableUser(record)}> <i className="fa fa-power-off mr-2"></i>Disable</span>
+          <span className="btn badge-danger  px-4" onClick={()=>this.deleteCurrentUser(record)}> <i className="icon-trash mr-2"></i>Delete</span>
        </Fragment>
      )
     }else {
      return ( 
        <Fragment>
     <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-     <span className="btn badge-success  px-4" onClick={()=>this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
+     <span className="btn badge-success  px-4 mr-2" onClick={()=>this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
+     <span className="btn badge-danger  px-4" onClick={()=>this.deleteCurrentUser(record)}> <i className="icon-trash mr-2"></i>Delete</span>
        </Fragment>
      )}
     
