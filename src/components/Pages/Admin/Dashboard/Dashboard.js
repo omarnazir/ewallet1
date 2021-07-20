@@ -152,9 +152,13 @@ class Dashboard extends Component {
             dropdownOpen: !this.state.dropdownOpen
         });
     }
-    logout = () => {
-        AuthService.logout();
-        this.setState({redirect:"/login"})
+
+    logout=()=>{
+        SenderIdService.logout().then((res) => {
+            this.setState({redirect:"/login"})
+        }, (err) => {
+            this.setState({redirect:"/login"})
+        })
     }
 
 

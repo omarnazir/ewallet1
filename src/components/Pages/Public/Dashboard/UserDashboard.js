@@ -159,9 +159,13 @@ class UserDashboard extends Component {
     }
 
     logout=()=>{
-        AuthService.logout();
-        this.setState({redirect:"/login"})
+        SenderIdService.logout().then((res) => {
+            this.setState({redirect:"/login"})
+        }, (err) => {
+            this.setState({redirect:"/login"})
+        })
     }
+
     render() {
         // Usse t function instead of Trans component
         // const { t } = this.props;

@@ -131,6 +131,24 @@ class AuthService {
         }
     }
 
+    logout() {
+        const id=window.localStorage.getItem("userId");
+        return axios.get(API_URL +"/auth/logout/"+id).then(res => {
+            if (res.data) {
+                window.localStorage.removeItem("token");
+                window.localStorage.removeItem("user");
+                window.localStorage.removeItem("userId")
+                window.localStorage.removeItem("username");
+                window.localStorage.removeItem("user_roles");
+                window.localStorage.removeItem("user_plain_roles");
+                window.localStorage.clear();
+            }
+            return res.data;
+        },(err)=>{
+            window.localStorage.clear();
+        })
+    }
+
 
 }
 export default new AuthService;

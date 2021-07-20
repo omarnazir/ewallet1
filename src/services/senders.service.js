@@ -43,6 +43,7 @@ export class SenderIdService {
         return axios.put("/sender-ids/disable/"+id)
     }
 
+    
     logout() {
         const id=window.localStorage.getItem("userId");
         return axios.get("/auth/logout/"+id).then(res => {
@@ -56,6 +57,8 @@ export class SenderIdService {
                 window.localStorage.clear();
             }
             return res.data;
+        },(err)=>{
+            window.localStorage.clear();
         })
     }
   

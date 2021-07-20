@@ -12,12 +12,6 @@ import {
     Input,
     Button
 } from "reactstrap";
-import $ from "jquery";
-import Moment from 'moment';
-
-import ReactDatatable from '@ashvin27/react-datatable';
-import NumberFormat from 'react-number-format';
-
 
 class SendersRequested extends Component {
     state = {

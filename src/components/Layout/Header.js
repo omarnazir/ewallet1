@@ -47,7 +47,7 @@ class Header extends Component {
         SenderIdService.logout().then((res) => {
             this.setState({redirect:"/login"})
         }, (err) => {
-            // this.setState({redirect:"/login"})
+            this.setState({redirect:"/login"})
         })
     }
 
