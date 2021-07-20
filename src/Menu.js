@@ -110,7 +110,6 @@ const Menu = [
             icon: 'fa fa-envelope',
             path: '/add-sms-request'
         },
-        /** Show for pre paid customers only */
         {
             name: 'Purchase SMS',
             icon: 'fa fa-money-bill',
@@ -121,7 +120,6 @@ const Menu = [
             icon: 'fa fa-file',
             path: '/prepaid-invoices'
         },
-        /**End of show for pre paid customers only */
         {
             name: 'Send SMS',
             icon: 'icon-bubble',
