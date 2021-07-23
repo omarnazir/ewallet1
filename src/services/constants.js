@@ -4,4 +4,4 @@
 
 // export const API_URL = "http://197.250.3.246:8085/api/v1"
 
-export const API_URL = "https://sms.vodacom.co.tz/api/v1/"
+export const API_URL = "https://sms.vodacom.co.tz/api/v1"
