@@ -32,6 +32,10 @@ class UsersManagement extends Component {
     return this.props.history.push('/admin-add-new-user')
 }
 
+ViewAccountExpiration =()=>{
+  return this.props.history.push('/admin-account-expiration')
+}
+
 
 GetAllUser=()=>{
   axios.get("/users")
@@ -211,6 +215,9 @@ config = {
             <small>Showing all post paid customers.</small>
           </div>
           <div className="flex-row">
+          <Button onClick={this.ViewAccountExpiration} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
+              <i className="fa fa-clock mr-2"></i>
+              Manage Account Expiration</Button>
             <Button onClick={this.AddNewUser} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
               Add User</Button>

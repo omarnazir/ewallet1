@@ -54,6 +54,7 @@ import ManageSmsc from './components/Pages/Admin/Settings/ManageSmsc';
 import EditSingleUserPage from './components/Pages/Public/Users/EditSingleUserPage';
 import UserSelfManagement from './components/Pages/Admin/UserManagement/UserSelfManage';
 import EditSelfManage from './components/Pages/Admin/UserManagement/EditSelfManage';
+import UserAccountExpiration from './components/Pages/Admin/UserManagement/UserAccountExpiration';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -130,6 +131,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
                                     <Route path="/admin-manage-roles" component={waitFor(ManageRole)}/>
                                     <Route path="/admin-manage-smsc" component={waitFor(ManageSmsc)}/>
+                                    <Route path="/admin-account-expiration" component={waitFor(UserAccountExpiration)}/>
                                     
                                     <Route path="/admin-invoices/:id" component={waitFor(Invoices)} />
 
