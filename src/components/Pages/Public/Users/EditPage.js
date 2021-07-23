@@ -33,12 +33,12 @@ class EditNormalUserPage extends Component {
         },
         passwordReset: {
             userId: "",
-            currentPassword:"",
+            currentPassword: "",
             newPassword: "",
             newPassword2: ""
         },
-        userId:"",
-        adminRole:false
+        userId: "",
+        adminRole: false
     }
 
 
@@ -52,17 +52,17 @@ class EditNormalUserPage extends Component {
         let url = "";
         if (state.roleName == "ADMIN") {
             url = "/roles/admin";
-            this.setState({adminRole:true})
+            this.setState({ adminRole: true })
         }
         else if (state.roleName == "CUSTOMER_ADMIN") {
             url = "roles/customer-admin";
-            this.setState({adminRole:true})
+            this.setState({ adminRole: true })
         }
         else {
             url = "roles/user";
         }
-        this.setState({...this.state.passwordReset,userId:state.id})
-       this.setState({userId:state.id})
+        this.setState({ ...this.state.passwordReset, userId: state.id })
+        this.setState({ userId: state.id })
 
         axios.get("/users/" + state.id)
             .then(res => {
@@ -105,7 +105,7 @@ class EditNormalUserPage extends Component {
             })
     }
 
-    showSweetAlert(icon,title) {
+    showSweetAlert(icon, title) {
         return MySwal.fire({
             position: 'center',
             icon: icon,
@@ -123,18 +123,18 @@ class EditNormalUserPage extends Component {
 
         const result = FormValidator.validate(input);
 
-        if(result !=null){
-        this.setState({
-            [form.name]: {
-                ...this.state[form.name],
-                [input.name]: value,
-                errors: {
-                    ...this.state[form.name].errors,
-                    [input.name]: result
+        if (result != null) {
+            this.setState({
+                [form.name]: {
+                    ...this.state[form.name],
+                    [input.name]: value,
+                    errors: {
+                        ...this.state[form.name].errors,
+                        [input.name]: result
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
     }
 
 
@@ -154,22 +154,22 @@ class EditNormalUserPage extends Component {
 
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
 
-  
+
 
         if (!hasError) {
-            const data={
-                "userId":this.state.userId,
-                "username":this.state.formUpdate.username,
-                "email":this.state.formUpdate.email,
-                "name":this.state.formUpdate.fullname,
-                "msisdn":this.state.formUpdate.phonenumber,
-                "userMonthlySmsLimit":this.state.formUpdate.monthlysmslimit
+            const data = {
+                "userId": this.state.userId,
+                "username": this.state.formUpdate.username,
+                "email": this.state.formUpdate.email,
+                "name": this.state.formUpdate.fullname,
+                "msisdn": this.state.formUpdate.phonenumber,
+                "userMonthlySmsLimit": this.state.formUpdate.monthlysmslimit
             }
             console.log(data)
-            axios.put("users",data).then(res=>{
-                this.showSweetAlert("success","Updated User Successfully")
+            axios.put("users", data).then(res => {
+                this.showSweetAlert("success", "Updated User Successfully")
                 this.ViewUserPage();
-              })
+            })
         }
     }
 
@@ -177,7 +177,7 @@ class EditNormalUserPage extends Component {
         return MySwal.fire({
             position: 'center',
             icon: 'success',
-            title:message,
+            title: message,
             text: "",
             showConfirmButton: false,
             timer: 2000
@@ -192,43 +192,38 @@ class EditNormalUserPage extends Component {
     }
 
 
-    handlePasswordReset=e=>{
+    handlePasswordReset = e => {
         e.preventDefault()
         this.togglePasswordModal();
-        console.log("am here password reset")
-        console.log(" Is Admin mode "+this.state.adminRole)
-        console.log(this.state.passwordReset.currentPassword);
-        console.log(this.state.passwordReset.newPassword);
-        console.log(this.state.passwordReset.newPassword2)
-        console.log(this.state.user.id)
-        const userId=this.state.user.id;
-        
+        const userId = this.state.user.id;
+
         let data = {}
-        let url="";
-        if(this.state.adminRole){
-             data = {...this.state.passwordReset,userId:userId }
-             url="/users/password-reset"
-             console.log("Reset")
-        }else {
-            data = {...this.state.passwordReset,userId:userId }
-            url="/users/admin-password-reset"
+        if (this.state.adminRole) {
+            data = { ...this.state.passwordReset, userId: userId }
+            axios.post("/users/password-reset", data).then(res => {
+                console.log(res);
+                console.log(res.data);
+
+                if(res.data.status=="success"){
+                    this.showSweetAlert('success', 'Password Updated Sucessfully')
+                    this.ViewUserPage();
+                }else{
+                    this.showSweetAlert('info', 'Password Mismatch')
+                }
+            })
+        } else {
+            data = { ...this.state.passwordReset, userId: userId }
+            axios.post("/users/admin-password-reset", data).then(res => {
+                if(res.data.status=="success"){
+                    this.showSweetAlert('success', 'Password Updated Sucessfully')
+                    this.ViewUserPage();
+                }else{
+                    this.showSweetAlert('info', 'Password Mismatch')
+                }
+
+            })
         }
-        console.log(data)
 
-
-        axios.post(url, data).then(res => {
-            console.log(res);
-            console.log(res.data);
-            if(res.data.message!=""){
-            this.showSweetAlert('success','Password Updated Sucessfully')
-            this.ViewUserPage();
-            }else{
-                this.showSweetAlert('info','Password Mismatch') 
-            }
-            
-        })
-
-        
     }
 
     hasError = (formName, inputName, method) => {
@@ -249,9 +244,9 @@ class EditNormalUserPage extends Component {
 
     ViewUserPage = () => {
         return this.props.history.push("/manage-users");
-      };
+    };
 
-      togglePasswordModal = () => {
+    togglePasswordModal = () => {
         this.setState({
             passwordModal: !this.state.passwordModal
         });
@@ -263,25 +258,25 @@ class EditNormalUserPage extends Component {
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
                         Edit User
-                     <small>Updating User information.</small>
+                        <small>Updating User information.</small>
                     </div>
                     <div className="flex-row">
-                    <Button onClick={this.togglePasswordModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Change Password</Button>
-                    <Button onClick={this.ViewAllUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
-                       
+                        <Button onClick={this.togglePasswordModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Change Password</Button>
+                        <Button onClick={this.ViewAllUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
+
                         <Modal isOpen={this.state.passwordModal} toggle={this.togglePasswordModal}>
                             <ModalHeader toggle={this.togglePasswordModal}>Password Reset : </ModalHeader>
                             <form onSubmit={this.handlePasswordReset}>
                                 <ModalBody>
 
-                        {this.state.adminRole &&
-                                <FormGroup>
-                                        <label>Current Password :</label>
-                                        <input className="form-control" name="currentPassword"
-                                            value={this.state.passwordReset.currentPassword}
-                                            onChange={this.handleChange} type="password" required></input>
-                                    </FormGroup>
-    }
+                                    {this.state.adminRole &&
+                                        <FormGroup>
+                                            <label>Current Password :</label>
+                                            <input className="form-control" name="currentPassword"
+                                                value={this.state.passwordReset.currentPassword}
+                                                onChange={this.handleChange} type="password" required></input>
+                                        </FormGroup>
+                                    }
                                     <FormGroup>
                                         <label>New Password :</label>
                                         <input className="form-control" name="newPassword"
@@ -323,10 +318,10 @@ class EditNormalUserPage extends Component {
                                                         onChange={this.validateOnChange}
                                                         data-validate='["required"]'
                                                         value={this.state.formUpdate.fullname}
-                                                        
-                                                         />
-                                                        
-                                                   
+
+                                                    />
+
+
                                                     <span className="invalid-feedback">Field is required</span>
                                                 </div>
                                             </div>
@@ -411,7 +406,7 @@ class EditNormalUserPage extends Component {
 
                                         </div> */}
                                         <div className="row mt-2">
-                                        {/* {this.state.adminRole && 
+                                            {/* {this.state.adminRole && 
                                             <div className="col-md-12">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Monthly SMS Limit * :</label>
@@ -425,11 +420,11 @@ class EditNormalUserPage extends Component {
                                                     <span className="invalid-feedback">Field is required</span>
                                                 </div>
                                             </div>} */}
-                                            
+
                                             <div className="col-md-12">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Monthly SMS Limit * :</label>
-                                                   
+
                                                     <Input type="number"
                                                         name="monthlysmslimit"
                                                         invalid={this.hasError('formUpdate', 'monthlysmslimit', 'required')}

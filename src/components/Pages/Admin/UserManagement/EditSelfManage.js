@@ -199,17 +199,13 @@ class EditSelfManage extends Component {
         const userId=this.state.user.id;
         
         const data = {...this.state.passwordReset,userId:userId }
-        console.log(data)
-        axios.post("/users/admin-password-reset", data).then(res => {
-            console.log(res);
-            console.log(res.data);
-            if(res.data.message!=""){
-            this.showSweetAlert('success','Password Updated Sucessfully')
-            this.ViewUserPage();
+        axios.post("/users/admin-password-reset-self", data).then(res => {
+            if(res.data.status=="success"){
+                this.showSweetAlert('success', 'Password Updated Sucessfully')
+                this.ViewUserPage();
             }else{
-                this.showSweetAlert('info','Password Mismatch') 
+                this.showSweetAlert('info', 'Password Mismatch')
             }
-            
         })
 
         
