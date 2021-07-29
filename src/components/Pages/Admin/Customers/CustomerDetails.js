@@ -45,7 +45,9 @@ class CustomerDetails extends Component {
             autoRenewal: ""
         },
         imgURl:"",
-        img:{}
+        img:{},
+        previewURl:{},
+        attachmentUrl:""
 
     };
 
@@ -86,6 +88,8 @@ class CustomerDetails extends Component {
                 const customer = res.data;
                 this.setState({ customer})
             })
+        const attachmentUrl="https://sms.vodacom.co.tz/api/v1/img/customer-attachment/"+state.id;
+        this.setState({attachmentUrl})
 
         axios.get("/customers/users-list/" + state.id)
             .then(res => {
@@ -100,9 +104,15 @@ class CustomerDetails extends Component {
                  // const blob=customer.imageBlob.toString("base64");
                  const encodedString = Buffer.from([img.imageBlob]).toString('base64');
                  // const blob=btoa(customer.imageBlob);
-                 console.log(encodedString)
-                 this.setPdf(img.imageBlobType,encodedString);
                 this.setState({ img })
+                
+            })
+
+            axios.get("/img/customer-attachment/" + state.id)
+            .then(res => {
+                const img = res.data;
+                console.log(res)
+                this.setState({ previewURl:img })
                 
             })
         
@@ -121,40 +131,6 @@ class CustomerDetails extends Component {
                 this.setState({ smscList: response })
                 console.log(response);
             })
-
-    }
-
-    setPdf=(contentType,b64Data)=>{
-        // const contentType=this.state.customer.imageBlobType;
-        // const b64Data=this.state.customer.imageBlob;
-        const dataUrl = `data:${contentType};base64,${b64Data}`;
-        this.setState({imgURl:dataUrl}) 
-    }
-
-    ViewPdf=()=>{
-           // Create a Blog object for selected file & define MIME type
-        //    console.log(customer.imageBlob)
-        //    console.log(customer.imageBlobType)
-        //    var blob = new Blob(customer.imageBlob, {type: "text/plain;charset=utf-8"} );
-
-        //    // Create Blog URL 
-        //    var url = window.URL.createObjectURL(blob);
-        //    console.log(url)
-
-        //    var blob = new Blob([this.state.customer.imageBlob], {type: 'application/pdf'});
-        //     var blobURL = URL.createObjectURL(blob);
-        //      blobURL= blobURL.replace("blob:","") 
-        //      this.setState({imgURl:blobURL})
-        //     window.open(blobURL);
-        const contentType=this.state.customer.imageBlobType;
-        const b64Data=this.state.customer.imageBlob;
-
-        const dataUrl = `data:${contentType};base64,${b64Data}`;
-        this.setState({imgURl:dataUrl})
-        // window.open(dataUrl);
-        // window.location = dataUrl;
-        // console.log(dataUrl)
-            
 
     }
 
@@ -538,7 +514,7 @@ class CustomerDetails extends Component {
                                     <div>
                                         <div className="card">
                                             <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">Customer Details</h4>
+                                                <h4 className="text-center mt-2">Customer Attachment</h4>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body mt-2 py-1">
@@ -554,8 +530,10 @@ class CustomerDetails extends Component {
                                                         <Page pageNumber={1} />
                                                         </Document> */}
 
-                                                        <iframe src={this.state.imgURl} width="100%" height="500px">
-    </iframe>
+                                                        <iframe src={this.state.attachmentUrl} width="100%" height="500px">
+    </iframe> 
+    {/* <iframe src="/img/customer-attachment/222" width="100%" height="500px" frameborder="0">
+    </iframe> */}
                                                     </div>
                                                 </div>
                                             </div>
