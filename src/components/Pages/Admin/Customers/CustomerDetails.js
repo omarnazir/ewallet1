@@ -97,17 +97,6 @@ class CustomerDetails extends Component {
                 this.setState({ usersList: response })
                 console.log(response);
             })
-
-            axios.get("/customers/img/" + state.id)
-            .then(res => {
-                const img = res.data;
-                 // const blob=customer.imageBlob.toString("base64");
-                 const encodedString = Buffer.from([img.imageBlob]).toString('base64');
-                 // const blob=btoa(customer.imageBlob);
-                this.setState({ img })
-                
-            })
-
             axios.get("/img/customer-attachment/" + state.id)
             .then(res => {
                 const img = res.data;
