@@ -287,6 +287,10 @@ class CustomerDetails extends Component {
         return Moment(date).format('lll')
     }
 
+    previewAttachment=()=>{
+        window.open(this.state.attachmentUrl, "_blank")
+    }
+
 
     render() {
         const id = this.state.customer.id;
@@ -519,7 +523,7 @@ class CustomerDetails extends Component {
                                             <hr className="my-0" />
                                             <div className="card-body mt-2 py-1">
                                                 <div className="px-md-3 px-2">
-                                                    <div className="px-2">
+                                                    <div className="px-2 text-center">
                                                         {/* <Button onClick={this.ViewPdf}>View Attachment</Button> */}
                                                         {/* <img className="img-fluid" src={this.state.customer.attachment} alt="Attachment" /> */}
                                                         {/* <Document
@@ -529,9 +533,13 @@ class CustomerDetails extends Component {
 
                                                         <Page pageNumber={1} />
                                                         </Document> */}
+                                                           <button onClick={this.previewAttachment} className="btn btn-sm btn-danger  px-5 text-center">
+                                    Preview Attachment
+                   </button> 
+                                                        
 
-                                                        <iframe src={this.state.attachmentUrl} width="100%" height="500px">
-    </iframe> 
+                                                        {/* <iframe src={this.state.attachmentUrl} width="100%" height="500px">
+    </iframe>  */}
     {/* <iframe src="/img/customer-attachment/222" width="100%" height="500px" frameborder="0">
     </iframe> */}
                                                     </div>
