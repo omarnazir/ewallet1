@@ -32,7 +32,7 @@ class EditAdminUser extends Component {
             id:0,
             fullname: "",
             username: "",
-            phoneNumber: "",
+            msisdn: "",
             monthlysmslimit: 0,
             status: "",
             email:"",
@@ -107,7 +107,7 @@ class EditAdminUser extends Component {
                 });
                 this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
-                        phoneNumber: user.phoneNumber,
+                        msisdn: user.msisdn,
                     }),
                 });
                 this.setState({
@@ -257,7 +257,9 @@ class EditAdminUser extends Component {
                 "id":this.state.formRegister.id,
                 "name": this.state.formRegister.fullname,
                 "username": this.state.formRegister.username,
-                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit
+                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit,
+                "email":this.state.formRegister.email,
+                "msisdn":this.state.formRegister.msisdn
             }
 
             const UserRoles = [];
@@ -440,6 +442,39 @@ class EditAdminUser extends Component {
 
                                         </div>
 
+
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Email *</label>
+                                                    <Input type="text"
+                                                        name="email"
+                                                        invalid={this.hasError('formRegister', 'email', 'email')}
+                                                        onChange={this.validateOnChange}
+                                                        data-validate='["email"]'
+                                                        value={this.state.formRegister.email} />
+                                                    {this.hasError('formRegister', 'email', 'email') &&
+                                                        <span className="invalid-feedback">Email is required</span>}
+                                                </div>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Phone Number * :</label>
+                                                    <Input type="number"
+                                                        name="msisdn"
+                                                        invalid={this.hasError('formRegister', 'msisdn', 'minlen')}
+                                                        onChange={this.validateOnChange}
+                                                        data-validate='["minlen"]'
+                                                        data-param="10"
+                                                        value={this.state.formRegister.msisdn} />
+                                                    {this.hasError('formRegister', 'msisdn', 'minlen') &&
+                                                        <span className="invalid-feedback">Valid phone number is required</span>}
+                                                </div>
+                                            </div>
+                                            
+                                        </div> 
+
                           
                                         <div className="row">
                                             <div className="col-md-6">
@@ -465,42 +500,14 @@ class EditAdminUser extends Component {
                                                         onChange={this.validateOnChange}
                                                         data-validate='["required"]'
                                                         value={this.state.formRegister.monthlysmslimit} />
-                                                    <span className="invalid-feedback">Field is required</span>
+                                                    <span className="invalid-feedback">Field is required for otp</span>
+                                                    <br/>
+                                                    <span className="invalid-feedback">Enter All Zeros as placeholder</span>
                                                 </div>
                                             </div>
 
                                         </div>
-                                        {/* <div className="row">
-                                            <div className="col-md-6">
-                                                <div className="form-group">
-                                                    <label className="col-form-label">Email *</label>
-                                                    <Input type="text"
-                                                        name="email"
-                                                        invalid={this.hasError('formRegister', 'email', 'email')}
-                                                        onChange={this.validateOnChange}
-                                                        data-validate='["required"]'
-                                                        value={this.state.formRegister.email} />
-                                                    {this.hasError('formRegister', 'email', 'email') &&
-                                                        <span className="invalid-feedback">Email is required</span>}
-                                                </div>
-                                            </div>
-
-                                            <div className="col-md-6">
-                                                <div className="form-group">
-                                                    <label className="col-form-label">Phone Number * :</label>
-                                                    <Input type="number"
-                                                        name="phoneNumber"
-                                                        invalid={this.hasError('formRegister', 'phoneNumber', 'minlen')}
-                                                        onChange={this.validateOnChange}
-                                                        data-validate='["minlen"]'
-                                                        data-param="10"
-                                                        value={this.state.formRegister.phoneNumber} />
-                                                    {this.hasError('formRegister', 'phoneNumber', 'minlen') &&
-                                                        <span className="invalid-feedback">Valid phone number is required</span>}
-                                                </div>
-                                            </div>
-                                            
-                                        </div> */}
+                                       
                                      
                                         <div className="row">
 
