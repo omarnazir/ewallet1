@@ -10,6 +10,11 @@ const Menu = [
         translate: 'sidebar.nav.DASHBOARD'
     },
     {
+        name: 'Farmers',
+        icon: 'icon-list',
+        path: '/admin-farmers-list'
+    },
+    {
         name: 'View Customer List',
         icon: 'icon-list',
         path: '/admin-customers-list'

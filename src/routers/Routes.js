@@ -55,6 +55,7 @@ import EditSingleUserPage from '../components/Pages/Public/Users/EditSingleUserP
 import UserSelfManagement from '../components/Pages/Admin/UserManagement/UserSelfManage';
 import EditSelfManage from '../components/Pages/Admin/UserManagement/EditSelfManage';
 import UserAccountExpiration from '../components/Pages/Admin/UserManagement/UserAccountExpiration';
+import AllFarmers from '../components/Pages/Admin/Farmers/AllFarmers';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -101,6 +102,9 @@ const Routes = ({ location }) => {
                             <Suspense fallback={<PageLoader />}>
                                 <Switch location={location}>
                                     <Route path="/admin-dashboard" component={waitFor(Dashboard)} />
+                                    <Route path="/admin-farmers-list" component={waitFor(AllFarmers)} />
+
+
 
                                     <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
                                     <Route path="/admin-sms-log" component={waitFor(SmsLogs)} />
