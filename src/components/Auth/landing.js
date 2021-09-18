@@ -75,13 +75,11 @@ class LandingPage extends Component {
         return this.props.history.push('/login')
     }
 
-    ViewSignUp = () => {
-        return this.props.history.push('/register')
-    }
+   
 
     onSubmit = e => {
         e.preventDefault();
-        this.ViewSignUp();
+        this.ViewLogin();
     }
 
     render() {
@@ -119,8 +117,8 @@ class LandingPage extends Component {
                                     <a class="nav-link text-white" href="#contact" style={this.NavLink}>Contact</a>
                                 </li>
                             </ul>
-                            <Button outline onClick={this.ViewLogin} color="danger" className="btn-pill mr-3">Login</Button>
-                            <Button outline color="success" onClick={this.ViewSignUp} className="btn-pill mr-3">Sign Up</Button>
+                            <Button outline onClick={this.ViewLogin} color="success" className="btn-pill mr-3">Login</Button>
+                            {/* <Button outline color="success" onClick={this.ViewSignUp} className="btn-pill mr-3">Sign Up</Button> */}
                         </div>
                     </nav>
                 </header>
@@ -190,7 +188,7 @@ class LandingPage extends Component {
                     </div>
                     <div className="text-center text-dark my-md-5 my-3" id="contact">
                         <h1 className="mb-4 pt-2">Get in touch</h1>
-                        <h4 className="px-2">Contact us to find out more about our Bulk SMS service.</h4>
+                        <h4 className="px-2">Contact us to find out more about mkulima platform.</h4>
                     </div>
                     <hr className="my-md-4 my-2"/>
                     <div className="row px-md-4 px-2 mx-md-4 py-3 mb-3 no-gutters">
@@ -275,9 +273,9 @@ class LandingPage extends Component {
                             <span className="mr-2">&copy;</span>
                             <span>2021</span>
                             <span className="mx-2">-</span>
-                            <span>E-SMS</span>
+                            <span>Mkulima</span>
                             <br/>
-                            <span>Bulk SMS Platform</span>
+                            <span>Mkulima Platform</span>
                         </div>
                     </div>
                 </div>

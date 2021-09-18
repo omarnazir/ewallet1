@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from "./constants";
+import { API_URL } from "../utils/constants";
 
 const token = window.localStorage.getItem('token');
 // 'Authorization': `Bearer ${localStorage.getItem('token')}`

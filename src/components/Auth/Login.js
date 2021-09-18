@@ -77,32 +77,27 @@ class Login extends Component {
                 username: this.state.formLogin.username,
                 password: this.state.formLogin.password
             }
-            AuthService.loginTest(data).then(
+            AuthService.login(data).then(
                 (res) => {
-                    //  this.setState({redirect:'/otp-token'});
-                    this.ViewTokenPage();
-                    // this.setState({redirect: '/token'});
-                    // const roles=res.user.roles;
-                    // if (roles == null || !Array.isArray(roles)) {
-                    //     this.setState({redirect: '/login'});
+                    /**OTP TOKEN WHEN NEEDED 
+                     this.ViewTokenPage();
+                    */
+                   
+                    const roles=res.user.roles;
+                    if (roles == null || !Array.isArray(roles)) {
+                        this.setState({redirect: '/login'});
                         
-                    // } else {
-                    //     // roles.filter(role => (role.name === "/admin/dashboard")).length === 0
-                    //     const found = roles.find((row) => row.name == "/admin-dashboard");
-                    //     if (found == undefined) {
-                    //         this.setState({redirect: '/dashboard'});
+                    } else {
+                        const found = roles.find((row) => row.name == "/admin-dashboard");
+                        if (found == undefined) {
+                            this.setState({redirect: '/dashboard'});
 
-                    //     } else {
-                    //         this.setState({redirect: '/admin-dashboard'});
+                        } else {
+                            this.setState({redirect: '/admin-dashboard'});
                            
-                    //     }
-
-                    //     // const redirect=localStorage.getItem("dashboard");
-                    //     // this.setState({redirect})
-                    // }
-
-                    // const redirect=AuthService.getRedirectPath();
-                    // this.setState({redirect});
+                        }
+                    }
+                    window.location.reload();
 
                 }, (err) => {
                     if(err.response !=undefined){
@@ -151,11 +146,6 @@ class Login extends Component {
                                     <img className="img-fluid" src="img/logo.png" alt="App Logo" />
                                 </div>
                             </a>
-                        </div>
-                   
-
-                        <div className="navbar-nav flex-row">
-                            <Button onClick={this.ViewSignUp} outline color="success" className="btn-pill mr-3">Sign Up</Button>
                         </div>
                     </nav>
                 </header>
@@ -223,8 +213,7 @@ class Login extends Component {
                                     </div>
                                     <button className="btn btn-block btn-primary mt-3" type="submit">Login</button>
                                 </form>
-                                <p className="pt-3 text-center">Need to Signup?</p>
-                                <Link to="register" className="btn btn-block btn-secondary">Register Now</Link>
+                                
                             </div>
                         </div>
                     </div>
@@ -232,9 +221,9 @@ class Login extends Component {
                         <span className="mr-2">&copy;</span>
                         <span>{year}</span>
                         <span className="mx-2">-</span>
-                        <span>E-SMS</span>
+                        <span>Mkulima</span>
                         <br />
-                        <span>Bulk SMS Platform</span>
+                        <span>Mkulima Platform </span>
                     </div>
                 </div>
             </div>

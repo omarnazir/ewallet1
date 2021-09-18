@@ -62,7 +62,7 @@ const waitFor = Tag => props => <Tag {...props} />;
 const Dashboard = lazy(() => import('./components/Pages/Admin/Dashboard/Dashboard'));
 const Login = lazy(() => import('./components/Auth/Login'));
 const TwoFaToken = lazy(() => import('./components/Auth/TwofaToken'));
-const Register = lazy(() => import('./components/Auth/Register'));
+
 
 const ViewContactList=lazy(()=>import("./components/Pages/Public/ContactList/ViewContactList"))
 
@@ -87,7 +87,6 @@ const Routes = ({ location }) => {
                     <Switch location={location}>
                         <Route path="/otp-token" component={waitFor(TwoFaToken)} />
                         <Route path="/login" component={waitFor(Login)} />
-                        <Route path="/register" component={waitFor(Register)} />
                         <Route path="/" component={waitFor(LandingPage)}/>
                     </Switch>
                 </Suspense>

@@ -1,3 +1,3 @@
-# ESMS Front-End
+# Mkulima 
 
-ReactJS front-end for E-Wallet's ESMS
+Mkulima platform ui
