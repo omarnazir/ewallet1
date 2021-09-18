@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 
-import axios from "../../../../services/axios";
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
-import $ from "jquery";
 import Moment from 'moment'
 import ReactDatatable from '@ashvin27/react-datatable';
 import { AuthService, FarmersService } from '../../../../services';
@@ -70,7 +68,7 @@ class AllFarmers extends Component {
     },
     {
       key: "firstName",
-      text: "FULL NAME"
+      text: "FIRST NAME"
     },
     {
       key: "middleName",
