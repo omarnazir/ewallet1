@@ -15,88 +15,141 @@ const Menu = [
         path: '/admin-farmers-list'
     },
     {
-        name: 'View Customer List',
-        icon: 'icon-list',
-        path: '/admin-customers-list'
+        name: 'Farmer Harvests',
+        icon: 'fas fa-exchange-alt',
+        path: '/admin-farmers-harvests'
     },
     {
-        name: 'Post Paid Customer',
-        icon: 'fa fa-money-bill',
-        path: '/admin-customers-postpaid'
+        name: 'Mpesa Wallet',
+        icon: 'icon-briefcase',
+        path: '/admin-mpesa-wallet'
     },
     {
-        name: 'View Transactions',
-        icon: 'icon-wallet',
-        path: '/admin-transactions'
-    },
-    {
-        name: 'Manage Senders',
-        icon: 'icon-people',
-        path: '/admin-senders'
-    },
-    {
-        name: 'Requested Templates',
-        icon: 'icon-layers',
-        path: '/admin-sms-templates'
-    },
-    {
-        name: 'Manage Tariffs',
-        icon: 'icon-note',
-        path: '/admin-manage-tariffs'
+        name: 'Manage Registars',
+        icon: 'fa fa-user-lock',
+        path: '/admin-manage-registars'
     },
     {
         name: 'Manage Users',
-        icon: 'fa fa-users',
+        icon: 'fa fa-users-cog',
         path: '/admin-manage-users'
     },
     {
-        name: 'Account Management',
-        icon: 'fa fa-user',
-        path: '/admin-self-manage'
+        name: 'USSD Menu',
+        icon: 'icon-phone',
+        path: '/admin-ussd-menu'
+    },
+    {
+        name: 'System Setup',
+        icon: 'fas fa-wrench',
+        path: '/admin-manage-registars',
+        translate: 'sidebar.nav.SETUP',
+        submenu: [
+            {
+                name: 'Crops',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.CROPS',
+                path: '/crops'
+            },
+            {
+                name: 'Crop Prices',
+                icon: "icon-arrow-right",
+                translate: 'Crop Prices',
+                path: '/crop-prices'
+            },
+            {
+                name: 'Agricultural Inputs',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.INPUTS',
+                path: '/inputs'
+            },
+
+            {
+                name: 'MCU',
+                icon: "icon-arrow-right",
+                translate: 'MCU',
+                path: '/mcos'
+            },
+
+            {
+                name: 'AMCOS',
+                icon: "icon-arrow-right",
+                translate: 'AMCOS',
+                path: '/amcos',
+            },
+
+            {
+                name: 'Collection Centers',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.CENTRES',
+                path: '/centers'
+            },
+
+            {
+                name: 'Regions',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.REGIONS',
+                path: '/regions'
+            },
+
+            {
+                name: 'Districts',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.DISTRICTS',
+                path: '/districts'
+            },
+
+            {
+                name: 'Wards',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.WARDS',
+                path: '/wards'
+            },
+
+            {
+                name: 'Villages',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.VILLAGES',
+                path: '/villages'
+            },
+        ]
     },
     {
         name: 'System Settings',
         icon: 'icon-settings',
-        path:"/admin-settings",
+        path: '/admin-manage-registars',
+        translate: 'sidebar.nav.SETUP',
         submenu: [
+            {
+                name: 'Roles',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.CROPS',
+                path: '/crops'
+            },
+            {
+                name: 'Mobile Operators',
+                icon: "icon-arrow-right",
+                translate: 'Crop Prices',
+                path: '/crop-prices'
+            },
             {
                 name:"Manage SMSC",
                 path:"/admin-manage-smsc",
-                icon:"fa fa-globe"
+                icon:"icon-arrow-right"
             },
             {
                 name:"Manage Mail",
                 path:"/admin-manage-mail",
-                icon:"fa fa-inbox"
-            },
-            {
-                name:"Manage Roles",
-                path:"/admin-manage-roles",
-                icon:"fa fa-users"
-            },
-            {
-            name: 'Restricted words to filter',
-            icon: 'fa fa-download',
-            path: '/admin-restricted-words'
-        },
-
-            {
-                name: 'Do not disturb',
-                icon: 'fa fa-ban',
-                path: '/admin-reserved-numbers'
-            }, {
-                name: 'Operators',
-                icon: 'fa fa-phone',
-                path: '/admin-mobile-operators'
-            },
-            {
-                name: 'Sms logs',
-                path: '/admin-sms-log',
-                icon: 'icon-bubble'
+                icon:"icon-arrow-right"
             }
-
         ]
     },
+    {
+        name: 'Account Management',
+        icon: 'icon-note',
+        path: '/admin-self-manage'
+    },
+
 
     /**User pages on Refactor DELETE the routes */
         {

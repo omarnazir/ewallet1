@@ -56,6 +56,9 @@ import UserSelfManagement from '../components/Pages/Admin/UserManagement/UserSel
 import EditSelfManage from '../components/Pages/Admin/UserManagement/EditSelfManage';
 import UserAccountExpiration from '../components/Pages/Admin/UserManagement/UserAccountExpiration';
 import AllFarmers from '../components/Pages/Admin/Farmers/AllFarmers';
+import FarmersHarvests from '../components/Pages/Admin/FarmerHarvests/FarmerHarvests';
+import AdminWallet from '../components/Pages/Admin/Wallet/AdminWallet';
+import UssdMenu from '../components/Pages/Admin/UssdMenu/UssdMenu';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -103,8 +106,9 @@ const Routes = ({ location }) => {
                                 <Switch location={location}>
                                     <Route path="/admin-dashboard" component={waitFor(Dashboard)} />
                                     <Route path="/admin-farmers-list" component={waitFor(AllFarmers)} />
-
-
+                                    <Route path="/admin-farmers-harvests" component={waitFor(FarmersHarvests)}/>
+                                    <Route path="/admin-mpesa-wallet" component={waitFor(AdminWallet)}/>
+                                    <Route path="/admin-ussd-menu" component={waitFor(UssdMenu)}/>
 
                                     <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
                                     <Route path="/admin-sms-log" component={waitFor(SmsLogs)} />
