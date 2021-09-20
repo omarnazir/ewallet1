@@ -112,6 +112,7 @@ const Routes = ({ location }) => {
                         <div>
                             <Suspense fallback={<PageLoader />}>
                                 <Switch location={location}>
+                                    {/* Admin */}
                                     <Route path="/admin-dashboard" component={waitFor(Dashboard)} />
                                     <Route path="/admin-farmers-list" component={waitFor(AllFarmers)} />
                                     <Route path="/admin-farmers-harvests" component={waitFor(FarmersHarvests)}/>
@@ -128,8 +129,14 @@ const Routes = ({ location }) => {
                                    <Route path="/admin-manage-villages" component={waitFor(ManageVillage)}/>
                                    <Route path="/admin-collection-centers" component={waitFor(ManageCollectionCenter)}/>
 
-                                    <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
+                                   {/* System Settings */}
+                                   <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
+                                    <Route path="/admin-manage-roles" component={waitFor(ManageRole)}/>
+                                    <Route path="/admin-manage-smsc" component={waitFor(ManageSmsc)}/>
                                     <Route path="/admin-sms-log" component={waitFor(SmsLogs)} />
+                                    <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
+
+
 
                                     <Route path="/admin-customers-list" component={waitFor(CustomerList)} />
                                     <Route path="/admin-customers-details/:id" component={waitFor(CustomerDetails)}/>
@@ -153,9 +160,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-self-edit/:id" component={waitFor(EditSelfManage)}/>
                                     <Route path="/admin-restricted-words" component={waitFor(RestrictedWords)} />
                                     <Route path="/admin-reserved-numbers" component={waitFor(ReservedNumbers)} />
-                                    <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
-                                    <Route path="/admin-manage-roles" component={waitFor(ManageRole)}/>
-                                    <Route path="/admin-manage-smsc" component={waitFor(ManageSmsc)}/>
+                                 
                                     <Route path="/admin-account-expiration" component={waitFor(UserAccountExpiration)}/>
                                     
                                     <Route path="/admin-invoices/:id" component={waitFor(Invoices)} />
