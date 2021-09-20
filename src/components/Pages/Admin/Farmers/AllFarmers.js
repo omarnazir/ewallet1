@@ -9,7 +9,8 @@ import { Redirect } from 'react-router-dom';
 
 class AllFarmers extends Component {
   state = {
-    farmersList: []
+    farmersList: [],
+    loading: true
   };
 
   componentDidMount() {
@@ -19,6 +20,7 @@ class AllFarmers extends Component {
     }
 
     FarmersService.getAllFarmers().then(res => {
+      this.setState({ loading: false })
       this.setState({ farmersList: res.data })
     })
   }
@@ -47,16 +49,18 @@ class AllFarmers extends Component {
     pagination: 'advance',
     filename: "Contact List",
     button: {
-
+      // excel: true,
+      // print: true,
+      // csv: true
     },
     language: {
       loading_text: "Please be patient while data loads..."
     }
   }
 
-   ucFirst=(str)=> {
+  ucFirst = (str) => {
     if (!str) return str;
-    if(str.trim()=="undefined") return "";
+    if (str.trim() == "undefined") return "";
     return str[0].toUpperCase() + str.slice(1);
   }
 
@@ -180,6 +184,7 @@ class AllFarmers extends Component {
                 config={this.config}
                 records={this.state.farmersList}
                 columns={this.columns}
+                loading={this.state.loading}
 
               />
             </CardBody>

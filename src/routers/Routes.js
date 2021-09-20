@@ -67,6 +67,8 @@ import ManageWards from '../components/Pages/Admin/SystemSetup/ManageWards';
 import ManageVillage from '../components/Pages/Admin/SystemSetup/ManageVillage';
 import ManageCollectionCenter from '../components/Pages/Admin/SystemSetup/ManageCollectionCenter';
 import AllRegistars from '../components/Pages/Admin/Registrars/AllRegistrars';
+import ManageAmcosPrice from '../components/Pages/Admin/SystemSetup/ManageCropPrice';
+import ManageCropPrice from '../components/Pages/Admin/SystemSetup/ManageCropPrice';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -128,6 +130,7 @@ const Routes = ({ location }) => {
                                    <Route path="/admin-manage-wards" component={waitFor(ManageWards)}/>
                                    <Route path="/admin-manage-villages" component={waitFor(ManageVillage)}/>
                                    <Route path="/admin-collection-centers" component={waitFor(ManageCollectionCenter)}/>
+                                   <Route path="/admin-crop-price" component={waitFor(ManageCropPrice)}/>
 
                                    {/* System Settings */}
                                    <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>

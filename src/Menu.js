@@ -61,7 +61,7 @@ const Menu = [
                 name: 'Crop Prices',
                 icon: "icon-arrow-right",
                 translate: 'Crop Prices',
-                path: '/crop-prices'
+                path: '/admin-crop-price'
             },
             {
                 name: 'Agricultural Inputs',
