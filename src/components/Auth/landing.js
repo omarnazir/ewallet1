@@ -167,7 +167,7 @@ class LandingPage extends Component {
                             cooperative unions. With M-KULIMA platform farmers will be able to acquire knowledge related to markets,
                             advisory services, understanding patterns and trends. Also farmers can sell their crops and make purchases
                             for agricultural inputs such as seeds, fertilizer, tools and the like on credit.<br /> The platform combines
-                             a carefully formulated support for all key stakeholdersin the ecosystem such as various Government officials,
+                             a carefully formulated support of all key stakeholders in the ecosystem such as various Government officials,
                              extension officers and other key members. 
                             </p>
                         </div>

@@ -141,24 +141,12 @@ columns = [
       }
     }
 },
-  {
-      key: "lastLogin",
-      text: "LAST LOGIN",
-      cell: (record, index) => {
-        if(record.lastLogin == null){
-          return "N/A"
-        }else {
-        return (this.formatDate(record.lastLogin))
-        }
-      }
-
-  },
 {
-  key: "createdAt",
-  text: "DATE CREATED",
+  key: "dateCreated",
+  text: "REGISTRATION DATE",
   sortable: true,
   cell: (record, index) => {
-    return (this.formatDate(record.registrationDate))
+    return (this.formatDate(record.dateCreated))
   }
 },
 {

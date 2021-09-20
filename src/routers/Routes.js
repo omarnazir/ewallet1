@@ -121,7 +121,8 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-mpesa-wallet" component={waitFor(AdminWallet)}/>
                                     <Route path="/admin-ussd-menu" component={waitFor(UssdMenu)}/>
                                     <Route path="/admin-manage-registars" component={waitFor(AllRegistars)}/>
-
+                                    <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
+                                    
                                    {/* System Setup */}
                                    <Route path="/admin-crops" component={waitFor(ManageCrop)}/>
                                    <Route path="/admin-crop-types" component={waitFor(ManageCropType)}/>
@@ -158,7 +159,6 @@ const Routes = ({ location }) => {
 
                                     <Route path="/admin-manage-edit-user/:id" component={waitFor(EditAdminUser)}/>
                                     <Route path="/admin-add-new-user" component={waitFor(AddUser)} />
-                                    <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
                                     <Route path="/admin-self-manage" component={waitFor(UserSelfManagement)} />
                                     <Route path="/admin-self-edit/:id" component={waitFor(EditSelfManage)}/>
                                     <Route path="/admin-restricted-words" component={waitFor(RestrictedWords)} />
