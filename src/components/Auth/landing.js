@@ -166,7 +166,7 @@ class LandingPage extends Component {
                             <p style={this.IntroText}>We are an all-inclusive digital platform designed to assist farmers through their cooperative unions. In Mkulima
                                 platform farmers will be able to acquire knowledge concerning markets, advisory services, understanding patterns and trends.
                                 Also farmers can sell their crops and make purchases for agricultural inputs such as seeds, fertilizer, tools and the like
-                                on credit.<br /> The platform combines a carefully formulated support for all key stakeholdersin the ecosystem such as
+                                on credit.<br /> The platform combines a carefully formulated support for all key stakeholders in the ecosystem such as
                                 government officials, extension officers and others. 
                             </p>
                         </div>
