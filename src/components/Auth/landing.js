@@ -150,8 +150,8 @@ class LandingPage extends Component {
                     <div style={this.HeroHeader} className="py-5">
                         <div style={this.HeroText} className="px-md-5 px-3">
                             <h1 className="text-white mb-3">Creating sustainable farming ecosystem</h1>
-                            <p style={this.HeroSubText} className="text-white">Assisting farmers and other stakeholders in the 
-                                <br/>agricultural system to leverage affordable technologies to support the supply-chain.
+                            <p style={this.HeroSubText} className="text-white">Transforming Agriculture by giving Small-Holder Farmers<br/>
+                            access to Knowledge, Agricultural Inputs, Finance and Markets via a Commercially<br/>self-sustainable Digital Agri-ecosystem
                             </p>                           
                         </div>
                     </div>
@@ -159,22 +159,23 @@ class LandingPage extends Component {
 
                 <div className="container py-3 my-lg-5 my-4">
                     <div className="row my-4" id="about">
-                        <div className="col-lg-3">
-                            <h2 className="text-center my-md-4 my-2" style={this.IntroHeader}><strong>About Mkulima Platform</strong></h2>
+                        <div className="col-lg-4">
+                            <h2 className="text-center my-md-4 my-2" style={this.IntroHeader}><strong>About M-KULIMA Platform</strong></h2>
                         </div>   
                         <div className="col-lg-8">
-                            <p style={this.IntroText}>We are an all-inclusive digital platform designed to assist farmers through their cooperative unions. In Mkulima
-                                platform farmers will be able to acquire knowledge concerning markets, advisory services, understanding patterns and trends.
-                                Also farmers can sell their crops and make purchases for agricultural inputs such as seeds, fertilizer, tools and the like
-                                on credit.<br /> The platform combines a carefully formulated support for all key stakeholders in the ecosystem such as
-                                government officials, extension officers and others. 
+                            <p style={this.IntroText}>We are an all-inclusive digital platform designed to assist farmers through their
+                            cooperative unions. With M-KULIMA platform farmers will be able to acquire knowledge related to markets,
+                            advisory services, understanding patterns and trends. Also farmers can sell their crops and make purchases
+                            for agricultural inputs such as seeds, fertilizer, tools and the like on credit.<br /> The platform combines
+                             a carefully formulated support for all key stakeholdersin the ecosystem such as various Government officials,
+                             extension officers and other key members. 
                             </p>
                         </div>
                     </div>
                 </div>
             
                 <div className="container-fluid text-dark px-0 mt-5">
-                    <h2 className="text-center my-md-4 my-2" id="features"><strong>Unique Mkulima Features</strong></h2>
+                    <h2 className="text-center my-md-4 my-2" id="features"><strong>Unique M-KULIMA Features</strong></h2>
                     <div className="row no-gutters m-lg-5 m-3">
                         <div className="col-sm-6 col-lg-4 text-center px-md-4 px-2 py-3">
                             <span className="fas fa-mobile-alt mb-3" style={this.FeatureIcon}></span>
@@ -194,7 +195,7 @@ class LandingPage extends Component {
                         <div className="col-sm-6 col-lg-4 text-center px-md-4 px-2 py-3">
                             <span className="fa fa-chart-line mb-3" style={this.FeatureIcon}></span>
                             <h4>Elegant analytics and reports</h4>
-                            <p style={this.ParaText}>Mkulima portal assists in decision making since it catalogs, analyzes and give reports about relevant farmer information.</p>
+                            <p style={this.ParaText}>M-KULIMA portal assists in decision making since it catalogs, analyzes and give reports about relevant farmer information.</p>
                         </div>
                         <div className="col-sm-6 col-lg-4 text-center px-md-4 px-2 py-3">
                             <span className="fa fa-users mb-3" style={this.FeatureIcon}></span>
@@ -218,7 +219,7 @@ class LandingPage extends Component {
                         </div>
                         <div className="col-lg-2 col-md-3">
                             <img className="img-fluid" style={this.partnerLogo} src="img/voda.png" alt="Vodacom Logo" />
-                            <h4 className="text-white mt-lg-3 mt-2"><em>Vodacom Tanzania Limited</em></h4>
+                            <h4 className="text-white mt-lg-3 mt-2"><em>Vodacom Tanzania PLC</em></h4>
                         </div>
                     </div>
                 </div>
@@ -226,7 +227,7 @@ class LandingPage extends Component {
                 <div className="container-fluid text-dark px-0">
                     <div className="text-center my-md-5 my-3" id="contact">
                         <h1 className="mb-4 pt-2">Get in touch</h1>
-                        <h4 className="px-2">Contact us to find out more about mkulima platform.</h4>
+                        <h4 className="px-2">Contact us to find out more about M-KULIMA platform.</h4>
                     </div>
                     <hr className="my-md-4 my-2"/>
                     <div className="row px-md-4 px-2 mx-md-4 pt-2 pb-4 mb-3 no-gutters">
@@ -307,13 +308,8 @@ class LandingPage extends Component {
                     </div>
                     
                     <div className="block-center">
-                        <div className="p-3 pb-4 text-center">
-                            <span className="mr-2">&copy;</span>
-                            <span>2021</span>
-                            <span className="mx-2">-</span>
-                            <span>Mkulima</span>
-                            <br/>
-                            <span>Mkulima Platform</span>
+                        <div className="p-3 text-center">
+                            &copy;&nbsp;2021&nbsp;-&nbsp;M-KULIMA
                         </div>
                     </div>
                 </div>
