@@ -16,23 +16,45 @@ class LandingPage extends Component {
         // }
     }
 
-    RedSection = {
+   RedSection = {
         background: "#aa0002"
+    }
+
+    redFont = {
+        color: "#cc0002"
+    }
+
+    partnerLogo = {
+        maxWidth: "90px"
     }
 
     FeatureIcon = {
         borderRadius: "50%",
-        border: "2px solid",
-        fontSize: "1.5rem",
-        width: "2.25em",
-        height: "2.25em",
-        lineHeight: "1.125",
+        fontSize: "1.25rem",
+        backgroundColor: "#cc0002",
+        color: "white",
+        width: "2.5em",
+        height: "2.5em",
+        lineHeight: "1.5",
         padding: "0.45em"
+    }
+
+    IntroText = {
+        fontSize: "18px",
+        lineHeight: "2em"
+    }
+
+    IntroHeader = {
+        fontSize: "36px",
+        lineHeight: "1.2em",
+        color: "#aa0002",
+        fontWeight: "700"
     }
 
     ParaText = {
         fontSize: "16px",
-        marginBottom: "30px"
+        marginBottom: "30px",
+        lineHeight: "2em"
     }
 
     FrontButton = {
@@ -51,16 +73,17 @@ class LandingPage extends Component {
     }
 
     HeroHeader = {
-        backgroundImage: `url(${heroImage})`,
+        backgroundImage: `linear-gradient(to top, rgba(35, 85, 40, 0.45), rgba(40, 43, 58, 0.25)), url(${heroImage})`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
+        minHeight: "600px"
     }
 
     HeroText = {
         width: "100%",
         textAlign: "center",
-        marginTop: "130px",
+        marginTop: "150px",
         marginBottom: "140px"
     }
 
@@ -68,7 +91,7 @@ class LandingPage extends Component {
         fontSize: "20px",
         marginBottom: "40px",
         marginTop: "20px",
-        fontWeight: "600"
+        fontWeight: "500"
     }
 
     ViewLogin = () => {
@@ -83,9 +106,6 @@ class LandingPage extends Component {
     }
 
     render() {
-        // if (this.state.redirect) {
-        //     return <Redirect to={this.state.redirect}/>
-        // }
 
         return (
             <div className="bg-white">
@@ -108,13 +128,16 @@ class LandingPage extends Component {
                         <div className="navbar-nav flex-row">
                             <ul className="nav mx-3 px-3">
                                 <li className="nav-item mx-3">
+                                    <a class="nav-link text-white" href="#about" style={this.NavLink}>About</a>
+                                </li>
+                                <li className="nav-item mx-3">
                                     <a class="nav-link text-white" href="#features" style={this.NavLink}>Features</a>
                                 </li>
                                 <li className="nav-item mx-3">
-                                    <a class="nav-link text-white" href="#pricing" style={this.NavLink}>Pricing</a>
+                                    <a class="nav-link text-white" href="#partners" style={this.NavLink}>Partners</a>
                                 </li>
                                 <li className="nav-item mx-3">
-                                    <a class="nav-link text-white" href="#contact" style={this.NavLink}>Contact</a>
+                                    <a class="nav-link text-white" href="#contact" style={this.NavLink}>Contact Us</a>
                                 </li>
                             </ul>
                             <Button outline onClick={this.ViewLogin} color="success" className="btn-pill mr-3">Login</Button>
@@ -123,77 +146,92 @@ class LandingPage extends Component {
                     </nav>
                 </header>
 
-                <div className="container-fluid px-0 mb-2">
+                <div className="container-fluid px-0">
                     <div style={this.HeroHeader} className="py-5">
                         <div style={this.HeroText} className="px-md-5 px-3">
-                            <h1 className="text-white mb-3">Affordable SMS Packages</h1>
-                            <p style={this.HeroSubText} className="text-dark">With our affordable SMS packages, you can now manage
-                                <br/>all your SMS campaigns online with our SMS Gateway.
-                            </p>
-                           
-                                <button onClick={this.ViewSignUp} className="btn btn-light rounded-pill btn-outline-dark mt-2" style={this.FrontButton}>Sign up today &nbsp;
-                                    <span className="fa fa-arrow-right"></span>
-                                </button>
-                           
+                            <h1 className="text-white mb-3">Creating sustainable farming ecosystem</h1>
+                            <p style={this.HeroSubText} className="text-white">Assisting farmers and other stakeholders in the 
+                                <br/>agricultural system to leverage affordable technologies to support the supply-chain.
+                            </p>                           
                         </div>
                     </div>
                 </div>
-               
+
+                <div className="container py-3 my-lg-5 my-4">
+                    <div className="row my-4" id="about">
+                        <div className="col-lg-3">
+                            <h2 className="text-center my-md-4 my-2" style={this.IntroHeader}><strong>About Mkulima Platform</strong></h2>
+                        </div>   
+                        <div className="col-lg-8">
+                            <p style={this.IntroText}>We are an all-inclusive digital platform designed to assist farmers through their cooperative unions. In Mkulima
+                                platform farmers will be able to acquire knowledge concerning markets, advisory services, understanding patterns and trends.
+                                Also farmers can sell their crops and make purchases for agricultural inputs such as seeds, fertilizer, tools and the like
+                                on credit.<br /> The platform combines a carefully formulated support for all key stakeholdersin the ecosystem such as
+                                government officials, extension officers and others. 
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            
                 <div className="container-fluid text-dark px-0 mt-5">
-                    <h2 className="text-center my-md-4 my-2" id="features"><em>Explore Features</em></h2>
+                    <h2 className="text-center my-md-4 my-2" id="features"><strong>Unique Mkulima Features</strong></h2>
                     <div className="row no-gutters m-lg-5 m-3">
                         <div className="col-sm-6 col-lg-4 text-center px-md-4 px-2 py-3">
-                            <span className="far fa-envelope mb-3" style={this.FeatureIcon}></span>
-                            <h4>Bulk SMS Sending</h4>
-                            <p style={this.ParaText}>You can send Bulk SMS up to 200k at a time without any downtime or crashing.</p>
+                            <span className="fas fa-mobile-alt mb-3" style={this.FeatureIcon}></span>
+                            <h4>Low-cost solution</h4>
+                            <p style={this.ParaText}>The platform employs the use of USSD service and mobile application to ensure affordability and mobility.</p>
                         </div>
                         <div className="col-sm-6 col-lg-4 text-center px-md-4 px-2 py-3">
-                            <span className="far fa-calendar-alt mb-3" style={this.FeatureIcon}></span>
-                            <h4>Scheduled SMS</h4>
-                            <p style={this.ParaText}>We've made it easy for you to schedule messages that need to be sent on a later time with our Scheduled SMS Feature.</p>
+                            <span className="fa fa-sync-alt mb-3" style={this.FeatureIcon}></span>
+                            <h4>Real-time information</h4>
+                            <p style={this.ParaText}>All the information processed is instantly saved and syncronized to both Web portal and USSD service.</p>
                         </div>
                         <div className="col-sm-6 col-lg-4 text-center px-md-4 px-2 py-3">
-                            <span className="fa fa-shopping-cart mb-3" style={this.FeatureIcon}></span>
-                            <h4>Online Subscription & Payment</h4>
-                            <p style={this.ParaText}>You can subscribe an SMS package and instantly pay online without letting us know. We've made it easy for you to send SMS.</p>
+                            <span className="fa fa-link mb-3" style={this.FeatureIcon}></span>
+                            <h4>Guaranteed connectivity</h4>
+                            <p style={this.ParaText}>Through fast and reliable servers, we guarantee a minimum uptime of about 95%.</p>
                         </div>
                         <div className="col-sm-6 col-lg-4 text-center px-md-4 px-2 py-3">
-                            <span className="fa fa-list mb-3" style={this.FeatureIcon}></span>
-                            <h4>Customizable Sender Name</h4>
-                            <p style={this.ParaText}>Choose any acceptable names to appear as a sender when you send Bulk SMS. Sender names has to be approved before they can send SMS.</p>
+                            <span className="fa fa-chart-line mb-3" style={this.FeatureIcon}></span>
+                            <h4>Elegant analytics and reports</h4>
+                            <p style={this.ParaText}>Mkulima portal assists in decision making since it catalogs, analyzes and give reports about relevant farmer information.</p>
                         </div>
                         <div className="col-sm-6 col-lg-4 text-center px-md-4 px-2 py-3">
                             <span className="fa fa-users mb-3" style={this.FeatureIcon}></span>
                             <h4>Multi-User Platform</h4>
-                            <p style={this.ParaText}>Our multiple users management feature will let you create users for your team with their defined SMS quotas.</p>
+                            <p style={this.ParaText}>The multiple users feature allows different types of users to efficiently access the platform with different privileges.</p>
+                        </div>
+                        <div className="col-sm-6 col-lg-4 text-center px-md-4 px-2 py-3">
+                            <span className="fa fa-money-bill-wave mb-3" style={this.FeatureIcon}></span>
+                            <h4>Direct B2C Payments</h4>
+                            <p style={this.ParaText}>Farmers payment can be disbursed directly from the B2C wallet to individual farmer mobile money and banking accounts</p>
                         </div>
                     </div>
-                    <hr className="my-md-4 my-2"/>
-                    <div className="text-center text-dark my-md-5 my-3 py-3">
-                        <h4 className="mb-4 px-2"><em>Experience more other features like Contact Manager, CSV and Excel Upload and Developer API Integration</em></h4>
-                       
-                            <button className="btn rounded-pill btn-outline-dark mt-3" onClick={this.ViewSignUp} style={this.FrontButton}>Sign up today &nbsp;
-                                <span className="fa fa-arrow-right"></span>
-                            </button>
-                       
+                </div>
+
+                <div className="text-center container-fluid py-5 px-lg-5" style={this.RedSection} id="partners">
+                    <h1 className="text-white my-3"><strong>Our Partners</strong></h1>
+                    <div className="row py-lg-4 py-2 justify-content-center">
+                        <div className="col-lg-2 col-md-3">
+                            <img className="img-fluid" style={this.partnerLogo} src="img/nembo.png" alt="Wizara Logo" />
+                            <h4 className="text-white mt-lg-3 mt-2"><em>Wizara ya Kilimo</em></h4>
+                        </div>
+                        <div className="col-lg-2 col-md-3">
+                            <img className="img-fluid" style={this.partnerLogo} src="img/voda.png" alt="Vodacom Logo" />
+                            <h4 className="text-white mt-lg-3 mt-2"><em>Vodacom Tanzania Limited</em></h4>
+                        </div>
                     </div>
-                    <div className="text-center py-5 px-lg-5" style={this.RedSection} id="pricing">
-                        <h1 className="text-white mt-5 mb-3"><em>Pricing</em></h1>
-                        <p className="text-white mx-lg-5 px-md-5 px-2 mb-4" style={this.HeroSubText}>We have very affordable SMS packages rates for everyone . Simply register, pay easily via M-pesa and just send as you wish!</p>
-                       
-                            <button onClick={this.ViewSignUp} className="btn rounded-pill btn-light btn-outline-dark mb-5 mt-2" style={this.FrontButton}>Sign up today &nbsp;
-                                <span className="fa fa-arrow-right"></span>
-                            </button>
-                       
-                    </div>
-                    <div className="text-center text-dark my-md-5 my-3" id="contact">
+                </div>
+
+                <div className="container-fluid text-dark px-0">
+                    <div className="text-center my-md-5 my-3" id="contact">
                         <h1 className="mb-4 pt-2">Get in touch</h1>
                         <h4 className="px-2">Contact us to find out more about mkulima platform.</h4>
                     </div>
                     <hr className="my-md-4 my-2"/>
-                    <div className="row px-md-4 px-2 mx-md-4 py-3 mb-3 no-gutters">
+                    <div className="row px-md-4 px-2 mx-md-4 pt-2 pb-4 mb-3 no-gutters">
                         <div className="col-md-4 px-md-3 px-2 py-md-3 py-2 ml-md-3">
-                            <h4><span className="fa fa-home"></span> &nbsp; ADDRESS:</h4>
+                            <h4><span className="fa fa-home" style={this.redFont}></span> &nbsp; ADDRESS:</h4>
                             <ul className="list-unstyled ml-2" style={this.ContactList}>
                                 <li>Vodacom Tanzania Public Limited Company,</li>
                                 <li>7th Floor, Vodacom Tower,</li>
@@ -201,12 +239,12 @@ class LandingPage extends Component {
                                 <li>P.O. Box 2369,</li>
                                 <li>Dar es Salaam.</li>
                             </ul>
-                            <h4 className="mt-md-4 mt-3"><span className="fa fa-phone-alt"></span> &nbsp; TEL:</h4>
+                            <h4 className="mt-md-4 mt-3"><span className="fa fa-phone-alt" style={this.redFont}></span> &nbsp; TEL:</h4>
                             <ul style={this.ContactList}>
                                 <li>+255 754 100 100</li>
                                 <li>+255 754 705 000</li>
                             </ul>
-                            <h4 className="mt-md-4 mt-3"><span className="fa fa-envelope"></span> &nbsp; EMAIL:</h4>
+                            <h4 className="mt-md-4 mt-3"><span className="fa fa-envelope" style={this.redFont}></span> &nbsp; EMAIL:</h4>
                             <ul style={this.ContactList}>
                                 <li>business@vodacom.co.tz</li>
                             </ul>
@@ -267,7 +305,7 @@ class LandingPage extends Component {
                             </div>
                         </div>
                     </div>
-
+                    
                     <div className="block-center">
                         <div className="p-3 pb-4 text-center">
                             <span className="mr-2">&copy;</span>
@@ -280,6 +318,7 @@ class LandingPage extends Component {
                     </div>
                 </div>
             </div>
+            
         );
     }
 }
