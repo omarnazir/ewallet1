@@ -204,7 +204,7 @@ class Dashboard extends Component {
                                 <em className="fa fa-dice-six fa-3x"></em>
                             </div>
                             <div className="col-8 py-3 bg-info rounded-right">
-                                <div className="h2 mt-0">0</div> 
+                            <div className="h2 mt-0">{this.state.dashboardData.totalCollectionCenters}</div>
                                 <div className="text-uppercase">COLLECTION CENTERS</div>
                             </div>
                         </div>

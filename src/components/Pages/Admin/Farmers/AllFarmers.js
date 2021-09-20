@@ -75,21 +75,28 @@ class AllFarmers extends Component {
       key: "firstName",
       text: "FULL NAME",
       cell: (record, index) => {
-        const firstName=record.firstName;
-        const middleName=record.middleName=="undefined"?" ":record.middleName;
-        const lastName=record.surname;
+        // const firstName=record.firstName;
+        // const middleName=record.middleName=="undefined"?" ":record.middleName;
+        // const lastName=record.surname;
         // return (record.firstName +" "+record.middleName+" "+record.surname)
-        return this.ucFirst(firstName)+" "+this.ucFirst(middleName)+" "+this.ucFirst(lastName);
+        // return this.ucFirst(firstName)+" "+this.ucFirst(middleName)+" "+this.ucFirst(lastName);
+        return this.ucFirst(record.firstName)
       }
     },
-    // {
-    //   key: "middleName",
-    //   text: "MIDDLE NAME"
-    // },
-    // {
-    //   key: "surname",
-    //   text: "LAST NAME"
-    // },
+    {
+      key: "middleName",
+      text: "MIDDLE NAME",
+      cell: (record, index) => {
+        return this.ucFirst(record.middleName)
+      }
+    },
+    {
+      key: "surname",
+      text: "LAST NAME",
+      cell: (record, index) => {
+        return this.ucFirst(record.surname)
+      }
+    },
     {
       key: "sex",
       text: "GENDER",
@@ -114,11 +121,11 @@ class AllFarmers extends Component {
       }
     },
     {
-      key: "createdAt",
+      key: "registrationDate",
       text: "DATE REGISTERED",
       sortable: true,
       cell: (record, index) => {
-        return (this.formatDate(record.createdAt))
+        return (this.formatDate(record.registrationDate))
       }
     },
     {
