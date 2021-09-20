@@ -16,7 +16,8 @@ import withReactContent from 'sweetalert2-react-content'
 
 class UsersManagement extends Component {
   state = {
-    usersList: []
+    usersList: [],
+    loading:true
   };
 
   componentDidMount() {
@@ -41,8 +42,8 @@ GetAllUser=()=>{
   axios.get("/users")
   .then(res => {
     const response = res.data;
+    this.setState({loading:false})
     this.setState({ usersList: response })
-    console.log(response);
   })
 }
 
@@ -234,6 +235,7 @@ config = {
                 config={this.config}
                 records={this.state.usersList}
                 columns={this.columns}
+                loading={this.state.loading}
                  />
                 
             </CardBody>

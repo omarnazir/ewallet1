@@ -10,7 +10,8 @@ import NumberFormat from 'react-number-format'
 
 class FarmersHarvests extends Component {
   state = {
-    harvestsList: []
+    harvestsList: [],
+    loading: true
   };
 
   componentDidMount() {
@@ -20,6 +21,7 @@ class FarmersHarvests extends Component {
     }
 
     HarvestsService.getAllFarmersHarvests().then(res => {
+      this.setState({loading:false})
       this.setState({ harvestsList: res.data })
     })
   }
@@ -188,7 +190,7 @@ class FarmersHarvests extends Component {
                 config={this.config}
                 records={this.state.harvestsList}
                 columns={this.columns}
-
+                loading={this.state.loading}
               />
             </CardBody>
           </Card>

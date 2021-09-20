@@ -9,7 +9,8 @@ import { Redirect } from 'react-router-dom';
 
 class AllRegistars extends Component {
   state = {
-    farmersList: []
+    farmersList: [],
+    loading:true
   };
 
   componentDidMount() {
@@ -19,6 +20,7 @@ class AllRegistars extends Component {
     }
 
     RegistarService.getAllRegistars().then(res => {
+      this.setState({loading:false})
       this.setState({ farmersList: res.data })
     })
   }
@@ -147,7 +149,7 @@ class AllRegistars extends Component {
                 config={this.config}
                 records={this.state.farmersList}
                 columns={this.columns}
-
+                loading={this.state.loading}
               />
             </CardBody>
           </Card>

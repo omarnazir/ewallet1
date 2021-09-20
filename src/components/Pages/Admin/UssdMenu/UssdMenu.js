@@ -9,7 +9,8 @@ import { Redirect } from 'react-router-dom';
 
 class UssdMenu extends Component {
   state = {
-    ussdMenuList: []
+    ussdMenuList: [],
+    loading:true
   };
 
   componentDidMount() {
@@ -19,6 +20,7 @@ class UssdMenu extends Component {
     }
 
     UssdMenuService.getAllUssdMenu().then(res => {
+      this.setState({loading:false})
       this.setState({ ussdMenuList: res.data })
     })
   }
@@ -136,6 +138,7 @@ class UssdMenu extends Component {
                 config={this.config}
                 records={this.state.ussdMenuList}
                 columns={this.columns}
+                loading={this.state.loading}
 
               />
             </CardBody>

@@ -71,7 +71,12 @@ class Dashboard extends Component {
             shadowSize: 0
         },
         dropdownOpen: false,
-        dashboardData: {}
+        dashboardData: {
+            totalFarmers:0,
+            totalMcos:0,
+            totalAmcos:0,
+            totalCollectionCenters:0
+        }
     }
 
     componentDidMount() {
