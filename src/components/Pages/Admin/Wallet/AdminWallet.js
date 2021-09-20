@@ -18,9 +18,9 @@ class AdminWallet extends Component {
       this.setState({ redirect: "/login" })
     }
 
-    FarmersService.getAllFarmers().then(res => {
-      this.setState({ farmersList: res.data })
-    })
+    // FarmersService.getAllFarmers().then(res => {
+    //   this.setState({ farmersList: res.data })
+    // })
   }
 
   formatDate = (date) => {
@@ -68,47 +68,36 @@ class AdminWallet extends Component {
     },
     {
       key: "firstName",
-      text: "FIRST NAME"
+      text: "AMOUNT"
     },
     {
       key: "middleName",
-      text: "MIDDLE NAME"
+      text: "TYPE"
     },
     {
       key: "surname",
-      text: "LAST NAME"
+      text: "TRANSACTION DATE"
     },
     {
       key: "sex",
-      text: "GENDER",
+      text: "CREATED BY",
     },
     {
-      key: "dateOfBirth",
-      text: "AGE",
+      key: "approved",
+      text: "APPROVED BY",
     },
     {
       key: "msisdn",
-      text: "PHONE NUMBER",
-    },
-    {
-      key: "memberID",
-      text: "MEMBER ID",
-    },
-    {
-      key: "mainCrop",
-      text: "MAIN CROP",
-      cell: (record, index) => {
-        return (record.mainCrop.name)
-      }
-    },
-    {
-      key: "createdAt",
-      text: "DATE REGISTERED",
-      sortable: true,
-      cell: (record, index) => {
-        return (this.formatDate(record.createdAt))
-      }
-    },
+      text: "AMCOS",
+    }, 
+    // {
+    //   key: "createdAt",
+    //   text: "DATE PAID",
+    //   sortable: true,
+    //   cell: (record, index) => {
+    //     return (this.formatDate(record.createdAt))
+    //   }
+    // },
     {
       key: "id",
       text: "ACTION",
@@ -141,13 +130,10 @@ class AdminWallet extends Component {
       <ContentWrapper>
         <div className="content-heading">
           <div className="mr-auto flex-row">
-            Farmers List
-            <small>Showing all farmers.</small>
+            MPESA Wallet
+            <small>Manage payments.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
-              <i className="fa fa-plus mr-2"></i>
-              Register Farmer </Button>
           </div>
         </div>
         <Container fluid>
