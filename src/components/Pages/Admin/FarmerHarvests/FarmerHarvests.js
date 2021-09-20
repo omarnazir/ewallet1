@@ -6,6 +6,7 @@ import Moment from 'moment'
 import ReactDatatable from '@ashvin27/react-datatable';
 import { AuthService, HarvestsService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
+import NumberFormat from 'react-number-format'
 
 class FarmersHarvests extends Component {
   state = {
@@ -106,14 +107,23 @@ class FarmersHarvests extends Component {
     {
       key: "weight",
       text: "WEIGHT",
+      cell:(record,index)=>{
+        return (<NumberFormat value={record.weight} displayType={'text'} thousandSeparator={true} prefix={''} />)
+      }
     },
     {
       key: "cropUnitPrice",
       text: "UNIT PRICE",
+      cell:(record,index)=>{
+        return (<NumberFormat value={record.cropUnitPrice} displayType={'text'} thousandSeparator={true} prefix={''} />)
+      }
     },
     {
       key: "cropsValue",
       text: "CROP VALUE",
+      cell:(record,index)=>{
+        return (<NumberFormat value={record.cropsValue} displayType={'text'} thousandSeparator={true} prefix={''} />)
+      }
     },
     // {
     //   key: "memberID",
@@ -130,7 +140,10 @@ class FarmersHarvests extends Component {
       key: "status",
       text: "STATUS",
       cell: (record, index) => {
-        return record.status;
+       
+          return (
+            <span className="badge badge-success">Received</span>
+          );
       }
     },
     {
