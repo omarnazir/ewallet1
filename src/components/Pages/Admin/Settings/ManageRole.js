@@ -180,7 +180,9 @@ handleSubmit = event => {
             <small>Manage roles in the system.</small>
           </div>
           <div className="flex-row">
-          <Button onClick={this.AddRoleMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add New Role</Button>
+          <Button onClick={this.AddRoleMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
+          <i className="fa fa-plus mr-2"></i>
+            Add New Role</Button>
 
           <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
               <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Role" : "Edit Role"}</ModalHeader>

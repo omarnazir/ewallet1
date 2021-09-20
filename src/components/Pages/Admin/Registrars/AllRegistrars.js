@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React, { Component,Fragment } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
 import Moment from 'moment'
 import ReactDatatable from '@ashvin27/react-datatable';
-import { AuthService, FarmersService } from '../../../../services';
+import { AuthService, FarmersService,RegistarService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
 
-class AdminWallet extends Component {
+class AllRegistars extends Component {
   state = {
     farmersList: []
   };
@@ -18,9 +18,9 @@ class AdminWallet extends Component {
       this.setState({ redirect: "/login" })
     }
 
-    // FarmersService.getAllFarmers().then(res => {
-    //   this.setState({ farmersList: res.data })
-    // })
+    RegistarService.getAllRegistars().then(res => {
+      this.setState({ farmersList: res.data })
+    })
   }
 
   formatDate = (date) => {
@@ -54,6 +54,11 @@ class AdminWallet extends Component {
     }
   }
 
+   ucFirst=(str)=> {
+    if (!str) return str;
+    if(str.trim()=="undefined") return "";
+    return str[0].toUpperCase() + str.slice(1);
+  }
 
 
 
@@ -67,55 +72,47 @@ class AdminWallet extends Component {
       }
     },
     {
-      key: "firstName",
-      text: "AMOUNT"
-    },
-    {
-      key: "middleName",
-      text: "TYPE"
-    },
-    {
-      key: "surname",
-      text: "TRANSACTION DATE"
-    },
-    {
-      key: "sex",
-      text: "CREATED BY",
-    },
-    {
-      key: "approved",
-      text: "APPROVED BY",
+      key: "name",
+      text: "FULL NAME"
     },
     {
       key: "msisdn",
-      text: "AMCOS",
-    }, 
-    // {
-    //   key: "createdAt",
-    //   text: "DATE PAID",
-    //   sortable: true,
-    //   cell: (record, index) => {
-    //     return (this.formatDate(record.createdAt))
-    //   }
-    // },
+      text: "PHONE NUMBER"
+    },
     {
-      key: "id",
-      text: "ACTION",
+      key: "address",
+      text: "ADDRESS"
+    },
+    {
+        key: "status",
+        text: "STATUS",
+        cell: (record, index) => {
+         
+            return (
+              <span className="badge badge-success">Active</span>
+            );
+        }
+      },
+    {
+      key: "dateCreated",
+      text: "DATE REGISTERED",
+      sortable: true,
       cell: (record, index) => {
-        return (
-          <Button style={{
-            color: 'white',
-            background: "#003366"
-          }} className="btn btn-success"
-            onClick={() => {
-              this.ViewCustomerDetails(record);
-            }}
-          >
-            <i className="fa fa-eye"></i>
-          </Button>
-        );
+        return (this.formatDate(record.dateCreated))
       }
-    }
+    },
+    {
+        key: "id",
+        text: "ACTION",
+        cell: (record, index) => {
+          return (
+            <Fragment>
+              <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+              <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            </Fragment>
+          )
+        }
+      }
 
   ];
 
@@ -130,10 +127,13 @@ class AdminWallet extends Component {
       <ContentWrapper>
         <div className="content-heading">
           <div className="mr-auto flex-row">
-            MPESA Wallet
-            <small>Manage payments.</small>
+            Registars
+            <small>Showing all registars.</small>
           </div>
           <div className="flex-row">
+            <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
+              <i className="fa fa-plus mr-2"></i>
+              Add New Registar </Button>
           </div>
         </div>
         <Container fluid>
@@ -157,4 +157,4 @@ class AdminWallet extends Component {
   }
 }
 
-export default AdminWallet;
+export default AllRegistars;

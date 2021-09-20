@@ -168,7 +168,7 @@ class MobileOperator extends Component {
 
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Mobile operator
+                        Mobile Operator
             <small>Showing all mobile operators.</small>
                     </div>
                     <div className="flex-row">

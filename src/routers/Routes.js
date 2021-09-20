@@ -66,6 +66,9 @@ import ManageDistricts from '../components/Pages/Admin/SystemSetup/ManageDistric
 import ManageWards from '../components/Pages/Admin/SystemSetup/ManageWards';
 import ManageVillage from '../components/Pages/Admin/SystemSetup/ManageVillage';
 import ManageCollectionCenter from '../components/Pages/Admin/SystemSetup/ManageCollectionCenter';
+import AllRegistars from '../components/Pages/Admin/Registrars/AllRegistrars';
+import ManageAmcosPrice from '../components/Pages/Admin/SystemSetup/ManageCropPrice';
+import ManageCropPrice from '../components/Pages/Admin/SystemSetup/ManageCropPrice';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -111,11 +114,13 @@ const Routes = ({ location }) => {
                         <div>
                             <Suspense fallback={<PageLoader />}>
                                 <Switch location={location}>
+                                    {/* Admin */}
                                     <Route path="/admin-dashboard" component={waitFor(Dashboard)} />
                                     <Route path="/admin-farmers-list" component={waitFor(AllFarmers)} />
                                     <Route path="/admin-farmers-harvests" component={waitFor(FarmersHarvests)}/>
                                     <Route path="/admin-mpesa-wallet" component={waitFor(AdminWallet)}/>
                                     <Route path="/admin-ussd-menu" component={waitFor(UssdMenu)}/>
+                                    <Route path="/admin-manage-registars" component={waitFor(AllRegistars)}/>
 
                                    {/* System Setup */}
                                    <Route path="/admin-crops" component={waitFor(ManageCrop)}/>
@@ -125,9 +130,16 @@ const Routes = ({ location }) => {
                                    <Route path="/admin-manage-wards" component={waitFor(ManageWards)}/>
                                    <Route path="/admin-manage-villages" component={waitFor(ManageVillage)}/>
                                    <Route path="/admin-collection-centers" component={waitFor(ManageCollectionCenter)}/>
+                                   <Route path="/admin-crop-price" component={waitFor(ManageCropPrice)}/>
 
-                                    <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
+                                   {/* System Settings */}
+                                   <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
+                                    <Route path="/admin-manage-roles" component={waitFor(ManageRole)}/>
+                                    <Route path="/admin-manage-smsc" component={waitFor(ManageSmsc)}/>
                                     <Route path="/admin-sms-log" component={waitFor(SmsLogs)} />
+                                    <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
+
+
 
                                     <Route path="/admin-customers-list" component={waitFor(CustomerList)} />
                                     <Route path="/admin-customers-details/:id" component={waitFor(CustomerDetails)}/>
@@ -151,9 +163,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-self-edit/:id" component={waitFor(EditSelfManage)}/>
                                     <Route path="/admin-restricted-words" component={waitFor(RestrictedWords)} />
                                     <Route path="/admin-reserved-numbers" component={waitFor(ReservedNumbers)} />
-                                    <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
-                                    <Route path="/admin-manage-roles" component={waitFor(ManageRole)}/>
-                                    <Route path="/admin-manage-smsc" component={waitFor(ManageSmsc)}/>
+                                 
                                     <Route path="/admin-account-expiration" component={waitFor(UserAccountExpiration)}/>
                                     
                                     <Route path="/admin-invoices/:id" component={waitFor(Invoices)} />

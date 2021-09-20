@@ -61,7 +61,7 @@ const Menu = [
                 name: 'Crop Prices',
                 icon: "icon-arrow-right",
                 translate: 'Crop Prices',
-                path: '/crop-prices'
+                path: '/admin-crop-price'
             },
             {
                 name: 'Agricultural Inputs',
@@ -75,14 +75,12 @@ const Menu = [
                 translate: 'MCU',
                 path: '/mcos'
             },
-
             {
                 name: 'AMCOS',
                 icon: "icon-arrow-right",
                 translate: 'AMCOS',
                 path: '/amcos',
             },
-
             {
                 name: 'Collection Centers',
                 icon: "icon-arrow-right",
@@ -129,13 +127,13 @@ const Menu = [
                 name: 'Roles',
                 icon: "icon-arrow-right",
                 translate: 'sidebar.nav.setup.CROPS',
-                path: '/crops'
+                path: '/admin-manage-roles'
             },
             {
                 name: 'Mobile Operators',
                 icon: "icon-arrow-right",
                 translate: 'Crop Prices',
-                path: '/crop-prices'
+                path: '/admin-mobile-operators'
             },
             {
                 name:"Manage SMSC",

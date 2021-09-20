@@ -212,12 +212,12 @@ config = {
         <div className="content-heading">
           <div className="mr-auto flex-row">
             Manage User
-            <small>Showing all post paid customers.</small>
+            <small>Showing all users.</small>
           </div>
           <div className="flex-row">
-          <Button onClick={this.ViewAccountExpiration} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
+          {/* <Button onClick={this.ViewAccountExpiration} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
               <i className="fa fa-clock mr-2"></i>
-              Manage Account Expiration</Button>
+              Manage Account Expiration</Button> */}
             <Button onClick={this.AddNewUser} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
               Add User</Button>
