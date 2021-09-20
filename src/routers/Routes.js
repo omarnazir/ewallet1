@@ -66,6 +66,7 @@ import ManageDistricts from '../components/Pages/Admin/SystemSetup/ManageDistric
 import ManageWards from '../components/Pages/Admin/SystemSetup/ManageWards';
 import ManageVillage from '../components/Pages/Admin/SystemSetup/ManageVillage';
 import ManageCollectionCenter from '../components/Pages/Admin/SystemSetup/ManageCollectionCenter';
+import AllRegistars from '../components/Pages/Admin/Registrars/AllRegistrars';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -116,6 +117,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-farmers-harvests" component={waitFor(FarmersHarvests)}/>
                                     <Route path="/admin-mpesa-wallet" component={waitFor(AdminWallet)}/>
                                     <Route path="/admin-ussd-menu" component={waitFor(UssdMenu)}/>
+                                    <Route path="/admin-manage-registars" component={waitFor(AllRegistars)}/>
 
                                    {/* System Setup */}
                                    <Route path="/admin-crops" component={waitFor(ManageCrop)}/>
