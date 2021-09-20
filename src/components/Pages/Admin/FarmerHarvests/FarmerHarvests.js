@@ -18,9 +18,9 @@ class FarmersHarvests extends Component {
       this.setState({ redirect: "/login" })
     }
 
-    // HarvestsService.getAllFarmersHarvests().then(res => {
-    //   this.setState({ harvestsList: res.data })
-    // })
+    HarvestsService.getAllFarmersHarvests().then(res => {
+      this.setState({ harvestsList: res.data })
+    })
   }
 
   formatDate = (date) => {
@@ -30,6 +30,12 @@ class FarmersHarvests extends Component {
   ViewCustomerDetails = (row) => {
     console.log(row.id)
     return this.props.history.push('/admin-customers-details/' + row.id, row)
+  }
+
+  ucFirst=(str)=> {
+    if (!str) return str;
+    if(str.trim()=="undefined") return "";
+    return str[0].toUpperCase() + str.slice(1);
   }
 
 
@@ -68,63 +74,71 @@ class FarmersHarvests extends Component {
     },
     {
       key: "farmer",
-      text: "FULL NAME"
+      text: "FULL NAME",
+      cell: (record, index) => {
+        const firstName=record.farmer.firstName;
+        const middleName=record.farmer.middleName=="undefined"?" ":record.farmer.middleName;
+        const lastName=record.farmer.surname;
+        // return (record.firstName +" "+record.middleName+" "+record.surname)
+        return this.ucFirst(firstName)+" "+this.ucFirst(middleName)+" "+this.ucFirst(lastName);
+        // return this.ucFirst(record.firstName)
+      }
     },
+    // {
+    //   key: "middleName",
+    //   text: "MIDDLE NAME"
+    // },
+    // {
+    //   key: "surname",
+    //   text: "LAST NAME"
+    // },
     {
-      key: "middleName",
-      text: "MIDDLE NAME"
-    },
-    {
-      key: "surname",
-      text: "LAST NAME"
-    },
-    {
-      key: "sex",
-      text: "GENDER",
-    },
-    {
-      key: "dateOfBirth",
-      text: "AGE",
-    },
-    {
-      key: "msisdn",
+      key: "farmerMsisdn",
       text: "PHONE NUMBER",
     },
     {
-      key: "memberID",
-      text: "MEMBER ID",
-    },
-    {
       key: "crop",
-      text: "MAIN CROP",
+      text: "CROP",
       cell: (record, index) => {
-        return (record.crop.name)
+        return record.crop.name;
       }
     },
     {
-      key: "createdAt",
-      text: "DATE REGISTERED",
+      key: "weight",
+      text: "WEIGHT",
+    },
+    {
+      key: "cropUnitPrice",
+      text: "UNIT PRICE",
+    },
+    {
+      key: "cropsValue",
+      text: "CROP VALUE",
+    },
+    // {
+    //   key: "memberID",
+    //   text: "AMCOS",
+    // },
+    {
+      key: "collectionCenter",
+      text: "COLLECTION CENTER",
+      cell: (record, index) => {
+        return record.collectionCenter.name;
+      }
+    },
+    {
+      key: "status",
+      text: "STATUS",
+      cell: (record, index) => {
+        return record.status;
+      }
+    },
+    {
+      key: "date",
+      text: "RECEIVED AT",
       sortable: true,
       cell: (record, index) => {
-        return (this.formatDate(record.createdAt))
-      }
-    },
-    {
-      key: "id",
-      text: "ACTION",
-      cell: (record, index) => {
-        return (
-          <Button style={{
-            color: 'white',
-            background: "#003366"
-          }} className="btn btn-success"
-            onClick={() => {
-              this.ViewCustomerDetails(record);
-            }}
-          >
-            <i className="fa fa-eye"></i>
-          </Button>
-        );
+        return (this.formatDate(record.date))
       }
     }
 
