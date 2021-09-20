@@ -10,10 +10,12 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
+import {showAlert} from "../../../Common/SweetAlert";
 
 class ManageRegion extends Component {
     state = {
         regionsList: [],
+        loading:true,
         modal: false,
         mode: true,
         editedRegion: {
@@ -21,28 +23,27 @@ class ManageRegion extends Component {
             name: ""
         },
         region: {
-            word: ""
+            name: ""
         }
     };
 
     initialState = {
         region: {
             id:0,
-            word: ""
+            name: ""
         }
     }
 
 
     componentDidMount() {
-        this.getAllReservedWords();
+        this.getAllRegions();
     }
 
-    getAllReservedWords() {
+    getAllRegions() {
         axios.get("/regions")
             .then(res => {
-                const regionsList = res.data;
-                this.setState({ regionsList })
-
+                this.setState({loading:false})
+                this.setState({ regionsList:res.data })
             })
     }
 
@@ -78,7 +79,7 @@ class ManageRegion extends Component {
         show_filter: true,
         show_pagination: true,
         pagination: 'advance',
-        filename: "Contact List",
+        filename: "Regions List",
         button: {
 
         },
@@ -117,25 +118,24 @@ class ManageRegion extends Component {
     }
 
     EditRegion(row) {
-        console.log(row)
-        const editedRestricted = {
+        const editedRegion = {
             id:row.id,
-            word: row.word
+            name: row.name
         }
-
-        this.setState({ editedRestricted })
+        this.setState({ editedRegion})
         this.setState({ mode: false })
         this.toggleModal();
     }
 
     DeleteRegion(id) {
-        axios.delete("/reserved-words/" + id)
+        axios.delete("/regions/" + id)
             .then(res => {
                 const response = res.data;
                 const regionsList = this.state.regionsList.filter((item) => {
                     return item.id !== id;
                 });
                 this.setState({ regionsList })
+                showAlert("Deleted Region Sucessfully")
             })
     }
 
@@ -147,15 +147,16 @@ class ManageRegion extends Component {
             console.log("Add mode")
             axios.post("/regions", this.state.region).then(res => {
                 console.log(res.data);
-                this.getAllReservedWords();
+                this.getAllRegions();
                 this.setState({ region: this.initialState.region })
+                showAlert("Added Region Successfully")
             })
         } else {
             console.log("Edit mode")
             axios.put("/regions", this.state.editedRegion).then(res => {
                 console.log(res.data);
-                this.getAllReservedWords();
-
+                this.getAllRegions();
+                showAlert("Updated Region Successfully")
             })
         }
     }
@@ -203,6 +204,7 @@ class ManageRegion extends Component {
                                 config={this.config}
                                 records={this.state.regionsList}
                                 columns={this.columns}
+                                loading={this.state.loading}
                             />
                         </CardBody>
                     </Card>
