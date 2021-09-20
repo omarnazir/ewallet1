@@ -54,6 +54,11 @@ class AllFarmers extends Component {
     }
   }
 
+   ucFirst=(str)=> {
+    if (!str) return str;
+    if(str.trim()=="undefined") return "";
+    return str[0].toUpperCase() + str.slice(1);
+  }
 
 
 
@@ -68,16 +73,23 @@ class AllFarmers extends Component {
     },
     {
       key: "firstName",
-      text: "FIRST NAME"
+      text: "FULL NAME",
+      cell: (record, index) => {
+        const firstName=record.firstName;
+        const middleName=record.middleName=="undefined"?" ":record.middleName;
+        const lastName=record.surname;
+        // return (record.firstName +" "+record.middleName+" "+record.surname)
+        return this.ucFirst(firstName)+" "+this.ucFirst(middleName)+" "+this.ucFirst(lastName);
+      }
     },
-    {
-      key: "middleName",
-      text: "MIDDLE NAME"
-    },
-    {
-      key: "surname",
-      text: "LAST NAME"
-    },
+    // {
+    //   key: "middleName",
+    //   text: "MIDDLE NAME"
+    // },
+    // {
+    //   key: "surname",
+    //   text: "LAST NAME"
+    // },
     {
       key: "sex",
       text: "GENDER",

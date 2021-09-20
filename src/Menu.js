@@ -49,7 +49,13 @@ const Menu = [
                 name: 'Crops',
                 icon: "icon-arrow-right",
                 translate: 'sidebar.nav.setup.CROPS',
-                path: '/crops'
+                path: '/admin-crops'
+            },
+            {
+                name: 'Crop Type',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.CROPS',
+                path: '/admin-crop-types'
             },
             {
                 name: 'Crop Prices',
@@ -63,7 +69,6 @@ const Menu = [
                 translate: 'sidebar.nav.setup.INPUTS',
                 path: '/inputs'
             },
-
             {
                 name: 'MCU',
                 icon: "icon-arrow-right",
@@ -82,35 +87,35 @@ const Menu = [
                 name: 'Collection Centers',
                 icon: "icon-arrow-right",
                 translate: 'sidebar.nav.setup.CENTRES',
-                path: '/centers'
+                path: '/admin-collection-centers'
             },
 
             {
                 name: 'Regions',
                 icon: "icon-arrow-right",
                 translate: 'sidebar.nav.setup.REGIONS',
-                path: '/regions'
+                path: '/admin-manage-regions'
             },
 
             {
                 name: 'Districts',
                 icon: "icon-arrow-right",
                 translate: 'sidebar.nav.setup.DISTRICTS',
-                path: '/districts'
+                path: '/admin-manage-districts'
             },
 
             {
                 name: 'Wards',
                 icon: "icon-arrow-right",
                 translate: 'sidebar.nav.setup.WARDS',
-                path: '/wards'
+                path: '/admin-manage-wards'
             },
 
             {
                 name: 'Villages',
                 icon: "icon-arrow-right",
                 translate: 'sidebar.nav.setup.VILLAGES',
-                path: '/villages'
+                path: '/admin-manage-villages'
             },
         ]
     },
