@@ -16,6 +16,7 @@ class ManageVillage extends Component {
         regionsList: [],
         modal: false,
         mode: true,
+        loading:true,
         editedRegion: {
             id:0,
             name: ""
@@ -41,6 +42,7 @@ class ManageVillage extends Component {
         axios.get("/villages")
             .then(res => {
                 const regionsList = res.data;
+                this.setState({loading:false})
                 this.setState({ regionsList })
 
             })
@@ -224,6 +226,7 @@ class ManageVillage extends Component {
                                 config={this.config}
                                 records={this.state.regionsList}
                                 columns={this.columns}
+                                loading={this.state.loading}
                             />
                         </CardBody>
                     </Card>

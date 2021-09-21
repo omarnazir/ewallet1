@@ -15,6 +15,7 @@ class ManageRole extends Component {
     roles:[],
     modal: false,
     mode: true,
+    loading:true,
     editedRole:{
       id:0,
       name:"",
@@ -43,6 +44,7 @@ getAllRoles(){
   axios.get("/roles")
   .then(res => {
       const roles = res.data;
+      this.setState({loading:false})
       this.setState({ roles })
      
   })
@@ -233,6 +235,7 @@ handleSubmit = event => {
                 config={this.config}
                 records={this.state.roles}
                 columns={this.columns}
+                loading={this.state.loading}
               />
             </CardBody>
           </Card>
