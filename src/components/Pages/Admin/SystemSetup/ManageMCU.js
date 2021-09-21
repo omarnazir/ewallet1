@@ -10,60 +10,56 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
-import { CropsService, CropsTypeService } from "../../../../services";
+
 
 class ManageMCU extends Component {
     state = {
-        crops: [],
         modal: false,
         mode: true,
         loading: true,
-        editedCrop: {
+        editedMco: {
             id: 0,
             name: "",
-            cropType: 0
+            regionId: 0
         },
-        crop: {
+        mco: {
             name: "",
-            cropType: 0
+            regionId: 0
         },
-        cropTypeList: []
+        mcosList: [],
+        regionsList:[]
     };
 
     initialState = {
-        crop: {
+        mco: {
             name: "",
-            cropType: 0
+            regionId: 0
         }
     }
 
     componentDidMount() {
-        this.getAllMCUS();
+        this.getAllMCOS();
+        this.getAllRegions();
     }
 
-    getAllMCUS() {
+    getAllMCOS() {
         axios.get("/mcos")
             .then(res => {
                 this.setState({ loading: false })
-                this.setState({ crops: res.data })
+                this.setState({ mcosList: res.data })
 
             })
     }
 
-    getAllCrops() {
-        CropsService.getAllCrops().then(res => {
-            const crops = res.data;
-            this.setState({ loading: false })
-            this.setState({ crops })
-
-        })
+    getAllRegions() {
+        axios.get("/regions")
+            .then(res => {
+                this.setState({ loading: false })
+                this.setState({ regionsList: res.data })
+            })
     }
 
-    getAllCropTypes() {
-        CropsTypeService.getAllCropTypes().then(res => {
-            this.setState({ cropTypeList: res.data })
-        })
-    }
+   
 
     toggleModal = () => {
         this.setState({
@@ -78,26 +74,24 @@ class ManageMCU extends Component {
 
     EditRole(row) {
         console.log(row)
-        const cropType = row.cropType == null ? 0 : Number(row.cropType.id);
-        const editedCrop = {
+        const editedMco = {
             id: row.id,
-            name: row.name,
-            cropType
+            name:row.name,
+            regionId: row.region.id
         }
-        this.setState({ editedCrop })
+        this.setState({ editedMco })
         this.setState({ mode: false })
         this.toggleModal();
     }
 
 
     DeleteRole(id) {
-        axios.delete("/crops/" + id)
+        axios.delete("/mcos/" + id)
             .then(res => {
-                const response = res.data;
-                const crops = this.state.crops.filter((item) => {
+                const mcosList = this.state.mcosList.filter((item) => {
                     return item.id !== id;
                 });
-                this.setState({ crops })
+                this.setState({ mcosList })
             })
     }
 
@@ -105,12 +99,12 @@ class ManageMCU extends Component {
     handleChange = event => {
         if (this.state.mode) {
             this.setState({
-                crop: Object.assign({},
-                    this.state.crop, { [event.target.name]: event.target.value })
+                mco: Object.assign({},
+                    this.state.mco, { [event.target.name]: event.target.value })
             })
         } else {
             this.setState({
-                editedCrop: Object.assign({}, this.state.editedCrop,
+                editedMco: Object.assign({}, this.state.editedMco,
                     { [event.target.name]: event.target.value })
             })
         }
@@ -123,17 +117,17 @@ class ManageMCU extends Component {
         this.toggleModal();
         if (this.state.mode) {
             console.log("Add mode")
-            axios.post("/crops", this.state.crop).then(res => {
+            axios.post("/mcos", this.state.mco).then(res => {
                 console.log(res.data);
-                this.getAllCrops();
-                this.setState({ crop: this.initialState.crop })
+                this.getAllMCOS();
+                this.setState({ mco: this.initialState.mco })
             })
         } else {
             console.log("Edit mode")
-            console.log(this.state.editedCrop);
-            axios.put("/crops", this.state.editedCrop).then(res => {
+            console.log(this.state.editedMco);
+            axios.put("/mcos", this.state.editedMco).then(res => {
                 console.log(res.data);
-                this.getAllCrops();
+                this.getAllMCOS();
             })
         }
     }
@@ -217,23 +211,23 @@ class ManageMCU extends Component {
                             Add New MCU</Button>
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Crop" : "Edit Crop"}</ModalHeader>
+                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add MCU" : "Edit MCU"}</ModalHeader>
                             <form onSubmit={this.handleSubmit}>
                                 <ModalBody>
                                     <FormGroup>
                                         <label>Name :</label>
                                         <input className="form-control" name="name"
-                                            value={this.state.mode ? this.state.crop.name : this.state.editedCrop.name}
+                                            value={this.state.mode ? this.state.mco.name : this.state.editedMco.name}
                                             onChange={this.handleChange} type="text" required></input>
                                     </FormGroup>
                                     <div className="form-group">
-                                        <label htmlFor="exampleFormControlSelect1">Crop Type : </label>
-                                        <select className="form-control" id="exampleFormControlSelect1" name="cropType"
+                                        <label htmlFor="exampleFormControlSelect1">Region : </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="regionId"
                                             onChange={this.handleChange}
-                                            value={this.state.mode ? this.state.crop.cropType : this.state.editedCrop.cropType}
+                                            value={this.state.mode ? this.state.mco.regionId : this.state.editedMco.regionId}
                                         >
                                             <option value="0">Select type</option>
-                                            {this.state.cropTypeList.map(row => (
+                                            {this.state.regionsList.map(row => (
                                                 <option key={row.id} value={row.id} >
                                                     {row.name}
                                                 </option>
@@ -259,7 +253,7 @@ class ManageMCU extends Component {
                             <ReactDatatable
                                 extraButtons={this.extraButtons}
                                 config={this.config}
-                                records={this.state.crops}
+                                records={this.state.mcosList}
                                 columns={this.columns}
                                 loading={this.state.loading}
                             />

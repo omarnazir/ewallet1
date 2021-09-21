@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
-import { CropsService, CropsTypeService } from "../../../../services";
+import { CropsService,CropsTypeService } from "../../../../services";
 
 class ManageAmcos extends Component {
     state = {
@@ -70,6 +70,10 @@ class ManageAmcos extends Component {
             modal: !this.state.modal
         });
     }
+
+    AddAmcos=()=>{
+        return this.props.history.push("/admin-add-amcos");
+      }
 
     AddRoleMode = () => {
         this.setState({ mode: true })
@@ -220,43 +224,9 @@ class ManageAmcos extends Component {
                         <small>Manage Amcos.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.AddRoleMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
+                        <Button onClick={this.AddAmcos} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
                             <i className="fa fa-plus mr-2"></i>
                             Add New Amcos</Button>
-
-                        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Crop" : "Edit Crop"}</ModalHeader>
-                            <form onSubmit={this.handleSubmit}>
-                                <ModalBody>
-                                    <FormGroup>
-                                        <label>Name :</label>
-                                        <input className="form-control" name="name"
-                                            value={this.state.mode ? this.state.crop.name : this.state.editedCrop.name}
-                                            onChange={this.handleChange} type="text" required></input>
-                                    </FormGroup>
-                                    <div className="form-group">
-                                        <label htmlFor="exampleFormControlSelect1">Crop Type : </label>
-                                        <select className="form-control" id="exampleFormControlSelect1" name="cropType"
-                                            onChange={this.handleChange}
-                                            value={this.state.mode ? this.state.crop.cropType : this.state.editedCrop.cropType}
-                                        >
-                                            <option value="0">Select type</option>
-                                            {this.state.cropTypeList.map(row => (
-                                                <option key={row.id} value={row.id} >
-                                                    {row.name}
-                                                </option>
-                                            ))}
-
-                                        </select>
-                                    </div>
-                                </ModalBody>
-                                <ModalFooter>
-                                    <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
-                                        Save
-                                    </button>
-                                </ModalFooter>
-                            </form>
-                        </Modal>
                     </div>
                 </div>
                 <Container fluid>
