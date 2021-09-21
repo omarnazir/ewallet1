@@ -5,4 +5,5 @@ export {default as FarmersService} from "./farmers.service";
 export {default as HarvestsService} from "./harvests.service";
 export {default as UssdMenuService} from "./ussdMenu.service";
 export {default as CropsService} from "./SystemSetup/crops.service";
+export {default as CropsTypeService} from "./SystemSetup/cropsType.service";
 export {default as RegistarService} from "./registar.service";

@@ -8,28 +8,25 @@ import { Container, Card, CardHeader, CardBody, CardTitle, Button, Modal,
   ModalFooter, } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
-import { CropsService } from "../../../../services";
+import { CropsTypeService } from "../../../../services";
 
 class ManageCropType extends Component {
   state = {
     crops:[],
     modal: false,
     mode: true,
-    editedRole:{
+    loading:true,
+    editedCropType:{
       id:0,
-      name:"",
-      description:"",
-      type:""
+      name:""
     },
-    role:{
-      name:"",
-      description:"",
-      type:""
+    cropType:{
+      name:""
     }
   };
 
   initialState={
-    role:{
+    cropType:{
       name:"",
       description:"",
       type:""
@@ -37,12 +34,12 @@ class ManageCropType extends Component {
   }
 
   componentDidMount(){
-   this.getAllCrops();
+   this.getAllCropTypes();
 }
-getAllCrops(){
-    CropsService.getAllCrops().then(res => {
-      const crops = res.data;
-      this.setState({ crops })
+getAllCropTypes(){
+  CropsTypeService.getAllCropTypes().then(res => {
+      this.setState({loading:false})
+      this.setState({ crops:res.data })
      
   })
 }
@@ -60,13 +57,13 @@ AddRoleMode = () => {
 
 EditRole(row) {
   console.log(row)
-  const editedRole={
+  const editedCropType={
     id:row.id,
     name:row.name,
     description:row.description,
     type:row.type
    }
-   this.setState({editedRole})
+   this.setState({editedCropType})
    this.setState({ mode: false })
    this.toggleModal();
  }
@@ -86,10 +83,10 @@ EditRole(row) {
 
  handleChange = event => {       
   if(this.state.mode){
-  this.setState({role:Object.assign({},
-      this.state.role,{[event.target.name]:event.target.value})})
+  this.setState({cropType:Object.assign({},
+      this.state.cropType,{[event.target.name]:event.target.value})})
   }else {
-      this.setState({editedRole:Object.assign({},this.state.editedRole,
+      this.setState({editedCropType:Object.assign({},this.state.editedCropType,
           {[event.target.name]:event.target.value})})
   }
 }
@@ -101,16 +98,16 @@ handleSubmit = event => {
   this.toggleModal();
   if (this.state.mode) {
     console.log("Add mode")
-    axios.post("/crops",this.state.role ).then(res => {
+    axios.post("/crop-types",this.state.cropType ).then(res => {
       console.log(res.data);
-      this.getAllcrops();
-      this.setState({role:this.initialState.role})
+      this.getAllCropTypes();
+      this.setState({cropType:this.initialState.cropType})
     })
   } else {
     console.log("Edit mode")
-    axios.put("/crops",this.state.editedRole).then(res => {
+    axios.put("/crop-types",this.state.editedCropType).then(res => {
       console.log(res.data);
-      this.getAllcrops();
+      this.getAllCropTypes();
 
     })
   }
@@ -127,10 +124,6 @@ handleSubmit = event => {
     {
       key: "name",
       text: "NAME"
-    },
-    {
-      key: "type",
-      text: "TYPE"
     },
     {
       key: "id",
@@ -177,37 +170,18 @@ handleSubmit = event => {
           <div className="flex-row">
           <Button onClick={this.AddRoleMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
           <i className="fa fa-plus mr-2"></i>
-              Add Crop</Button>
+              Add Crop Type</Button>
 
           <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-              <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Role" : "Edit Role"}</ModalHeader>
+              <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Crop Type" : "Edit Crop Type"}</ModalHeader>
               <form onSubmit={this.handleSubmit}>
                 <ModalBody>
                   <FormGroup>
-                    <label>Role Name :</label>
+                    <label>Name :</label>
                     <input className="form-control" name="name"
-                    value={this.state.mode? this.state.role.name:this.state.editedRole.name}
+                    value={this.state.mode? this.state.cropType.name:this.state.editedCropType.name}
                      onChange={this.handleChange} type="text" required></input>
                   </FormGroup>
-
-                  <FormGroup>
-                    <label>Description :</label>
-                    <input className="form-control" name="description"
-                    value={this.state.mode? this.state.role.description:this.state.editedRole.description}
-                     onChange={this.handleChange} type="text" required></input>
-                  </FormGroup>
-                  <div className="form-group">
-                    <label htmlFor="exampleFormControlSelect1">Role Type : </label>
-                    <select className="form-control" id="exampleFormControlSelect1" name="type"
-                      onChange={this.handleChange}
-                      value={this.state.mode? this.state.role.type:this.state.editedRole.type}
-                    >
-                      <option value="0">Select role</option>
-                      <option value="Admin">Admin</option>
-                      <option value="Customer_Admin">Customer Admin</option>
-                      <option value="User">Normal User</option>
-                    </select>
-                  </div>
                 </ModalBody>
                 <ModalFooter>
                   <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
@@ -228,6 +202,7 @@ handleSubmit = event => {
                 config={this.config}
                 records={this.state.crops}
                 columns={this.columns}
+                loading={this.state.loading}
               />
             </CardBody>
           </Card>
