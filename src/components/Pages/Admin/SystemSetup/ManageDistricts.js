@@ -13,37 +13,49 @@ import { Fragment } from "react";
 
 class ManageDistricts extends Component {
     state = {
+        districtsList: [],
         regionsList: [],
         modal: false,
         mode: true,
-        loading:true,
-        editedRegion: {
-            id:0,
-            name: ""
+        loading: true,
+        editedDistrict: {
+            id: 0,
+            name: "",
+            regionId: 0
         },
-        region: {
-            word: ""
+        district: {
+            name: "",
+            regionId: 0
         }
     };
 
     initialState = {
-        region: {
-            id:0,
-            word: ""
+        district: {
+            name: "",
+            regionId: 0
         }
     }
 
 
     componentDidMount() {
-        this.getAllReservedWords();
+        this.getAllDistricts();
+        this.getAllRegions();
     }
 
-    getAllReservedWords() {
+    getAllDistricts() {
         axios.get("/districts")
             .then(res => {
-                const regionsList = res.data;
-                this.setState({loading:false})
-                this.setState({ regionsList })
+                const districtsList = res.data;
+                this.setState({ loading: false })
+                this.setState({ districtsList })
+
+            })
+    }
+
+    getAllRegions() {
+        axios.get("/regions")
+            .then(res => {
+                this.setState({ regionsList: res.data })
 
             })
     }
@@ -73,8 +85,8 @@ class ManageDistricts extends Component {
             cell: (record, index) => {
                 return (
                     <Fragment>
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRegion(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegion(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditDistrict(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteDistrict(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
@@ -114,37 +126,38 @@ class ManageDistricts extends Component {
     handleChange = event => {
         if (this.state.mode) {
             this.setState({
-                region: Object.assign({},
-                    this.state.region, { [event.target.name]: event.target.value })
+                district: Object.assign({},
+                    this.state.district, { [event.target.name]: event.target.value })
             })
         } else {
             this.setState({
-                editedRegion: Object.assign({}, this.state.editedRegion,
+                editedDistrict: Object.assign({}, this.state.editedDistrict,
                     { [event.target.name]: event.target.value })
             })
         }
     }
 
-    EditRegion(row) {
+    EditDistrict(row) {
         console.log(row)
-        const editedRestricted = {
-            id:row.id,
-            word: row.word
-        }
 
-        this.setState({ editedRestricted })
+        const editedDistrict = {
+            id: row.id,
+            name: row.name,
+            regionId: row.region.id
+        }
+        this.setState({ editedDistrict })
         this.setState({ mode: false })
         this.toggleModal();
     }
 
-    DeleteRegion(id) {
-        axios.delete("/reserved-words/" + id)
+    DeleteDistrict(id) {
+        axios.delete("/districts/" + id)
             .then(res => {
                 const response = res.data;
-                const regionsList = this.state.regionsList.filter((item) => {
+                const districtsList = this.state.districtsList.filter((item) => {
                     return item.id !== id;
                 });
-                this.setState({ regionsList })
+                this.setState({ districtsList })
             })
     }
 
@@ -154,16 +167,16 @@ class ManageDistricts extends Component {
         this.toggleModal();
         if (this.state.mode) {
             console.log("Add mode")
-            axios.post("/regions", this.state.region).then(res => {
+            axios.post("/districts", this.state.district).then(res => {
                 console.log(res.data);
-                this.getAllReservedWords();
+                this.getAllDistricts();
                 this.setState({ region: this.initialState.region })
             })
         } else {
             console.log("Edit mode")
-            axios.put("/regions", this.state.editedRegion).then(res => {
+            axios.put("/districts", this.state.editedDistrict).then(res => {
                 console.log(res.data);
-                this.getAllReservedWords();
+                this.getAllDistricts();
 
             })
         }
@@ -179,7 +192,7 @@ class ManageDistricts extends Component {
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.AddWordMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
-                        <i className="fa fa-plus mr-2"></i>
+                            <i className="fa fa-plus mr-2"></i>
                             Add District</Button>
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
@@ -187,10 +200,25 @@ class ManageDistricts extends Component {
                             <form onSubmit={this.handleSubmit}>
                                 <ModalBody>
                                     <FormGroup>
-                                        <label>Name :</label>
+                                        <label>District Name :</label>
                                         <input className="form-control" name="name"
-                                            value={this.state.mode ? this.state.region.name : this.state.editedRegion.name}
+                                            value={this.state.mode ? this.state.district.name : this.state.editedDistrict.name}
                                             onChange={this.handleChange} type="text" required></input>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label htmlFor="exampleFormControlSelect1">Region : </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="regionId"
+                                            onChange={this.handleChange}
+                                            value={this.state.mode ? this.state.district.regionId : this.state.editedDistrict.regionId}
+                                        >
+                                            <option value="0">Select type</option>
+                                            {this.state.regionsList.map(row => (
+                                                <option key={row.id} value={row.id} >
+                                                    {row.name}
+                                                </option>
+                                            ))}
+
+                                        </select>
                                     </FormGroup>
                                 </ModalBody>
                                 <ModalFooter>
@@ -210,7 +238,7 @@ class ManageDistricts extends Component {
                             <ReactDatatable
                                 extraButtons={this.extraButtons}
                                 config={this.config}
-                                records={this.state.regionsList}
+                                records={this.state.districtsList}
                                 columns={this.columns}
                                 loading={this.state.loading}
                             />
