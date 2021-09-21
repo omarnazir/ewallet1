@@ -56,7 +56,7 @@ class EditSelfManage extends Component {
         }
 
         this.setState({...this.state.passwordReset,userId:state})
-        axios.get("/roles/admin")
+        axios.get("/roles")
             .then(res => {
                 const response = res.data;
                 this.setState({ rolesList: response })

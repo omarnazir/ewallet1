@@ -52,7 +52,7 @@ class AddRegistar extends Component {
     }
 
     componentDidMount() {
-        axios.get("/roles/admin")
+        axios.get("/roles")
             .then(res => {
                 const response = res.data;
                 this.setState({ rolesList: response })

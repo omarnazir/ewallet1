@@ -67,7 +67,7 @@ const Menu = [
                 name: 'Agricultural Inputs',
                 icon: "icon-arrow-right",
                 translate: 'sidebar.nav.setup.INPUTS',
-                path: '/inputs'
+                path: '/admin-agricultural-inputs'
             },
             {
                 name: 'MCU',

@@ -51,7 +51,7 @@ class EditNormalUserPage extends Component {
 
         let url = "";
         if (state.roleName == "ADMIN") {
-            url = "/roles/admin";
+            url = "/roles";
             this.setState({ adminRole: true })
         }
         else if (state.roleName == "CUSTOMER_ADMIN") {

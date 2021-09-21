@@ -72,6 +72,7 @@ import ManageCropPrice from '../components/Pages/Admin/SystemSetup/ManageCropPri
 import AddFarmer from '../components/Pages/Admin/Farmers/AddFarmer';
 import AddRegistar from '../components/Pages/Admin/Registrars/AddRegistar';
 import AddUssdMenu from '../components/Pages/Admin/UssdMenu/AddUssdMenu';
+import ManagePembejeo from '../components/Pages/Admin/SystemSetup/ManagePembejeo';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -126,7 +127,7 @@ const Routes = ({ location }) => {
 
                                     <Route path="/admin-ussd-menu" component={waitFor(UssdMenu)}/>
                                     <Route path="/admin-add-ussdmenu" component={waitFor(AddUssdMenu)}/>
-                                    
+
                                     <Route path="/admin-manage-registars" component={waitFor(AllRegistars)}/>
                                     <Route path="/admin-add-registar" component={waitFor(AddRegistar)} />
                                     <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
@@ -140,6 +141,7 @@ const Routes = ({ location }) => {
                                    <Route path="/admin-manage-villages" component={waitFor(ManageVillage)}/>
                                    <Route path="/admin-collection-centers" component={waitFor(ManageCollectionCenter)}/>
                                    <Route path="/admin-crop-price" component={waitFor(ManageCropPrice)}/>
+                                   <Route path="/admin-agricultural-inputs" component={waitFor(ManagePembejeo)}/>
 
                                    {/* System Settings */}
                                    <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
@@ -147,6 +149,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-manage-smsc" component={waitFor(ManageSmsc)}/>
                                     <Route path="/admin-sms-log" component={waitFor(SmsLogs)} />
                                     <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
+
 
 
 

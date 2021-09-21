@@ -58,7 +58,7 @@ class EditAdminUser extends Component {
 
         let url = "";
         if (state.roleName == "ADMIN") {
-            url = "/roles/admin";
+            url = "/roles";
         }
         else if (state.roleName == "CUSTOMER_ADMIN") {
             url = "roles/customer-admin";

@@ -39,7 +39,6 @@ class AddFarmer extends Component {
             accountExpiration: ""
 
         },
-        rolesList: [],
         description: "",
         selectedRoleList: [],
         role: "",
@@ -56,11 +55,7 @@ class AddFarmer extends Component {
     }
 
     componentDidMount() {
-        axios.get("/roles/admin")
-            .then(res => {
-                const response = res.data;
-                this.setState({ rolesList: response })
-            })
+       
     }
     validateOnChange = event => {
         const input = event.target;
@@ -83,31 +78,9 @@ class AddFarmer extends Component {
         }
     }
 
-    handleSubmit = event => {
-        this.toggleModal();
-        event.preventDefault()
+    
 
-        console.log(event.target.value)
-        const roleId = this.state.roleId;
-        const role = this.state.rolesList.find(item => item.id == roleId);
-        const found = this.state.selectedRoleList.find((row) => row.id == roleId);
-
-        if (found == undefined) {
-            const selectedRoleList = [...this.state.selectedRoleList, role]
-            this.setState({ selectedRoleList })
-        }
-        console.log(this.state.roleId)
-        console.log(this.state.role)
-        console.log(this.state.description)
-
-    }
-
-    DeleteUserRole = (id) => {
-        const role = this.state.rolesList.find(item => item.id == id);
-        const selectedRoleList = this.state.selectedRoleList.filter(row => row.id != role.id)
-        this.setState({ selectedRoleList })
-
-    }
+   
     handleChange = event => {
         console.log("am hree")
         this.setState({ [event.target.name]: event.target.value });
@@ -176,14 +149,6 @@ class AddFarmer extends Component {
         this.setState({
             modal: !this.state.modal
         });
-    }
-
-    handleSmsTemplateChange = event => {
-        const templateId = event.target.value
-        const template = this.state.rolesList.find(item => item.id == templateId);
-        this.setState({ role: template.name })
-        this.setState({ description: template.description })
-        this.setState({ roleId: template.id })
     }
 
 
