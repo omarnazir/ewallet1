@@ -73,13 +73,13 @@ const Menu = [
                 name: 'MCU',
                 icon: "icon-arrow-right",
                 translate: 'MCU',
-                path: '/mcos'
+                path: '/admin-manage-mcu'
             },
             {
                 name: 'AMCOS',
                 icon: "icon-arrow-right",
                 translate: 'AMCOS',
-                path: '/amcos',
+                path: '/admin-manage-amcos',
             },
             {
                 name: 'Collection Centers',

@@ -12,7 +12,7 @@ import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
 import { CropsService, CropsTypeService } from "../../../../services";
 
-class ManageAmcos extends Component {
+class ManageMCU extends Component {
     state = {
         crops: [],
         modal: false,
@@ -42,7 +42,7 @@ class ManageAmcos extends Component {
     }
 
     getAllMCUS() {
-        axios.get("/amcos")
+        axios.get("/mcos")
             .then(res => {
                 this.setState({ loading: false })
                 this.setState({ crops: res.data })
@@ -151,41 +151,33 @@ class ManageAmcos extends Component {
             text: "NAME"
         },
         {
-            key: "mcu",
-            text: "MCU",
-            cell:(record,index)=>{
-                return record.mcos.name
+            key: "region",
+            text: "REGION",
+            cell: (record, index) => {
+                if (record.region != null) {
+                    return record.region.name;
+                }
+                return "";
             }
         },
         {
-            key: "registar",
-            text: "REGISTRAR",
-            cell:(record,index)=>{
-                return record.registrarId.name
+            key: "status",
+            text: "STATUS",
+            cell: (record, index) => {
+                return (<span className="badge badge-success">{record.status}</span>)
+
             }
-        },
-        {
-            key: "location",
-            text: "LOCATION",
-            cell:(record,index)=>{
-                return record.village.ward.district.region.name+","+ record.village.ward.district.name+","+record.village.ward.name+","+record.village.name;
-            }
+
         },
         {
             key: "id",
             text: "ACTION",
             cell: (record, index) => {
                 return (
-                    <Button style={{
-                        color: 'white',
-                        background: "#003366"
-                      }} className="btn btn-success"
-                        onClick={() => {
-                          this.ViewCustomerDetails(record);
-                        }}
-                      >
-                        <i className="fa fa-eye"></i>
-                      </Button>
+                    <Fragment>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                    </Fragment>
                 )
             }
         }
@@ -216,13 +208,13 @@ class ManageAmcos extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        AMCOS
-                        <small>Manage Amcos.</small>
+                        MCU
+                        <small>Manage MCU's (Marketing Corporative Union).</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.AddRoleMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
                             <i className="fa fa-plus mr-2"></i>
-                            Add New Amcos</Button>
+                            Add New MCU</Button>
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
                             <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Crop" : "Edit Crop"}</ModalHeader>
@@ -279,4 +271,4 @@ class ManageAmcos extends Component {
     }
 }
 
-export default ManageAmcos;
+export default ManageMCU;

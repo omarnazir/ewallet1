@@ -73,6 +73,8 @@ import AddFarmer from '../components/Pages/Admin/Farmers/AddFarmer';
 import AddRegistar from '../components/Pages/Admin/Registrars/AddRegistar';
 import AddUssdMenu from '../components/Pages/Admin/UssdMenu/AddUssdMenu';
 import ManagePembejeo from '../components/Pages/Admin/SystemSetup/ManagePembejeo';
+import ManageMCU from '../components/Pages/Admin/SystemSetup/ManageMCU';
+import ManageAmcos from '../components/Pages/Admin/SystemSetup/ManageAmcos';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -142,6 +144,8 @@ const Routes = ({ location }) => {
                                    <Route path="/admin-collection-centers" component={waitFor(ManageCollectionCenter)}/>
                                    <Route path="/admin-crop-price" component={waitFor(ManageCropPrice)}/>
                                    <Route path="/admin-agricultural-inputs" component={waitFor(ManagePembejeo)}/>
+                                   <Route path="/admin-manage-mcu" component={waitFor(ManageMCU)}/>
+                                   <Route path="/admin-manage-amcos" component={waitFor(ManageAmcos)}/>
 
                                    {/* System Settings */}
                                    <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
