@@ -34,6 +34,9 @@ class AllFarmers extends Component {
     return this.props.history.push('/admin-customers-details/' + row.id, row)
   }
 
+  AddFarmer=()=>{
+    return this.props.history.push("/admin-add-farmer");
+  }
 
 
   AddActionButtonStyle = {
@@ -168,7 +171,7 @@ class AllFarmers extends Component {
             <small>Showing all farmers.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
+            <Button onClick={this.AddFarmer} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
               Register Farmer </Button>
           </div>

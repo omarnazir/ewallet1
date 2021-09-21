@@ -69,6 +69,9 @@ import ManageCollectionCenter from '../components/Pages/Admin/SystemSetup/Manage
 import AllRegistars from '../components/Pages/Admin/Registrars/AllRegistrars';
 import ManageAmcosPrice from '../components/Pages/Admin/SystemSetup/ManageCropPrice';
 import ManageCropPrice from '../components/Pages/Admin/SystemSetup/ManageCropPrice';
+import AddFarmer from '../components/Pages/Admin/Farmers/AddFarmer';
+import AddRegistar from '../components/Pages/Admin/Registrars/AddRegistar';
+import AddUssdMenu from '../components/Pages/Admin/UssdMenu/AddUssdMenu';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -117,10 +120,15 @@ const Routes = ({ location }) => {
                                     {/* Admin */}
                                     <Route path="/admin-dashboard" component={waitFor(Dashboard)} />
                                     <Route path="/admin-farmers-list" component={waitFor(AllFarmers)} />
+                                    <Route path="/admin-add-farmer" component={waitFor(AddFarmer)} />
                                     <Route path="/admin-farmers-harvests" component={waitFor(FarmersHarvests)}/>
                                     <Route path="/admin-mpesa-wallet" component={waitFor(AdminWallet)}/>
+
                                     <Route path="/admin-ussd-menu" component={waitFor(UssdMenu)}/>
+                                    <Route path="/admin-add-ussdmenu" component={waitFor(AddUssdMenu)}/>
+                                    
                                     <Route path="/admin-manage-registars" component={waitFor(AllRegistars)}/>
+                                    <Route path="/admin-add-registar" component={waitFor(AddRegistar)} />
                                     <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
                                     
                                    {/* System Setup */}

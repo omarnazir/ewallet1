@@ -34,6 +34,10 @@ class AllRegistars extends Component {
     return this.props.history.push('/admin-customers-details/' + row.id, row)
   }
 
+  AddRegistar=()=>{
+    return this.props.history.push("/admin-add-registar");
+  }
+
 
 
   AddActionButtonStyle = {
@@ -133,7 +137,7 @@ class AllRegistars extends Component {
             <small>Showing all registars.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
+            <Button onClick={this.AddRegistar} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
               Add New Registar </Button>
           </div>

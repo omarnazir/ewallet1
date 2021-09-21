@@ -34,6 +34,10 @@ class UssdMenu extends Component {
     return this.props.history.push('/admin-customers-details/' + row.id, row)
   }
 
+  AddUssdMenu=()=>{
+    return this.props.history.push("/admin-add-ussdmenu");
+  }
+
 
 
   AddActionButtonStyle = {
@@ -122,7 +126,7 @@ class UssdMenu extends Component {
             <small>Manage USSD Menu.</small>
           </div>
           <div className="flex-row">
-            <Button onClick={this.AddSenderId} style={this.AddActionButtonStyle} className="btn-pill-right">
+            <Button onClick={this.AddUssdMenu} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
               Add Menu </Button>
           </div>

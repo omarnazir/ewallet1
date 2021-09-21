@@ -10,16 +10,16 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
-import {showAlert} from "../../../Common/SweetAlert";
+import swal from '@sweetalert/with-react'
 
 class ManageRegion extends Component {
     state = {
         regionsList: [],
-        loading:true,
+        loading: true,
         modal: false,
         mode: true,
         editedRegion: {
-            id:0,
+            id: 0,
             name: ""
         },
         region: {
@@ -29,7 +29,7 @@ class ManageRegion extends Component {
 
     initialState = {
         region: {
-            id:0,
+            id: 0,
             name: ""
         }
     }
@@ -39,11 +39,42 @@ class ManageRegion extends Component {
         this.getAllRegions();
     }
 
+    showSweetAlert() {
+        // swal("Good job!", "You clicked the button!", "success");
+        swal({
+            title: "Good jo!",
+            text: "You clicked the button!",
+            icon: "success",
+        });
+    }
+
+    showDeleteSweetAlert(id) {
+        swal({
+            title: "Are you sure?",
+            text: "This action can not be reversed",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    this.DeleteRegion(id);
+                    swal({
+                        text: "Region successfully deleted", icon: "success",
+                        timer: 2000,
+                        showCancelButton: false,
+                        showConfirmButton: false
+                    });
+                }
+            });
+    }
+
     getAllRegions() {
         axios.get("/regions")
             .then(res => {
-                this.setState({loading:false})
-                this.setState({ regionsList:res.data })
+                this.setState({ loading: false })
+                this.setState({ regionsList: res.data })
             })
     }
 
@@ -66,7 +97,7 @@ class ManageRegion extends Component {
                 return (
                     <Fragment>
                         <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRegion(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegion(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.showDeleteSweetAlert(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
@@ -119,10 +150,10 @@ class ManageRegion extends Component {
 
     EditRegion(row) {
         const editedRegion = {
-            id:row.id,
+            id: row.id,
             name: row.name
         }
-        this.setState({ editedRegion})
+        this.setState({ editedRegion })
         this.setState({ mode: false })
         this.toggleModal();
     }
@@ -135,7 +166,8 @@ class ManageRegion extends Component {
                     return item.id !== id;
                 });
                 this.setState({ regionsList })
-                showAlert("Deleted Region Sucessfully")
+
+                // showAlert("Deleted Region Sucessfully")
             })
     }
 
@@ -149,14 +181,15 @@ class ManageRegion extends Component {
                 console.log(res.data);
                 this.getAllRegions();
                 this.setState({ region: this.initialState.region })
-                showAlert("Added Region Successfully")
+                // showAlert("Added Region Successfully")
+                this.showSweetAlert();
             })
         } else {
             console.log("Edit mode")
             axios.put("/regions", this.state.editedRegion).then(res => {
                 console.log(res.data);
                 this.getAllRegions();
-                showAlert("Updated Region Successfully")
+                // showAlert("Updated Region Successfully")
             })
         }
     }
@@ -171,7 +204,7 @@ class ManageRegion extends Component {
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.AddWordMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
-                        <i className="fa fa-plus mr-2"></i>
+                            <i className="fa fa-plus mr-2"></i>
                             Add Region</Button>
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
