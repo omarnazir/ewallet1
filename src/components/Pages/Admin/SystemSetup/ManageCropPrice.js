@@ -11,47 +11,63 @@ import {
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
 import Moment from 'moment'
+import { CropsService } from "../../../../services";
 
 class ManageCropPrice extends Component {
     state = {
-        regionsList: [],
+        cropPricesList: [],
         modal: false,
         mode: true,
-        editedRegion: {
-            id:0,
-            name: ""
+        editedCropPrice: {
+            id: 0,
+            cropId: 0,
+            gradeName: "",
+            unitPrice: 0
         },
-        region: {
-            word: ""
+        cropPrice: {
+            cropId: 0,
+            gradeName: "",
+            unitPrice: 0
         },
-        loading:true
+        loading: true,
+        cropsList: []
     };
 
     initialState = {
-        region: {
-            id:0,
-            word: ""
+        cropPrice: {
+            id: 0,
+            cropId: 0,
+            gradeName: "",
+            unitPrice: 0
         }
     }
 
 
 
     componentDidMount() {
-        this.getAllReservedWords();
+        this.getAllCropPrices();
+        this.getAllCrops();
     }
 
-    getAllReservedWords() {
+    getAllCropPrices() {
         axios.get("/crops-grade-price")
             .then(res => {
-                const regionsList = res.data;
-                this.setState({loading:false})
-                this.setState({ regionsList })
+                const cropPricesList = res.data;
+                this.setState({ loading: false })
+                this.setState({ cropPricesList })
 
             })
     }
+
+    getAllCrops() {
+        CropsService.getAllCrops().then(res => {
+            this.setState({ cropsList: res.data })
+
+        })
+    }
     formatDate = (date) => {
         return Moment(date).format('lll')
-      }
+    }
 
     columns = [
         {
@@ -64,14 +80,14 @@ class ManageCropPrice extends Component {
         {
             key: "crop",
             text: "CROP",
-            cell:(record,index)=>{
+            cell: (record, index) => {
                 return record.cropId.name;
             }
         },
         {
             key: "type",
             text: "TYPE",
-            cell:(record,index)=>{
+            cell: (record, index) => {
                 return record.cropId.type;
             }
         },
@@ -88,17 +104,17 @@ class ManageCropPrice extends Component {
             text: "CREATED AT",
             sortable: true,
             cell: (record, index) => {
-              return (this.formatDate(record.dateCreated))
+                return (this.formatDate(record.dateCreated))
             }
-          },
+        },
         {
             key: "id",
             text: "ACTION",
             cell: (record, index) => {
                 return (
                     <Fragment>
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRegion(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegion(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditCropPrice(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteCropPrice(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
@@ -138,37 +154,39 @@ class ManageCropPrice extends Component {
     handleChange = event => {
         if (this.state.mode) {
             this.setState({
-                region: Object.assign({},
-                    this.state.region, { [event.target.name]: event.target.value })
+                cropPrice: Object.assign({},
+                    this.state.cropPrice, { [event.target.name]: event.target.value })
             })
         } else {
             this.setState({
-                editedRegion: Object.assign({}, this.state.editedRegion,
+                editedCropPrice: Object.assign({}, this.state.editedCropPrice,
                     { [event.target.name]: event.target.value })
             })
         }
     }
 
-    EditRegion(row) {
+    EditCropPrice(row) {
         console.log(row)
-        const editedRestricted = {
-            id:row.id,
-            word: row.word
+        const editedCropPrice = {
+            id: row.id,
+            cropId: row.cropId.id,
+            gradeName: row.gradeName,
+            unitPrice: row.unitPrice
         }
 
-        this.setState({ editedRestricted })
+        this.setState({ editedCropPrice })
         this.setState({ mode: false })
         this.toggleModal();
     }
 
-    DeleteRegion(id) {
-        axios.delete("/reserved-words/" + id)
+    DeleteCropPrice(id) {
+        axios.delete("/crops-grade-price/" + id)
             .then(res => {
                 const response = res.data;
-                const regionsList = this.state.regionsList.filter((item) => {
+                const cropPricesList = this.state.cropPricesList.filter((item) => {
                     return item.id !== id;
                 });
-                this.setState({ regionsList })
+                this.setState({ cropPricesList })
             })
     }
 
@@ -178,16 +196,16 @@ class ManageCropPrice extends Component {
         this.toggleModal();
         if (this.state.mode) {
             console.log("Add mode")
-            axios.post("/regions", this.state.region).then(res => {
+            axios.post("/crops-grade-price", this.state.cropPrice).then(res => {
                 console.log(res.data);
-                this.getAllReservedWords();
-                this.setState({ region: this.initialState.region })
+                this.getAllCropPrices();
+                this.setState({ cropPrice: this.initialState.cropPrice })
             })
         } else {
             console.log("Edit mode")
-            axios.put("/regions", this.state.editedRegion).then(res => {
+            axios.put("/crops-grade-price", this.state.editedCropPrice).then(res => {
                 console.log(res.data);
-                this.getAllReservedWords();
+                this.getAllCropPrices();
 
             })
         }
@@ -203,19 +221,40 @@ class ManageCropPrice extends Component {
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.AddWordMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
-                        <i className="fa fa-plus mr-2"></i>
+                            <i className="fa fa-plus mr-2"></i>
                             Add Crop Price</Button>
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add New Region" : "Edit Region"}</ModalHeader>
+                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Crop Price" : "Edit Crop Price"}</ModalHeader>
                             <form onSubmit={this.handleSubmit}>
                                 <ModalBody>
                                     <FormGroup>
-                                        <label>Name :</label>
-                                        <input className="form-control" name="name"
-                                            value={this.state.mode ? this.state.region.name : this.state.editedRegion.name}
+                                        <label>Grade Name :</label>
+                                        <input className="form-control" name="gradeName"
+                                            value={this.state.mode ? this.state.cropPrice.gradeName : this.state.editedCropPrice.gradeName}
                                             onChange={this.handleChange} type="text" required></input>
                                     </FormGroup>
+                                    <FormGroup>
+                                        <label>Price :</label>
+                                        <input className="form-control" name="unitPrice"
+                                            value={this.state.mode ? this.state.cropPrice.unitPrice : this.state.editedCropPrice.unitPrice}
+                                            onChange={this.handleChange} type="text" required></input>
+                                    </FormGroup>
+                                    <div className="form-group">
+                                        <label htmlFor="exampleFormControlSelect1">Crop : </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="cropId"
+                                            onChange={this.handleChange}
+                                            value={this.state.mode ? this.state.cropPrice.cropId : this.state.editedCropPrice.cropId}
+                                        >
+                                            <option value="0">Select type</option>
+                                            {this.state.cropsList.map(row => (
+                                                <option key={row.id} value={row.id} >
+                                                    {row.name}
+                                                </option>
+                                            ))}
+
+                                        </select>
+                                    </div>
                                 </ModalBody>
                                 <ModalFooter>
                                     <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
@@ -234,7 +273,7 @@ class ManageCropPrice extends Component {
                             <ReactDatatable
                                 extraButtons={this.extraButtons}
                                 config={this.config}
-                                records={this.state.regionsList}
+                                records={this.state.cropPricesList}
                                 columns={this.columns}
                                 loading={this.state.loading}
                             />
