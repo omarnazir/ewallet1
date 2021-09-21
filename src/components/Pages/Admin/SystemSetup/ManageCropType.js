@@ -70,7 +70,7 @@ EditRole(row) {
 
 
  DeleteRole(id) {
-  axios.delete("/crops/" + id)
+  axios.delete("/crop-types/" + id)
     .then(res => {
       const response = res.data;
       const crops = this.state.crops.filter((item) => {
