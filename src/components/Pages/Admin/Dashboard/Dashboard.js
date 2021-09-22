@@ -8,7 +8,7 @@ import CardTool from '../../../Common/CardTool'
 import Sparkline from '../../../Common/Sparklines';
 import FlotChart from '../../../Common/Flot';
 import { AuthService,DashboardService } from '../../../../services';
-
+import NumberFormat from 'react-number-format'
 
 
 
@@ -76,7 +76,9 @@ class Dashboard extends Component {
             totalMcos:0,
             totalAmcos:0,
             totalCollectionCenters:0
-        }
+        },
+        totalUssdSessions:0
+        
     }
 
     componentDidMount() {
@@ -103,6 +105,7 @@ class Dashboard extends Component {
        
         this.getDashboardData();
         this.getDashboardChartData();
+        this.getUssdSessions();
     }
 
     getDashboardData=()=>{
@@ -128,6 +131,12 @@ class Dashboard extends Component {
                 "data": finalResult
             }]
             this.setState({barStackedData})
+        })
+    }
+
+    getUssdSessions=()=>{
+        DashboardService.getUssdSessions().then(res=>{
+            this.setState({totalUssdSessions:res.data.message})
         })
     }
 
@@ -253,7 +262,8 @@ class Dashboard extends Component {
                             </div>
                             <div className="card-footer">
                                 <p className="text-muted">
-                                    <span className="text-dark"> Over 18,000 USSD sessions</span>
+                                {/* <NumberFormat value={this.state.dashboardData.totalUssdSessions} displayType={'text'} thousandSeparator={true} prefix={''} /> */}
+                                    <span className="text-dark"> Over <NumberFormat value={this.state.totalUssdSessions} displayType={'text'} thousandSeparator={true} prefix={''} /> USSD sessions</span>
                                 </p>
                             </div>
                         </div>

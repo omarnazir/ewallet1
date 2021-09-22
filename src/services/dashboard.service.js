@@ -12,5 +12,9 @@ export class DashboardService {
         return axios.get("/dashboard/chart")
     }
 
+    getUssdSessions(){
+        return axios.get("/dashboard/sessions")
+    }
+
 }
 export default new DashboardService();
