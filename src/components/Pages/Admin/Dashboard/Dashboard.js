@@ -238,7 +238,7 @@ class Dashboard extends Component {
                                
                                 <div className="">Platform USSD Success Rate</div>
                                 <div className="text-center py-4">
-                                    <div ref="easypie" data-percent="70" className="easypie-chart easypie-chart-lg">
+                                    <div ref="easypie" data-percent="95" className="easypie-chart easypie-chart-lg">
                                         <span>98%</span>
                                     </div>
                                 </div>
