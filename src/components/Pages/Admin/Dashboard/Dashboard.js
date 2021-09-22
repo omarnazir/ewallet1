@@ -20,25 +20,6 @@ class Dashboard extends Component {
             "color": "#37bc9b",
             "data": []
         }],
-        barStackedData2: [ {
-            "label": "Regions",
-            "color": "#37bc9b",
-            "data": [
-                ["Arusha", 29],
-                ["15", 56],
-                ["16", 14],
-                ["17", 21],
-                ["18", 5],
-                ["19", 24],
-                ["20", 37],
-                ["21", 22],
-                ["22", 28],
-                ["23", 9],
-                ["24", 14],
-                ["25", 21],
-                ["26", 5]
-            ]
-        }],
         barStackedOptions: {
             series: {
                 stack: true,
@@ -174,7 +155,6 @@ class Dashboard extends Component {
                 </div>
                 <Row>
                     <Col xl={3} md={6}>
-                        { /* START card */}
                         <div className="card flex-row align-items-center text-white align-items-stretch border-0">
                             <div
                                 className="col-4 d-flex align-items-center bg-dark justify-content-center rounded-left">
@@ -187,7 +167,6 @@ class Dashboard extends Component {
                         </div>
                     </Col>
                     <Col xl={3} md={6}>
-                        { /* START card */}
                         <div className="card flex-row align-items-center align-items-stretch border-0">
                             <div
                                 className="col-4 d-flex align-items-center bg-danger justify-content-center rounded-left">
@@ -262,7 +241,6 @@ class Dashboard extends Component {
                             </div>
                             <div className="card-footer">
                                 <p className="text-muted">
-                                {/* <NumberFormat value={this.state.dashboardData.totalUssdSessions} displayType={'text'} thousandSeparator={true} prefix={''} /> */}
                                     <span className="text-dark"> Over <NumberFormat value={this.state.totalUssdSessions} displayType={'text'} thousandSeparator={true} prefix={''} /> USSD sessions</span>
                                 </p>
                             </div>

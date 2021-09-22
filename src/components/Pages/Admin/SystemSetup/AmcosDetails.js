@@ -466,35 +466,10 @@ class AmcosDetails extends Component {
                                     <div>
                                         <div className="card">
                                             <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">Customer Details</h4>
+                                                <h4 className="text-center mt-2">Amcos Details</h4>
                                             </div>
                                             <hr className="my-0" />
-                                            <div className="card-body mt-2 py-1">
-                                                <div className="px-md-3 px-2">
-                                                    <div className="px-2">
-                                                        <p className="mb-3 text-dark"><strong>Customer name:</strong> &nbsp; <span name="name">{this.state.customer.fullname}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Email:</strong> &nbsp; <span name="email">{this.state.customer.email}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Phone:</strong> &nbsp; <span name="phone">{this.state.customer.phonenumber}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Address:</strong> &nbsp; <span name="address">{this.state.customer.location}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Status:</strong> &nbsp;
-
-                                                            <span name="status"></span>{this.state.customer.isActive == 1 ? "Active" : "Pending"}
-                                                        </p>
-                                                        <p className="mb-3 text-dark"><strong>Customer Type:</strong> &nbsp;
-                                                            <span name="status"></span>{this.state.customer.customerType}
-                                                        </p>
-                                                        <p className="mb-3 text-dark"><strong>Payment Type:</strong> &nbsp;
-                                                            <span name="status"></span>{this.state.customer.paymentType}
-                                                        </p>
-                                                        <p className="mb-3 text-dark"><strong>Date registered:</strong> &nbsp; <span name="regdate">{this.formatDate(this.state.customer.createdAt)}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>ID number:</strong> &nbsp; <span name="idnumber">{this.state.customer.idNumber}</span></p>
-                                                        {/* <p className="mb-3 text-dark"><strong>Monthly Sms Limit:</strong> &nbsp; <span name="smsLimit">19900302-600123-456791</span></p> */}
-                                                        {/* <p className="mb-3 text-dark"><strong>Attachment:</strong> &nbsp; <span name="attachment"><a href="#">View Attachment</a></span></p> */}
-                                                        {/* <p className="mb-3 text-dark"><strong>SMSC ID:</strong> &nbsp; <span name="smsc">ID-01XXXX</span></p> */}
-                                                        {/* <p className="mb-3 text-dark"><strong>Tariff:</strong> &nbsp; <span name="tariff">Dabo Bando</span></p> */}
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
 
                                         </div>
                                     </div>
@@ -508,32 +483,11 @@ class AmcosDetails extends Component {
                                     <div>
                                         <div className="card">
                                             <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">Customer Attachment</h4>
+                                                <h4 className="text-center mt-2">Crops</h4>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body mt-2 py-1">
-                                                <div className="px-md-3 px-2">
-                                                    <div className="px-2 text-center">
-                                                        {/* <Button onClick={this.ViewPdf}>View Attachment</Button> */}
-                                                        {/* <img className="img-fluid" src={this.state.customer.attachment} alt="Attachment" /> */}
-                                                        {/* <Document
-                                                            file={`data:application/pdf;base64,${this.state.customer.imageBlob}`}
-                                                        > 
-
-
-                                                        <Page pageNumber={1} />
-                                                        </Document> */}
-                                                           <button onClick={this.previewAttachment} className="btn btn-sm btn-danger  px-5 text-center">
-                                    Preview Attachment
-                   </button> 
-                                                        
-
-                                                        {/* <iframe src={this.state.attachmentUrl} width="100%" height="500px">
-    </iframe>  */}
-    {/* <iframe src="/img/customer-attachment/222" width="100%" height="500px" frameborder="0">
-    </iframe> */}
-                                                    </div>
-                                                </div>
+                                             
                                             </div>
 
                                         </div>
@@ -552,54 +506,10 @@ class AmcosDetails extends Component {
                                     <div>
                                         <div className="card">
                                             <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">User Accounts</h4>
+                                                <h4 className="text-center mt-2">Pembejeo</h4>
                                             </div>
                                             <hr className="my-0" />
-                                            <div className="card-body mt-2 py-1">
-                                                <div className="px-md-3 px-2">
-                                                    <div className="px-2">
-                                                        <table className="table table-striped my-4 w-100">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th data-priority="1">#</th>
-                                                                    <th>FULL NAME</th>
-                                                                    <th>USERNAME</th>
-                                                                    <th className="sort-numeric">USER MONTHLY SMS LIMIT</th>
-
-                                                                    <th>STATUS</th>
-                                                                    <th>LAST LOGIN</th>
-
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {this.state.usersList.map(row =>
-                                                                    <tr className="gradeA" key={row.id}>
-                                                                        <td>{userIndex += 1}</td>
-                                                                        <td>{row.name}</td>
-                                                                        <td>{row.username}</td>
-                                                                        <td>{row.userMonthlySmsLimit}</td>
-                                                                        <td>
-
-                                                                            {row.isActive == 1 &&
-                                                                                <span className="badge badge-success">Active</span>
-                                                                            }
-                                                                            {row.isActive == 0 &&
-                                                                                <span className="badge badge-success">Pending</span>
-                                                                            }
-                                                                            {row.isActive == 2 &&
-                                                                                <span className="badge badge-danger">Disabled</span>
-                                                                            }
-                                                                        </td>
-                                                                        <td>{this.formatDate(row.registrationDate)}</td>
-
-                                                                    </tr>
-                                                                )}
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
 
                                         </div>
                                     </div>

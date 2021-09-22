@@ -164,8 +164,6 @@ class FarmersHarvests extends Component {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />
     }
-    let index = 0
-
     return (
       <ContentWrapper>
         <div className="content-heading">
