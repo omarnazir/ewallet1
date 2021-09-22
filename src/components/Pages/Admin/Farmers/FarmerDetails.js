@@ -1,4 +1,4 @@
-import React, { Component,Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import Moment from "moment";
 import axios from "../../../../services/axios";
@@ -14,40 +14,66 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
+    Table,
+    Card, CardHeader, CardBody,
 } from "reactstrap";
 import classnames from 'classnames';
-import { Document, Page } from 'react-pdf';
-
+import { calculateAge } from '../../../../utils/AgeCalculator';
+import NumberFormat from 'react-number-format'
+import ReactDatatable from '@ashvin27/react-datatable';
+import { AuthService, HarvestsService } from '../../../../services';
 
 
 class FarmerDetails extends Component {
     state = {
         activeTab: '1',
-        customerId: 0,
-        customer: {},
+        farmerId: 0,
+        farmer: {},
         isApproved: 0,
         usersList: [],
         tarrifsList: [],
 
-        smscList:[],
-        smscId:0,
-        showSmscDetails:false,
-        smscType:-1,
+        smscList: [],
+        smscId: 0,
+        showSmscDetails: false,
+        smscType: -1,
         paymentType: "",
 
         tariffId: 22,
         monthlySmsLimit: 0,
-        
+
         customerModal: false,
         editedCustomer: {
             tariffFk: 0,
             monthlyLimit: 0,
             autoRenewal: ""
         },
-        imgURl:"",
-        img:{},
-        previewURl:{},
-        attachmentUrl:""
+        imgURl: "",
+        img: {},
+        previewURl: {},
+        attachmentUrl: "",
+
+
+        //Above to delete
+        loading: true,
+        farmer: {
+            id: 0,
+            firstName: "",
+            surname: "",
+            sex: "",
+            idNumber: "",
+            dateOfBirth: "",
+            msisdn: "",
+            mainCrop:{},
+            secondaryCrop:{},
+            ward:{},
+            village:{},
+            amcos:{},
+            farmSize:0,
+            farmingType:"",
+            farmingMethod:"",
+            registrationDate:Date.now()
+        }
 
     };
 
@@ -76,50 +102,19 @@ class FarmerDetails extends Component {
 
         const { state } = this.props.history.location;
         if (state == undefined) {
-            return this.props.history.push('/admin-customers-list/')
+            return this.props.history.push('/admin-farmers-list/')
         }
 
-        this.setState({ isApproved: state.isApproved })
-        this.setState({ customerId: state.id })
-        this.setState({ paymentType: state.paymentType })
-
-        axios.get("/customers/" + state.id)
+        this.setState({ farmerId: state.id })
+        axios.get("/farmers/" + state.id)
             .then(res => {
-                const customer = res.data;
-                this.setState({ customer})
+                const farmer = res.data;
+                this.setState({ farmer })
             })
-        const attachmentUrl="https://sms.vodacom.co.tz/api/v1/img/customer-attachment/"+state.id;
-        this.setState({attachmentUrl})
-
-        axios.get("/customers/users-list/" + state.id)
-            .then(res => {
-                const response = res.data;
-                this.setState({ usersList: response })
-                console.log(response);
-            })
-            axios.get("/img/customer-attachment/" + state.id)
-            .then(res => {
-                const img = res.data;
-                console.log(res)
-                this.setState({ previewURl:img })
-                
-            })
-        
-
-
-        axios.get("/tariff")
-            .then(res => {
-                const response = res.data;
-                this.setState({ tarrifsList: response })
-                console.log(response);
-            })
-
-            axios.get("/smsc/dedicated-pending")
-            .then(res => {
-                const response = res.data;
-                this.setState({ smscList: response })
-                console.log(response);
-            })
+        HarvestsService.getAllHarvetByFarmer(state.id).then(res => {
+            this.setState({ loading: false })
+            this.setState({ harvestsList: res.data })
+        })
 
     }
 
@@ -150,7 +145,7 @@ class FarmerDetails extends Component {
         {
             "customerId": this.state.customerId,
             "tariffId": this.state.tariffId,
-             "smscId":this.state.smscId,
+            "smscId": this.state.smscId,
             "monthlySmsLimit": this.state.monthlySmsLimit
         }
 
@@ -195,16 +190,18 @@ class FarmerDetails extends Component {
         })
     }
 
+
+
     handleSmsTypeChange = event => {
         console.log("Am here")
         if ([event.target.value] == "0") {
             this.setState({ showSmscDetails: false })
-            this.setState({smscId:0})
-            this.setState({smscType:0})
+            this.setState({ smscId: 0 })
+            this.setState({ smscType: 0 })
         } else {
             this.setState({ showSmscDetails: true })
-            this.setState({smscType:1})
-           
+            this.setState({ smscType: 1 })
+
         }
     }
 
@@ -216,44 +213,7 @@ class FarmerDetails extends Component {
             })
     }
 
-    EditCustomer() {
-        console.log("edit")
-        console.log(this.state.customer)
-        console.log("TariffFk", this.state.customer.tariffFk)
-        console.log(this.state.customer.autoRenewal)
-        console.log(this.state.customer.monthlyLimit)
 
-
-        this.setState({
-            editedCustomer: Object.assign({},
-                this.state.editedCustomer, { tariffFk: this.state.customer.tariffFk })
-        })
-
-        console.log(this.state.editedCustomer);
-        this.setState({ editedCustomer: { ...this.state.editedCustomer, tariffFk: this.state.customer.tariffFk } })
-
-        this.setState({
-            editedCustomer: Object.assign({},
-                this.state.editedCustomer, { tariffFk: this.state.customer.tariffFk })
-        })
-
-        //     this.setState({editedCustomer:Object.assign({},
-        //         this.state.editedCustomer,{[event.target.name]:event.target.value})})
-
-
-        this.setState({
-            editedCustomer: Object.assign({},
-                this.state.editedCustomer, { autoRenewal: this.state.customer.autoRenewal })
-        })
-
-        this.setState({
-            editedCustomer: Object.assign({},
-                this.state.editedCustomer, { monthlyLimit: this.state.customer.monthlyLimit })
-        })
-        console.log(this.state.editedCustomer);
-        this.toggleModalCustomer();
-
-    }
     toggleModalCustomer = () => {
         this.setState({
             customerModal: !this.state.customerModal
@@ -276,46 +236,118 @@ class FarmerDetails extends Component {
         return Moment(date).format('lll')
     }
 
-    previewAttachment=()=>{
+    previewAttachment = () => {
         window.open(this.state.attachmentUrl, "_blank")
     }
 
+    ucFirst = (str) => {
+        if (!str) return str;
+        if (str.trim() == "undefined") return "";
+        return str[0].toUpperCase() + str.slice(1);
+    }
+
+
+    getFarmerFullName = () => {
+        const firstName = this.ucFirst(this.state.farmer.firstName);
+        const middleName = this.state.farmer.middleName == undefined ? " " : this.ucFirst(this.state.farmer.middleName);
+        const lastName = this.ucFirst(this.state.farmer.surname);
+        return firstName + " " + middleName + " " + lastName;
+    }
+
+    config = {
+        page_size: 10,
+        length_menu: [10, 25, 50],
+        show_filter: true,
+        show_pagination: true,
+        pagination: 'advance',
+        filename: "Contact List",
+        button: {
+
+        },
+        language: {
+            loading_text: "Please be patient while data loads..."
+        }
+    }
+
+
+    columns = [
+        {
+            key: "id",
+            text: "#",
+            sortable: true,
+            cell: (record, index) => {
+                return index + 1;
+            }
+        },
+        {
+            key: "crop",
+            text: "CROP",
+            cell: (record, index) => {
+                return record.crop.name;
+            }
+        },
+        {
+            key: "weight",
+            text: "WEIGHT",
+            cell: (record, index) => {
+                return (<NumberFormat value={record.weight} displayType={'text'} thousandSeparator={true} prefix={''} />)
+            }
+        },
+        {
+            key: "cropUnitPrice",
+            text: "UNIT PRICE",
+            cell: (record, index) => {
+                return (<NumberFormat value={record.cropUnitPrice} displayType={'text'} thousandSeparator={true} prefix={''} />)
+            }
+        },
+        {
+            key: "cropsValue",
+            text: "CROP VALUE",
+            cell: (record, index) => {
+                return (<NumberFormat value={record.cropsValue} displayType={'text'} thousandSeparator={true} prefix={''} />)
+            }
+        },
+        {
+            key: "collectionCenter",
+            text: "COLLECTION CENTER",
+            cell: (record, index) => {
+                return record.collectionCenter.name;
+            }
+        },
+        {
+            key: "status",
+            text: "STATUS",
+            cell: (record, index) => {
+
+                return (
+                    <span className="badge badge-success">Received</span>
+                );
+            }
+        },
+        {
+            key: "date",
+            text: "RECEIVED AT",
+            sortable: true,
+            cell: (record, index) => {
+                return (this.formatDate(record.date))
+            }
+        }
+
+    ];
+
 
     render() {
-        const id = this.state.customer.id;
-        let userIndex = 0;
         return (
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Farmer Details : {this.state.customer.fullname}
+                        Farmer Details : {this.getFarmerFullName()}
                         <small>Showing all farmer details.</small>
                     </div>
                     <div className="flex-row d-block d-md-flex">
-                        {this.state.isApproved == 1 &&
-                            this.state.paymentType == "Post-Paid" &&
-                            <Button onClick={() => this.EditCustomer()} className="btn btn-pill mr-2 bg-success">Edit Customer</Button>
-                        }
-                        {this.state.isApproved == 1 &&
-                            <Button onClick={() => this.RejectCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-danger">Disable Customer</Button>
-                        }
-                        {this.state.isApproved == 0 &&
-                            <span>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit Farmer</span>
+                        <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete Farmer </span>
 
-                                <Button onClick={() => this.RejectCustomer(this.state.customerId)} className="btn btn-pill mr-2 bg-danger">Reject Customer</Button>
-                                <Button onClick={() => this.toggleModal()} className="btn btn-pill mr-2 bg-success">Approve Customer</Button>
-                            </span>
-                        }
-                        {
-                            this.state.isApproved == 2 &&
-                            <span>
-                                <Button onClick={() => this.toggleModal()} className="btn btn-pill mr-2 bg-success">Approve Customer</Button>
-                            </span>
-                        }
-                        
-            <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit Farmer</span>
-            <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete Farmer </span>
-          
                         <Button onClick={this.ViewFarmersList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Farmers</Button>
                     </div>
                 </div>
@@ -372,39 +404,39 @@ class FarmerDetails extends Component {
                             <ModalBody>
 
 
-                            {this.state.paymentType == "Post-Paid" &&
-                                <div className="form-group">
-                                    <label htmlFor="exampleFormControlSelect1">Smsc Type : </label>
-                                    <select className="form-control" id="exampleFormControlSelect1" name="smscType"
-                                        onChange={this.handleSmsTypeChange}
-                                        value={this.state.smscType}
-                                    >
-                                        <option value="-1">Select type</option>
-                                        <option value="0">Shared SMSC</option>
-                                        <option value="1">Dedicate SMSC</option>
-                                    </select>
-                                </div>
+                                {this.state.paymentType == "Post-Paid" &&
+                                    <div className="form-group">
+                                        <label htmlFor="exampleFormControlSelect1">Smsc Type : </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="smscType"
+                                            onChange={this.handleSmsTypeChange}
+                                            value={this.state.smscType}
+                                        >
+                                            <option value="-1">Select type</option>
+                                            <option value="0">Shared SMSC</option>
+                                            <option value="1">Dedicate SMSC</option>
+                                        </select>
+                                    </div>
 
-                             }
+                                }
 
 
-                            {this.state.showSmscDetails  &&
-                                <div className="form-group">
-                                    <label htmlFor="exampleFormControlSelect1">Smsc Account : </label>
-                                    <select className="form-control" id="exampleFormControlSelect1" name="smscId"
-                                        onChange={this.handleChange}
-                                        value={this.state.smscId}
-                                    >
-                                        <option value="-1">Select account</option>
-                                        {this.state.smscList.map(row => (
-                                            <option key={row.id} value={row.id} >
-                                                {row.smscUsername}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
+                                {this.state.showSmscDetails &&
+                                    <div className="form-group">
+                                        <label htmlFor="exampleFormControlSelect1">Smsc Account : </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="smscId"
+                                            onChange={this.handleChange}
+                                            value={this.state.smscId}
+                                        >
+                                            <option value="-1">Select account</option>
+                                            {this.state.smscList.map(row => (
+                                                <option key={row.id} value={row.id} >
+                                                    {row.smscUsername}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
 
-                             }
+                                }
                                 {this.state.paymentType == "Post-Paid" &&
                                     <FormGroup>
                                         <label>Monthly sms limit :</label>
@@ -467,34 +499,115 @@ class FarmerDetails extends Component {
 
                                 <Col xl="12">
                                     <div>
-                                        <div className="card">
-                                            <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">Customer Details</h4>
-                                            </div>
-                                            <hr className="my-0" />
-                                            <div className="card-body mt-2 py-1">
-                                                <div className="px-md-3 px-2">
-                                                    <div className="px-2">
-                                                        <p className="mb-3 text-dark"><strong>Customer name:</strong> &nbsp; <span name="name">{this.state.customer.fullname}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Email:</strong> &nbsp; <span name="email">{this.state.customer.email}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Phone:</strong> &nbsp; <span name="phone">{this.state.customer.phonenumber}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Address:</strong> &nbsp; <span name="address">{this.state.customer.location}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>Status:</strong> &nbsp;
+                                        <div className="card card-default">
 
-                                                            <span name="status"></span>{this.state.customer.isActive == 1 ? "Active" : "Pending"}
-                                                        </p>
-                                                        <p className="mb-3 text-dark"><strong>Customer Type:</strong> &nbsp;
-                                                            <span name="status"></span>{this.state.customer.customerType}
-                                                        </p>
-                                                        <p className="mb-3 text-dark"><strong>Payment Type:</strong> &nbsp;
-                                                            <span name="status"></span>{this.state.customer.paymentType}
-                                                        </p>
-                                                        <p className="mb-3 text-dark"><strong>Date registered:</strong> &nbsp; <span name="regdate">{this.formatDate(this.state.customer.createdAt)}</span></p>
-                                                        <p className="mb-3 text-dark"><strong>ID number:</strong> &nbsp; <span name="idnumber">{this.state.customer.idNumber}</span></p>
-                                                        {/* <p className="mb-3 text-dark"><strong>Monthly Sms Limit:</strong> &nbsp; <span name="smsLimit">19900302-600123-456791</span></p> */}
-                                                        {/* <p className="mb-3 text-dark"><strong>Attachment:</strong> &nbsp; <span name="attachment"><a href="#">View Attachment</a></span></p> */}
-                                                        {/* <p className="mb-3 text-dark"><strong>SMSC ID:</strong> &nbsp; <span name="smsc">ID-01XXXX</span></p> */}
-                                                        {/* <p className="mb-3 text-dark"><strong>Tariff:</strong> &nbsp; <span name="tariff">Dabo Bando</span></p> */}
+                                            <hr className="my-0" />
+                                            <div className="card-body mt-2 mb-2">
+                                                <div className="">
+                                                    <div className="px-2">
+                                                        <Table className="table table-bordered">
+
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th colSpan={4} className="text-uppercase">  <span className="fa fa-user mr-2"></span> Personal Information</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Full Name</th>
+                                                                    {/* <td>{this.state.firstName + " " + this.state.surname}</td> */}
+                                                                    <td>{this.getFarmerFullName()}</td>
+
+                                                                    <th>Sex</th>
+                                                                    <td>{this.state.farmer.sex}</td>
+                                                                </tr>
+
+                                                                <tr>
+
+                                                                    <th>Date of Birth (Age)</th>
+                                                                    <td>{this.state.farmer.dateOfBirth}</td>
+
+
+                                                                    <th>Age (Years)</th>
+                                                                    <td>{calculateAge(this.state.farmer.dateOfBirth)}</td>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th>Phone</th>
+                                                                    <td>{this.state.farmer.msisdn}</td>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th colSpan={4} className="text-uppercase"><span className="fa fa-id-card mr-2"></span> Membership Information</th>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th>MemberID</th>
+                                                                    <td>{this.state.farmer.memberID}</td>
+
+                                                                    <th>Amcos</th>
+                                                                    {/* <td>{this.state.farmer.amcos.name}</td> */}
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th>Hamlet</th>
+                                                                    <td>{this.state.farmer.hamlet}</td>
+
+                                                                    <th></th>
+                                                                    <td></td>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th colSpan={4} className="text-uppercase"><span className="fa fa-leaf mr-2"></span> Farm Information</th>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th>Location</th>
+                                                                    <td colSpan={3}>
+                                                                        {this.state.region}{", "}
+                                                                        {this.state.district}{", "}
+                                                                        {this.state.ward}{", "}
+                                                                        {this.state.village}
+                                                                    </td>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th>Farm Size</th>
+                                                                    <td>{this.state.farmer.farmSize}</td>
+
+                                                                    <th>Type of Farming</th>
+                                                                    <td>{this.state.farmer.farmingType}</td>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th>Equipment used</th>
+                                                                    <td>{this.state.farmer.farmingMethod}</td>
+
+                                                                    <th>Planting season</th>
+                                                                    <td>{this.state.farmer.season}</td>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th>Latitude</th>
+                                                                    <td>{this.state.latitude}</td>
+
+                                                                    <th>Longitude</th>
+                                                                    <td>{this.state.longitude}</td>
+                                                                </tr>
+
+
+
+                                                                <tr>
+                                                                    <th colSpan={4} className="text-uppercase"><span className="fa fa-snowflake mr-2"></span> Crops Information</th>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th>Main Crop</th>
+                                                                    {/* <td>{this.state.farmer.mainCrop.name}</td> */}
+
+                                                                    <th>Secondary Crops</th>
+                                                                    {/* <td>{this.state.farmer.secondaryCrop.name}</td> */}
+                                                                </tr>
+                                                            </tbody>
+                                                        </Table>
                                                     </div>
                                                 </div>
                                             </div>
@@ -511,30 +624,16 @@ class FarmerDetails extends Component {
                                     <div>
                                         <div className="card">
                                             <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">Customer Attachment</h4>
+                                                <h4 className="text-center mt-2">Agricultural  Input</h4>
                                             </div>
                                             <hr className="my-0" />
                                             <div className="card-body mt-2 py-1">
                                                 <div className="px-md-3 px-2">
                                                     <div className="px-2 text-center">
-                                                        {/* <Button onClick={this.ViewPdf}>View Attachment</Button> */}
-                                                        {/* <img className="img-fluid" src={this.state.customer.attachment} alt="Attachment" /> */}
-                                                        {/* <Document
-                                                            file={`data:application/pdf;base64,${this.state.customer.imageBlob}`}
-                                                        > 
 
 
-                                                        <Page pageNumber={1} />
-                                                        </Document> */}
-                                                           <button onClick={this.previewAttachment} className="btn btn-sm btn-danger  px-5 text-center">
-                                    Preview Attachment
-                   </button> 
-                                                        
 
-                                                        {/* <iframe src={this.state.attachmentUrl} width="100%" height="500px">
-    </iframe>  */}
-    {/* <iframe src="/img/customer-attachment/222" width="100%" height="500px" frameborder="0">
-    </iframe> */}
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -552,60 +651,20 @@ class FarmerDetails extends Component {
 
 
                                 <Col xl="12">
-                                    <div>
-                                        <div className="card">
-                                            <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">User Accounts</h4>
-                                            </div>
-                                            <hr className="my-0" />
-                                            <div className="card-body mt-2 py-1">
-                                                <div className="px-md-3 px-2">
-                                                    <div className="px-2">
-                                                        <table className="table table-striped my-4 w-100">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th data-priority="1">#</th>
-                                                                    <th>FULL NAME</th>
-                                                                    <th>USERNAME</th>
-                                                                    <th className="sort-numeric">USER MONTHLY SMS LIMIT</th>
+                                    <Card>
+                                        <CardHeader>
+                                        </CardHeader>
+                                        <CardBody>
 
-                                                                    <th>STATUS</th>
-                                                                    <th>LAST LOGIN</th>
-
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {this.state.usersList.map(row =>
-                                                                    <tr className="gradeA" key={row.id}>
-                                                                        <td>{userIndex += 1}</td>
-                                                                        <td>{row.name}</td>
-                                                                        <td>{row.username}</td>
-                                                                        <td>{row.userMonthlySmsLimit}</td>
-                                                                        <td>
-
-                                                                            {row.isActive == 1 &&
-                                                                                <span className="badge badge-success">Active</span>
-                                                                            }
-                                                                            {row.isActive == 0 &&
-                                                                                <span className="badge badge-success">Pending</span>
-                                                                            }
-                                                                            {row.isActive == 2 &&
-                                                                                <span className="badge badge-danger">Disabled</span>
-                                                                            }
-                                                                        </td>
-                                                                        <td>{this.formatDate(row.registrationDate)}</td>
-
-                                                                    </tr>
-                                                                )}
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
+                                            <ReactDatatable
+                                                extraButtons={this.extraButtons}
+                                                config={this.config}
+                                                records={this.state.harvestsList}
+                                                columns={this.columns}
+                                                loading={this.state.loading}
+                                            />
+                                        </CardBody>
+                                    </Card>
                                 </Col>
 
 

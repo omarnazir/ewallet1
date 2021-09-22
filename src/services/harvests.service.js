@@ -5,5 +5,9 @@ export class HarvestsService {
         return axios.get("/farmer-harvests")
 
     }
+
+    getAllHarvetByFarmer(id){
+        return axios.get("/farmer-harvests/"+id+"/farmer")
+    }
 }
 export default new HarvestsService();
