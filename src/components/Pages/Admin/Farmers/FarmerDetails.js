@@ -1,19 +1,14 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import Moment from "moment";
 import axios from "../../../../services/axios";
 import {
-    Container, Button, FormGroup,
-    TabContent,
+    Container, Button, TabContent,
     TabPane,
     Nav,
     NavItem,
     NavLink,
     Col,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
     Table,
     Card, CardHeader, CardBody,
 } from "reactstrap";
@@ -21,40 +16,13 @@ import classnames from 'classnames';
 import { calculateAge } from '../../../../utils/AgeCalculator';
 import NumberFormat from 'react-number-format'
 import ReactDatatable from '@ashvin27/react-datatable';
-import { AuthService, HarvestsService } from '../../../../services';
+import { HarvestsService } from '../../../../services';
 
 
 class FarmerDetails extends Component {
     state = {
         activeTab: '1',
         farmerId: 0,
-        farmer: {},
-        isApproved: 0,
-        usersList: [],
-        tarrifsList: [],
-
-        smscList: [],
-        smscId: 0,
-        showSmscDetails: false,
-        smscType: -1,
-        paymentType: "",
-
-        tariffId: 22,
-        monthlySmsLimit: 0,
-
-        customerModal: false,
-        editedCustomer: {
-            tariffFk: 0,
-            monthlyLimit: 0,
-            autoRenewal: ""
-        },
-        imgURl: "",
-        img: {},
-        previewURl: {},
-        attachmentUrl: "",
-
-
-        //Above to delete
         loading: true,
         farmer: {
             id: 0,
@@ -88,18 +56,8 @@ class FarmerDetails extends Component {
             });
         }
     }
-
-
     ViewFarmersList = () => {
         return this.props.history.push("/admin-farmers-list")
-    }
-
-
-    handleClickActiveTab = event => {
-        const newActiveTab = event.target.tab;
-        this.setState({
-            activeTab: newActiveTab,
-        })
     }
 
     componentDidMount() {
@@ -151,98 +109,6 @@ class FarmerDetails extends Component {
         background: "#33414e"
     }
 
-    ApproveCustomer(id) {
-        console.log(id)
-        axios.put("/customers/approve/" + id)
-            .then(res => {
-                const response = res.data;
-                this.ViewFarmersList();
-            })
-
-    }
-
-    handleSubmit = event => {
-        event.preventDefault();
-        this.hideToggelModal();
-        const data =
-        {
-            "customerId": this.state.customerId,
-            "tariffId": this.state.tariffId,
-            "smscId": this.state.smscId,
-            "monthlySmsLimit": this.state.monthlySmsLimit
-        }
-
-        console.log(data)
-
-        axios.put("/customers/approve", data).then(res => {
-            const response = res.data;
-            this.ViewFarmersList();
-        })
-    }
-
-    handleCustomerUpdateFomSubmission = event => {
-
-        event.preventDefault();
-        this.toggleModalCustomer();
-
-
-        const data = {
-            customerId: this.state.customer.id,
-            tariffId: this.state.editedCustomer.tariffFk,
-            monthlySmsLimit: this.state.editedCustomer.monthlyLimit,
-            autoRenew: this.state.editedCustomer.autoRenewal,
-
-        }
-        console.log("data", data)
-        axios.put("/customers/auto-renew", data)
-            .then(res => {
-                const response = res.data;
-                this.ViewFarmersList();
-            })
-
-    }
-
-    handleChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
-    }
-
-    handleChangeDetails = event => {
-        this.setState({
-            editedCustomer: Object.assign({},
-                this.state.editedCustomer, { [event.target.name]: event.target.value })
-        })
-    }
-
-
-
-    handleSmsTypeChange = event => {
-        console.log("Am here")
-        if ([event.target.value] == "0") {
-            this.setState({ showSmscDetails: false })
-            this.setState({ smscId: 0 })
-            this.setState({ smscType: 0 })
-        } else {
-            this.setState({ showSmscDetails: true })
-            this.setState({ smscType: 1 })
-
-        }
-    }
-
-    RejectCustomer(id) {
-        axios.put("/customers/reject/" + id)
-            .then(res => {
-                const response = res.data;
-                this.ViewFarmersList();
-            })
-    }
-
-
-    toggleModalCustomer = () => {
-        this.setState({
-            customerModal: !this.state.customerModal
-        })
-    }
-
     toggleModal = () => {
         this.setState({
             modal: !this.state.modal
@@ -257,10 +123,6 @@ class FarmerDetails extends Component {
 
     formatDate = (date) => {
         return Moment(date).format('lll')
-    }
-
-    previewAttachment = () => {
-        window.open(this.state.attachmentUrl, "_blank")
     }
 
     ucFirst = (str) => {
@@ -375,120 +237,6 @@ class FarmerDetails extends Component {
                     </div>
                 </div>
                 <Container fluid>
-                    <Modal isOpen={this.state.customerModal} toggle={this.toggleModalCustomer}>
-                        <ModalHeader toggle={this.toggleModalCustomer}>Edit Customer</ModalHeader>
-                        <form onSubmit={this.handleCustomerUpdateFomSubmission}>
-                            <ModalBody>
-                                <div className="form-group">
-                                    <label htmlFor="exampleFormControlSelect1">Tariff : </label>
-                                    <select className="form-control" id="exampleFormControlSelect1" name="tariffFk" onChange={this.handleChangeDetails}
-                                        value={this.state.editedCustomer.tariffFk}
-                                    >
-                                        <option value="0">Select a tariff</option>
-                                        {this.state.tarrifsList.map(row => (
-                                            <option key={row.id} value={row.id} >
-                                                {row.tariffName}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <FormGroup>
-                                    <label>Monthly sms limit :</label>
-                                    <input className="form-control" name="monthlyLimit"
-                                        value={this.state.editedCustomer.monthlyLimit}
-                                        onChange={this.handleChangeDetails} type="number" required></input>
-                                </FormGroup>
-
-
-                                <div className="form-group">
-                                    <label htmlFor="exampleFormControlSelect1">Auto Renew : </label>
-                                    <select className="form-control" id="exampleFormControlSelect1" name="autoRenewal"
-                                        onChange={this.handleChangeDetails}
-                                        value={this.state.editedCustomer.autoRenewal}
-                                    >
-                                        <option value="">Select Status</option>
-                                        <option value="1">ACTIVE</option>
-                                        <option value="0">DISABLED</option>
-                                    </select>
-                                </div>
-
-                            </ModalBody>
-                            <ModalFooter>
-                                <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
-                                    Save
-                                </button>
-                            </ModalFooter>
-                        </form>
-                    </Modal>
-
-                    <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                        <ModalHeader toggle={this.toggleModal}>Approve Customer</ModalHeader>
-                        <form onSubmit={this.handleSubmit}>
-                            <ModalBody>
-
-
-                                {this.state.paymentType == "Post-Paid" &&
-                                    <div className="form-group">
-                                        <label htmlFor="exampleFormControlSelect1">Smsc Type : </label>
-                                        <select className="form-control" id="exampleFormControlSelect1" name="smscType"
-                                            onChange={this.handleSmsTypeChange}
-                                            value={this.state.smscType}
-                                        >
-                                            <option value="-1">Select type</option>
-                                            <option value="0">Shared SMSC</option>
-                                            <option value="1">Dedicate SMSC</option>
-                                        </select>
-                                    </div>
-
-                                }
-
-
-                                {this.state.showSmscDetails &&
-                                    <div className="form-group">
-                                        <label htmlFor="exampleFormControlSelect1">Smsc Account : </label>
-                                        <select className="form-control" id="exampleFormControlSelect1" name="smscId"
-                                            onChange={this.handleChange}
-                                            value={this.state.smscId}
-                                        >
-                                            <option value="-1">Select account</option>
-                                            {this.state.smscList.map(row => (
-                                                <option key={row.id} value={row.id} >
-                                                    {row.smscUsername}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                }
-                                {this.state.paymentType == "Post-Paid" &&
-                                    <FormGroup>
-                                        <label>Monthly sms limit :</label>
-                                        <input className="form-control" name="monthlySmsLimit" onChange={this.handleChange} type="number" required></input>
-                                    </FormGroup>
-                                }
-                                <div className="form-group">
-                                    <label htmlFor="exampleFormControlSelect1">Tariff : </label>
-                                    <select className="form-control" id="exampleFormControlSelect1" name="tariffId" onChange={this.handleChange}>
-                                        <option value="0">Select a tariff</option>
-                                        {this.state.tarrifsList.map(row => (
-                                            <option key={row.id} value={row.id} >
-                                                {row.tariffName}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </ModalBody>
-                            <ModalFooter>
-                                <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
-                                    Approve
-                                </button>
-                                {/* <button onClick={this.hideToggelModal} className="btn btn-sm btn-danger  px-5">
-                                    Cancel
-                   </button> */}
-                            </ModalFooter>
-                        </form>
-                    </Modal>
-
                     <div role="tabpanel card card-body">
                         <Nav tabs>
                             <NavItem>
@@ -653,10 +401,6 @@ class FarmerDetails extends Component {
                                             <div className="card-body mt-2 py-1">
                                                 <div className="px-md-3 px-2">
                                                     <div className="px-2 text-center">
-
-
-
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -664,15 +408,8 @@ class FarmerDetails extends Component {
                                         </div>
                                     </div>
                                 </Col>
-
-
-
                             </TabPane>
-
-
                             <TabPane tabId="3">
-
-
                                 <Col xl="12">
                                     <Card>
                                         <CardHeader>
@@ -689,15 +426,10 @@ class FarmerDetails extends Component {
                                         </CardBody>
                                     </Card>
                                 </Col>
-
-
                             </TabPane>
 
                         </TabContent>
                     </div>
-
-
-
                 </Container>
             </ContentWrapper>
         );
