@@ -337,7 +337,7 @@ class AddRegistar extends Component {
                         <CardFooter>
                             <div className="d-flex align-items-center">
                                 <div className="ml-auto">
-                                    <button className="btn btn-danger px-5 mr-2" onClick={this.ViewAllFarmers}>Cancel</button>
+                                    <button className="btn btn-danger px-5 mr-2" onClick={this.ViewAllRegistars}>Cancel</button>
                                     <button type="submit" style={this.AddActionButtonStyle} className="btn btn-primary px-5">Save</button>
                                 </div>
                             </div>

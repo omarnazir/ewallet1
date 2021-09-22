@@ -31,7 +31,7 @@ class AllFarmers extends Component {
 
   ViewCustomerDetails = (row) => {
     console.log(row.id)
-    return this.props.history.push('/admin-customers-details/' + row.id, row)
+    return this.props.history.push('/admin-farmer-details/' + row.id, row)
   }
 
   AddFarmer=()=>{

@@ -187,7 +187,7 @@ class ManageWards extends Component {
                     <div className="flex-row">
                         <Button onClick={this.AddWordMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
                         <i className="fa fa-plus mr-2"></i>
-                            Add District</Button>
+                            Add Ward</Button>
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
                             <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add New Region" : "Edit Region"}</ModalHeader>

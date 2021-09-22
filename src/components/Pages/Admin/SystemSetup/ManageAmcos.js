@@ -105,6 +105,11 @@ class ManageAmcos extends Component {
             })
     }
 
+    ViewAmcosDetails = (row) => {
+        console.log(row.id)
+        return this.props.history.push('/admin-amcos-details/' + row.id, row)
+      }
+
 
     handleChange = event => {
         if (this.state.mode) {
@@ -185,7 +190,7 @@ class ManageAmcos extends Component {
                         background: "#003366"
                       }} className="btn btn-success"
                         onClick={() => {
-                          this.ViewCustomerDetails(record);
+                          this.ViewAmcosDetails(record);
                         }}
                       >
                         <i className="fa fa-eye"></i>

@@ -76,6 +76,8 @@ import ManagePembejeo from '../components/Pages/Admin/SystemSetup/ManagePembejeo
 import ManageMCU from '../components/Pages/Admin/SystemSetup/ManageMCU';
 import ManageAmcos from '../components/Pages/Admin/SystemSetup/ManageAmcos';
 import AddAmcos from '../components/Pages/Admin/SystemSetup/AddAmcos';
+import FarmerDetails from '../components/Pages/Admin/Farmers/FarmerDetails';
+import AmcosDetails from '../components/Pages/Admin/SystemSetup/AmcosDetails';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -123,8 +125,11 @@ const Routes = ({ location }) => {
                                 <Switch location={location}>
                                     {/* Admin */}
                                     <Route path="/admin-dashboard" component={waitFor(Dashboard)} />
+
                                     <Route path="/admin-farmers-list" component={waitFor(AllFarmers)} />
+                                    <Route path="/admin-farmer-details/:id" component={waitFor(FarmerDetails)}/>
                                     <Route path="/admin-add-farmer" component={waitFor(AddFarmer)} />
+
                                     <Route path="/admin-farmers-harvests" component={waitFor(FarmersHarvests)}/>
                                     <Route path="/admin-mpesa-wallet" component={waitFor(AdminWallet)}/>
 
@@ -149,6 +154,8 @@ const Routes = ({ location }) => {
 
                                    <Route path="/admin-manage-amcos" component={waitFor(ManageAmcos)}/>
                                    <Route path="/admin-add-amcos" component={waitFor(AddAmcos)}/>
+                                   <Route path="/admin-amcos-details/:id" component={waitFor(AmcosDetails)}/>
+
 
                                    {/* System Settings */}
                                    <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
