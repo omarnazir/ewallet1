@@ -59,6 +59,7 @@ class FarmerDetails extends Component {
         farmer: {
             id: 0,
             firstName: "",
+            middleName:"",
             surname: "",
             sex: "",
             idNumber: "",
@@ -72,7 +73,10 @@ class FarmerDetails extends Component {
             farmSize:0,
             farmingType:"",
             farmingMethod:"",
-            registrationDate:Date.now()
+            registrationDate:Date.now(),
+
+            district:{},
+            region:{}
         }
 
     };
@@ -108,8 +112,27 @@ class FarmerDetails extends Component {
         this.setState({ farmerId: state.id })
         axios.get("/farmers/" + state.id)
             .then(res => {
-                const farmer = res.data;
-                this.setState({ farmer })
+          
+                this.setState({farmer:{...this.state.farmer,id:res.data.id}})
+                this.setState({farmer:{...this.state.farmer,firstName:res.data.firstName}})
+                this.setState({farmer:{...this.state.farmer,middleName:res.data.middleName}})
+                this.setState({farmer:{...this.state.farmer,surname:res.data.surname}})
+                this.setState({farmer:{...this.state.farmer,sex:res.data.sex}})
+                this.setState({farmer:{...this.state.farmer,idNumber:res.data.idNumber}})
+                this.setState({farmer:{...this.state.farmer,dateOfBirth:res.data.dateOfBirth}})
+                this.setState({farmer:{...this.state.farmer,msisdn:res.data.msisdn}})
+                this.setState({farmer:{...this.state.farmer,mainCrop:res.data.mainCrop}})
+                this.setState({farmer:{...this.state.farmer,secondaryCrop:res.data.secondaryCrop}})
+                this.setState({farmer:{...this.state.farmer,ward:res.data.ward}}) 
+                this.setState({farmer:{...this.state.farmer,district:res.data.ward.district}}) 
+                this.setState({farmer:{...this.state.farmer,region:res.data.ward.district.region}}) 
+                this.setState({farmer:{...this.state.farmer,village:res.data.village}})
+                this.setState({farmer:{...this.state.farmer,amcos:res.data.amcos}})  
+
+                this.setState({farmer:{...this.state.farmer,farmSize:res.data.farmSize}}) 
+                this.setState({farmer:{...this.state.farmer,farmingType:res.data.farmingType}}) 
+                this.setState({farmer:{...this.state.farmer,farmingMethod:res.data.farmingMethod}}) 
+                this.setState({farmer:{...this.state.farmer,registrationDate:res.data.registrationDate}})             
             })
         HarvestsService.getAllHarvetByFarmer(state.id).then(res => {
             this.setState({ loading: false })
@@ -544,7 +567,7 @@ class FarmerDetails extends Component {
                                                                     <td>{this.state.farmer.memberID}</td>
 
                                                                     <th>Amcos</th>
-                                                                    {/* <td>{this.state.farmer.amcos.name}</td> */}
+                                                                    <td>{this.state.farmer.amcos.name}</td>
                                                                 </tr>
 
                                                                 <tr>
@@ -562,10 +585,10 @@ class FarmerDetails extends Component {
                                                                 <tr>
                                                                     <th>Location</th>
                                                                     <td colSpan={3}>
-                                                                        {this.state.region}{", "}
-                                                                        {this.state.district}{", "}
-                                                                        {this.state.ward}{", "}
-                                                                        {this.state.village}
+                                                                        {this.state.farmer.region.name}{", "}
+                                                                        {this.state.farmer.district.name}{", "}
+                                                                        {this.state.farmer.ward.name}{", "}
+                                                                        {this.state.farmer.village.name}
                                                                     </td>
                                                                 </tr>
 
@@ -601,10 +624,10 @@ class FarmerDetails extends Component {
 
                                                                 <tr>
                                                                     <th>Main Crop</th>
-                                                                    {/* <td>{this.state.farmer.mainCrop.name}</td> */}
+                                                                    <td>{this.state.farmer.mainCrop.name}</td>
 
                                                                     <th>Secondary Crops</th>
-                                                                    {/* <td>{this.state.farmer.secondaryCrop.name}</td> */}
+                                                                    <td>{this.state.farmer.secondaryCrop.name}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </Table>
