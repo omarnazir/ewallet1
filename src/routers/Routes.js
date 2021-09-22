@@ -12,18 +12,7 @@ import BasePage from '../components/Layout/BasePage';
 
 
 
-import SmsTemplatesRequested from '../components/Pages/Admin/SmsTemplates/RequestedSmsTemplates';
-import CustomerDetails from '../components/Pages/Admin/Customers/CustomerDetails';
 import MobileOperator from '../components/Pages/Admin/Settings/MobileOperator';
-import SmsLogs from '../components/Pages/Admin/Settings/SmsLogs';
-import CustomerList from '../components/Pages/Admin/Customers/CustomerList';
-import PostPaidCustomers from '../components/Pages/Admin/Customers/PostPaidCustomers';
-import Transactions from '../components/Pages/Admin/Transactions/Transactions';
-import Senders from '../components/Pages/Admin/Senders/Senders';
-import SendersRequested from '../components/Pages/Admin/Senders/RequestedSenders';
-import SmsTemplates from '../components/Pages/Admin/SmsTemplates/SmsTemplates';
-import Tariffs from "../components/Pages/Admin/Tariffs/Tariffs"
-import TarriffBand from '../components/Pages/Admin/Tariffs/TariffBand';
 import AddUser from '../components/Pages/Admin/UserManagement/AddUser';
 import UsersManagement from '../components/Pages/Admin/UserManagement/UsersList';
 import RestrictedWords from '../components/Pages/Admin/Settings/RestrictedWords';
@@ -44,7 +33,6 @@ import AddUserRequestedSms from '../components/Pages/Public/Sms/AddUserRequested
 import PrePaidInvoice from "../components/Pages/Public/PrePaid/PrePaidInvoice";
 
 import LandingPage from '../components/Auth/landing';
-import Invoices from '../components/Pages/Admin/Transactions/Invoices';
 import SingleUserPage from '../components/Pages/Public/Users/SingleUserPage';
 import EditAdminUser from '../components/Pages/Admin/UserManagement/EditAdminUser';
 import EditNormalUserPage from "../components/Pages/Public/Users/EditPage";
@@ -161,26 +149,8 @@ const Routes = ({ location }) => {
                                    <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
                                     <Route path="/admin-manage-roles" component={waitFor(ManageRole)}/>
                                     <Route path="/admin-manage-smsc" component={waitFor(ManageSmsc)}/>
-                                    <Route path="/admin-sms-log" component={waitFor(SmsLogs)} />
+                                    {/* <Route path="/admin-sms-log" component={waitFor(SmsLogs)} /> */}
                                     <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />
-
-
-
-
-                                    <Route path="/admin-customers-list" component={waitFor(CustomerList)} />
-                                    <Route path="/admin-customers-details/:id" component={waitFor(CustomerDetails)}/>
-                                    <Route path="/admin-customers-postpaid" component={waitFor(PostPaidCustomers)} />
-                                    <Route path="/admin-transactions" component={waitFor(Transactions)} />
-
-                                    <Route path="/admin-senders" component={waitFor(Senders)} />
-                                    <Route path="/admin-senders-requested" component={waitFor(SendersRequested)} />
-
-                                    <Route path="/admin-sms-requested-templates" component={waitFor(SmsTemplatesRequested)}/>
-                                    <Route path="/admin-sms-templates" component={waitFor(SmsTemplates)} />
-
-                                    <Route path="/admin-manage-tariffs" component={waitFor(Tariffs)} />
-                                    <Route path="/admin-manage-tariff-bands/:id" component={waitFor(TarriffBand)} />
-
 
                                     <Route path="/admin-manage-edit-user/:id" component={waitFor(EditAdminUser)}/>
                                     <Route path="/admin-add-new-user" component={waitFor(AddUser)} />
@@ -191,7 +161,7 @@ const Routes = ({ location }) => {
                                  
                                     <Route path="/admin-account-expiration" component={waitFor(UserAccountExpiration)}/>
                                     
-                                    <Route path="/admin-invoices/:id" component={waitFor(Invoices)} />
+                                    
 
 
                                 {/* User Roles -{type Prepaid & Post Paid}  */}

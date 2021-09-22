@@ -7,7 +7,7 @@ export const calculateAge = (dob) => {
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         ageNow--;
     }
-    console.log(ageNow);
+    // console.log(ageNow);
 
     if (ageNow !== null)
         return ageNow;
