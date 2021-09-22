@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component,Fragment } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import Moment from "moment";
 import axios from "../../../../services/axios";
@@ -9,10 +9,12 @@ import {
     NavItem,
     NavLink,
     Col,
-    Table
+    Table,
+    Card, CardHeader, CardBody,
 } from "reactstrap";
 import classnames from 'classnames';
-
+import ReactDatatable from '@ashvin27/react-datatable';
+import { CropsService } from "../../../../services";
 class AmcosDetails extends Component {
     state = {
         activeTab: '1',
@@ -26,7 +28,9 @@ class AmcosDetails extends Component {
             ward:{},
             district:{},
             region:{}
-        }
+        },
+        loading:true,
+        cropsList:[]
 
 
     };
@@ -39,6 +43,13 @@ class AmcosDetails extends Component {
         }
     }
 
+    getAllCropsByAmcos(id) {
+        axios.get("/amcos-crops/"+id+"/crops").then(res => {
+          this.setState({loading:false})
+          this.setState({ cropsList:res.data })
+    
+        })
+      }
 
     ViewFarmersList = () => {
         return this.props.history.push("/admin-manage-amcos")
@@ -72,7 +83,7 @@ class AmcosDetails extends Component {
                 this.setState({ amcos: { ...this.state.amcos, district: res.data.village.ward.district } })
                 this.setState({ amcos: { ...this.state.amcos, region: res.data.village.ward.district.region } })
             })
-
+        this.getAllCropsByAmcos(state.id);
 
     }
     AddActionButtonStyle = {
@@ -84,6 +95,58 @@ class AmcosDetails extends Component {
     }
 
 
+    columns = [
+        {
+          key: "id",
+          text: "ID",
+          cell: (record, index) => {
+            return index + 1;
+          }
+        },
+        {
+          key: "name",
+          text: "NAME",
+          cell: (record, index) => {
+            return record.crop.name;
+          }
+        },
+        {
+          key: "type",
+          text: "TYPE",
+          cell: (record, index) => {
+            if(record.crop!=null){
+            return record.crop.cropType.name;
+            }
+            return "";
+          }
+        },
+        {
+          key: "id",
+          text: "ACTION",
+          cell: (record, index) => {
+            return (
+              <Fragment>
+                <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+              </Fragment>
+            )
+          }
+        }
+      ]
+
+      config = {
+        page_size: 10,
+        length_menu: [10, 25, 50],
+        show_filter: true,
+        show_pagination: true,
+        pagination: 'advance',
+        filename: "Contact List",
+        button: {
+    
+        },
+        language: {
+          loading_text: "Please be patient while data loads..."
+        }
+      }
 
     render() {
         return (
@@ -141,7 +204,7 @@ class AmcosDetails extends Component {
 
                                                 <tbody>
                                                     <tr>
-                                                        <th colSpan={4} className="text-uppercase">  <span className="fa fa-user mr-2"></span> Amcos Information</th>
+                                                        <th colSpan={4} className="text-uppercase">  <span className="fa fa-users mr-2"></span> Amcos Information</th>
                                                     </tr>
                                                     <tr>
                                                         <th>Name</th>
@@ -169,7 +232,7 @@ class AmcosDetails extends Component {
 
 
                                                     <tr>
-                                                        <th colSpan={4} className="text-uppercase"><span className="fa fa-leaf mr-2"></span> AMCOS LOCATION</th>
+                                                        <th colSpan={4} className="text-uppercase"><span className="fa fa-map-marker-alt mr-2"></span> AMCOS LOCATION</th>
                                                     </tr>
 
                                                     <tr>
@@ -195,9 +258,6 @@ class AmcosDetails extends Component {
                                                     </tr>
                                                 </tbody>
                                             </Table>
-
-
-
                                         </div>
                                     </div>
                                 </Col>
@@ -207,18 +267,27 @@ class AmcosDetails extends Component {
                             <TabPane tabId="2">
 
                                 <Col xl="12">
-                                    <div>
-                                        <div className="card">
-                                            <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">Crops</h4>
-                                            </div>
-                                            <hr className="my-0" />
-                                            <div className="card-body mt-2 py-1">
-
-                                            </div>
-
+                                <Card>
+                                    
+                                        <CardHeader>
+                                        <h4 className="text-center mt-2">Amcos Crops</h4>
+                                        <hr/>
+                                        <div className="text-left">
+                                        <Button onClick={this.ViewFarmersList} style={this.AddActionButtonStyle} className="btn-pill-right">Add Amcos Crop</Button>
                                         </div>
-                                    </div>
+                                      
+                                        </CardHeader>
+                                        <CardBody>
+
+                                            <ReactDatatable
+                                                extraButtons={this.extraButtons}
+                                                config={this.config}
+                                                records={this.state.cropsList}
+                                                columns={this.columns}
+                                                loading={this.state.loading}
+                                            />
+                                        </CardBody>
+                                    </Card>
                                 </Col>
 
 
