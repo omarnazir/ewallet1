@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ContentWrapper from "../../../Layout/ContentWrapper";
-import axios from "../../../../services/axios";
+import ContentWrapper from "../../../../Layout/ContentWrapper";
+import axios from "../../../../../services/axios";
 import {
     Container,
     Card,
@@ -10,8 +10,8 @@ import {
     Col,
     CardFooter
 } from "reactstrap";
-import FormValidator from '../../../Common/FormValidator';
-import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
+import FormValidator from '../../../../Common/FormValidator';
+import {SuccessAlert,DeleteAlert} from "../../../../Common/AppAlerts";
 
 class AddAmcos extends Component {
 

@@ -30,7 +30,6 @@ class AllFarmers extends Component {
   }
 
   ViewCustomerDetails = (row) => {
-    console.log(row.id)
     return this.props.history.push('/admin-farmer-details/' + row.id, row)
   }
 
@@ -161,8 +160,6 @@ class AllFarmers extends Component {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />
     }
-    let index = 0
-
     return (
       <ContentWrapper>
         <div className="content-heading">

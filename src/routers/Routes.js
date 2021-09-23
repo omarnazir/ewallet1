@@ -62,14 +62,15 @@ import AddRegistar from '../components/Pages/Admin/Registrars/AddRegistar';
 import AddUssdMenu from '../components/Pages/Admin/UssdMenu/AddUssdMenu';
 import ManagePembejeo from '../components/Pages/Admin/SystemSetup/ManagePembejeo';
 import ManageMCU from '../components/Pages/Admin/SystemSetup/ManageMCU';
-import ManageAmcos from '../components/Pages/Admin/SystemSetup/ManageAmcos';
-import AddAmcos from '../components/Pages/Admin/SystemSetup/AddAmcos';
+import ManageAmcos from '../components/Pages/Admin/SystemSetup/Amcos/ManageAmcos';
+import AddAmcos from '../components/Pages/Admin/SystemSetup/Amcos/AddAmcos';
 import FarmerDetails from '../components/Pages/Admin/Farmers/FarmerDetails';
-import AmcosDetails from '../components/Pages/Admin/SystemSetup/AmcosDetails';
+import AmcosDetails from '../components/Pages/Admin/SystemSetup/Amcos/AmcosDetails';
 import EditRegistar from '../components/Pages/Admin/Registrars/EditRegistar';
 import EditFarmer from '../components/Pages/Admin/Farmers/EditFarmer';
 import AddVillage from '../components/Pages/Admin/SystemSetup/AddVillage';
 import ManageAdvisoryServices from '../components/Pages/Admin/SystemSetup/ManageAdvisoryServices';
+import EditAmcos from '../components/Pages/Admin/SystemSetup/Amcos/EditAmcos';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -154,6 +155,7 @@ const Routes = ({ location }) => {
 
                                    <Route path="/admin-manage-amcos" component={waitFor(ManageAmcos)}/>
                                    <Route path="/admin-add-amcos" component={waitFor(AddAmcos)}/>
+                                   <Route path="/admin-edit-amcos/:id" component={waitFor(EditAmcos)}/>
                                    <Route path="/admin-amcos-details/:id" component={waitFor(AmcosDetails)}/>
 
 

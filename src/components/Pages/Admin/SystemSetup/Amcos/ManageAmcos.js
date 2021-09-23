@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ContentWrapper from "../../../Layout/ContentWrapper";
-import axios from "../../../../services/axios";
+import ContentWrapper from "../../../../Layout/ContentWrapper";
+import axios from "../../../../../services/axios";
 import {
     Container, Card, CardHeader, CardBody, CardTitle, Button, Modal,
     ModalHeader,
@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
-import { CropsService,CropsTypeService } from "../../../../services";
+import { CropsService,CropsTypeService } from "../../../../../services";
 
 class ManageAmcos extends Component {
     state = {

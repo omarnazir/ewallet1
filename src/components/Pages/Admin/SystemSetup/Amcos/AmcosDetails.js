@@ -1,7 +1,7 @@
 import React, { Component,Fragment } from "react";
-import ContentWrapper from "../../../Layout/ContentWrapper";
+import ContentWrapper from "../../../../Layout/ContentWrapper";
 import Moment from "moment";
-import axios from "../../../../services/axios";
+import axios from "../../../../../services/axios";
 import {
     Container, Button, TabContent,
     TabPane,
@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import classnames from 'classnames';
 import ReactDatatable from '@ashvin27/react-datatable';
-import { CropsService } from "../../../../services";
+import { CropsService } from "../../../../../services";
 class AmcosDetails extends Component {
     state = {
         activeTab: '1',
