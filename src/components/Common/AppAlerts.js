@@ -13,7 +13,7 @@ function SuccessAlert(message,icon="success"){
       )
 }
 
-function DeleteAlert(title="Are you sure?",text="Delete action can not be reversed",message,icon="warning"){
+function DeleteAlert(title="Are you sure?",text="This action can not be reversed",message,icon="warning"){
     return swal(
         {
             position: 'center',
@@ -21,6 +21,8 @@ function DeleteAlert(title="Are you sure?",text="Delete action can not be revers
             title:title,
             text: text,
             buttons: ['No, Thanks','Yes, Delete'],
+            confirmButton:"btn btn-danger",
+            cancelButton:"btn",
             dangerMode:true
           }
     )

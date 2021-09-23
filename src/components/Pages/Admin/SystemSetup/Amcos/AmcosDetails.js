@@ -14,6 +14,8 @@ import {
 } from "reactstrap";
 import classnames from 'classnames';
 import ReactDatatable from '@ashvin27/react-datatable';
+import {SuccessAlert,DeleteAlert} from "../../../../Common/AppAlerts";
+
 class AmcosDetails extends Component {
     state = {
         activeTab: '1',
@@ -50,10 +52,29 @@ class AmcosDetails extends Component {
         })
       }
 
-    ViewFarmersList = () => {
+    ViewAmcosList = () => {
         return this.props.history.push("/admin-manage-amcos")
     }
 
+    AlertDeleteItem(id){
+        DeleteAlert().then((willDelete)=>{
+          if(willDelete){
+            this.DeleteAmcos(id);
+           
+          }
+        })
+      }
+
+
+  DeleteAmcos(id) {  
+    axios.delete("/amcos/" + id)
+      .then(res => {
+        this.ViewAmcosList()
+        SuccessAlert("Deleted Amcos Successfully")
+      }).catch(err=>{
+        SuccessAlert("Please delete Amcos references first ","info")
+      })
+  }
 
     handleClickActiveTab = event => {
         const newActiveTab = event.target.tab;
@@ -162,9 +183,9 @@ class AmcosDetails extends Component {
                     <div className="flex-row d-block d-md-flex">
 
                         <span className="btn badge-success mr-2 px-4" onClick={() => this.EditAmcos(this.state.amcosId)}> <i className="icon-pencil mr-2"  ></i>Edit Amcos</span>
-                        <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete Amcos </span>
+                        <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.AlertDeleteItem(this.state.amcosId)}> <i className="fa fa-trash mr-2"></i>Delete Amcos </span>
 
-                        <Button onClick={this.ViewFarmersList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Amcos</Button>
+                        <Button onClick={this.ViewAmcosList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Amcos</Button>
                     </div>
                 </div>
                 <Container fluid>
@@ -276,7 +297,7 @@ class AmcosDetails extends Component {
                                         <h4 className="text-center mt-2">Amcos Crops</h4>
                                         <hr/>
                                         <div className="text-left">
-                                        <Button onClick={this.ViewFarmersList} style={this.AddActionButtonStyle} className="btn-pill-right">Add Amcos Crop</Button>
+                                        <Button onClick={this.ViewAmcosList} style={this.AddActionButtonStyle} className="btn-pill-right">Add Amcos Crop</Button>
                                         </div>
                                       
                                         </CardHeader>
