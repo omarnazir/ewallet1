@@ -53,7 +53,7 @@ import ManageRegion from '../components/Pages/Admin/SystemSetup/ManageRegion';
 import ManageDistricts from '../components/Pages/Admin/SystemSetup/ManageDistricts';
 import ManageWards from '../components/Pages/Admin/SystemSetup/ManageWards';
 import ManageVillage from '../components/Pages/Admin/SystemSetup/ManageVillage';
-import ManageCollectionCenter from '../components/Pages/Admin/SystemSetup/ManageCollectionCenter';
+import ManageCollectionCenter from '../components/Pages/Admin/SystemSetup/CollectionCenter/ManageCollectionCenter';
 import AllRegistars from '../components/Pages/Admin/Registrars/AllRegistrars';
 import ManageAmcosPrice from '../components/Pages/Admin/SystemSetup/ManageCropPrice';
 import ManageCropPrice from '../components/Pages/Admin/SystemSetup/ManageCropPrice';
@@ -71,6 +71,7 @@ import EditFarmer from '../components/Pages/Admin/Farmers/EditFarmer';
 import AddVillage from '../components/Pages/Admin/SystemSetup/AddVillage';
 import ManageAdvisoryServices from '../components/Pages/Admin/SystemSetup/ManageAdvisoryServices';
 import EditAmcos from '../components/Pages/Admin/SystemSetup/Amcos/EditAmcos';
+import AddCollectionCenter from '../components/Pages/Admin/SystemSetup/CollectionCenter/AddCollectionCenter';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -147,6 +148,7 @@ const Routes = ({ location }) => {
                                    <Route path="/admin-edit-village/:id" component={waitFor(AddVillage)}/>
 
                                    <Route path="/admin-collection-centers" component={waitFor(ManageCollectionCenter)}/>
+                                   <Route path="/admin-add-center" component={waitFor(AddCollectionCenter)}/>
                                    <Route path="/admin-crop-price" component={waitFor(ManageCropPrice)}/>
 
                                    <Route path="/admin-agricultural-inputs" component={waitFor(ManagePembejeo)}/>
