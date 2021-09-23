@@ -66,6 +66,7 @@ import ManageAmcos from '../components/Pages/Admin/SystemSetup/ManageAmcos';
 import AddAmcos from '../components/Pages/Admin/SystemSetup/AddAmcos';
 import FarmerDetails from '../components/Pages/Admin/Farmers/FarmerDetails';
 import AmcosDetails from '../components/Pages/Admin/SystemSetup/AmcosDetails';
+import EditRegistar from '../components/Pages/Admin/Registrars/EditRegistar';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -117,6 +118,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-farmers-list" component={waitFor(AllFarmers)} />
                                     <Route path="/admin-farmer-details/:id" component={waitFor(FarmerDetails)}/>
                                     <Route path="/admin-add-farmer" component={waitFor(AddFarmer)} />
+                                    <Route path="/admin-edit-farmer/:id" component={waitFor(AddFarmer)} />
 
                                     <Route path="/admin-farmers-harvests" component={waitFor(FarmersHarvests)}/>
                                     <Route path="/admin-mpesa-wallet" component={waitFor(AdminWallet)}/>
@@ -126,6 +128,7 @@ const Routes = ({ location }) => {
 
                                     <Route path="/admin-manage-registars" component={waitFor(AllRegistars)}/>
                                     <Route path="/admin-add-registar" component={waitFor(AddRegistar)} />
+                                    <Route path="/admin-edit-registar" component={waitFor(EditRegistar)} />
                                     <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
                                     
                                    {/* System Setup */}

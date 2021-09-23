@@ -16,7 +16,7 @@ import $ from "jquery";
 import FormValidator from '../../../Common/FormValidator';
 import axios from '../../../../services/axios'
 
-class AddRegistar extends Component {
+class EditRegistar extends Component {
 
     state = {
         formAddRegistrar: {
@@ -34,16 +34,44 @@ class AddRegistar extends Component {
         regionId: 0,
         districtId: 0,
         wardId: 0,
-        villageId: 0
+        villageId: 0,
+        registarId:0
     }
 
     componentDidMount() {
-        this.getAllRegions();
+        const { state } = this.props.history.location;
+        if (state == undefined) {
+            return this.props.history.push('/admin-manage-registars')
+        }
+
+        this.setState({ registarId: state.id })
+        axios.get("/registars/" + state.id)
+            .then(res => {
+          
+                this.setState({formAddRegistrar:{...this.state.formAddRegistrar,id:res.data.id}})
+                this.setState({formAddRegistrar:{...this.state.formAddRegistrar,name:res.data.name}})
+                this.setState({formAddRegistrar:{...this.state.formAddRegistrar,address:res.data.address}})
+                this.setState({formAddRegistrar:{...this.state.formAddRegistrar,msisdn:res.data.msisdn}})
+
+                this.setState({regionId:res.data.regionId})
+                this.setState({districtId:res.data.districtId})
+                this.setState({wardId:res.data.wardId})
+                this.setState({villageId:res.data.villageId})
+
+            
+            this.getAllWardsByDistrict(res.data.districtId);
+            this.getAllDistrictsByRegion(res.data.regionId);
+            this.getAllVillagesByWard(res.data.wardId);
+            })
+
+            this.getAllRegions();  
     }
 
     getAllRegions() {
         axios.get("/regions").then(res => { this.setState({ regions: res.data }) })
     }
+
+    
     getAllDistrictsByRegion(id) {
         axios.get("/regions/" + id + "/districts").then(res => { this.setState({ districts: res.data }) })
     }
@@ -105,6 +133,7 @@ class AddRegistar extends Component {
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
         if (!hasError) {
             const registar={
+                id:this.state.formAddRegistrar.id,
                 name: this.state.formAddRegistrar.name,
                 address:this.state.formAddRegistrar.address,
                 msisdn: this.state.formAddRegistrar.msisdn,
@@ -116,7 +145,7 @@ class AddRegistar extends Component {
 
             }
             console.log(registar);
-            axios.post("/registars", registar).then(res => {
+            axios.put("/registars", registar).then(res => {
                 console.log(res);
                 this.ViewAllRegistars();
             })
@@ -182,8 +211,8 @@ class AddRegistar extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Create New Registar
-                        <small>Adding a new registar.</small>
+                        Edit Registar
+                        <small>Update an existing registar.</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewAllRegistars} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Registars</Button>
@@ -327,4 +356,4 @@ class AddRegistar extends Component {
     }
 }
 
-export default AddRegistar;
+export default EditRegistar;

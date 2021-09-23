@@ -60,6 +60,10 @@ class FarmerDetails extends Component {
         return this.props.history.push("/admin-farmers-list")
     }
 
+    EditFarmer = (id) => {
+        return this.props.history.push('/admin-edit-farmer/' + id, id)
+      }
+
     componentDidMount() {
 
         const { state } = this.props.history.location;
@@ -230,7 +234,7 @@ class FarmerDetails extends Component {
                         <small>Showing all farmer details.</small>
                     </div>
                     <div className="flex-row d-block d-md-flex">
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit Farmer</span>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditFarmer(this.state.farmerId)}> <i className="icon-pencil mr-2"  ></i>Edit Farmer</span>
                         <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete Farmer </span>
 
                         <Button onClick={this.ViewFarmersList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Farmers</Button>

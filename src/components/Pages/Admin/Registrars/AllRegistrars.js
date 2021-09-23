@@ -6,6 +6,7 @@ import Moment from 'moment'
 import ReactDatatable from '@ashvin27/react-datatable';
 import { AuthService, FarmersService,RegistarService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
+import axios from '../../../../services/axios';
 
 class AllRegistars extends Component {
   state = {
@@ -18,7 +19,10 @@ class AllRegistars extends Component {
     if (!isAuthenticated) {
       this.setState({ redirect: "/login" })
     }
+    this.getAllRegistars();
+  }
 
+  getAllRegistars(){
     RegistarService.getAllRegistars().then(res => {
       this.setState({loading:false})
       this.setState({ farmersList: res.data })
@@ -29,16 +33,16 @@ class AllRegistars extends Component {
     return Moment(date).format('lll')
   }
 
-  ViewCustomerDetails = (row) => {
-    console.log(row.id)
-    return this.props.history.push('/admin-customers-details/' + row.id, row)
+  EditRegistrar = (row) => {
+    return this.props.history.push('/admin-edit-registar/' + row.id, row)
   }
-
   AddRegistar=()=>{
     return this.props.history.push("/admin-add-registar");
   }
 
-
+  DeleteRegistar=(id)=>{
+    axios.delete("/registars/" + id).then(res =>this.getAllRegistars());
+  }
 
   AddActionButtonStyle = {
     color: 'white',
@@ -113,8 +117,8 @@ class AllRegistars extends Component {
         cell: (record, index) => {
           return (
             <Fragment>
-              <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-              <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+              <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRegistrar(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+              <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegistar(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
             </Fragment>
           )
         }
@@ -127,8 +131,6 @@ class AllRegistars extends Component {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />
     }
-    let index = 0
-
     return (
       <ContentWrapper>
         <div className="content-heading">

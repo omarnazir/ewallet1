@@ -50,12 +50,28 @@ class AddFarmer extends Component {
         wards: [],
         villages: [],
         amcos: [],
-        crops: []
+        crops: [],
+        mode:true,
+        farmerId:0,
 
     }
 
-    
+
     componentDidMount() {
+       
+
+        const { state } = this.props.history.location;
+        if (state == undefined) {
+            console.log("Farmer Id: 0");
+            this.setState({mode:true})
+        }
+        
+        if(state!=undefined){ 
+            console.log("Farmer Id:",state);
+            this.setState({mode:false})
+            this.setState({farmerId:state})
+        };
+
        
     }
     validateOnChange = event => {
@@ -180,8 +196,8 @@ class AddFarmer extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Add New Farmer
-                        <small>Adding a new farmer.</small>
+                        {this.state.mode?"Add New Farmer ":"Edit Farmer Details"}
+                        <small> {this.state.mode?"Adding a new farmer.":"Edit Farmer"}</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewAllFarmers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Farmers</Button>
