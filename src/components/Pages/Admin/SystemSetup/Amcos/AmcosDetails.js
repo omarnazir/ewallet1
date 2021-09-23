@@ -14,7 +14,6 @@ import {
 } from "reactstrap";
 import classnames from 'classnames';
 import ReactDatatable from '@ashvin27/react-datatable';
-import { CropsService } from "../../../../../services";
 class AmcosDetails extends Component {
     state = {
         activeTab: '1',
@@ -94,6 +93,10 @@ class AmcosDetails extends Component {
         return Moment(date).format('lll')
     }
 
+    EditAmcos = (id) => {
+        return this.props.history.push('/admin-edit-amcos/' + id, id)
+      }
+
 
     columns = [
         {
@@ -158,7 +161,7 @@ class AmcosDetails extends Component {
                     </div>
                     <div className="flex-row d-block d-md-flex">
 
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit Amcos</span>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditAmcos(this.state.amcosId)}> <i className="icon-pencil mr-2"  ></i>Edit Amcos</span>
                         <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete Amcos </span>
 
                         <Button onClick={this.ViewFarmersList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Amcos</Button>
