@@ -73,8 +73,6 @@ class EditFarmer extends Component {
 
 
     componentDidMount() {
-
-
         const { state } = this.props.history.location;
         if (state == undefined) {
             console.log("Farmer Id: 0");
