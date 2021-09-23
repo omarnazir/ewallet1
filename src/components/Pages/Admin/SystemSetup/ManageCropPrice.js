@@ -12,6 +12,7 @@ import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
 import Moment from 'moment'
 import { CropsService } from "../../../../services";
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 class ManageCropPrice extends Component {
     state = {
@@ -58,6 +59,15 @@ class ManageCropPrice extends Component {
 
             })
     }
+
+    AlertDeleteItem(id){
+        DeleteAlert().then((willDelete)=>{
+          if(willDelete){
+            this.DeleteCropPrice(id);
+            SuccessAlert("Deleted Crop Grade Price Successfully")
+          }
+        })
+      }
 
     getAllCrops() {
         CropsService.getAllCrops().then(res => {
@@ -114,7 +124,7 @@ class ManageCropPrice extends Component {
                 return (
                     <Fragment>
                         <span className="btn badge-success mr-2 px-4" onClick={() => this.EditCropPrice(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteCropPrice(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
@@ -199,6 +209,7 @@ class ManageCropPrice extends Component {
             axios.post("/crops-grade-price", this.state.cropPrice).then(res => {
                 console.log(res.data);
                 this.getAllCropPrices();
+                SuccessAlert("Added Crop Grade Price Successfully");
                 this.setState({ cropPrice: this.initialState.cropPrice })
             })
         } else {
@@ -206,7 +217,7 @@ class ManageCropPrice extends Component {
             axios.put("/crops-grade-price", this.state.editedCropPrice).then(res => {
                 console.log(res.data);
                 this.getAllCropPrices();
-
+                SuccessAlert("Updated Crop Grade Price Successfully");
             })
         }
     }
@@ -228,19 +239,7 @@ class ManageCropPrice extends Component {
                             <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Crop Price" : "Edit Crop Price"}</ModalHeader>
                             <form onSubmit={this.handleSubmit}>
                                 <ModalBody>
-                                    <FormGroup>
-                                        <label>Grade Name :</label>
-                                        <input className="form-control" name="gradeName"
-                                            value={this.state.mode ? this.state.cropPrice.gradeName : this.state.editedCropPrice.gradeName}
-                                            onChange={this.handleChange} type="text" required></input>
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <label>Price :</label>
-                                        <input className="form-control" name="unitPrice"
-                                            value={this.state.mode ? this.state.cropPrice.unitPrice : this.state.editedCropPrice.unitPrice}
-                                            onChange={this.handleChange} type="text" required></input>
-                                    </FormGroup>
-                                    <div className="form-group">
+                                <div className="form-group">
                                         <label htmlFor="exampleFormControlSelect1">Crop : </label>
                                         <select className="form-control" id="exampleFormControlSelect1" name="cropId"
                                             onChange={this.handleChange}
@@ -255,6 +254,19 @@ class ManageCropPrice extends Component {
 
                                         </select>
                                     </div>
+                                    <FormGroup>
+                                        <label>Grade Name :</label>
+                                        <input className="form-control" name="gradeName"
+                                            value={this.state.mode ? this.state.cropPrice.gradeName : this.state.editedCropPrice.gradeName}
+                                            onChange={this.handleChange} type="text" required></input>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label>Price :</label>
+                                        <input className="form-control" name="unitPrice"
+                                            value={this.state.mode ? this.state.cropPrice.unitPrice : this.state.editedCropPrice.unitPrice}
+                                            onChange={this.handleChange} type="number" required></input>
+                                    </FormGroup>
+                                 
                                 </ModalBody>
                                 <ModalFooter>
                                     <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
