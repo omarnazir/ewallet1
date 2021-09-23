@@ -206,7 +206,7 @@ class ManageDistricts extends Component {
                             Add District</Button>
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add New Region" : "Edit Region"}</ModalHeader>
+                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add New District" : "Edit District"}</ModalHeader>
                             <form onSubmit={this.handleSubmit}>
                                 <ModalBody>
                                     <FormGroup>
