@@ -1,49 +1,28 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import axios from "../../../../services/axios";
-import { Link, Redirect } from 'react-router-dom';
 import {
     Container,
     Card,
-    CardHeader,
     CardBody,
     Button,
-    FormGroup,
     Row,
     Col,
-    Input, CardFooter,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Label
+    CardFooter
 } from "reactstrap";
-import $ from "jquery";
-
 import FormValidator from '../../../Common/FormValidator';
-import Moment from "moment";
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 class AddAmcos extends Component {
 
     state = {
-        formRegister: {
-            email: '',
-            password: '',
-            password2: '',
-            terms: false,
-            fullname: "",
-            username: "",
-            phonenumber: "",
-            monthlysmslimit: 0,
-            settings: false,
-            accountExpiration: ""
-
-        },
-        description: "",
-        selectedRoleList: [],
-        role: "",
-        roleId: 0,
-        roleDescription: "",
+        amcosName:"",
+        mcosId: '',
+        regionId: '',
+        districtId: '',
+        wardId: '',
+        villageId: '',
+        registrarId: '',
 
         regions: [],
         districts: [],
@@ -51,14 +30,78 @@ class AddAmcos extends Component {
         villages: [],
         amcos: [],
         crops: [],
-            registrars: [],
-            mcos: []
+        registrars: [],
+        mcos: []
 
     }
 
     componentDidMount() {
-       
+        this.getAllRegions();
+        this.getAllRegistrar();
+
     }
+
+    getAllMCOS() {
+        axios.get("/mcos").then(res => { this.setState({ mcos: res.data }) })
+    }
+
+    getAllRegistrar() {
+        axios.get("/registars").then(res => { this.setState({ registrars: res.data }) })
+    }
+
+    getAllMCOSByRegion(id) {
+        axios.get("/mcos/" + id + "/region").then(res => { this.setState({ mcos: res.data }) })
+
+    }
+
+    getAllRegions() {
+        axios.get("/regions").then(res => { this.setState({ regions: res.data }) })
+    }
+
+    getAllDistrictsByRegion(id) {
+        axios.get("/regions/" + id + "/districts").then(res => { this.setState({ districts: res.data }) })
+    }
+    getAllWardsByDistrict(id) {
+        axios.get("/wards/byDistrict/" + id).then(res => { this.setState({ wards: res.data }) })
+    }
+    getAllVillagesByWard(id) {
+        axios.get("/villages/byWard/" + id).then(res => this.setState({ villages: res.data }))
+    }
+
+    handleComplexChange = event => {
+
+        console.log("Field Name: " + [event.target.name] + " Field Value: " + [event.target.value])
+        if ([event.target.name] == "regionId") {
+            this.getAllDistrictsByRegion([event.target.value]);
+            this.getAllMCOSByRegion([event.target.value])
+            this.setState({ districtId: 0 });
+            this.setState({ wardId: 0 });
+            this.setState({ villageId: 0 });
+
+            this.setState({ regionId: event.target.value });
+
+        }
+        if ([event.target.name] == "districtId") {
+            this.getAllWardsByDistrict([event.target.value]);
+            this.setState({ wardId: 0 })
+            this.setState({ villageId: 0 })
+
+            this.setState({ districtId: event.target.value })
+        }
+        if ([event.target.name] == "wardId") {
+            this.getAllVillagesByWard([event.target.value]);
+            this.setState({ villageId: 0 })
+
+            this.setState({ wardId: event.target.value })
+        }
+
+        if (event.target.name == "villageId") {
+            this.setState({ villageId: event.target.value })
+
+        }
+    }
+
+
     validateOnChange = event => {
         const input = event.target;
         const form = input.form
@@ -80,19 +123,9 @@ class AddAmcos extends Component {
         }
     }
 
-    
-
-   
     handleChange = event => {
-        console.log("am hree")
         this.setState({ [event.target.name]: event.target.value });
     }
-    formatDate = (date) => {
-        //07/19/2021 10:49:10
-        // YYYY-MM-DD HH:mm:ss
-        return Moment(date).format('MM/DD/YYYY HH:mm:ss')
-    }
-
 
     onSubmit = e => {
         e.preventDefault()
@@ -110,39 +143,19 @@ class AddAmcos extends Component {
 
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
 
-        console.log(this.state.selectedRoleList)
-
-
-        const UserRoles = [];
-        this.state.selectedRoleList.forEach(item => {
-            const newItem = { role_id: item.id }
-            UserRoles.push(newItem)
-        });
-
 
         if (!hasError) {
-            const accountExpiration = this.formatDate(this.state.formRegister.accountExpiration);
-            const User = {
-                "username": this.state.formRegister.username,
-                "email": this.state.formRegister.email,
-                "password": this.state.formRegister.password,
-                "name": this.state.formRegister.fullname,
-                "msisdn": this.state.formRegister.phonenumber,
-                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit,
-                "accountExpiration": accountExpiration
+            const amcos = {
+                "name": this.state.amcosName,
+                "mcosId": this.state.mcosId,
+                "villageId": this.state.villageId,
+                "registrarId": this.state.registrarId
             }
-
-            console.log(this.formatDate(this.state.formRegister.accountExpiration))
-            console.log(User)
-
-            const data = { user: User, role_ids: UserRoles }
-            console.log(data)
-
-
-            axios.post("users/admin", data).then(res => {
-                console.log(res);
-                console.log(res.data);
-                this.ViewUserPage();
+            console.log(amcos);
+            
+            axios.post("/amcos", amcos).then(res => {
+                SuccessAlert("Added Amcos Successfully")
+                this.ViewAllAmcos();
             })
         }
     }
@@ -171,10 +184,6 @@ class AddAmcos extends Component {
         background: "#003366"
     }
 
-    ViewUserPage = () => {
-        return this.props.history.push("/admin-manage-users");
-    };
-
     render() {
         return (
             <ContentWrapper>
@@ -188,15 +197,15 @@ class AddAmcos extends Component {
                     </div>
                 </div>
                 <Container fluid>
-
-                <Card className="pure-form card-default">
+                <form className="mb-3" onSubmit={this.onSubmit}>
+                    <Card className="pure-form card-default">
                         <CardBody>
-                            <form className="mb-3" onSubmit={this.onSubmit}>
+                        
                                 <Row>
                                     <Col md={4}>
                                         <div className="form-group">
                                             <label>Region <span className="red">*</span> </label>
-                                            <select name="regionId" className="form-control" value={this.state.regionId} onChange={this.onChangeRegion}>
+                                            <select name="regionId" className="form-control" value={this.state.regionId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.regions.map((data, index) => {
@@ -211,7 +220,7 @@ class AddAmcos extends Component {
                                     <Col md={4}>
                                         <div className="form-group">
                                             <label>District <span className="red">*</span> </label>
-                                            <select name="districtId" className="form-control" value={this.state.districtId} onChange={this.onChangeDistrict}>
+                                            <select name="districtId" className="form-control" value={this.state.districtId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.districts.map((data, index) => {
@@ -226,7 +235,7 @@ class AddAmcos extends Component {
                                     <Col md={4}>
                                         <div className="form-group">
                                             <label>Ward <span className="red">*</span> </label>
-                                            <select name="wardId" className="form-control" value={this.state.wardId} onChange={this.onChangeWard}>
+                                            <select name="wardId" className="form-control" value={this.state.wardId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.wards.map((data, index) => {
@@ -241,7 +250,7 @@ class AddAmcos extends Component {
                                     <Col md={4}>
                                         <div className="form-group">
                                             <label>Village <span className="red">*</span> </label>
-                                            <select name="villageId" className="form-control" value={this.state.villageId} onChange={this.handleOnChange}>
+                                            <select name="villageId" className="form-control" value={this.state.villageId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.villages.map((data, index) => {
@@ -255,8 +264,8 @@ class AddAmcos extends Component {
 
                                     <Col md={4}>
                                         <div className="form-group">
-                                            <label>MCU <span className="red">*</span> </label>
-                                            <select name="mcosId" className="form-control" value={this.state.mcosId} onChange={this.handleOnChange}>
+                                            <label>MCU (By region)<span className="red">*</span> </label>
+                                            <select name="mcosId" className="form-control" value={this.state.mcosId} onChange={this.handleChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.mcos.map((data, index) => {
@@ -271,10 +280,12 @@ class AddAmcos extends Component {
                                     <Col md={4}>
                                         <div className="form-group">
                                             <label>Registrar <span className="red">*</span> </label>
-                                            <select name="registrarId" className="form-control" value={this.state.registrarId} onChange={this.handleOnChange}>
+                                            <select name="registrarId" className="form-control" value={this.state.registrarId} onChange={this.handleChange}>
                                                 <option value="">-- Select --</option>
                                                 {
-                                                 
+                                                    this.state.registrars.map((data, index) => {
+                                                        return <option key={index} value={data.id}>{data.name}</option>
+                                                    })
                                                 }
                                             </select>
                                             <span className="text-danger">{this.state.registrarIdError}</span>
@@ -285,16 +296,16 @@ class AddAmcos extends Component {
                                         <div className="form-group">
                                             <label>Amcos Name <span className="red">*</span></label>
                                             <input placeholder="Write amcos name ..."
-                                                name="name"
+                                                name="amcosName"
                                                 className="form-control"
-                                                onChange={this.handleOnChange}
-                                                value={this.state.name} />
+                                                onChange={this.handleChange}
+                                                value={this.state.amcosName} />
                                             <span className="text-danger">{this.state.nameError}</span>
                                         </div>
                                     </Col>
                                 </Row>
-                                
-                            </form>
+
+                           
                         </CardBody>
                         <CardFooter>
                             <div className="d-flex align-items-center">
@@ -305,8 +316,8 @@ class AddAmcos extends Component {
                             </div>
                         </CardFooter>
                     </Card>
+                    </form>
 
-                   
                 </Container>
             </ContentWrapper>
         );
