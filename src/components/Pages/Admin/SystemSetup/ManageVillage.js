@@ -87,7 +87,7 @@ class ManageVillage extends Component {
             cell: (record, index) => {
                 return (
                     <Fragment>
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRegion(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditVillage(record.id)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
                         <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegion(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
@@ -120,6 +120,17 @@ class ManageVillage extends Component {
             modal: !this.state.modal
         });
     }
+
+    AddVillage=()=>{
+        return this.props.history.push('/admin-add-village')
+    }
+
+    EditVillage=(id)=>{
+        return this.props.history.push('/admin-edit-village/' + id, id)
+      
+    }
+
+
 
     AddWordMode = () => {
         this.setState({ mode: true })
@@ -192,7 +203,7 @@ class ManageVillage extends Component {
                         <small>Manage villages.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.AddWordMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
+                        <Button onClick={this.AddVillage} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
                         <i className="fa fa-plus mr-2"></i>
                             Add Village</Button>
 

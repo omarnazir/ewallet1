@@ -176,7 +176,6 @@ class AddAmcos extends Component {
     };
 
     render() {
-        let index = 0;
         return (
             <ContentWrapper>
                 <div className="content-heading">
@@ -294,15 +293,6 @@ class AddAmcos extends Component {
                                         </div>
                                     </Col>
                                 </Row>
-{/* 
-                                <Row>
-                                    <Col md={12}>
-                                        <div className="form-group">
-                                            <button className="btn btn-primary mr-2">Save</button>
-                                            <a href="/amcos" className="btn btn-danger">Cancel</a>
-                                        </div>
-                                    </Col>
-                                </Row> */}
                                 
                             </form>
                         </CardBody>

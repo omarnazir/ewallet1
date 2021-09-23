@@ -28,7 +28,7 @@ class EditFarmer extends Component {
     state = {
 
         addFarmerForm: {
-            id:0,
+            id: 0,
             firstName: "",
             middleName: "",
             surname: "",
@@ -91,44 +91,44 @@ class EditFarmer extends Component {
             this.getAllAmcos();
 
             axios.get("/farmers/" + state)
-            .then(res => {
-          
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,id:res.data.id}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,firstName:res.data.firstName}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,middleName:res.data.middleName}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,surname:res.data.surname}})
+                .then(res => {
 
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,dateOfBirth:res.data.dateOfBirth}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,idNumber:res.data.idNumber}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,msisdn:res.data.msisdn}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,memberID:res.data.memberID}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,hamlet:res.data.hamlet}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,longitude:res.data.longitude}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,latitude:res.data.latitude}})
-                this.setState({addFarmerForm:{...this.state.addFarmerForm,farmSize:res.data.farmSize}})
-  
-                this.setState({sex:res.data.sex})
-                this.setState({farmingMethod:res.data.farmingMethod})
-                this.setState({farmingType:res.data.farmingType})
-                
-                this.setState({mainCropId:res.data.mainCrop.id})
-                this.setState({secondaryCropId:res.data.secondaryCrop.id})
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, id: res.data.id } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, firstName: res.data.firstName } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, middleName: res.data.middleName } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, surname: res.data.surname } })
 
-                this.setState({amcosId:res.data.amcos.id})
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, dateOfBirth: res.data.dateOfBirth } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, idNumber: res.data.idNumber } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, msisdn: res.data.msisdn } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, memberID: res.data.memberID } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, hamlet: res.data.hamlet } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, longitude: res.data.longitude } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, latitude: res.data.latitude } })
+                    this.setState({ addFarmerForm: { ...this.state.addFarmerForm, farmSize: res.data.farmSize } })
 
-                this.setState({regionId:res.data.region.id})
-                this.setState({districtId:res.data.district.id})
-                this.setState({wardId:res.data.ward.id})
-                this.setState({villageId:res.data.village.id})
+                    this.setState({ sex: res.data.sex })
+                    this.setState({ farmingMethod: res.data.farmingMethod })
+                    this.setState({ farmingType: res.data.farmingType })
 
-            this.getAllRegions();
-            this.getAllWardsByDistrict(res.data.district.id);
-            this.getAllDistrictsByRegion(res.data.region.id);
-            this.getAllVillagesByWard(res.data.ward.id);
-            })
+                    this.setState({ mainCropId: res.data.mainCrop.id })
+                    this.setState({ secondaryCropId: res.data.secondaryCrop.id })
+
+                    this.setState({ amcosId: res.data.amcos.id })
+
+                    this.setState({ regionId: res.data.region.id })
+                    this.setState({ districtId: res.data.district.id })
+                    this.setState({ wardId: res.data.ward.id })
+                    this.setState({ villageId: res.data.village.id })
+
+                    this.getAllRegions();
+                    this.getAllWardsByDistrict(res.data.district.id);
+                    this.getAllDistrictsByRegion(res.data.region.id);
+                    this.getAllVillagesByWard(res.data.ward.id);
+                })
 
         };
-        
+
         this.getAllCrops();
         this.getAllAmcos();
 
@@ -239,38 +239,38 @@ class EditFarmer extends Component {
         if (!hasError) {
 
             const farmer = {
-                "id":this.state.addFarmerForm.id,
+                "id": this.state.addFarmerForm.id,
                 "firstName": this.state.addFarmerForm.firstName,
                 "middleName": this.state.addFarmerForm.middleName,
-                "surname":  this.state.addFarmerForm.surname,
-                "sex":  this.state.sex,
+                "surname": this.state.addFarmerForm.surname,
+                "sex": this.state.sex,
                 "dateOfBirth": this.state.addFarmerForm.dateOfBirth,
-                "idNumber":  this.state.addFarmerForm.idNumber,
-                "msisdn":  this.state.addFarmerForm.msisdn,
-                "memberID":  this.state.addFarmerForm.memberID,
-                "mainCropId":  this.state.mainCropId,
+                "idNumber": this.state.addFarmerForm.idNumber,
+                "msisdn": this.state.addFarmerForm.msisdn,
+                "memberID": this.state.addFarmerForm.memberID,
+                "mainCropId": this.state.mainCropId,
                 "secondaryCropId": this.state.secondaryCropId,
                 "region": this.state.regionId,
                 "district": this.state.districtId,
                 "ward": this.state.wardId,
                 "village": this.state.villageId,
-                "hamlet":  this.state.addFarmerForm.hamlet,
+                "hamlet": this.state.addFarmerForm.hamlet,
                 "amcos": this.state.amcosId
             }
 
-            const farm={
-                "longitude":this.state.addFarmerForm.longitude,
-                "latitude":this.state.addFarmerForm.latitude,
-                "farmSize":this.state.addFarmerForm.farmSize,
-                "farmingType":this.state.farmingType,
-                "farmingMethod":this.state.farmingMethod
+            const farm = {
+                "longitude": this.state.addFarmerForm.longitude,
+                "latitude": this.state.addFarmerForm.latitude,
+                "farmSize": this.state.addFarmerForm.farmSize,
+                "farmingType": this.state.farmingType,
+                "farmingMethod": this.state.farmingMethod
             }
 
-            const data={farmer,farm};
+            const data = { farmer, farm };
             console.log(data);
-            
+
             axios.put("/farmers", data).then(res => {
-                
+
                 this.ViewAllFarmers();
             })
         }

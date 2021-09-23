@@ -70,6 +70,12 @@ const Menu = [
                 path: '/admin-agricultural-inputs'
             },
             {
+                name: 'Advisory Services',
+                icon: "icon-arrow-right",
+                translate: 'sidebar.nav.setup.INPUTS',
+                path: '/admin-agricultural-inputs'
+            },
+            {
                 name: 'MCU',
                 icon: "icon-arrow-right",
                 translate: 'MCU',

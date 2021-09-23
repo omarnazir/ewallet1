@@ -139,9 +139,10 @@ const Routes = ({ location }) => {
                                    <Route path="/admin-manage-regions" component={waitFor(ManageRegion)}/>
                                    <Route path="/admin-manage-districts" component={waitFor(ManageDistricts)}/>
                                    <Route path="/admin-manage-wards" component={waitFor(ManageWards)}/>
-                                   
+
                                    <Route path="/admin-manage-villages" component={waitFor(ManageVillage)}/>
                                    <Route path="/admin-add-village" component={waitFor(AddVillage)}/>
+                                   <Route path="/admin-edit-village/:id" component={waitFor(AddVillage)}/>
 
                                    <Route path="/admin-collection-centers" component={waitFor(ManageCollectionCenter)}/>
                                    <Route path="/admin-crop-price" component={waitFor(ManageCropPrice)}/>

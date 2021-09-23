@@ -10,14 +10,15 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
-import { CropsService,CropsTypeService } from "../../../../services";
+import { CropsService, CropsTypeService } from "../../../../services";
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 class ManageCrop extends Component {
   state = {
     crops: [],
     modal: false,
     mode: true,
-    loading:true,
+    loading: true,
     editedCrop: {
       id: 0,
       name: "",
@@ -27,7 +28,7 @@ class ManageCrop extends Component {
       name: "",
       cropType: 0
     },
-    cropTypeList:[]
+    cropTypeList: []
   };
 
   initialState = {
@@ -44,15 +45,15 @@ class ManageCrop extends Component {
   getAllCrops() {
     CropsService.getAllCrops().then(res => {
       const crops = res.data;
-      this.setState({loading:false})
+      this.setState({ loading: false })
       this.setState({ crops })
 
     })
   }
 
-  getAllCropTypes(){
-    CropsTypeService.getAllCropTypes().then(res=>{
-        this.setState({cropTypeList:res.data})
+  getAllCropTypes() {
+    CropsTypeService.getAllCropTypes().then(res => {
+      this.setState({ cropTypeList: res.data })
     })
   }
 
@@ -69,7 +70,7 @@ class ManageCrop extends Component {
 
   EditRole(row) {
     console.log(row)
-    const cropType=row.cropType==null?0:Number(row.cropType.id);
+    const cropType = row.cropType == null ? 0 : Number(row.cropType.id);
     const editedCrop = {
       id: row.id,
       name: row.name,
@@ -80,8 +81,16 @@ class ManageCrop extends Component {
     this.toggleModal();
   }
 
+  AlertDeleteItem(id){
+    DeleteAlert().then((willDelete)=>{
+      if(willDelete){
+        this.DeleteRole(id);
+        SuccessAlert("Deleted Crop Successfully")
+      }
+    })
+  }
 
-  DeleteRole(id) {
+  DeleteRole(id) {  
     axios.delete("/crops/" + id)
       .then(res => {
         const response = res.data;
@@ -106,9 +115,6 @@ class ManageCrop extends Component {
       })
     }
   }
-
-
-
   handleSubmit = event => {
     event.preventDefault();
     this.toggleModal();
@@ -117,6 +123,7 @@ class ManageCrop extends Component {
       axios.post("/crops", this.state.crop).then(res => {
         console.log(res.data);
         this.getAllCrops();
+        SuccessAlert("Added Crop Successfully");
         this.setState({ crop: this.initialState.crop })
       })
     } else {
@@ -124,6 +131,7 @@ class ManageCrop extends Component {
       console.log(this.state.editedCrop);
       axios.put("/crops", this.state.editedCrop).then(res => {
         console.log(res.data);
+        SuccessAlert("Updated Crop Successfully")
         this.getAllCrops();
       })
     }
@@ -145,8 +153,8 @@ class ManageCrop extends Component {
       key: "type",
       text: "TYPE",
       cell: (record, index) => {
-        if(record.cropType!=null){
-        return record.cropType.name;
+        if (record.cropType != null) {
+          return record.cropType.name;
         }
         return "";
       }
@@ -158,7 +166,7 @@ class ManageCrop extends Component {
         return (
           <Fragment>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-            <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
           </Fragment>
         )
       }
@@ -220,7 +228,7 @@ class ManageCrop extends Component {
                           {row.name}
                         </option>
                       ))}
-                      
+
                     </select>
                   </div>
                 </ModalBody>
