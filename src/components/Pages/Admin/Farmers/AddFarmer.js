@@ -26,53 +26,122 @@ import Moment from "moment";
 class AddFarmer extends Component {
 
     state = {
-        formRegister: {
-            email: '',
-            password: '',
-            password2: '',
-            terms: false,
-            fullname: "",
-            username: "",
-            phonenumber: "",
-            monthlysmslimit: 0,
-            settings: false,
-            accountExpiration: ""
+
+        addFarmerForm: {
+            firstName: "",
+            middleName: "",
+            surname: "",
+            dateOfBirth: "",
+            idNumber: "",
+            msisdn: "",
+            memberID: "",
+            hamlet: "",
+            longitude: "",
+            latitude: "",
+            farmSize: 0,
 
         },
-        description: "",
-        selectedRoleList: [],
-        role: "",
-        roleId: 0,
-        roleDescription: "",
+        //gender
+        sex: "0",
+        //Crops
+        mainCropId: 0,
+        secondaryCropId: 0,
+        //location
+        regionId: 0,
+        districtId: 0,
+        wardId: 0,
+        villageId: 0,
+        //amcos
+        amcosId: 0,
 
+        //farm
+        farmingType: "",
+        farmingMethod: "",
+
+        //Arrays
         regions: [],
         districts: [],
         wards: [],
         villages: [],
         amcos: [],
         crops: [],
-        mode:true,
-        farmerId:0,
+        mode: true,
+        farmerId: 0,
 
     }
 
 
     componentDidMount() {
-       
+
 
         const { state } = this.props.history.location;
         if (state == undefined) {
             console.log("Farmer Id: 0");
-            this.setState({mode:true})
+            this.setState({ mode: true })
         }
-        
-        if(state!=undefined){ 
-            console.log("Farmer Id:",state);
-            this.setState({mode:false})
-            this.setState({farmerId:state})
-        };
 
-       
+        if (state != undefined) {
+            console.log("Farmer Id:", state);
+            this.setState({ mode: false })
+            this.setState({ farmerId: state })
+        };
+        this.getAllRegions();
+        this.getAllCrops();
+        this.getAllAmcos();
+
+    }
+
+    getAllRegions() {
+        axios.get("/regions").then(res => { this.setState({ regions: res.data }) })
+    }
+
+    getAllDistrictsByRegion(id) {
+        axios.get("/regions/" + id + "/districts").then(res => { this.setState({ districts: res.data }) })
+    }
+    getAllWardsByDistrict(id) {
+        axios.get("/wards/byDistrict/" + id).then(res => { this.setState({ wards: res.data }) })
+    }
+    getAllVillagesByWard(id) {
+        axios.get("/villages/byWard/" + id).then(res => this.setState({ villages: res.data }))
+    }
+
+    getAllCrops() {
+        axios.get("/crops").then(res => { this.setState({ crops: res.data }) })
+    }
+
+    getAllAmcos() {
+        axios.get("/amcos").then(res => { this.setState({ amcos: res.data }) })
+    }
+
+    handleComplexChange = event => {
+
+        console.log("Field Name: " + [event.target.name] + " Field Value: " + [event.target.value])
+        if ([event.target.name] == "regionId") {
+            this.getAllDistrictsByRegion([event.target.value]);
+            this.setState({ districtId: 0 });
+            this.setState({ wardId: 0 });
+            this.setState({ villageId: 0 });
+
+            this.setState({ regionId: event.target.value });
+
+        }
+        if ([event.target.name] == "districtId") {
+            this.getAllWardsByDistrict([event.target.value]);
+            this.setState({ wardId: 0 })
+            this.setState({ villageId: 0 })
+
+            this.setState({ districtId: event.target.value })
+        }
+        if ([event.target.name] == "wardId") {
+            this.getAllVillagesByWard([event.target.value]);
+            this.setState({ villageId: 0 })
+
+            this.setState({ wardId: event.target.value })
+        }
+
+        if (event.target.name == "villageId") {
+            this.setState({ villageId: event.target.value })
+        }
     }
     validateOnChange = event => {
         const input = event.target;
@@ -95,11 +164,10 @@ class AddFarmer extends Component {
         }
     }
 
-    
 
-   
+
+
     handleChange = event => {
-        console.log("am hree")
         this.setState({ [event.target.name]: event.target.value });
     }
     formatDate = (date) => {
@@ -125,39 +193,41 @@ class AddFarmer extends Component {
 
         console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
 
-        console.log(this.state.selectedRoleList)
-
-
-        const UserRoles = [];
-        this.state.selectedRoleList.forEach(item => {
-            const newItem = { role_id: item.id }
-            UserRoles.push(newItem)
-        });
-
-
         if (!hasError) {
-            const accountExpiration = this.formatDate(this.state.formRegister.accountExpiration);
-            const User = {
-                "username": this.state.formRegister.username,
-                "email": this.state.formRegister.email,
-                "password": this.state.formRegister.password,
-                "name": this.state.formRegister.fullname,
-                "msisdn": this.state.formRegister.phonenumber,
-                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit,
-                "accountExpiration": accountExpiration
+
+            const farmer = {
+                "firstName": this.state.addFarmerForm.firstName,
+                "middleName": this.state.addFarmerForm.middleName,
+                "surname":  this.state.addFarmerForm.surname,
+                "sex":  this.state.sex,
+                "dateOfBirth": this.state.addFarmerForm.dateOfBirth,
+                "idNumber":  this.state.addFarmerForm.idNumber,
+                "msisdn":  this.state.addFarmerForm.msisdn,
+                "memberID":  this.state.addFarmerForm.memberID,
+                "mainCropId":  this.state.mainCropId,
+                "secondaryCropId": this.state.secondaryCropId,
+                "region": this.state.regionId,
+                "district": this.state.districtId,
+                "ward": this.state.wardId,
+                "village": this.state.villageId,
+                "hamlet":  this.state.addFarmerForm.hamlet,
+                "amcos": this.state.amcosId
             }
 
-            console.log(this.formatDate(this.state.formRegister.accountExpiration))
-            console.log(User)
+            const farm={
+                "longitude":this.state.addFarmerForm.longitude,
+                "latitude":this.state.addFarmerForm.latitude,
+                "farmSize":this.state.addFarmerForm.farmSize,
+                "farmingType":this.state.farmingType,
+                "farmingMethod":this.state.farmingMethod
+            }
 
-            const data = { user: User, role_ids: UserRoles }
-            console.log(data)
-
-
-            axios.post("users/admin", data).then(res => {
-                console.log(res);
-                console.log(res.data);
-                this.ViewUserPage();
+            const data={farmer,farm};
+            console.log(data);
+            
+            axios.post("/farmers", data).then(res => {
+                
+                this.ViewAllFarmers();
             })
         }
     }
@@ -186,27 +256,23 @@ class AddFarmer extends Component {
         background: "#003366"
     }
 
-    ViewUserPage = () => {
-        return this.props.history.push("/admin-manage-users");
-    };
-
     render() {
-        let index = 0;
         return (
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        {this.state.mode?"Add New Farmer ":"Edit Farmer Details"}
-                        <small> {this.state.mode?"Adding a new farmer.":"Edit Farmer"}</small>
+                        {this.state.mode ? "Add New Farmer " : "Edit Farmer Details"}
+                        <small> {this.state.mode ? "Adding a new farmer." : "Edit Farmer"}</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewAllFarmers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Farmers</Button>
                     </div>
                 </div>
                 <Container fluid>
-                    <Card className="pure-form card-default">
-                        <CardBody>
-                            <form class="form-horizontal" onSubmit={this.onSubmit}>
+                    <form class="form-horizontal" onSubmit={this.onSubmit} name="addFarmerForm">
+                        <Card className="pure-form card-default">
+                            <CardBody>
+
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <h5 className="text-uppercase font-weight-600">Personal Information</h5>
@@ -214,64 +280,79 @@ class AddFarmer extends Component {
                                 </div>
 
                                 <Row>
-                                    <div className="col-lg-6">
+                                    <div className="col-lg-4">
                                         <div className="form-group">
                                             <label>First Name <span className="red">*</span></label>
-                                            <input className="form-control"
+
+                                            <Input
                                                 placeholder="Write a first name..."
-                                                name="firstName"
                                                 type="text"
-                                                value={this.state.firstName}
-                                                onChange={this.handleOnChange} />
-                                            <span className="text-danger"></span>
+                                                name="firstName"
+                                                invalid={this.hasError('addFarmerForm', 'firstName', 'required')}
+                                                onChange={this.validateOnChange}
+                                                data-validate='["required"]'
+                                                value={this.state.addFarmerForm.firstName}
+                                            />
+                                            <span className="invalid-feedback">Full name is required</span>
+
                                         </div>
                                     </div>
 
-                                    <div className="col-lg-2">
+                                    <div className="col-lg-4">
                                         <div className="form-group">
                                             <label>Middle name</label>
-                                            <input className="form-control"
-                                                type="text"
+
+                                            <Input
                                                 placeholder="Write middle name..."
+                                                type="text"
                                                 name="middleName"
-                                                value={this.state.middleName}
-                                                onChange={this.handleOnChange} />
+                                                onChange={this.validateOnChange}
+                                                data-validate='["required"]'
+                                                value={this.state.addFarmerForm.middleName}
+                                            />
                                         </div>
                                     </div>
 
                                     <div className="col-lg-4">
                                         <div className="form-group">
                                             <label>Surname <span className="red">*</span></label>
-                                            <input className="form-control"
-                                                placeholder="Write a surname..."
-                                                name="surname"
-                                                value={this.state.surname}
-                                                onChange={this.handleOnChange}
-                                                type="text" />
 
+                                            <Input
+                                                placeholder="Write a surname..."
+                                                type="text"
+                                                name="surname"
+                                                invalid={this.hasError('addFarmerForm', 'surname', 'required')}
+                                                onChange={this.validateOnChange}
+                                                data-validate='["required"]'
+                                                value={this.state.addFarmerForm.surname}
+                                            />
+                                            <span className="invalid-feedback">Last name is required</span>
                                         </div>
                                     </div>
                                 </Row>
 
                                 <Row>
-                                    <Col md={6}>
+                                    <Col md={4}>
                                         <FormGroup>
                                             <Label>Date of Birth <span className="red">*</span></Label>
-                                            <input
-                                                className="form-control"
-                                                name="dateOfBirth"
-                                                value={this.state.dateOfBirth}
-                                                onChange={this.handleOnChange}
-                                                type="date" />
 
+                                            <Input
+                                                type="date"
+                                                name="dateOfBirth"
+                                                invalid={this.hasError('addFarmerForm', 'dateOfBirth', 'required')}
+                                                onChange={this.validateOnChange}
+                                                data-validate='["required"]'
+                                                value={this.state.addFarmerForm.dateOfBirth}
+                                            />
+                                            <span className="invalid-feedback">DOB is required</span>
                                         </FormGroup>
                                     </Col>
 
-                                    <Col md={2}>
+                                    <Col md={4}>
                                         <FormGroup>
                                             <Label>Gender <span className="red">*</span></Label>
-                                            <select name="sex" className="form-control" value={this.state.sex} onChange={this.handleOnChange} >
-                                                <option value="">-- Select --</option>
+                                            <select name="sex" className="form-control" value={this.state.sex} onChange={this.handleChange} >
+                                                <option value="0">-- Select --</option>
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
                                             </select>
@@ -282,13 +363,15 @@ class AddFarmer extends Component {
                                     <Col md={4}>
                                         <FormGroup>
                                             <Label>Phone <span className="red">*</span></Label>
-                                            <input className="form-control"
+                                            <Input type="number"
+                                                placeholder="Write phone number..."
                                                 name="msisdn"
-                                                type="text"
-                                                value={this.state.msisdn}
-                                                onChange={this.handleOnChange}
-                                                placeholder="Write phone number..." />
-
+                                                invalid={this.hasError('addFarmerForm', 'msisdn', 'minlen')}
+                                                onChange={this.validateOnChange}
+                                                data-validate='["required","minlen"]'
+                                                value={this.state.addFarmerForm.msisdn}
+                                                data-param="10" />
+                                            <span className="invalid-feedback">Valid phone number is required</span>
                                         </FormGroup>
                                     </Col>
                                 </Row>
@@ -297,7 +380,7 @@ class AddFarmer extends Component {
                                     <Col md={6}>
                                         <FormGroup>
                                             <Label>ID Type <span className="red">*</span></Label>
-                                            <select name="idType" className="form-control" value={this.state.idType} onChange={this.handleOnChange} >
+                                            <select name="idType" className="form-control" value={this.state.idType} onChange={this.handleChange} >
                                                 <option value="">-- Select --</option>
                                                 <option value="NIN">National ID</option>
                                                 <option value="VIN">Voting ID</option>
@@ -309,12 +392,16 @@ class AddFarmer extends Component {
                                     <Col md={6}>
                                         <FormGroup>
                                             <Label>ID Number <span className="red">*</span></Label>
-                                            <input className="form-control"
+
+                                            <Input type="number"
+                                                placeholder="Write Id number..."
                                                 name="idNumber"
-                                                type="text"
-                                                value={this.state.idNumber}
-                                                onChange={this.handleOnChange}
-                                                placeholder="Write ID Number..." />
+                                                invalid={this.hasError('addFarmerForm', 'idNumber', 'minlen')}
+                                                onChange={this.validateOnChange}
+                                                data-validate='["required","minlen"]'
+                                                value={this.state.addFarmerForm.idNumber}
+                                                data-param="14" />
+                                            <span className="invalid-feedback">Valid ID number is required</span>
 
                                         </FormGroup>
                                     </Col>
@@ -330,7 +417,7 @@ class AddFarmer extends Component {
                                     <Col md={3}>
                                         <FormGroup>
                                             <Label>Region <span className="red">*</span></Label>
-                                            <select name="regionId" className="form-control" value={this.state.regionId} onChange={this.onChangeRegion}>
+                                            <select name="regionId" className="form-control" value={this.state.regionId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.regions.map((data, index) => {
@@ -345,7 +432,7 @@ class AddFarmer extends Component {
                                     <Col md={3}>
                                         <FormGroup>
                                             <Label>District <span className="red">*</span></Label>
-                                            <select name="districtId" className="form-control" value={this.state.districtId} onChange={this.onChangeDistrict}>
+                                            <select name="districtId" className="form-control" value={this.state.districtId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.districts.map((data, index) => {
@@ -360,7 +447,7 @@ class AddFarmer extends Component {
                                     <Col md={3}>
                                         <FormGroup>
                                             <Label>Ward <span className="red">*</span></Label>
-                                            <select name="wardId" className="form-control" value={this.state.wardId} onChange={this.onChangeWard}>
+                                            <select name="wardId" className="form-control" value={this.state.wardId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.wards.map((data, index) => {
@@ -375,7 +462,7 @@ class AddFarmer extends Component {
                                     <Col md={3}>
                                         <FormGroup>
                                             <Label>Village <span className="red">*</span></Label>
-                                            <select name="villageId" className="form-control" value={this.state.villageId} onChange={this.onChangeVillage}>
+                                            <select name="villageId" className="form-control" value={this.state.villageId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.villages.map((data, index) => {
@@ -392,23 +479,26 @@ class AddFarmer extends Component {
                                     <Col md={3}>
                                         <FormGroup>
                                             <Label>Farm Size <span className="red">*</span></Label>
-                                            <input className="form-control"
-                                                name="farmSize"
-                                                type="text"
-                                                placeholder="Write farm size..."
-                                                value={this.state.farmSize}
-                                                onChange={this.handleOnChange} />
 
+                                            <Input type="number"
+                                                placeholder="Write farm size..."
+                                                name="farmSize"
+                                                invalid={this.hasError('addFarmerForm', 'farmSize', 'minlen')}
+                                                onChange={this.validateOnChange}
+                                                data-validate='["required","minlen"]'
+                                                value={this.state.addFarmerForm.farmSize}
+                                                data-param="1" />
+                                            <span className="invalid-feedback">Farm size is required</span>
                                         </FormGroup>
                                     </Col>
 
                                     <Col md={3}>
                                         <FormGroup>
                                             <Label>Type Of Farming <span className="red">*</span></Label>
-                                            <select name="typeOfFarming"
+                                            <select name="farmingType"
                                                 className="form-control"
-                                                value={this.state.typeOfFarming}
-                                                onChange={this.handleOnChange} >
+                                                value={this.state.farmingType}
+                                                onChange={this.handleChange} >
                                                 <option value="">-- Select --</option>
                                                 <option value="Irrigation">Irrigation</option>
                                                 <option value="Manual">Manual</option>
@@ -421,27 +511,15 @@ class AddFarmer extends Component {
                                     <Col md={3}>
                                         <FormGroup>
                                             <Label>Equipment Used <span className="red">*</span></Label>
-                                            <select name="equipmentUsed"
+                                            <select name="farmingMethod"
                                                 className="form-control"
-                                                value={this.state.equipmentUsed}
-                                                onChange={this.handleOnChange} >
+                                                value={this.state.farmingMethod}
+                                                onChange={this.handleChange} >
                                                 <option value="">-- Select --</option>
                                                 <option value="Tractor">Tractor</option>
                                                 <option value="Manual">Manual</option>
                                             </select>
 
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col md={3}>
-                                        <FormGroup>
-                                            <Label>Planting Season </Label>
-                                            <input className="form-control"
-                                                name="plantingSeason"
-                                                type="text"
-                                                placeholder="Write planting season..."
-                                                value={this.state.plantingSeason}
-                                                onChange={this.handleOnChange} />
                                         </FormGroup>
                                     </Col>
                                 </Row>
@@ -450,12 +528,15 @@ class AddFarmer extends Component {
                                     <Col md={3}>
                                         <FormGroup>
                                             <Label>Latitude </Label>
-                                            <input className="form-control"
-                                                name="latitude"
-                                                type="text"
+
+
+                                            <Input
                                                 placeholder="Write latitude..."
-                                                value={this.state.latitude}
-                                                onChange={this.handleOnChange} />
+                                                type="text"
+                                                name="latitude"
+                                                onChange={this.validateOnChange}
+                                                value={this.state.addFarmerForm.latitude}
+                                            />
                                         </FormGroup>
                                     </Col>
 
@@ -483,7 +564,7 @@ class AddFarmer extends Component {
                                 </Row>
 
                                 <Row>
-                                    <Col md={3}>
+                                    <Col md={4}>
                                         <FormGroup>
                                             <Label>Member ID <span className="red">*</span></Label>
                                             <input className="form-control"
@@ -496,10 +577,10 @@ class AddFarmer extends Component {
                                         </FormGroup>
                                     </Col>
 
-                                    <Col md={3}>
+                                    <Col md={4}>
                                         <FormGroup>
                                             <Label>Amcos <span className="red">*</span></Label>
-                                            <select name="amcosId" className="form-control" value={this.state.amcosId} onChange={this.handleOnChange}>
+                                            <select name="amcosId" className="form-control" value={this.state.amcosId} onChange={this.handleChange}>
                                                 <option value="">-- Select --</option>
                                                 {
                                                     this.state.amcos.map((data, index) => {
@@ -511,16 +592,19 @@ class AddFarmer extends Component {
                                         </FormGroup>
                                     </Col>
 
-                                    <Col md={6}>
+                                    <Col md={4}>
                                         <FormGroup>
                                             <Label>Hamlet <span className="red">*</span></Label>
-                                            <input className="form-control"
-                                                name="hamlet"
+                                            <Input
+                                                placeholder="Write Hamlet ..."
                                                 type="text"
-                                                placeholder="Write Hamlet..."
-                                                value={this.state.hamlet}
-                                                onChange={this.handleOnChange} />
-
+                                                name="hamlet"
+                                                invalid={this.hasError('addFarmerForm', 'hamlet', 'required')}
+                                                onChange={this.validateOnChange}
+                                                data-validate='["required"]'
+                                                value={this.state.addFarmerForm.hamlet}
+                                            />
+                                            <span className="invalid-feedback">Hamlet is required</span>
                                         </FormGroup>
                                     </Col>
                                 </Row>
@@ -535,8 +619,8 @@ class AddFarmer extends Component {
                                     <Col md={6}>
                                         <FormGroup>
                                             <Label>Main Crop <span className="red">*</span></Label>
-                                            <select name="cropId" className="form-control" value={this.state.cropId} onChange={this.handleOnChange}>
-                                                <option value="">-- Select --</option>
+                                            <select name="mainCropId" className="form-control" value={this.state.mainCropId} onChange={this.handleChange}>
+                                                <option value="0">-- Select --</option>
                                                 {
                                                     this.state.crops.map((data, index) => {
                                                         return <option key={index} value={data.id}>{data.name}</option>
@@ -550,8 +634,8 @@ class AddFarmer extends Component {
                                     <Col md={6}>
                                         <FormGroup>
                                             <Label>Secondary Crops </Label>
-                                            <select name="otherCropId" className="form-control" value={this.state.otherCropId} onChange={this.handleOnChange}>
-                                                <option value="">-- Select --</option>
+                                            <select name="secondaryCropId" className="form-control" value={this.state.secondaryCropId} onChange={this.handleChange}>
+                                                <option value="0">-- Select --</option>
                                                 {
                                                     this.state.crops.map((data, index) => {
                                                         return <option key={index} value={data.id}>{data.name}</option>
@@ -561,28 +645,17 @@ class AddFarmer extends Component {
                                         </FormGroup>
                                     </Col>
                                 </Row>
-
-                                {/* <Row>
-                                    <Col md={12}>
-                                        <FormGroup>
-                                            <button className="btn btn-sm btn-primary mr-2" type="submit">Save</button>
-                                            <a href="/farmers" className="btn btn-danger btn-sm">Cancel</a>
-                                        </FormGroup>
-                                    </Col>
-                                </Row> */}
-
-
-                            </form>
-                        </CardBody>
-                        <CardFooter>
-                            <div className="d-flex align-items-center">
-                                <div className="ml-auto">
-                                    <button className="btn btn-danger px-5 mr-2" onClick={this.ViewAllFarmers}>Cancel</button>
-                                    <button type="submit" style={this.AddActionButtonStyle} className="btn btn-primary px-5">Save</button>
+                            </CardBody>
+                            <CardFooter>
+                                <div className="d-flex align-items-center">
+                                    <div className="ml-auto">
+                                        <button className="btn btn-danger px-5 mr-2" onClick={this.ViewAllFarmers}>Cancel</button>
+                                        <button type="submit" style={this.AddActionButtonStyle} className="btn btn-primary px-5">Save</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </CardFooter>
-                    </Card>
+                            </CardFooter>
+                        </Card>
+                    </form>
                 </Container>
             </ContentWrapper>
         );

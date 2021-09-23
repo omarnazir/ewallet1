@@ -67,6 +67,7 @@ import AddAmcos from '../components/Pages/Admin/SystemSetup/AddAmcos';
 import FarmerDetails from '../components/Pages/Admin/Farmers/FarmerDetails';
 import AmcosDetails from '../components/Pages/Admin/SystemSetup/AmcosDetails';
 import EditRegistar from '../components/Pages/Admin/Registrars/EditRegistar';
+import EditFarmer from '../components/Pages/Admin/Farmers/EditFarmer';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -118,7 +119,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-farmers-list" component={waitFor(AllFarmers)} />
                                     <Route path="/admin-farmer-details/:id" component={waitFor(FarmerDetails)}/>
                                     <Route path="/admin-add-farmer" component={waitFor(AddFarmer)} />
-                                    <Route path="/admin-edit-farmer/:id" component={waitFor(AddFarmer)} />
+                                    <Route path="/admin-edit-farmer/:id" component={waitFor(EditFarmer)} />
 
                                     <Route path="/admin-farmers-harvests" component={waitFor(FarmersHarvests)}/>
                                     <Route path="/admin-mpesa-wallet" component={waitFor(AdminWallet)}/>
