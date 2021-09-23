@@ -10,6 +10,7 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 class ManageDistricts extends Component {
     state = {
@@ -86,7 +87,7 @@ class ManageDistricts extends Component {
                 return (
                     <Fragment>
                         <span className="btn badge-success mr-2 px-4" onClick={() => this.EditDistrict(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteDistrict(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
@@ -161,6 +162,15 @@ class ManageDistricts extends Component {
             })
     }
 
+    AlertDeleteItem(id){
+        DeleteAlert().then((willDelete)=>{
+          if(willDelete){
+            this.DeleteDistrict(id);
+            SuccessAlert("Deleted District Successfully")
+          }
+        })
+      }
+
 
     handleSubmit = event => {
         event.preventDefault();
@@ -168,16 +178,16 @@ class ManageDistricts extends Component {
         if (this.state.mode) {
             console.log("Add mode")
             axios.post("/districts", this.state.district).then(res => {
-                console.log(res.data);
+                SuccessAlert("Added District Successfully");
                 this.getAllDistricts();
                 this.setState({ region: this.initialState.region })
+               
             })
         } else {
             console.log("Edit mode")
             axios.put("/districts", this.state.editedDistrict).then(res => {
-                console.log(res.data);
+                SuccessAlert("Updated District Successfully");
                 this.getAllDistricts();
-
             })
         }
     }

@@ -11,6 +11,7 @@ import {
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
 import swal from '@sweetalert/with-react'
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 class ManageRegion extends Component {
     state = {
@@ -37,37 +38,6 @@ class ManageRegion extends Component {
 
     componentDidMount() {
         this.getAllRegions();
-    }
-
-    showSweetAlert() {
-        // swal("Good job!", "You clicked the button!", "success");
-        swal({
-            title: "Good jo!",
-            text: "You clicked the button!",
-            icon: "success",
-        });
-    }
-
-    showDeleteSweetAlert(id) {
-        swal({
-            title: "Are you sure?",
-            text: "This action can not be reversed",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    this.DeleteRegion(id);
-                    swal({
-                        text: "Region successfully deleted", icon: "success",
-                        timer: 2000,
-                        showCancelButton: false,
-                        showConfirmButton: false
-                    });
-                }
-            });
     }
 
     getAllRegions() {
@@ -97,7 +67,7 @@ class ManageRegion extends Component {
                 return (
                     <Fragment>
                         <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRegion(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.showDeleteSweetAlert(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
@@ -158,6 +128,15 @@ class ManageRegion extends Component {
         this.toggleModal();
     }
 
+    AlertDeleteItem(id){
+        DeleteAlert().then((willDelete)=>{
+          if(willDelete){
+            this.DeleteRegion(id);
+            SuccessAlert("Deleted Region Successfully")
+          }
+        })
+      }
+
     DeleteRegion(id) {
         axios.delete("/regions/" + id)
             .then(res => {
@@ -165,9 +144,7 @@ class ManageRegion extends Component {
                 const regionsList = this.state.regionsList.filter((item) => {
                     return item.id !== id;
                 });
-                this.setState({ regionsList })
-
-                // showAlert("Deleted Region Sucessfully")
+                this.setState({ regionsList });
             })
     }
 
@@ -181,15 +158,14 @@ class ManageRegion extends Component {
                 console.log(res.data);
                 this.getAllRegions();
                 this.setState({ region: this.initialState.region })
-                // showAlert("Added Region Successfully")
-                this.showSweetAlert();
+                SuccessAlert("Added Region Successfully");
             })
         } else {
             console.log("Edit mode")
             axios.put("/regions", this.state.editedRegion).then(res => {
                 console.log(res.data);
                 this.getAllRegions();
-                // showAlert("Updated Region Successfully")
+                SuccessAlert("Updated Region Successfully");
             })
         }
     }
