@@ -9,6 +9,7 @@ import { Container, Card, CardHeader, CardBody, CardTitle, Button, Modal,
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
 import { CropsTypeService } from "../../../../services";
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 class ManageCropType extends Component {
   state = {
@@ -69,6 +70,15 @@ EditRole(row) {
  }
 
 
+ AlertDeleteItem(id){
+  DeleteAlert().then((willDelete)=>{
+    if(willDelete){
+      this.DeleteRole(id);
+      SuccessAlert("Deleted Crop Type Successfully")
+    }
+  })
+}
+
  DeleteRole(id) {
   axios.delete("/crop-types/" + id)
     .then(res => {
@@ -101,6 +111,7 @@ handleSubmit = event => {
     axios.post("/crop-types",this.state.cropType ).then(res => {
       console.log(res.data);
       this.getAllCropTypes();
+      SuccessAlert("Added Crop Type Successfully");
       this.setState({cropType:this.initialState.cropType})
     })
   } else {
@@ -108,7 +119,7 @@ handleSubmit = event => {
     axios.put("/crop-types",this.state.editedCropType).then(res => {
       console.log(res.data);
       this.getAllCropTypes();
-
+      SuccessAlert("Updated Crop Type Successfully");
     })
   }
 }
@@ -132,7 +143,7 @@ handleSubmit = event => {
         return (
           <Fragment>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-            <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
           </Fragment>
         )
       }
