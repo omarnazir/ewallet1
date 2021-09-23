@@ -10,7 +10,7 @@ import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
 import { CropsTypeService } from "../../../../services";
 
-class ManagePembejeo extends Component {
+class ManageAdvisoryServices extends Component {
   state = {
     crops:[],
     modal: false,
@@ -165,16 +165,16 @@ handleSubmit = event => {
       <ContentWrapper>
         <div className="content-heading">
           <div className="mr-auto flex-row">
-            Agricultural Inputs
-            <small>Manage Agricultural Inputs.</small>
+            Advisory Services
+            <small>Manage Advisory Services.</small>
           </div>
           <div className="flex-row">
           <Button onClick={this.AddRoleMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
           <i className="fa fa-plus mr-2"></i>
-              Add Agricultural Input</Button>
+              Add Advisory Service</Button>
 
           <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-              <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Agricultural Input" : "Edit Agricultural Input"}</ModalHeader>
+              <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Advisory Service" : "Edit Advisory Service"}</ModalHeader>
               <form onSubmit={this.handleSubmit}>
                 <ModalBody>
                   <FormGroup>
@@ -213,4 +213,4 @@ handleSubmit = event => {
   }
 }
 
-export default ManagePembejeo;
+export default ManageAdvisoryServices;
