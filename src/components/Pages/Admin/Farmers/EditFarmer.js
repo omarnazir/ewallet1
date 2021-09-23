@@ -106,17 +106,7 @@ class EditFarmer extends Component {
                 this.setState({addFarmerForm:{...this.state.addFarmerForm,longitude:res.data.longitude}})
                 this.setState({addFarmerForm:{...this.state.addFarmerForm,latitude:res.data.latitude}})
                 this.setState({addFarmerForm:{...this.state.addFarmerForm,farmSize:res.data.farmSize}})
-
-
-         
-              
-                // "region": this.state.regionId,
-                // "district": this.state.districtId,
-                // "ward": this.state.wardId,
-                // "village": this.state.villageId,
-              
-
-               
+  
                 this.setState({sex:res.data.sex})
                 this.setState({farmingMethod:res.data.farmingMethod})
                 this.setState({farmingType:res.data.farmingType})
@@ -126,8 +116,6 @@ class EditFarmer extends Component {
 
                 this.setState({amcosId:res.data.amcos.id})
 
-              
-                console.log(res.data);
                 this.setState({regionId:res.data.region.id})
                 this.setState({districtId:res.data.district.id})
                 this.setState({wardId:res.data.ward.id})

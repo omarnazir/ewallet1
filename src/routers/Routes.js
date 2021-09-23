@@ -68,6 +68,7 @@ import FarmerDetails from '../components/Pages/Admin/Farmers/FarmerDetails';
 import AmcosDetails from '../components/Pages/Admin/SystemSetup/AmcosDetails';
 import EditRegistar from '../components/Pages/Admin/Registrars/EditRegistar';
 import EditFarmer from '../components/Pages/Admin/Farmers/EditFarmer';
+import AddVillage from '../components/Pages/Admin/SystemSetup/AddVillage';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -138,7 +139,10 @@ const Routes = ({ location }) => {
                                    <Route path="/admin-manage-regions" component={waitFor(ManageRegion)}/>
                                    <Route path="/admin-manage-districts" component={waitFor(ManageDistricts)}/>
                                    <Route path="/admin-manage-wards" component={waitFor(ManageWards)}/>
+                                   
                                    <Route path="/admin-manage-villages" component={waitFor(ManageVillage)}/>
+                                   <Route path="/admin-add-village" component={waitFor(AddVillage)}/>
+
                                    <Route path="/admin-collection-centers" component={waitFor(ManageCollectionCenter)}/>
                                    <Route path="/admin-crop-price" component={waitFor(ManageCropPrice)}/>
                                    <Route path="/admin-agricultural-inputs" component={waitFor(ManagePembejeo)}/>

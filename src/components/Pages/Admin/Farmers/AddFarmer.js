@@ -87,7 +87,7 @@ class AddFarmer extends Component {
         };
         this.getAllRegions();
         this.getAllCrops();
-        this.getAllAmcos();
+        // this.getAllAmcos();
 
     }
 
@@ -109,8 +109,8 @@ class AddFarmer extends Component {
         axios.get("/crops").then(res => { this.setState({ crops: res.data }) })
     }
 
-    getAllAmcos() {
-        axios.get("/amcos").then(res => { this.setState({ amcos: res.data }) })
+    getAllAmcos(id) {
+        axios.get("/amcos/byVillage/"+id).then(res => { this.setState({ amcos: res.data }) })
     }
 
     handleComplexChange = event => {
@@ -141,6 +141,7 @@ class AddFarmer extends Component {
 
         if (event.target.name == "villageId") {
             this.setState({ villageId: event.target.value })
+            this.getAllAmcos(event.target.value)
         }
     }
     validateOnChange = event => {
