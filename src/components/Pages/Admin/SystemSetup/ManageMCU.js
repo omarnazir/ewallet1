@@ -10,6 +10,7 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 
 class ManageMCU extends Component {
@@ -85,7 +86,7 @@ class ManageMCU extends Component {
     }
 
 
-    DeleteRole(id) {
+    DeleteMCU(id) {
         axios.delete("/mcos/" + id)
             .then(res => {
                 const mcosList = this.state.mcosList.filter((item) => {
@@ -95,6 +96,14 @@ class ManageMCU extends Component {
             })
     }
 
+    AlertDeleteItem(id){
+        DeleteAlert().then((willDelete)=>{
+          if(willDelete){
+            this.DeleteMCU(id);
+            SuccessAlert("Deleted MCU Successfully")
+          }
+        })
+      }
 
     handleChange = event => {
         if (this.state.mode) {
@@ -118,16 +127,16 @@ class ManageMCU extends Component {
         if (this.state.mode) {
             console.log("Add mode")
             axios.post("/mcos", this.state.mco).then(res => {
-                console.log(res.data);
                 this.getAllMCOS();
+                SuccessAlert("Added MCU Successfully");
                 this.setState({ mco: this.initialState.mco })
             })
         } else {
             console.log("Edit mode")
             console.log(this.state.editedMco);
             axios.put("/mcos", this.state.editedMco).then(res => {
-                console.log(res.data);
                 this.getAllMCOS();
+                SuccessAlert("Updated MCU Successfully");
             })
         }
     }
@@ -170,7 +179,7 @@ class ManageMCU extends Component {
                 return (
                     <Fragment>
                         <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
