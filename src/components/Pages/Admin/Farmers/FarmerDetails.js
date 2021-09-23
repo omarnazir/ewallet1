@@ -42,6 +42,7 @@ class FarmerDetails extends Component {
             farmingType:"",
             farmingMethod:"",
             registrationDate:Date.now(),
+            hamlet:"",
 
             district:{},
             region:{}
@@ -90,6 +91,7 @@ class FarmerDetails extends Component {
                 this.setState({farmer:{...this.state.farmer,region:res.data.ward.district.region}}) 
                 this.setState({farmer:{...this.state.farmer,village:res.data.village}})
                 this.setState({farmer:{...this.state.farmer,amcos:res.data.amcos}})  
+                this.setState({farmer:{...this.state.farmer,hamlet:res.data.hamlet}})  
 
                 this.setState({farmer:{...this.state.farmer,farmSize:res.data.farmSize}}) 
                 this.setState({farmer:{...this.state.farmer,farmingType:res.data.farmingType}}) 
