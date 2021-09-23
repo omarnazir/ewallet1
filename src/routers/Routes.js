@@ -72,6 +72,7 @@ import AddVillage from '../components/Pages/Admin/SystemSetup/AddVillage';
 import ManageAdvisoryServices from '../components/Pages/Admin/SystemSetup/ManageAdvisoryServices';
 import EditAmcos from '../components/Pages/Admin/SystemSetup/Amcos/EditAmcos';
 import AddCollectionCenter from '../components/Pages/Admin/SystemSetup/CollectionCenter/AddCollectionCenter';
+import EditCollectionCenter from '../components/Pages/Admin/SystemSetup/CollectionCenter/EditCollectionCenter';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -149,6 +150,7 @@ const Routes = ({ location }) => {
 
                                    <Route path="/admin-collection-centers" component={waitFor(ManageCollectionCenter)}/>
                                    <Route path="/admin-add-center" component={waitFor(AddCollectionCenter)}/>
+                                   <Route path="/admin-edit-center/:id" component={waitFor(EditCollectionCenter)}/>
                                    <Route path="/admin-crop-price" component={waitFor(ManageCropPrice)}/>
 
                                    <Route path="/admin-agricultural-inputs" component={waitFor(ManagePembejeo)}/>

@@ -13,7 +13,7 @@ import {
 import FormValidator from '../../../../Common/FormValidator';
 import {SuccessAlert,DeleteAlert} from "../../../../Common/AppAlerts";
 
-class AddCollectionCenter extends Component {
+class EditCollectionCenter extends Component {
 
     state = {
         collectionCenterName:"",
@@ -187,7 +187,7 @@ class AddCollectionCenter extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Add New Collection Center
+                         Collection Center
                         <small>Adding a new collection center.</small>
                     </div>
                     <div className="flex-row">
@@ -202,7 +202,7 @@ class AddCollectionCenter extends Component {
                                 <Row>
                                     <Col md={4}>
                                         <div className="form-group">
-                                            <label>Region <span className="red">*</span> </label>
+                                            <label>Region <span className="text-danger">*</span> </label>
                                             <select name="regionId" className="form-control" value={this.state.regionId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
@@ -217,7 +217,7 @@ class AddCollectionCenter extends Component {
 
                                     <Col md={4}>
                                         <div className="form-group">
-                                            <label>District <span className="red">*</span> </label>
+                                            <label>District <span className="text-danger">*</span> </label>
                                             <select name="districtId" className="form-control" value={this.state.districtId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
@@ -232,7 +232,7 @@ class AddCollectionCenter extends Component {
 
                                     <Col md={4}>
                                         <div className="form-group">
-                                            <label>Ward <span className="red">*</span> </label>
+                                            <label>Ward <span className="text-danger">*</span> </label>
                                             <select name="wardId" className="form-control" value={this.state.wardId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
@@ -247,7 +247,7 @@ class AddCollectionCenter extends Component {
 
                                     <Col md={4}>
                                         <div className="form-group">
-                                            <label>Village <span className="red">*</span> </label>
+                                            <label>Village <span className="text-danger">*</span> </label>
                                             <select name="villageId" className="form-control" value={this.state.villageId} onChange={this.handleComplexChange}>
                                                 <option value="">-- Select --</option>
                                                 {
@@ -262,7 +262,7 @@ class AddCollectionCenter extends Component {
 
                                     <Col md={4}>
                                         <div className="form-group">
-                                            <label>Amcos<span className="red">*</span> </label>
+                                            <label>Amcos <span className="text-danger">*</span> </label>
                                             <select name="amcosId" className="form-control" value={this.state.amcosId} onChange={this.handleChange}>
                                                 <option value="">-- Select --</option>
                                                 {
@@ -277,7 +277,7 @@ class AddCollectionCenter extends Component {
 
                                     <Col md={4}>
                                         <div className="form-group">
-                                            <label>Registrar <span className="red">*</span> </label>
+                                            <label>Registrar <span className="text-danger">*</span> </label>
                                             <select name="registrarId" className="form-control" value={this.state.registrarId} onChange={this.handleChange}>
                                                 <option value="">-- Select --</option>
                                                 {
@@ -292,13 +292,12 @@ class AddCollectionCenter extends Component {
 
                                     <Col md={4}>
                                         <div className="form-group">
-                                            <label>Collection Center Name <span className="red">*</span></label>
+                                            <label>Collection Center Name <span className="text-danger">*</span></label>
                                             <input placeholder="Write collection center name ..."
                                                 name="collectionCenterName"
                                                 className="form-control"
                                                 onChange={this.handleChange}
-                                                value={this.state.collectionCenterName} 
-                                                required/>
+                                                value={this.state.collectionCenterName} />
                                             <span className="text-danger">{this.state.nameError}</span>
                                         </div>
                                     </Col>
@@ -323,4 +322,4 @@ class AddCollectionCenter extends Component {
     }
 }
 
-export default AddCollectionCenter;
+export default EditCollectionCenter;
