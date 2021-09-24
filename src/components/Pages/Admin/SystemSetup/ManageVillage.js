@@ -10,6 +10,7 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 class ManageVillage extends Component {
     state = {
@@ -88,7 +89,7 @@ class ManageVillage extends Component {
                 return (
                     <Fragment>
                         <span className="btn badge-success mr-2 px-4" onClick={() => this.EditVillage(record.id)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegion(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
@@ -162,17 +163,27 @@ class ManageVillage extends Component {
         this.toggleModal();
     }
 
-    DeleteRegion(id) {
-        axios.delete("/reserved-words/" + id)
+    DeleteVillage(id) {
+        axios.delete("/villages/" + id)
             .then(res => {
                 const response = res.data;
                 const regionsList = this.state.regionsList.filter((item) => {
                     return item.id !== id;
                 });
                 this.setState({ regionsList })
+                
             })
     }
 
+
+    AlertDeleteItem(id){
+        DeleteAlert().then((willDelete)=>{
+          if(willDelete){
+            this.DeleteVillage(id);
+            SuccessAlert("Deleted Village Successfully")
+          }
+        })
+      }
 
     handleSubmit = event => {
         event.preventDefault();

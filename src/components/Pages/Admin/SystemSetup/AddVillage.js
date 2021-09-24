@@ -22,6 +22,7 @@ import $ from "jquery";
 
 import FormValidator from '../../../Common/FormValidator';
 import Moment from "moment";
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 class AddVillage extends Component {
 
@@ -57,14 +58,23 @@ class AddVillage extends Component {
             console.log("Villge Id:", state);
             this.setState({ mode: false })
 
-            axios.get("/villages/"+state).then(res => {
-                // regionId: 0,
-                // districtId: 0,
-                // wardId: 0,
-                // villageName: "", 
-                this.setState({wardId:res.ward.id})
-                this.setState({villageId:res.id})
-                this.setState({villageName:res.name})
+            axios.get("/villages/"+state).then(res => {    
+                console.log(res.data)           
+                this.setState({villageId:res.data.id})
+                this.setState({villageName:res.data.name})
+               
+                const ward=res.data.ward;
+                this.setState({wardId:ward.id});
+
+                const district=res.data.ward.district;
+                this.setState({districtId:district.id})
+
+                const region=res.data.ward.district.region;
+                this.setState({regionId:region.id})
+
+                this.getAllDistrictsByRegion(region.id);
+                this.getAllWardsByDistrict(district.id);
+                this.getAllVillagesByWard(ward.id)
 
              })
         };
@@ -173,13 +183,32 @@ class AddVillage extends Component {
 
         if (!hasError) {
 
-            const village = {
-                "name": this.state.villageName,
-                "wardId": this.state.wardId
+            if(this.state.mode){
+                    //Add
+                const village = {
+                    "name": this.state.villageName,
+                    "wardId": this.state.wardId
+                }
+                axios.post("/villages", village).then(res => {
+                    SuccessAlert("Added Village Successfully");
+                    this.ViewAllVillage();
+                })
+            
+            }else{
+                //Edit
+                const village = {
+                    "id":this.state.villageId,
+                    "name": this.state.villageName,
+                    "wardId": this.state.wardId
+                }
+                axios.put("/villages", village).then(res => {
+                    SuccessAlert("Updated Village Successfully");
+                    this.ViewAllVillage();
+                })
+
             }
-            axios.post("/villages", village).then(res => {
-                this.ViewAllVillage();
-            })
+
+           
         }
     }
 
@@ -215,8 +244,8 @@ class AddVillage extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Add New Village
-                        <small>Adding a new village.</small>
+                        {this.state.mode?"Add New Village":"Update Village "}
+                        <small>{this.state.mode?"Adding a new village.":"Updating an existing village."}</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewAllVillage} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Villages</Button>
