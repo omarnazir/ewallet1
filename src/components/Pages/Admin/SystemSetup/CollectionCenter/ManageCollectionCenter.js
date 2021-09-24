@@ -26,8 +26,8 @@ class ManageCollectionCenter extends Component {
             })
     }
 
-    EditCollectionCenter = (row) => {
-        return this.props.history.push('/admin-edit-center/' + row.id, row)
+    EditCollectionCenter = (id) => {
+        return this.props.history.push('/admin-edit-center/' + id,id)
       }
 
     columns = [
@@ -76,7 +76,7 @@ class ManageCollectionCenter extends Component {
             cell: (record, index) => {
                 return (
                     <Fragment>
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditCollectionCenter(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditCollectionCenter(record.id)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
                         <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegion(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )

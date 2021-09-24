@@ -17,6 +17,7 @@ class EditCollectionCenter extends Component {
 
     state = {
         collectionCenterName:"",
+        collectionCenterId:0,
         amcosId: '',
         regionId: '',
         districtId: '',
@@ -36,6 +37,42 @@ class EditCollectionCenter extends Component {
     }
 
     componentDidMount() {
+
+        const { state } = this.props.history.location;
+        if (state == undefined) {
+            return this.props.history.push('/admin-collection-centers');
+        }
+
+        if (state != undefined) {
+            console.log(state);
+            console.log("Collection Id:", state);
+            axios.get("/collection-centers/"+state).then(res => {    
+                console.log(res.data)           
+                this.setState({collectionCenterId:res.data.id})
+                this.setState({collectionCenterName:res.data.name})
+                this.setState({registrarId:res.data.registrarId})
+                this.setState({amcosId:res.data.amcos.id})
+ 
+                const village=res.data.village;
+                this.setState({villageId:village.id})
+
+                const ward=res.data.village.ward;
+                this.setState({wardId:ward.id});
+
+                const district=res.data.village.ward.district;
+                this.setState({districtId:district.id})
+
+                const region=res.data.village.ward.district.region;
+                this.setState({regionId:region.id})
+
+                this.getAllDistrictsByRegion(region.id);
+                this.getAllWardsByDistrict(district.id);
+                this.getAllVillagesByWard(ward.id)
+
+                this.getAllAmcosByVillage(village.id);
+
+             })
+        };
         this.getAllRegions();
         this.getAllRegistrar();
 
@@ -146,13 +183,14 @@ class EditCollectionCenter extends Component {
 
         if (!hasError) {
             const collectionCenter = {
+                "id":this.state.collectionCenterId,
                 "name": this.state.collectionCenterName,
                 "amcos_id": this.state.amcosId,
                 "village_id": this.state.villageId,
                 "registrarId": this.state.registrarId
-            }      
-            axios.post("/collection-centers", collectionCenter).then(res => {
-                SuccessAlert("Added Collection Center Successfully")
+            }
+            axios.put("/collection-centers", collectionCenter).then(res => {
+                SuccessAlert("Updated Collection Center Successfully")
                 this.ViewAllAmcos();
             })
         }
@@ -187,8 +225,8 @@ class EditCollectionCenter extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                         Collection Center
-                        <small>Adding a new collection center.</small>
+                        Update Collection Center
+                        <small>Edit a new collection center.</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewAllAmcos} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Collection Center</Button>
