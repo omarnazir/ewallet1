@@ -27,25 +27,25 @@ class FarmerDetails extends Component {
         farmer: {
             id: 0,
             firstName: "",
-            middleName:"",
+            middleName: "",
             surname: "",
             sex: "",
             idNumber: "",
             dateOfBirth: "",
             msisdn: "",
-            mainCrop:{},
-            secondaryCrop:{},
-            ward:{},
-            village:{},
-            amcos:{},
-            farmSize:0,
-            farmingType:"",
-            farmingMethod:"",
-            registrationDate:Date.now(),
-            hamlet:"",
+            mainCrop: {},
+            secondaryCrop: {},
+            ward: {},
+            village: {},
+            amcos: {},
+            farmSize: 0,
+            farmingType: "",
+            farmingMethod: "",
+            registrationDate: Date.now(),
+            hamlet: "",
 
-            district:{},
-            region:{}
+            district: {},
+            region: {}
         }
 
     };
@@ -63,7 +63,7 @@ class FarmerDetails extends Component {
 
     EditFarmer = (id) => {
         return this.props.history.push('/admin-edit-farmer/' + id, id)
-      }
+    }
 
     componentDidMount() {
 
@@ -75,28 +75,28 @@ class FarmerDetails extends Component {
         this.setState({ farmerId: state.id })
         axios.get("/farmers/" + state.id)
             .then(res => {
-          
-                this.setState({farmer:{...this.state.farmer,id:res.data.id}})
-                this.setState({farmer:{...this.state.farmer,firstName:res.data.firstName}})
-                this.setState({farmer:{...this.state.farmer,middleName:res.data.middleName}})
-                this.setState({farmer:{...this.state.farmer,surname:res.data.surname}})
-                this.setState({farmer:{...this.state.farmer,sex:res.data.sex}})
-                this.setState({farmer:{...this.state.farmer,idNumber:res.data.idNumber}})
-                this.setState({farmer:{...this.state.farmer,dateOfBirth:res.data.dateOfBirth}})
-                this.setState({farmer:{...this.state.farmer,msisdn:res.data.msisdn}})
-                this.setState({farmer:{...this.state.farmer,mainCrop:res.data.mainCrop}})
-                this.setState({farmer:{...this.state.farmer,secondaryCrop:res.data.secondaryCrop}})
-                this.setState({farmer:{...this.state.farmer,ward:res.data.ward}}) 
-                this.setState({farmer:{...this.state.farmer,district:res.data.ward.district}}) 
-                this.setState({farmer:{...this.state.farmer,region:res.data.ward.district.region}}) 
-                this.setState({farmer:{...this.state.farmer,village:res.data.village}})
-                this.setState({farmer:{...this.state.farmer,amcos:res.data.amcos}})  
-                this.setState({farmer:{...this.state.farmer,hamlet:res.data.hamlet}})  
 
-                this.setState({farmer:{...this.state.farmer,farmSize:res.data.farmSize}}) 
-                this.setState({farmer:{...this.state.farmer,farmingType:res.data.farmingType}}) 
-                this.setState({farmer:{...this.state.farmer,farmingMethod:res.data.farmingMethod}}) 
-                this.setState({farmer:{...this.state.farmer,registrationDate:res.data.registrationDate}})             
+                this.setState({ farmer: { ...this.state.farmer, id: res.data.id } })
+                this.setState({ farmer: { ...this.state.farmer, firstName: res.data.firstName } })
+                this.setState({ farmer: { ...this.state.farmer, middleName: res.data.middleName } })
+                this.setState({ farmer: { ...this.state.farmer, surname: res.data.surname } })
+                this.setState({ farmer: { ...this.state.farmer, sex: res.data.sex } })
+                this.setState({ farmer: { ...this.state.farmer, idNumber: res.data.idNumber } })
+                this.setState({ farmer: { ...this.state.farmer, dateOfBirth: res.data.dateOfBirth } })
+                this.setState({ farmer: { ...this.state.farmer, msisdn: res.data.msisdn } })
+                this.setState({ farmer: { ...this.state.farmer, mainCrop: res.data.mainCrop } })
+                this.setState({ farmer: { ...this.state.farmer, secondaryCrop: res.data.secondaryCrop } })
+                this.setState({ farmer: { ...this.state.farmer, ward: res.data.ward } })
+                this.setState({ farmer: { ...this.state.farmer, district: res.data.ward.district } })
+                this.setState({ farmer: { ...this.state.farmer, region: res.data.ward.district.region } })
+                this.setState({ farmer: { ...this.state.farmer, village: res.data.village } })
+                this.setState({ farmer: { ...this.state.farmer, amcos: res.data.amcos } })
+                this.setState({ farmer: { ...this.state.farmer, hamlet: res.data.hamlet } })
+
+                this.setState({ farmer: { ...this.state.farmer, farmSize: res.data.farmSize } })
+                this.setState({ farmer: { ...this.state.farmer, farmingType: res.data.farmingType } })
+                this.setState({ farmer: { ...this.state.farmer, farmingMethod: res.data.farmingMethod } })
+                this.setState({ farmer: { ...this.state.farmer, registrationDate: res.data.registrationDate } })
             })
         HarvestsService.getAllHarvetByFarmer(state.id).then(res => {
             this.setState({ loading: false })
@@ -270,6 +270,14 @@ class FarmerDetails extends Component {
                                     Farmer Harvests
                                 </NavLink>
                             </NavItem>
+                            <NavItem>
+                                <NavLink
+                                    className={classnames({ active: this.state.activeTab === '4' })}
+                                    onClick={() => { this.toggleTab('4'); }}>
+                                    <span className="icon-briefcase mr-2"></span>
+                                    Transactions
+                                </NavLink>
+                            </NavItem>
                         </Nav>
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">
@@ -320,12 +328,12 @@ class FarmerDetails extends Component {
                                                                     <th>MemberID</th>
                                                                     <td>{this.state.farmer.memberID}</td>
 
-                                                                    <th>Amcos</th>
+                                                                    <th>AMCOS</th>
                                                                     <td>{this.state.farmer.amcos.name}</td>
                                                                 </tr>
 
                                                                 <tr>
-                                                                    <th>Hamlet</th>
+                                                                    <th>Hamlet (Kitongoji)</th>
                                                                     <td>{this.state.farmer.hamlet}</td>
 
                                                                     <th></th>
@@ -433,6 +441,28 @@ class FarmerDetails extends Component {
                                     </Card>
                                 </Col>
                             </TabPane>
+
+                            <TabPane tabId="4">
+
+                                <Col xl="12">
+                                    <div>
+                                        <div className="card">
+                                            <div className="card-header px-0">
+                                                <h4 className="text-center mt-2">Transactions</h4>
+                                            </div>
+                                            <hr className="my-0" />
+                                            <div className="card-body mt-2 py-1">
+                                                <div className="px-md-3 px-2">
+                                                    <div className="px-2 text-center">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Col>
+                            </TabPane>
+
 
                         </TabContent>
                     </div>
