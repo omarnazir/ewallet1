@@ -5,7 +5,7 @@ import {
     Container, Card, CardHeader, CardBody, Button} from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
-
+import {SuccessAlert,DeleteAlert} from "../../../../Common/AppAlerts";
 class ManageCollectionCenter extends Component {
     state = {
         collectionCenterList: [],
@@ -23,6 +23,26 @@ class ManageCollectionCenter extends Component {
                 this.setState({loading:false})
                 this.setState({ collectionCenterList })
 
+            })
+    }
+
+    AlertDeleteItem(id){
+        DeleteAlert().then((willDelete)=>{
+          if(willDelete){
+            this.DeleteCollectionCenter(id);
+          }
+        })
+      }
+
+      DeleteCollectionCenter(id) {
+        axios.delete("/collection-centers/" + id)
+            .then(res => {
+                const response = res.data;
+                const collectionCenterList = this.state.collectionCenterList.filter((item) => {
+                    return item.id !== id;
+                });
+                this.setState({ collectionCenterList });
+                SuccessAlert("Deleted Collection Center Successfully")
             })
     }
 
@@ -77,7 +97,7 @@ class ManageCollectionCenter extends Component {
                 return (
                     <Fragment>
                         <span className="btn badge-success mr-2 px-4" onClick={() => this.EditCollectionCenter(record.id)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegion(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
