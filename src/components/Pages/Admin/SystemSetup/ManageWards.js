@@ -13,37 +13,65 @@ import { Fragment } from "react";
 
 class ManageWards extends Component {
     state = {
+        wardsList:[],
         regionsList: [],
+        districtsList: [],
+        regionId: 0,
+        districtId:0,
+        wardId:0,
         modal: false,
         mode: true,
-        loading:true,
-        editedRegion: {
-            id:0,
-            name: ""
+        loading: true,
+        editedWard: {
+            name: "",
+            districtId: 0
         },
-        region: {
-            word: ""
+        ward: {
+            name: "",
+            districtId: 0
         }
     };
 
     initialState = {
-        region: {
-            id:0,
-            word: ""
+        ward: {
+            name: "",
+            districtId: 0
         }
+
     }
 
 
     componentDidMount() {
         this.getAllReservedWords();
+        this.getAllRegions();
+        this.getAllDistricts();
+    }
+
+
+    getAllDistricts() {
+        axios.get("/districts")
+            .then(res => {
+                const districtsList = res.data;
+                this.setState({ loading: false })
+                this.setState({ districtsList })
+
+            })
+    }
+
+    getAllRegions() {
+        axios.get("/regions")
+            .then(res => {
+                this.setState({ regionsList: res.data })
+
+            })
     }
 
     getAllReservedWords() {
         axios.get("/wards")
             .then(res => {
-                const regionsList = res.data;
-                this.setState({loading:false})
-                this.setState({ regionsList })
+                const wardsList = res.data;
+                this.setState({ loading: false })
+                this.setState({ wardsList })
 
             })
     }
@@ -135,7 +163,7 @@ class ManageWards extends Component {
     EditRegion(row) {
         console.log(row)
         const editedRestricted = {
-            id:row.id,
+            id: row.id,
             word: row.word
         }
 
@@ -186,18 +214,34 @@ class ManageWards extends Component {
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.AddWordMode} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
-                        <i className="fa fa-plus mr-2"></i>
+                            <i className="fa fa-plus mr-2"></i>
                             Add Ward</Button>
 
-                        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add New Region" : "Edit Region"}</ModalHeader>
+
+                            <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add New District" : "Edit District"}</ModalHeader>
                             <form onSubmit={this.handleSubmit}>
                                 <ModalBody>
                                     <FormGroup>
-                                        <label>Name :</label>
+                                        <label>District Name :</label>
                                         <input className="form-control" name="name"
-                                            value={this.state.mode ? this.state.region.name : this.state.editedRegion.name}
+                                            value={this.state.mode ? this.state.district.name : this.state.editedDistrict.name}
                                             onChange={this.handleChange} type="text" required></input>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label htmlFor="exampleFormControlSelect1">Region : </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="regionId"
+                                            onChange={this.handleChange}
+                                            value={this.state.mode ? this.state.district.regionId : this.state.editedDistrict.regionId}
+                                        >
+                                            <option value="0">Select type</option>
+                                            {this.state.regionsList.map(row => (
+                                                <option key={row.id} value={row.id} >
+                                                    {row.name}
+                                                </option>
+                                            ))}
+
+                                        </select>
                                     </FormGroup>
                                 </ModalBody>
                                 <ModalFooter>
@@ -217,7 +261,7 @@ class ManageWards extends Component {
                             <ReactDatatable
                                 extraButtons={this.extraButtons}
                                 config={this.config}
-                                records={this.state.regionsList}
+                                records={this.state.wardsList}
                                 columns={this.columns}
                                 loading={this.state.loading}
                             />
