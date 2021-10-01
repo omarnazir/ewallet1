@@ -6,6 +6,7 @@ import Moment from 'moment'
 import ReactDatatable from '@ashvin27/react-datatable';
 import { AuthService, UssdMenuService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
+import axios from '../../../../services/axios'
 
 class UssdMenu extends Component {
   state = {
@@ -40,6 +41,17 @@ class UssdMenu extends Component {
 
   AddUssdMenu=()=>{
     return this.props.history.push("/admin-add-ussdmenu");
+  }
+
+  DeleteMenu=(id)=>{
+    axios.delete("/ussd-menus/" +id)
+            .then((response) => {
+                console.log(response);
+                this.setState({ ussdMenuList: this.state.ussdMenuList.filter(pr => pr.id !== menu.id) });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
   }
 
 
@@ -107,7 +119,7 @@ class UssdMenu extends Component {
         return (
           <Fragment>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-            <span className="btn bg-danger-dark  px-4 mt-1" onClick={() => this.DeleteAlertMail(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            <span className="btn bg-danger-dark  px-4 mt-1" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
           </Fragment>
         )
       }
