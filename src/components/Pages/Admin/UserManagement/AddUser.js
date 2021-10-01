@@ -207,7 +207,7 @@ class AddUser extends Component {
                      <small>Adding a new user.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add Role</Button>
+                        <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2"><span className="fa fa-key mr-2"></span> Add Role</Button>
                         <Button onClick={this.ViewAllAdminUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
                             <ModalHeader toggle={this.toggleModal}>Add Role : </ModalHeader>
@@ -249,7 +249,7 @@ class AddUser extends Component {
                 </div>
                 <Container fluid>
                     <div className="row">
-                        <div className="col-md-10 offset-md-1">
+                        <div className="col-md-12">
                             <form onSubmit={this.onSubmit} name="formRegister" action="">
                                 <Card className="card-default">
                                     <CardBody>
