@@ -23,9 +23,10 @@ import FormValidator from '../../../Common/FormValidator';
 import axios from '../../../../services/axios'
 import Moment from "moment";
 
-class AddUssdMenu extends Component {
+class EditUssdMenu extends Component {
 
     state = {
+        id:0,
         title: '',
         loadBy: '',
         menuHeader: '',
@@ -56,11 +57,43 @@ class AddUssdMenu extends Component {
     }
 
     componentDidMount() {
+        const { state } = this.props.history.location;
+        console.log(state)
+        if (state == undefined) {
+            return this.props.history.push('/admin-customers-list/')
+        }
+        this.setState({id:state})
+
             axios.get("/ussd-menus")
             .then(res => {
                 const response = res.data;
                 this.setState({ ussdMenus: response })
             })
+
+
+                   //specific menu
+        axios.get("/ussd-menus/" +state)
+        .then((response) => {
+            console.log(response);
+            this.setState({
+                title: response.data.title,
+                loadBy: response.data.loadBy,
+                menuHeader: response.data.menuHeader,
+                type: response.data.type,
+                nextType: response.data.nextType,
+                dataSource: response.data.dataSource,
+                priority: response.data.priority,
+                inputVariableName: response.data.inputVariableName,
+                apiVariableName: response.data.apiVariableName,
+                apiTitle: response.data.apiTitle,
+                itemDataUrl: response.data.itemDataUrl,
+                itemDataMethod: response.data.itemDataMethod,
+                parentId: response.data.parentId
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }
 
     handleOnChange = (e) => {
@@ -122,6 +155,7 @@ class AddUssdMenu extends Component {
         if (isValid) {
             //payload
             const payload = {
+                id:this.state.id,
                 title: this.state.title,
                 loadBy: this.state.loadBy,
                 menuHeader: this.state.menuHeader,
@@ -153,7 +187,7 @@ class AddUssdMenu extends Component {
             console.log(payload)
 
             //insert data
-            axios.post("/ussd-menus", JSON.stringify(payload))
+            axios.put("/ussd-menus", JSON.stringify(payload))
                 .then((res) => {
                     this.ViewAllUssdMenus();
                 })
@@ -387,4 +421,4 @@ class AddUssdMenu extends Component {
     }
 }
 
-export default AddUssdMenu;
+export default EditUssdMenu;

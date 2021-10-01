@@ -73,6 +73,7 @@ import ManageAdvisoryServices from '../components/Pages/Admin/SystemSetup/Manage
 import EditAmcos from '../components/Pages/Admin/SystemSetup/Amcos/EditAmcos';
 import AddCollectionCenter from '../components/Pages/Admin/SystemSetup/CollectionCenter/AddCollectionCenter';
 import EditCollectionCenter from '../components/Pages/Admin/SystemSetup/CollectionCenter/EditCollectionCenter';
+import EditUssdMenu from '../components/Pages/Admin/UssdMenu/EditUssdMenu';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -131,6 +132,7 @@ const Routes = ({ location }) => {
 
                                     <Route path="/admin-ussd-menu" component={waitFor(UssdMenu)}/>
                                     <Route path="/admin-add-ussdmenu" component={waitFor(AddUssdMenu)}/>
+                                    <Route path="/admin-edit-ussdmenu/:id" component={waitFor(EditUssdMenu)}/>
 
                                     <Route path="/admin-manage-registars" component={waitFor(AllRegistars)}/>
                                     <Route path="/admin-add-registar" component={waitFor(AddRegistar)} />

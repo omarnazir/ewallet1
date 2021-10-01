@@ -34,6 +34,10 @@ class UssdMenu extends Component {
     return this.props.history.push('/admin-customers-details/' + row.id, row)
   }
 
+  EditUssdMenu=(row)=>{
+    return this.props.history.push('/admin-edit-ussdmenu/' + row.id, row.id)
+  }
+
   AddUssdMenu=()=>{
     return this.props.history.push("/admin-add-ussdmenu");
   }
@@ -102,7 +106,7 @@ class UssdMenu extends Component {
       cell: (record, index) => {
         return (
           <Fragment>
-            <span className="btn badge-success mr-2 px-4" onClick={() => this.EditAlertMail(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+            <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
             <span className="btn bg-danger-dark  px-4 mt-1" onClick={() => this.DeleteAlertMail(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
           </Fragment>
         )
