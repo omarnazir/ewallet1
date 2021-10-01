@@ -26,169 +26,150 @@ import Moment from "moment";
 class AddUssdMenu extends Component {
 
     state = {
-        formRegister: {
-            email: '',
-            password: '',
-            password2: '',
-            terms: false,
-            fullname: "",
-            username: "",
-            phonenumber: "",
-            monthlysmslimit: 0,
-            settings: false,
-            accountExpiration: ""
+        title: '',
+        loadBy: '',
+        menuHeader: '',
+        type: '',
+        nextType: '',
+        dataSource: '',
+        priority: '',
+        itemDataUrl: '',
+        itemDataMethod: '',
+        parentId: 0,
+        inputVariableName: '',
+        apiVariableName: '',
+        apiTitle: '',
 
-        },
-        rolesList: [],
-        description: "",
-        selectedRoleList: [],
-        role: "",
-        roleId: 0,
-        roleDescription: "",
+
+        //errors
+        titleError: '',
+        typeError: '',
+        dataSourceError: '',
+        priorityError: '',
+        itemDataUrlError: '',
+        itemDataMethodError: '',
+        parentIdError: '',
+
+        //array
         ussdMenus: []
 
     }
 
     componentDidMount() {
-        axios.get("/roles")
+            axios.get("/ussd-menus")
             .then(res => {
                 const response = res.data;
-                this.setState({ rolesList: response })
+                this.setState({ ussdMenus: response })
             })
     }
-    validateOnChange = event => {
-        const input = event.target;
-        const form = input.form
+
+    handleOnChange = (e) => {
+        const input = e.target;
+        const name = input.name
         const value = input.type === 'checkbox' ? input.checked : input.value;
 
-        const result = FormValidator.validate(input);
+        //set state
+        this.setState({ [name]: value });
+    }
+   
+    
 
-        if (result != null) {
-            this.setState({
-                [form.name]: {
-                    ...this.state[form.name],
-                    [input.name]: value,
-                    errors: {
-                        ...this.state[form.name].errors,
-                        [input.name]: result
-                    }
-                }
-            });
+    //validate
+    validate = () => {
+        let titleError = '';
+        let typeError = '';
+        let dataSourceError = '';
+        let priorityError = '';
+        let itemDataUrlError = '';
+        let itemDataMethodError = '';
+        let parentIdError = '';
+
+        if (!this.state.title) {
+            titleError = 'Title required';
         }
-    }
 
-    handleSubmit = event => {
-        this.toggleModal();
-        event.preventDefault()
-
-        console.log(event.target.value)
-        const roleId = this.state.roleId;
-        const role = this.state.rolesList.find(item => item.id == roleId);
-        const found = this.state.selectedRoleList.find((row) => row.id == roleId);
-
-        if (found == undefined) {
-            const selectedRoleList = [...this.state.selectedRoleList, role]
-            this.setState({ selectedRoleList })
+        if (!this.state.type) {
+            typeError = 'Type required';
         }
-        console.log(this.state.roleId)
-        console.log(this.state.role)
-        console.log(this.state.description)
 
+        if (!this.state.dataSource) {
+            dataSourceError = 'Data source  required';
+        }
+
+        if (!this.state.priority) {
+            priorityError = 'Priority required';
+        }
+
+        if (!this.state.itemDataMethod) {
+            itemDataMethodError = 'Data Method required';
+        }
+
+        //check for validation
+        if (titleError || typeError || dataSourceError || priorityError || itemDataMethodError) {
+            this.setState({ titleError, typeError, dataSourceError, priorityError, itemDataMethodError });
+            return false;
+        }
+        return true;
     }
 
-    DeleteUserRole = (id) => {
-        const role = this.state.rolesList.find(item => item.id == id);
-        const selectedRoleList = this.state.selectedRoleList.filter(row => row.id != role.id)
-        this.setState({ selectedRoleList })
-
-    }
-    handleChange = event => {
-        console.log("am hree")
-        this.setState({ [event.target.name]: event.target.value });
-    }
-    formatDate = (date) => {
-        //07/19/2021 10:49:10
-        // YYYY-MM-DD HH:mm:ss
-        return Moment(date).format('MM/DD/YYYY HH:mm:ss')
-    }
-
-
+ 
+  
     onSubmit = e => {
-        e.preventDefault()
-        const form = e.target;
-        const inputs = [...form.elements].filter(i => ['INPUT', 'SELECT'].includes(i.nodeName))
+        e.preventDefault();
 
-        const { errors, hasError } = FormValidator.bulkValidate(inputs)
+        const isValid = this.validate();
 
-        this.setState({
-            [form.name]: {
-                ...this.state[form.name],
-                errors
-            }
-        });
+        if (isValid) {
+            //payload
+            const payload = {
+                title: this.state.title,
+                loadBy: this.state.loadBy,
+                menuHeader: this.state.menuHeader,
+                type: this.state.type,
+                nextType: this.state.nextType,
+                dataSource: this.state.dataSource,
+                priority: Number(this.state.priority),
+                inputVariableName: this.state.inputVariableName,
+                apiVariableName: this.state.apiVariableName,
+                apiTitle: this.state.apiTitle,
+                itemDataUrl: this.state.itemDataUrl,
+                itemDataMethod: this.state.itemDataMethod,
+                parentId: Number(this.state.parentId),
+            };
 
-        console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
+            //loadBy
+            if (this.state.loadBy === '')
+                payload.loadBy = null
+            else
+                payload.loadBy = this.state.loadBy
 
-        console.log(this.state.selectedRoleList)
+            //type
+            if (this.state.type === '')
+                payload.type = null
+            else
+                payload.type = this.state.type
 
+            //console log
+            console.log(payload)
 
-        const UserRoles = [];
-        this.state.selectedRoleList.forEach(item => {
-            const newItem = { role_id: item.id }
-            UserRoles.push(newItem)
-        });
-
-
-        if (!hasError) {
-            const accountExpiration = this.formatDate(this.state.formRegister.accountExpiration);
-            const User = {
-                "username": this.state.formRegister.username,
-                "email": this.state.formRegister.email,
-                "password": this.state.formRegister.password,
-                "name": this.state.formRegister.fullname,
-                "msisdn": this.state.formRegister.phonenumber,
-                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit,
-                "accountExpiration": accountExpiration
-            }
-
-            console.log(this.formatDate(this.state.formRegister.accountExpiration))
-            console.log(User)
-
-            const data = { user: User, role_ids: UserRoles }
-            console.log(data)
+            //insert data
+            axios.post("/api/v1/ussd-menus", JSON.stringify(payload))
+                .then((res) => {
+                    this.ViewAllUssdMenus();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
 
 
-            axios.post("users/admin", data).then(res => {
-                console.log(res);
-                console.log(res.data);
-                this.ViewUserPage();
-            })
+            //clear form
+            this.setState({})
         }
     }
 
-    toggleModal = () => {
-        this.setState({
-            modal: !this.state.modal
-        });
-    }
-
-    handleSmsTemplateChange = event => {
-        const templateId = event.target.value
-        const template = this.state.rolesList.find(item => item.id == templateId);
-        this.setState({ role: template.name })
-        this.setState({ description: template.description })
-        this.setState({ roleId: template.id })
-    }
 
 
-    /* Simplify error check */
-    hasError = (formName, inputName, method) => {
-        return this.state[formName] &&
-            this.state[formName].errors &&
-            this.state[formName].errors[inputName] &&
-            this.state[formName].errors[inputName][method]
-    }
-
+ 
     ViewAllUssdMenus = () => {
         return this.props.history.push('/admin-ussd-menu')
     }
@@ -197,10 +178,6 @@ class AddUssdMenu extends Component {
         color: 'white',
         background: "#003366"
     }
-
-    ViewUserPage = () => {
-        return this.props.history.push("/admin-ussd-menu");
-    };
 
     render() {
         let index = 0;
@@ -216,9 +193,10 @@ class AddUssdMenu extends Component {
                     </div>
                 </div>
                 <Container fluid>
+                <form className="mb-3" onSubmit={this.onSubmit}>
                 <Card className="card-default">
                         <CardBody>
-                            <form className="mb-3" onSubmit={this.onSubmit}>
+                           
                                 <Row>
                                     <Col md={4}>
                                         <div className="form-group">
@@ -390,15 +368,8 @@ class AddUssdMenu extends Component {
                                     </Col>
                                 </Row>
 
-                                {/* <Row>
-                                    <Col md={12}>
-                                        <div className="form-group">
-                                            <button className="btn btn-primary mr-2">Save</button>
-                                            <a href="/ussd-menu" className="btn btn-danger">Cancel</a>
-                                        </div>
-                                    </Col>
-                                </Row> */}
-                            </form>
+                            
+                          
                         </CardBody>
                         <CardFooter>
                             <div className="d-flex align-items-center">
@@ -409,6 +380,7 @@ class AddUssdMenu extends Component {
                             </div>
                         </CardFooter>
                     </Card>
+                    </form>
                 </Container>
             </ContentWrapper>
         );

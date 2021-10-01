@@ -266,8 +266,6 @@ class AddUser extends Component {
                                                         value={this.state.formRegister.fullname}
 
                                                     />
-
-
                                                     <span className="invalid-feedback">Field is required</span>
                                                 </div>
                                             </div>
