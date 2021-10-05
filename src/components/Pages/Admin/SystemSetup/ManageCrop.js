@@ -120,7 +120,11 @@ class ManageCrop extends Component {
     this.toggleModal();
     if (this.state.mode) {
       console.log("Add mode")
-      axios.post("/crops", this.state.crop).then(res => {
+      const data= {
+        name: this.state.crop.name,
+        cropType: Number(this.state.crop.cropType)
+      }
+      axios.post("/crops",data).then(res => {
         console.log(res.data);
         this.getAllCrops();
         SuccessAlert("Added Crop Successfully");

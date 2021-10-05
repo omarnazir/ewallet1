@@ -28,9 +28,7 @@ class ManageCropType extends Component {
 
   initialState={
     cropType:{
-      name:"",
-      description:"",
-      type:""
+      name:""
     }
   }
 
