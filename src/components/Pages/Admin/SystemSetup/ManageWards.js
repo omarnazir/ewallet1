@@ -10,6 +10,7 @@ import {
 } from "reactstrap";
 import ReactDatatable from '@ashvin27/react-datatable';
 import { Fragment } from "react";
+import {SuccessAlert,DeleteAlert} from "../../../Common/AppAlerts";
 
 class ManageWards extends Component {
     state = {
@@ -100,7 +101,7 @@ class ManageWards extends Component {
                 return (
                     <Fragment>
                         <span className="btn badge-success mr-2 px-4" onClick={() => this.EditWard(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegion(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }
@@ -209,6 +210,16 @@ class ManageWards extends Component {
         this.toggleModal();
     }
 
+
+    AlertDeleteItem(id){
+        DeleteAlert().then((willDelete)=>{
+          if(willDelete){
+            this.DeleteRegion(id);
+            SuccessAlert("Deleted Ward Successfully")
+          }
+        })
+      }
+
     DeleteRegion(id) {
         axios.delete("/wards/" + id)
             .then(res => {
@@ -234,6 +245,7 @@ class ManageWards extends Component {
                 console.log(res.data);
                 this.getAllWards();
                 this.setState({ ward: this.initialState.ward })
+                SuccessAlert("Added Ward Successfully");
             })
         } else {
             console.log("Edit mode")
@@ -245,6 +257,7 @@ class ManageWards extends Component {
             axios.put("/wards", ward).then(res => {
                 console.log(res.data);
                 this.getAllWards();
+                SuccessAlert("Updated Ward Successfully");
 
             })
         }
