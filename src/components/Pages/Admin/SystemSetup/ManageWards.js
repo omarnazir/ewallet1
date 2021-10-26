@@ -23,41 +23,32 @@ class ManageWards extends Component {
         mode: true,
         loading: true,
         editedWard: {
+            id:0,
             name: "",
-            districtId: 0
+            districtId: 0,
+            regionId:0
         },
         ward: {
             name: "",
-            districtId: 0
+            districtId: 0,
+            regionId:0
         }
     };
 
     initialState = {
         ward: {
             name: "",
-            districtId: 0
+            districtId: 0,
+            regionId:0
         }
 
     }
 
-
     componentDidMount() {
-        this.getAllReservedWords();
-        this.getAllRegions();
-        this.getAllDistricts();
+        this.getAllWards();
+       this.getAllRegions()
+    
     }
-
-
-    getAllDistricts() {
-        axios.get("/districts")
-            .then(res => {
-                const districtsList = res.data;
-                this.setState({ loading: false })
-                this.setState({ districtsList })
-
-            })
-    }
-
     getAllRegions() {
         axios.get("/regions")
             .then(res => {
@@ -66,7 +57,7 @@ class ManageWards extends Component {
             })
     }
 
-    getAllReservedWords() {
+    getAllWards() {
         axios.get("/wards")
             .then(res => {
                 const wardsList = res.data;
@@ -108,7 +99,7 @@ class ManageWards extends Component {
             cell: (record, index) => {
                 return (
                     <Fragment>
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRegion(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditWard(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
                         <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegion(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
@@ -160,26 +151,72 @@ class ManageWards extends Component {
         }
     }
 
-    EditRegion(row) {
-        console.log(row)
-        const editedRestricted = {
-            id: row.id,
-            word: row.word
-        }
+    handleComplexChange = event => {
 
-        this.setState({ editedRestricted })
+        console.log("Field Name: " + [event.target.name] + " Field Value: " + [event.target.value])
+
+        if (this.state.mode) {
+
+        if ([event.target.name] == "regionId") {
+            this.getAllDistrictsByRegion([event.target.value]);
+            this.setState({
+                ward: Object.assign({},
+                    this.state.ward, { districtId: 0 })
+            })
+        }
+            this.setState({
+                ward: Object.assign({},
+                    this.state.ward, { [event.target.name]: event.target.value })
+            })
+        } else {
+
+            if ([event.target.name] == "regionId") {
+                this.getAllDistrictsByRegion([event.target.value]);
+                this.setState({
+                    ward: Object.assign({},
+                        this.state.ward, { districtId: 0 })
+                })
+            }
+            this.setState({
+                editedWard: Object.assign({}, this.state.editedWard,
+                    { [event.target.name]: event.target.value })
+            })
+        }
+     
+    }
+
+
+    getAllRegions() {
+        axios.get("/regions").then(res => { this.setState({ regionsList: res.data }) })
+    }
+
+    getAllDistrictsByRegion(id) {
+        axios.get("/regions/" + id + "/districts").then(res => { this.setState({ districtsList: res.data }) })
+    }
+
+    EditWard(row) {
+        console.log(row)
+
+       const editedWard={
+            id:row.id,
+            name: row.name,
+            districtId: row.district.id,
+            regionId:row.district.region.id
+        }
+        this.getAllDistrictsByRegion(row.district.region.id)
+        this.setState({ editedWard })
         this.setState({ mode: false })
         this.toggleModal();
     }
 
     DeleteRegion(id) {
-        axios.delete("/reserved-words/" + id)
+        axios.delete("/wards/" + id)
             .then(res => {
                 const response = res.data;
-                const regionsList = this.state.regionsList.filter((item) => {
+                const wardsList = this.state.wardsList.filter((item) => {
                     return item.id !== id;
                 });
-                this.setState({ regionsList })
+                this.setState({ wardsList })
             })
     }
 
@@ -189,16 +226,25 @@ class ManageWards extends Component {
         this.toggleModal();
         if (this.state.mode) {
             console.log("Add mode")
-            axios.post("/regions", this.state.region).then(res => {
+            const ward={
+                name:this.state.ward.name,
+                districtId:this.state.ward.districtId
+            }
+            axios.post("/wards", ward).then(res => {
                 console.log(res.data);
-                this.getAllReservedWords();
-                this.setState({ region: this.initialState.region })
+                this.getAllWards();
+                this.setState({ ward: this.initialState.ward })
             })
         } else {
             console.log("Edit mode")
-            axios.put("/regions", this.state.editedRegion).then(res => {
+            const ward={
+                id:this.state.editedWard.id,
+                name:this.state.editedWard.name,
+                districtId:this.state.editedWard.districtId
+            }
+            axios.put("/wards", ward).then(res => {
                 console.log(res.data);
-                this.getAllReservedWords();
+                this.getAllWards();
 
             })
         }
@@ -219,22 +265,16 @@ class ManageWards extends Component {
 
 
                             <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add New District" : "Edit District"}</ModalHeader>
+                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add New Ward" : "Edit Ward"}</ModalHeader>
                             <form onSubmit={this.handleSubmit}>
                                 <ModalBody>
                                     <FormGroup>
-                                        <label>District Name :</label>
-                                        <input className="form-control" name="name"
-                                            value={this.state.mode ? this.state.district.name : this.state.editedDistrict.name}
-                                            onChange={this.handleChange} type="text" required></input>
-                                    </FormGroup>
-                                    <FormGroup>
                                         <label htmlFor="exampleFormControlSelect1">Region : </label>
                                         <select className="form-control" id="exampleFormControlSelect1" name="regionId"
-                                            onChange={this.handleChange}
-                                            value={this.state.mode ? this.state.district.regionId : this.state.editedDistrict.regionId}
+                                            onChange={this.handleComplexChange}
+                                            value={this.state.mode ? this.state.ward.regionId : this.state.editedWard.regionId}
                                         >
-                                            <option value="0">Select type</option>
+                                            <option value="0">Select Region</option>
                                             {this.state.regionsList.map(row => (
                                                 <option key={row.id} value={row.id} >
                                                     {row.name}
@@ -242,6 +282,28 @@ class ManageWards extends Component {
                                             ))}
 
                                         </select>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <label htmlFor="exampleFormControlSelect1">District : </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="districtId"
+                                            onChange={this.handleComplexChange}
+                                            value={this.state.mode ? this.state.ward.districtId : this.state.editedWard.districtId}
+                                        >
+                                            <option value="0">Select District</option>
+                                            {this.state.districtsList.map(row => (
+                                                <option key={row.id} value={row.id} >
+                                                    {row.name}
+                                                </option>
+                                            ))}
+
+                                        </select>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                        <label>Ward Name :</label>
+                                        <input className="form-control" name="name"
+                                            value={this.state.mode ? this.state.ward.name : this.state.editedWard.name}
+                                            onChange={this.handleComplexChange} type="text" required></input>
                                     </FormGroup>
                                 </ModalBody>
                                 <ModalFooter>
