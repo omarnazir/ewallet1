@@ -20,11 +20,16 @@ class UssdMenu extends Component {
       this.setState({ redirect: "/login" })
     }
 
-    UssdMenuService.getAllUssdMenu().then(res => {
+   this.getAllUssdMenu();
+  }
+
+  getAllUssdMenu(){
+    return axios.get("/ussd-menus").then(res => {
       this.setState({loading:false})
       this.setState({ ussdMenuList: res.data })
     })
-  }
+
+}
 
   formatDate = (date) => {
     return Moment(date).format('lll')
@@ -33,6 +38,10 @@ class UssdMenu extends Component {
   ViewCustomerDetails = (row) => {
     console.log(row.id)
     return this.props.history.push('/admin-customers-details/' + row.id, row)
+  }
+
+  ViewUsedDetails=(id)=>{
+    return this.props.history.push('/admin-ussd-details/' + id)
   }
 
   EditUssdMenu=(row)=>{
@@ -45,13 +54,10 @@ class UssdMenu extends Component {
 
   DeleteMenu=(id)=>{
     axios.delete("/ussd-menus/" +id)
-            .then((response) => {
-                console.log(response);
-                this.setState({ ussdMenuList: this.state.ussdMenuList.filter(pr => pr.id !== id) });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    .then(res => {
+      const response = res.data;
+     this.getAllUssdMenu();
+  })
   }
 
 
@@ -93,24 +99,23 @@ class UssdMenu extends Component {
       text: "TITLE"
     },
     {
-      key: "type",
-      text: "TYPE"
+      key: "pageType",
+      text: "PAGE TYPE",
     },
     {
       key: "dataSource",
       text: "DATA SOURCE"
     },
     {
-      key: "priority",
-      text: "PRIORITY",
+      key: "pageLevel",
+      text: "PAGE LEVEL",
+      cell: (record, index) => {
+        return  `${record.pageLevel}`;
+      }
     },
     {
-      key: "itemDataUrl",
-      text: "DATA URL",
-    },
-    {
-      key: "itemDataMethod",
-      text: "DATA METHOD",
+      key: "variableName",
+      text: "VARIABLE NAME",
     },
     {
       key: "id",
@@ -119,7 +124,8 @@ class UssdMenu extends Component {
         return (
           <Fragment>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-            <span className="btn bg-danger-dark  px-4 mt-1" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={() => this.ViewUsedDetails(record.id)}> <i className="fa fa-eye mr-2"></i>View</span>
           </Fragment>
         )
       }

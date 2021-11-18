@@ -39,11 +39,11 @@ const Menu = [
         icon: 'icon-phone',
         path: '/admin-ussd-menu'
     },
+   
     {
-        name: 'System Setup',
-        icon: 'fas fa-wrench',
+        name: 'Manage Crop',
+        icon: 'fa fa-leaf',
         path: '/admin-manage-registars',
-        translate: 'sidebar.nav.SETUP',
         submenu: [
             {
                 name: 'Crops',
@@ -63,6 +63,14 @@ const Menu = [
                 translate: 'Crop Prices',
                 path: '/admin-crop-price'
             },
+        ]
+    },
+    {
+        name: 'System Setup',
+        icon: 'fas fa-wrench',
+        path: '/admin-manage-registars',
+        translate: 'sidebar.nav.SETUP',
+        submenu: [
             {
                 name: 'Agricultural Inputs',
                 icon: "icon-arrow-right",
@@ -94,6 +102,14 @@ const Menu = [
                 path: '/admin-collection-centers'
             },
 
+            
+        ]
+    },
+    {
+        name: 'Locations',
+        icon: 'icon-direction',
+        path: '/admin-manage-registars',
+        submenu: [
             {
                 name: 'Regions',
                 icon: "icon-arrow-right",
