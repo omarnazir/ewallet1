@@ -192,7 +192,7 @@ class AddUssdMenu extends Component {
 
 
     ViewAllUssdMenus = () => {
-        return this.props.history.push('/admin-ussd-menu')
+        return this.props.history.push('/admin-ussd-menu');
     }
 
     AddActionButtonStyle = {

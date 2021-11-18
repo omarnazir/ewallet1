@@ -76,6 +76,7 @@ import EditCollectionCenter from '../components/Pages/Admin/SystemSetup/Collecti
 import EditUssdMenu from '../components/Pages/Admin/UssdMenu/EditUssdMenu';
 import UssdDetails from '../components/Pages/Admin/UssdMenu/UssdDetails';
 import AddUssdMenuData from '../components/Pages/Admin/UssdMenu/AddUssdMenuData';
+import EditUssdMenuData from '../components/Pages/Admin/UssdMenu/EditUssdMenuData';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -135,6 +136,7 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-ussd-menu" component={waitFor(UssdMenu)}/>
                                     <Route path="/admin-add-ussdmenu" component={waitFor(AddUssdMenu)}/>
                                     <Route path="/admin-add-menu-data" component={waitFor(AddUssdMenuData)}/>
+                                    <Route path="/admin-edit-menu-data" component={waitFor(EditUssdMenuData)}/>
                                     <Route path="/admin-edit-ussdmenu/:id" component={waitFor(EditUssdMenu)}/>
                                     <Route path="/admin-ussd-details/:id" component={waitFor(UssdDetails)}/>
 

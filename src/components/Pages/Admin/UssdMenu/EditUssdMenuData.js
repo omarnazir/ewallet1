@@ -15,7 +15,7 @@ import {
 import axios from '../../../../services/axios'
 import {SuccessAlert} from "../../../Common/AppAlerts";
 
-class AddUssdMenuData extends Component {
+class EditUssdMenuData extends Component {
 
     state = {
         id:0,
@@ -24,6 +24,7 @@ class AddUssdMenuData extends Component {
         priority: 1,
         role:'',
         nextPageId:'',
+        parentId:0,
 
         //errors
         nameError: '',
@@ -40,12 +41,30 @@ class AddUssdMenuData extends Component {
     componentDidMount() {
         const { state } = this.props.history.location;
         console.log(state)
-        this.setState({id:state})
+        this.setState({id:state.id})
+        this.setState({parentId:state.parent})
         axios.get("/ussd-menus")
             .then(res => {
                 const response = res.data;
                 this.setState({ ussdMenus: response })
             })
+
+
+            axios.get("/ussd-menus")
+            .then(res => {
+                const response = res.data;
+                this.setState({ ussdMenus: response })
+            })
+
+            axios.get("/ussd-menu-data/"+state.id).then(res => {
+                  console.log(res.data);
+                    this.setState({name:res.data.name})
+                    this.setState({value:res.data.value})
+                    this.setState({priority:res.data.priority})
+                    this.setState({nextPageId:res.data.nextPageId})
+                    this.setState({role:res.data.role})
+                
+                })
     }
 
     handleOnChange = (e) => {
@@ -105,9 +124,10 @@ class AddUssdMenuData extends Component {
         
             //PageId from above
             const payload ={
+                id:this.state.id,
                 name: this.state.name,
                 value: this.state.value,
-                pageId: this.state.id, 
+                pageId: this.state.parentId, 
                 priority: this.state.priority,
                 nextPageId: this.state.nextPageId,
                 role:this.state.role
@@ -117,9 +137,9 @@ class AddUssdMenuData extends Component {
 
             //insert data
 
-            axios.post("/ussd-menu-data", payload)
+            axios.put("/ussd-menu-data", payload)
                 .then((res) => {
-                    SuccessAlert("Added Ussd Menu Data Successfully");
+                    SuccessAlert("Updated Ussd Menu Data Successfully");
                     this.ViewAllUssdMenus();
                 })
                 .catch((err) => {
@@ -134,8 +154,7 @@ class AddUssdMenuData extends Component {
 
 
     ViewAllUssdMenus = () => {
-        return this.props.history.push('/admin-ussd-details/'+this.state.id,this.state.id)
-
+        return this.props.history.push('/admin-ussd-details/'+this.state.parentId,this.state.parentId)
     }
 
     AddActionButtonStyle = {
@@ -148,8 +167,8 @@ class AddUssdMenuData extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Create New Ussd Menu Data
-                        <small>Adding a new ussd menu data.</small>
+                        Edit  New Ussd Menu Data
+                        <small>Updating a new ussd menu data.</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.ViewAllUssdMenus} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Ussd Menu's</Button>
@@ -246,4 +265,4 @@ class AddUssdMenuData extends Component {
     }
 }
 
-export default AddUssdMenuData;
+export default EditUssdMenuData;

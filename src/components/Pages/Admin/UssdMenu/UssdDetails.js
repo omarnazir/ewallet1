@@ -54,7 +54,11 @@ class UssdDetails extends Component {
   }
 
   EditUssdMenu=(row)=>{
-    return this.props.history.push('/admin-edit-ussdmenu/' + row.id, row.id)
+    const data={
+        id:row.id,
+        parent:this.state.id
+    }
+    return this.props.history.push('/admin-edit-menu-data/' + row.id, data)
   }
 
   AddUssdMenu=()=>{
