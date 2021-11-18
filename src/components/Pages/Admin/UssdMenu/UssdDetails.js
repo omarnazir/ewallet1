@@ -1,423 +1,176 @@
-import React, { Component } from "react";
+import React, { Component,Fragment } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
-import Moment from "moment";
-import axios from "../../../../services/axios";
-import {
-    Container, Button, TabContent,
-    TabPane,
-    Nav,
-    NavItem,
-    NavLink,
-    Col,
-    Table,
-    Card, CardHeader, CardBody,
-} from "reactstrap";
-import classnames from 'classnames';
-import { calculateAge } from '../../../../utils/AgeCalculator';
-import NumberFormat from 'react-number-format'
-import ReactDatatable from '@ashvin27/react-datatable';
-import { HarvestsService } from '../../../../services';
 
+import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
+import Moment from 'moment'
+import ReactDatatable from '@ashvin27/react-datatable';
+import { AuthService, UssdMenuService } from '../../../../services';
+import { Redirect } from 'react-router-dom';
+import axios from '../../../../services/axios'
 
 class UssdDetails extends Component {
-    state = {
-        activeTab: '1',
-        farmerId: 0,
-        loading: true,
-        farmer: {
-            id: 0,
-            firstName: "",
-            middleName: "",
-            surname: "",
-            sex: "",
-            idNumber: "",
-            dateOfBirth: "",
-            msisdn: "",
-            mainCrop: {},
-            secondaryCrop: {},
-            ward: {},
-            village: {},
-            amcos: {},
-            farmSize: 0,
-            farmingType: "",
-            farmingMethod: "",
-            registrationDate: Date.now(),
-            hamlet: "",
+  state = {
+    ussdMenuList: [],
+    loading:true
+  };
 
-            district: {},
-            region: {}
-        }
-
-    };
-
-    toggleTab = tab => {
-        if (this.state.activeTab !== tab) {
-            this.setState({
-                activeTab: tab
-            });
-        }
-    }
-    ViewFarmersList = () => {
-        return this.props.history.push("/admin-ussd-menu")
+  componentDidMount() {
+    const isAuthenticated = AuthService.isAuthenticated();
+    if (!isAuthenticated) {
+      this.setState({ redirect: "/login" })
     }
 
-    EditFarmer = (id) => {
-        return this.props.history.push('/admin-edit-farmer/' + id, id)
+   this.getAllUssdMenu();
+  }
+
+  getAllUssdMenu(){
+    return axios.get("/ussd-menus").then(res => {
+      this.setState({loading:false})
+      this.setState({ ussdMenuList: res.data })
+    })
+
+}
+
+  formatDate = (date) => {
+    return Moment(date).format('lll')
+  }
+
+  ViewCustomerDetails = (row) => {
+    console.log(row.id)
+    return this.props.history.push('/admin-customers-details/' + row.id, row)
+  }
+
+  ViewUsedDetails=(id)=>{
+    return this.props.history.push('/admin-ussd-details/' + id)
+  }
+
+  EditUssdMenu=(row)=>{
+    return this.props.history.push('/admin-edit-ussdmenu/' + row.id, row.id)
+  }
+
+  AddUssdMenu=()=>{
+    return this.props.history.push("/admin-add-ussdmenu");
+  }
+
+  DeleteMenu=(id)=>{
+    axios.delete("/ussd-menus/" +id)
+    .then(res => {
+      const response = res.data;
+     this.getAllUssdMenu();
+  })
+  }
+
+
+
+  AddActionButtonStyle = {
+    color: 'white',
+    background: "#003366"
+  }
+
+  config = {
+    page_size: 10,
+    length_menu: [10, 25, 50],
+    show_filter: true,
+    show_pagination: true,
+    pagination: 'advance',
+    filename: "Contact List",
+    button: {
+
+    },
+    language: {
+      loading_text: "Please be patient while data loads..."
     }
-
-    componentDidMount() {
-
-        const { state } = this.props.history.location;
-        // if (state == undefined) {
-        //     return this.props.history.push('/admin-farmers-list/')
-        // }
-
-        this.setState({ farmerId: state })
-        axios.get("/farmers/" + state)
-            .then(res => {
-
-                this.setState({ farmer: { ...this.state.farmer, id: res.data.id } })
-                this.setState({ farmer: { ...this.state.farmer, firstName: res.data.firstName } })
-                this.setState({ farmer: { ...this.state.farmer, middleName: res.data.middleName } })
-                this.setState({ farmer: { ...this.state.farmer, surname: res.data.surname } })
-                this.setState({ farmer: { ...this.state.farmer, sex: res.data.sex } })
-                this.setState({ farmer: { ...this.state.farmer, idNumber: res.data.idNumber } })
-                this.setState({ farmer: { ...this.state.farmer, dateOfBirth: res.data.dateOfBirth } })
-                this.setState({ farmer: { ...this.state.farmer, msisdn: res.data.msisdn } })
-                this.setState({ farmer: { ...this.state.farmer, mainCrop: res.data.mainCrop } })
-                this.setState({ farmer: { ...this.state.farmer, secondaryCrop: res.data.secondaryCrop } })
-                this.setState({ farmer: { ...this.state.farmer, ward: res.data.ward } })
-                this.setState({ farmer: { ...this.state.farmer, district: res.data.ward.district } })
-                this.setState({ farmer: { ...this.state.farmer, region: res.data.ward.district.region } })
-                this.setState({ farmer: { ...this.state.farmer, village: res.data.village } })
-                this.setState({ farmer: { ...this.state.farmer, amcos: res.data.amcos } })
-                this.setState({ farmer: { ...this.state.farmer, hamlet: res.data.hamlet } })
-
-                this.setState({ farmer: { ...this.state.farmer, farmSize: res.data.farmSize } })
-                this.setState({ farmer: { ...this.state.farmer, farmingType: res.data.farmingType } })
-                this.setState({ farmer: { ...this.state.farmer, farmingMethod: res.data.farmingMethod } })
-                this.setState({ farmer: { ...this.state.farmer, registrationDate: res.data.registrationDate } })
-            })
-        HarvestsService.getAllHarvetByFarmer(state).then(res => {
-            this.setState({ loading: false })
-            this.setState({ harvestsList: res.data })
-        })
-
-    }
-
-    AddActionButtonStyle = {
-        color: 'white',
-        background: "#003366"
-    }
-
-    TableActionButtonStyle = {
-        color: 'white',
-        background: "#33414e"
-    }
-
-    toggleModal = () => {
-        this.setState({
-            modal: !this.state.modal
-        });
-    }
-
-    hideToggelModal = () => {
-        this.setState({
-            modal: false,
-        })
-    }
-
-    formatDate = (date) => {
-        return Moment(date).format('lll')
-    }
-
-    ucFirst = (str) => {
-        if (!str) return str;
-        if (str.trim() == "undefined") return "";
-        return str[0].toUpperCase() + str.slice(1);
-    }
+  }
 
 
-    getFarmerFullName = () => {
-        const firstName = this.ucFirst(this.state.farmer.firstName);
-        const middleName = this.state.farmer.middleName == undefined ? " " : this.ucFirst(this.state.farmer.middleName);
-        const lastName = this.ucFirst(this.state.farmer.surname);
-        return firstName + " " + middleName + " " + lastName;
-    }
-
-    config = {
-        page_size: 10,
-        length_menu: [10, 25, 50],
-        show_filter: true,
-        show_pagination: true,
-        pagination: 'advance',
-        filename: "Contact List",
-        button: {
-
-        },
-        language: {
-            loading_text: "Please be patient while data loads..."
-        }
-    }
 
 
-    columns = [
-        {
-            key: "id",
-            text: "#",
-            sortable: true,
-            cell: (record, index) => {
-                return index + 1;
-            }
-        },
-        {
-            key: "crop",
-            text: "CROP",
-            cell: (record, index) => {
-                return record.crop.name;
-            }
-        },
-        {
-            key: "weight",
-            text: "WEIGHT",
-            cell: (record, index) => {
-                return (<NumberFormat value={record.weight} displayType={'text'} thousandSeparator={true} prefix={''} />)
-            }
-        },
-        {
-            key: "cropUnitPrice",
-            text: "UNIT PRICE",
-            cell: (record, index) => {
-                return (<NumberFormat value={record.cropUnitPrice} displayType={'text'} thousandSeparator={true} prefix={''} />)
-            }
-        },
-        {
-            key: "cropsValue",
-            text: "CROP VALUE",
-            cell: (record, index) => {
-                return (<NumberFormat value={record.cropsValue} displayType={'text'} thousandSeparator={true} prefix={''} />)
-            }
-        },
-        {
-            key: "collectionCenter",
-            text: "COLLECTION CENTER",
-            cell: (record, index) => {
-                return record.collectionCenter.name;
-            }
-        },
-        {
-            key: "status",
-            text: "STATUS",
-            cell: (record, index) => {
-
-                return (
-                    <span className="badge badge-success">Received</span>
-                );
-            }
-        },
-        {
-            key: "date",
-            text: "RECEIVED AT",
-            sortable: true,
-            cell: (record, index) => {
-                return (this.formatDate(record.date))
-            }
-        }
-
-    ];
-
-
-    render() {
+  columns = [
+    {
+      key: "id",
+      text: "#",
+      sortable: true,
+      cell: (record, index) => {
+        return index + 1;
+      }
+    },
+    {
+      key: "title",
+      text: "TITLE"
+    },
+    {
+      key: "pageType",
+      text: "PAGE TYPE",
+    },
+    {
+      key: "dataSource",
+      text: "DATA SOURCE"
+    },
+    {
+      key: "pageLevel",
+      text: "PAGE LEVEL",
+      cell: (record, index) => {
+        return  `${record.pageLevel}`;
+      }
+    },
+    {
+      key: "variableName",
+      text: "VARIABLE NAME",
+    },
+    {
+      key: "id",
+      text: "ACTION",
+      cell: (record, index) => {
         return (
-            <ContentWrapper>
-                <div className="content-heading">
-                    <div className="mr-auto flex-row">
-                        Ussd Details : {this.getFarmerFullName()}
-                        <small>Showing all ussd details.</small>
-                    </div>
-                    <div className="flex-row d-block d-md-flex">
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditFarmer(this.state.farmerId)}> <i className="icon-pencil mr-2"  ></i>Edit Farmer</span>
-                        <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete Farmer </span>
-
-                        <Button onClick={this.ViewFarmersList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Ussd Menus</Button>
-                    </div>
-                </div>
-                <Container fluid>
-                    <div role="tabpanel card card-body">
-                        <Nav tabs>
-                            <NavItem>
-                                <NavLink
-                                    className={classnames({ active: this.state.activeTab === '1' })}
-                                    onClick={() => { this.toggleTab('1'); }}>
-                                    <span className="icon-phone mr-2"></span>
-                                    Ussd Details
-                                </NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink
-                                    className={classnames({ active: this.state.activeTab === '2' })}
-                                    onClick={() => { this.toggleTab('2'); }}>
-                                    <span className="fas fa-exchange-alt mr-2"></span>
-                                    Ussd Menu Data
-                                </NavLink>
-                            </NavItem>
-
-                           
-                          
-                        </Nav>
-                        <TabContent activeTab={this.state.activeTab}>
-                            <TabPane tabId="1">
-
-                                <Col xl="12">
-                                    <div>
-                                        <div className="card card-default">
-
-                                            <hr className="my-0" />
-                                            <div className="card-body mt-2 mb-2">
-                                                <div className="">
-                                                    <div className="px-2">
-                                                        <Table className="table table-bordered">
-
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th colSpan={4} className="text-uppercase">  <span className="fa fa-user mr-2"></span> Personal Information</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Full Name</th>
-                                                                    {/* <td>{this.state.firstName + " " + this.state.surname}</td> */}
-                                                                    <td>{this.getFarmerFullName()}</td>
-
-                                                                    <th>Sex</th>
-                                                                    <td>{this.state.farmer.sex}</td>
-                                                                </tr>
-
-                                                                <tr>
-
-                                                                    <th>Date of Birth (Age)</th>
-                                                                    <td>{this.state.farmer.dateOfBirth}</td>
-
-
-                                                                    <th>Age (Years)</th>
-                                                                    <td>{calculateAge(this.state.farmer.dateOfBirth)}</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th>Phone</th>
-                                                                    <td>{this.state.farmer.msisdn}</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th colSpan={4} className="text-uppercase"><span className="fa fa-id-card mr-2"></span> Membership Information</th>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th>MemberID</th>
-                                                                    <td>{this.state.farmer.memberID}</td>
-
-                                                                    <th>AMCOS</th>
-                                                                    <td>{this.state.farmer.amcos.name}</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th>Hamlet (Kitongoji)</th>
-                                                                    <td>{this.state.farmer.hamlet}</td>
-
-                                                                    <th></th>
-                                                                    <td></td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th colSpan={4} className="text-uppercase"><span className="fa fa-leaf mr-2"></span> Farm Information</th>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th>Location</th>
-                                                                    <td colSpan={3}>
-                                                                        {this.state.farmer.region.name}{", "}
-                                                                        {this.state.farmer.district.name}{", "}
-                                                                        {this.state.farmer.ward.name}{", "}
-                                                                        {this.state.farmer.village.name}
-                                                                    </td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th>Farm Size</th>
-                                                                    <td>{this.state.farmer.farmSize}</td>
-
-                                                                    <th>Type of Farming</th>
-                                                                    <td>{this.state.farmer.farmingType}</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th>Equipment used</th>
-                                                                    <td>{this.state.farmer.farmingMethod}</td>
-
-                                                                    <th>Planting season</th>
-                                                                    <td>{this.state.farmer.season}</td>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th>Latitude</th>
-                                                                    <td>{this.state.latitude}</td>
-
-                                                                    <th>Longitude</th>
-                                                                    <td>{this.state.longitude}</td>
-                                                                </tr>
-
-
-
-                                                                <tr>
-                                                                    <th colSpan={4} className="text-uppercase"><span className="fa fa-snowflake mr-2"></span> Crops Information</th>
-                                                                </tr>
-
-                                                                <tr>
-                                                                    <th>Main Crop</th>
-                                                                    <td>{this.state.farmer.mainCrop.name}</td>
-
-                                                                    <th>Secondary Crops</th>
-                                                                    <td>{this.state.farmer.secondaryCrop.name}</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </Table>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </Col>
-
-
-                            </TabPane>
-                          
-                            <TabPane tabId="2">
-                                <Col xl="12">
-                                    <Card>
-                                        <CardHeader>
-                                        </CardHeader>
-                                        <CardBody>
-
-                                            <ReactDatatable
-                                                extraButtons={this.extraButtons}
-                                                config={this.config}
-                                                records={this.state.harvestsList}
-                                                columns={this.columns}
-                                                loading={this.state.loading}
-                                            />
-                                        </CardBody>
-                                    </Card>
-                                </Col>
-                            </TabPane>
-
-                          
-
-
-                        </TabContent>
-                    </div>
-                </Container>
-            </ContentWrapper>
-        );
+          <Fragment>
+            <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
+            <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={() => this.ViewUsedDetails(record.id)}> <i className="fa fa-eye mr-2"></i>View</span>
+          </Fragment>
+        )
+      }
     }
+
+  ];
+
+
+  render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
+    }
+    return (
+      <ContentWrapper>
+        <div className="content-heading">
+          <div className="mr-auto flex-row">
+            Ussd Menu Data
+            <small>Manage USSD Menu Data.</small>
+          </div>
+          <div className="flex-row">
+            <Button onClick={this.AddUssdMenu} style={this.AddActionButtonStyle} className="btn-pill-right">
+              <i className="fa fa-plus mr-2"></i>
+              Add Menu Data</Button>
+          </div>
+        </div>
+        <Container fluid>
+          <Card>
+            <CardHeader>
+            </CardHeader>
+            <CardBody>
+
+              <ReactDatatable
+                extraButtons={this.extraButtons}
+                config={this.config}
+                records={this.state.ussdMenuList}
+                columns={this.columns}
+                loading={this.state.loading}
+
+              />
+            </CardBody>
+          </Card>
+        </Container>
+      </ContentWrapper>
+    );
+  }
 }
 
 export default UssdDetails;
