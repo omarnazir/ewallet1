@@ -37,16 +37,10 @@ class AddCollectionCenter extends Component {
 
     componentDidMount() {
         this.getAllRegions();
-        this.getAllRegistrar();
-
     }
 
     getAllMCOS() {
         axios.get("/mcos").then(res => { this.setState({ mcos: res.data }) })
-    }
-
-    getAllRegistrar() {
-        axios.get("/registars").then(res => { this.setState({ registrars: res.data }) })
     }
 
     getAllAmcosByVillage(id) {
@@ -148,8 +142,7 @@ class AddCollectionCenter extends Component {
             const collectionCenter = {
                 "name": this.state.collectionCenterName,
                 "amcos_id": this.state.amcosId,
-                "village_id": this.state.villageId,
-                "registrarId": this.state.registrarId
+                "village_id": this.state.villageId
             }      
             axios.post("/collection-centers", collectionCenter).then(res => {
                 SuccessAlert("Added Collection Center Successfully")
@@ -272,21 +265,6 @@ class AddCollectionCenter extends Component {
                                                 }
                                             </select>
                                             <span className="text-danger">{this.state.amcosIdError}</span>
-                                        </div>
-                                    </Col>
-
-                                    <Col md={4}>
-                                        <div className="form-group">
-                                            <label>Registrar <span className="red">*</span> </label>
-                                            <select name="registrarId" className="form-control" value={this.state.registrarId} onChange={this.handleChange}>
-                                                <option value="">-- Select --</option>
-                                                {
-                                                    this.state.registrars.map((data, index) => {
-                                                        return <option key={index} value={data.id}>{data.name}</option>
-                                                    })
-                                                }
-                                            </select>
-                                            <span className="text-danger">{this.state.registrarIdError}</span>
                                         </div>
                                     </Col>
 

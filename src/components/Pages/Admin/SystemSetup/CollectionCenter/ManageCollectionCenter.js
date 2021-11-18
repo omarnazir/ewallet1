@@ -77,13 +77,6 @@ class ManageCollectionCenter extends Component {
             }
         },
         {
-            key: "ward",
-            text: "REGISTRAR",
-            cell: (record, index) => {
-                return (record.amcos.registrarId.name);
-            }
-        },
-        {
             key: "village",
             text: "VILLAGE",
             cell: (record, index) => {
