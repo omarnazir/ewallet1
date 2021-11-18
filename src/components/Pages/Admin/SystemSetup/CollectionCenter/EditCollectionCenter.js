@@ -50,7 +50,6 @@ class EditCollectionCenter extends Component {
                 console.log(res.data)           
                 this.setState({collectionCenterId:res.data.id})
                 this.setState({collectionCenterName:res.data.name})
-                this.setState({registrarId:res.data.registrarId})
                 this.setState({amcosId:res.data.amcos.id})
  
                 const village=res.data.village;
@@ -186,8 +185,7 @@ class EditCollectionCenter extends Component {
                 "id":this.state.collectionCenterId,
                 "name": this.state.collectionCenterName,
                 "amcos_id": this.state.amcosId,
-                "village_id": this.state.villageId,
-                "registrarId": this.state.registrarId
+                "village_id": this.state.villageId
             }
             axios.put("/collection-centers", collectionCenter).then(res => {
                 SuccessAlert("Updated Collection Center Successfully")
@@ -313,21 +311,7 @@ class EditCollectionCenter extends Component {
                                         </div>
                                     </Col>
 
-                                    <Col md={4}>
-                                        <div className="form-group">
-                                            <label>Registrar <span className="text-danger">*</span> </label>
-                                            <select name="registrarId" className="form-control" value={this.state.registrarId} onChange={this.handleChange}>
-                                                <option value="">-- Select --</option>
-                                                {
-                                                    this.state.registrars.map((data, index) => {
-                                                        return <option key={index} value={data.id}>{data.name}</option>
-                                                    })
-                                                }
-                                            </select>
-                                            <span className="text-danger">{this.state.registrarIdError}</span>
-                                        </div>
-                                    </Col>
-
+                                
                                     <Col md={4}>
                                         <div className="form-group">
                                             <label>Collection Center Name <span className="text-danger">*</span></label>
