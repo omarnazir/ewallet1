@@ -40,8 +40,8 @@ class UssdMenu extends Component {
     return this.props.history.push('/admin-customers-details/' + row.id, row)
   }
 
-  ViewUsedDetails=(id)=>{
-    return this.props.history.push('/admin-ussd-details/' + id)
+  ViewUsedDetails=(row)=>{
+    return this.props.history.push('/admin-ussd-details/' + row.id,row.id)
   }
 
   EditUssdMenu=(row)=>{
@@ -125,7 +125,7 @@ class UssdMenu extends Component {
           <Fragment>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
             <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
-            <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={() => this.ViewUsedDetails(record.id)}> <i className="fa fa-eye mr-2"></i>View</span>
+            <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={() => this.ViewUsedDetails(record)}> <i className="fa fa-eye mr-2"></i>View</span>
           </Fragment>
         )
       }

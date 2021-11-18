@@ -11,20 +11,29 @@ import axios from '../../../../services/axios'
 class UssdDetails extends Component {
   state = {
     ussdMenuList: [],
-    loading:true
+    loading:true,
+    id:''
   };
 
   componentDidMount() {
+
+    const { state } = this.props.history.location;
+    console.log(state)
+    if (state == undefined) {
+        return this.props.history.push('/admin-ussd-menu')
+    }
+    this.setState({id:state})
+
     const isAuthenticated = AuthService.isAuthenticated();
     if (!isAuthenticated) {
       this.setState({ redirect: "/login" })
     }
 
-   this.getAllUssdMenu();
+   this.getAllUssdMenu(state);
   }
 
-  getAllUssdMenu(){
-    return axios.get("/ussd-menus").then(res => {
+  getAllUssdMenu(id){
+    return axios.get("/ussd-menu-data/byPage/"+id).then(res => {
       this.setState({loading:false})
       this.setState({ ussdMenuList: res.data })
     })
@@ -49,14 +58,17 @@ class UssdDetails extends Component {
   }
 
   AddUssdMenu=()=>{
-    return this.props.history.push("/admin-add-ussdmenu");
+    return this.props.history.push("/admin-add-menu-data/"+this.state.id,this.state.id);
   }
 
   DeleteMenu=(id)=>{
-    axios.delete("/ussd-menus/" +id)
+    axios.delete("/ussd-menu-data/" +id)
     .then(res => {
       const response = res.data;
-     this.getAllUssdMenu();
+      const ussdMenuList = this.state.ussdMenuList.filter((item) => {
+          return item.id !== id;
+      });
+      this.setState({ ussdMenuList });
   })
   }
 
@@ -95,28 +107,35 @@ class UssdDetails extends Component {
       }
     },
     {
-      key: "title",
-      text: "TITLE"
+      key: "name",
+      text: "NAME"
     },
     {
-      key: "pageType",
-      text: "PAGE TYPE",
+      key: "value",
+      text: "VALUE",
     },
     {
-      key: "dataSource",
-      text: "DATA SOURCE"
+      key: "pageId",
+      text: "PAGE ID"
     },
     {
-      key: "pageLevel",
-      text: "PAGE LEVEL",
+      key: "priority",
+      text: "PRIORITY",
       cell: (record, index) => {
-        return  `${record.pageLevel}`;
+        return  `${record.priority}`;
       }
     },
     {
-      key: "variableName",
-      text: "VARIABLE NAME",
+      key: "nextPageId",
+      text: "NEXT PAGE ID",
+      cell: (record, index) => {
+        return  `${record.nextPageId}`;
+      }
     },
+    {
+        key: "role",
+        text: "ROLE",
+      },
     {
       key: "id",
       text: "ACTION",
@@ -125,7 +144,6 @@ class UssdDetails extends Component {
           <Fragment>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
             <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
-            <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={() => this.ViewUsedDetails(record.id)}> <i className="fa fa-eye mr-2"></i>View</span>
           </Fragment>
         )
       }
