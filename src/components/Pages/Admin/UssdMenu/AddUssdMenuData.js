@@ -192,7 +192,6 @@ class AddUssdMenuData extends Component {
                                             <input className="form-control"
                                                 name="priority"
                                                 type="number"
-                                                min="0"
                                                 placeholder="Write Priority level..."
                                                 onChange={this.handleOnChange}
                                                 value={this.state.priority} />

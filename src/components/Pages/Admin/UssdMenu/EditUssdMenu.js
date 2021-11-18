@@ -36,7 +36,7 @@ class EditUssdMenu extends Component {
         type: '',
         nextType: '',
         dataSource: '',
-        priority: 0,
+        priority: 1,
         remoteUrl: '',
         parentId: 0,
         inputVariableName: '',
@@ -69,11 +69,31 @@ class EditUssdMenu extends Component {
         this.setState({id:state})
 
 
-        axios.get("/ussd-menus")
+        axios.get("/ussd-menus/"+state)
             .then(res => {
-                const response = res.data;
-                this.setState({ ussdMenus: response })
+                console.log(res.data);
+                this.setState({title:res.data.title})
+                this.setState({type:res.data.pageType})
+                this.setState({dataSource:res.data.dataSource})
+                this.setState({remoteUrl:res.data.remoteUrl})
+                this.setState({loadBy:res.data.loadBy})
+                this.setState({priority:res.data.pageLevel})
+                this.setState({parentId:res.data.nextPageId})
+                this.setState({inputVariableName:res.data.variableName})
+                this.setState({actionUrl:res.data.actionUrl})
+                // this.setState({})
+                // this.setState({ ussdMenus: response })
             })
+
+            this.getAllUssdMenu();
+    }
+
+
+    getAllUssdMenu(){
+        return axios.get("/ussd-menus").then(res => {
+          this.setState({loading:false})
+          this.setState({ ussdMenus: res.data })
+        })
     }
 
     handleOnChange = (e) => {
@@ -156,6 +176,7 @@ class EditUssdMenu extends Component {
 
             const payload=
                 {
+                    id:this.state.id,
                     title: this.state.title,
                     pageType: this.state.type, 
                     dataSource:this.state.dataSource, 
@@ -185,9 +206,9 @@ class EditUssdMenu extends Component {
 
             //insert data
 
-            axios.post("/ussd-menus", payload)
+            axios.put("/ussd-menus", payload)
                 .then((res) => {
-                    SuccessAlert("Added Ussd Menu Successfully");
+                    SuccessAlert("Updated Ussd Menu Successfully");
                     this.ViewAllUssdMenus();
                 })
                 .catch((err) => {
@@ -302,7 +323,6 @@ class EditUssdMenu extends Component {
                                             <input className="form-control"
                                                 name="priority"
                                                 type="number"
-                                                min="0"
                                                 placeholder="Write page level..."
                                                 onChange={this.handleOnChange}
                                                 value={this.state.priority} />
