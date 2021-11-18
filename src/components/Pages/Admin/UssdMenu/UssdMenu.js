@@ -55,8 +55,10 @@ class UssdMenu extends Component {
   DeleteMenu=(id)=>{
     axios.delete("/ussd-menus/" +id)
     .then(res => {
-      const response = res.data;
-     this.getAllUssdMenu();
+      const ussdMenuList = this.state.ussdMenuList.filter((item) => {
+        return item.id !== id;
+    });
+    this.setState({ ussdMenuList });
   })
   }
 
