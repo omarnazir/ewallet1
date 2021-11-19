@@ -242,6 +242,7 @@ class AddUssdMenu extends Component {
                                                 <option value="END">END</option>
                                                 <option value="CONFIRM">CONFIRM</option>
                                                 <option value="END-NO-ACTION">END-NO-ACTION</option>
+                                               
                                             </select>
                                             <span className="text-danger">{this.state.typeError}</span>
                                         </FormGroup>
@@ -284,6 +285,7 @@ class AddUssdMenu extends Component {
                                                 <option value="all">ALL</option>
                                                 <option value="msisdn">MSISDN</option>
                                                 <option value="amcos">AMCOS</option>
+                                                <option value="crop">CROP</option>
                                             </select>
                                             <span className="text-danger">{this.state.loadyByError}</span>
 

@@ -313,6 +313,7 @@ class EditUssdMenu extends Component {
                                                 <option value="all">ALL</option>
                                                 <option value="msisdn">MSISDN</option>
                                                 <option value="amcos">AMCOS</option>
+                                                <option value="crop">CROP</option>
                                             </select>
                                             <span className="text-danger">{this.state.loadyByError}</span>
 
