@@ -98,16 +98,16 @@ class EditUssdMenuData extends Component {
             priorityError = 'Priority is required';
         }
 
-        if (!this.state.role) {
-            roleError = 'Role is required';
-        }
+        // if (!this.state.role) {
+        //     roleError = 'Role is required';
+        // }
 
         if (!this.state.nextPageId) {
             nextPageIdError = 'Next Page is required';
         }
         //check for validation
-        if (nameError || valueError  || priorityError||roleError || nextPageIdError ) {
-            this.setState({ nameError, valueError, priorityError,roleError,nextPageIdError });
+        if (nameError || valueError  || priorityError || nextPageIdError ) {
+            this.setState({ nameError, valueError, priorityError,nextPageIdError });
             return false;
         }
         return true;

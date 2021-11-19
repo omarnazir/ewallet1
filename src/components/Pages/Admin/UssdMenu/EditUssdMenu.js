@@ -272,6 +272,8 @@ class EditUssdMenu extends Component {
                                                 <option value="SELECTION">SELECTION</option>
                                                 <option value="INPUT">INPUT</option>
                                                 <option value="END">END</option>
+                                                <option value="CONFIRM">CONFIRM</option>
+                                                <option value="END-NO-ACTION">END-NO-ACTION</option>
                                             </select>
                                             <span className="text-danger">{this.state.typeError}</span>
                                         </FormGroup>
