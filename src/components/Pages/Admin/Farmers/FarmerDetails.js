@@ -43,6 +43,7 @@ class FarmerDetails extends Component {
             farmingMethod: "",
             registrationDate: Date.now(),
             hamlet: "",
+            registrarName:"",
 
             district: {},
             region: {}
@@ -97,6 +98,7 @@ class FarmerDetails extends Component {
                 this.setState({ farmer: { ...this.state.farmer, farmingType: res.data.farmingType } })
                 this.setState({ farmer: { ...this.state.farmer, farmingMethod: res.data.farmingMethod } })
                 this.setState({ farmer: { ...this.state.farmer, registrationDate: res.data.registrationDate } })
+                this.setState({farmer:{...this.state.farmer,registrarName:res.data.registrarName}})
             })
         HarvestsService.getAllHarvetByFarmer(state.id).then(res => {
             this.setState({ loading: false })
@@ -391,6 +393,20 @@ class FarmerDetails extends Component {
                                                                     <th>Secondary Crops</th>
                                                                     <td>{this.state.farmer.secondaryCrop.name}</td>
                                                                 </tr>
+                                                                <tr>
+                                                                    <th colSpan={4} className="text-uppercase"><span className="fa fa-user mr-2"></span> Registrar Information</th>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <th colSpan={2}>Full Name</th>
+                                                                    <td colSpan={2}>{this.state.farmer.registrarName}</td>
+
+
+                                                                </tr>
+                                                                {/* <tr>
+                                                                    <th colSpan={2}>Role </th>
+                                                                    <td colSpan={2}>{this.state.farmer.secondaryCrop.name}</td>
+                                                                </tr> */}
                                                             </tbody>
                                                         </Table>
                                                     </div>
