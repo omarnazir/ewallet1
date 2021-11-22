@@ -259,17 +259,16 @@ class FarmerDetails extends Component {
                                 <NavLink
                                     className={classnames({ active: this.state.activeTab === '2' })}
                                     onClick={() => { this.toggleTab('2'); }}>
-                                    <span className="fa fa-leaf mr-2"></span>
-                                    Agricultural Inputs
+                                    <span className="fa fa-snowflake mr-2"></span>
+                                    Farmer Harvests
                                 </NavLink>
                             </NavItem>
-
                             <NavItem>
                                 <NavLink
                                     className={classnames({ active: this.state.activeTab === '3' })}
                                     onClick={() => { this.toggleTab('3'); }}>
-                                    <span className="fa fa-snowflake mr-2"></span>
-                                    Farmer Harvests
+                                    <span className="fa fa-leaf mr-2"></span>
+                                    Agricultural Inputs
                                 </NavLink>
                             </NavItem>
                             <NavItem>
@@ -419,7 +418,7 @@ class FarmerDetails extends Component {
 
 
                             </TabPane>
-                            <TabPane tabId="2">
+                            <TabPane tabId="3">
 
                                 <Col xl="12">
                                     <div>
@@ -439,7 +438,7 @@ class FarmerDetails extends Component {
                                     </div>
                                 </Col>
                             </TabPane>
-                            <TabPane tabId="3">
+                            <TabPane tabId="2">
                                 <Col xl="12">
                                     <Card>
                                         <CardHeader>
