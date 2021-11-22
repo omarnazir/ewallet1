@@ -399,7 +399,7 @@ class EditAdminUser extends Component {
                 </div>
                 <Container fluid>
                     <div className="row">
-                        <div className="col-md-10 offset-md-1">
+                        <div className="col-md-12 ">
                             <form onSubmit={this.onSubmit} name="formRegister" action="">
                                 <Card className="card-default">
                                     <CardBody>
@@ -519,7 +519,7 @@ class EditAdminUser extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {this.state.roles.map(row => (
+                                                    {/* {this.state.roles.map(row => (
                                                         <tr key={row.id}>
                                                             <td>{index += 1}</td>
                                                             <td>{row.name}</td>
@@ -530,7 +530,7 @@ class EditAdminUser extends Component {
                                                                     Delete</span>
                                                             </td>
                                                         </tr>
-                                                    ))}
+                                                    ))} */}
 
                                                 </tbody>
                                             </table>

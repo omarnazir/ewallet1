@@ -217,7 +217,6 @@ config = {
             <CardHeader>
             </CardHeader>
             <CardBody>     
-            {/* <span className="btn badge-danger mt-1"> <i className="icon-trash mr-2"></i>Delete</span> <br/>  */}
               <ReactDatatable 
               extraButtons={this.extraButtons}
                 config={this.config}

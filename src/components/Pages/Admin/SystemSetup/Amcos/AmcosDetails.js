@@ -1,4 +1,4 @@
-import React, { Component,Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import ContentWrapper from "../../../../Layout/ContentWrapper";
 import Moment from "moment";
 import axios from "../../../../../services/axios";
@@ -11,10 +11,16 @@ import {
     Col,
     Table,
     Card, CardHeader, CardBody,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    FormGroup,
+    ModalFooter
 } from "reactstrap";
 import classnames from 'classnames';
 import ReactDatatable from '@ashvin27/react-datatable';
-import {SuccessAlert,DeleteAlert} from "../../../../Common/AppAlerts";
+import { CropsService, CropsTypeService } from "../../../../../services";
+import { SuccessAlert, DeleteAlert } from "../../../../Common/AppAlerts";
 
 class AmcosDetails extends Component {
     state = {
@@ -26,15 +32,33 @@ class AmcosDetails extends Component {
             registrarId: {},
             mcos: {},
             village: {},
-            ward:{},
-            district:{},
-            region:{}
+            ward: {},
+            district: {},
+            region: {}
         },
-        loading:true,
-        cropsList:[]
-
-
+        loading: true,
+        cropsList: [],
+        crops: [],
+        cropId:0,
     };
+
+    initialState = {
+        crop: {
+            name: "",
+            cropType: 0
+        }
+    }
+
+    toggleModal = () => {
+        this.setState({
+            modal: !this.state.modal
+        });
+    }
+
+    AddAmcosCropMode = () => {
+        this.setState({ mode: true })
+        this.toggleModal();
+    }
 
     toggleTab = tab => {
         if (this.state.activeTab !== tab) {
@@ -45,36 +69,47 @@ class AmcosDetails extends Component {
     }
 
     getAllCropsByAmcos(id) {
-        axios.get("/amcos-crops/"+id+"/crops").then(res => {
-          this.setState({loading:false})
-          this.setState({ cropsList:res.data })
-    
+        axios.get("/amcos-crops/" + id + "/crops").then(res => {
+            this.setState({ loading: false })
+            console.log("Amcos Crops" +res.data)
+            this.setState({ cropsList: res.data })
+
         })
-      }
+    }
+
+    getAllCrops() {
+        CropsService.getAllCrops().then(res => {
+            const crops = res.data;
+            this.setState({ crops })
+        })
+    }
 
     ViewAmcosList = () => {
         return this.props.history.push("/admin-manage-amcos")
     }
 
-    AlertDeleteItem(id){
-        DeleteAlert().then((willDelete)=>{
-          if(willDelete){
-            this.DeleteAmcos(id);
-           
-          }
+    AlertDeleteItem(id) {
+        DeleteAlert().then((willDelete) => {
+            if (willDelete) {
+                this.DeleteAmcos(id);
+
+            }
         })
-      }
+    }
 
+    handleChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+    }
 
-  DeleteAmcos(id) {  
-    axios.delete("/amcos/" + id)
-      .then(res => {
-        this.ViewAmcosList()
-        SuccessAlert("Deleted Amcos Successfully")
-      }).catch(err=>{
-        SuccessAlert("Please delete Amcos references first ","info")
-      })
-  }
+    DeleteAmcos(id) {
+        axios.delete("/amcos/" + id)
+            .then(res => {
+                this.ViewAmcosList()
+                SuccessAlert("Deleted Amcos Successfully")
+            }).catch(err => {
+                SuccessAlert("Please delete Amcos references first ", "info")
+            })
+    }
 
     handleClickActiveTab = event => {
         const newActiveTab = event.target.tab;
@@ -104,6 +139,7 @@ class AmcosDetails extends Component {
                 this.setState({ amcos: { ...this.state.amcos, region: res.data.village.ward.district.region } })
             })
         this.getAllCropsByAmcos(state.id);
+        this.getAllCrops();
 
     }
     AddActionButtonStyle = {
@@ -116,48 +152,84 @@ class AmcosDetails extends Component {
 
     EditAmcos = (id) => {
         return this.props.history.push('/admin-edit-amcos/' + id, id)
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+        this.toggleModal();
+
+        const data= {
+            cropId: this.state.cropId,
+            amcosId: Number(this.state.amcosId)
+          }
+          axios.post("/amcos-crops",data).then(res => {
+            SuccessAlert("Added Amcos Crop Successfully");
+            this.getAllCropsByAmcos(this.state.amcosId)
+          })
+        
+    }
+
+
+    AlertDeleteItem(id){
+        DeleteAlert().then((willDelete)=>{
+          if(willDelete){
+            this.DeleteAmcosCrop(id);
+            SuccessAlert("Deleted Amcos Crop Successfully")
+          }
+        })
       }
 
+    DeleteAmcosCrop(id) {  
+        axios.delete("/amcos-crops/" + id)
+          .then(res => {
+            const response = res.data;
+            const cropsList = this.state.cropsList.filter((item) => {
+              return item.id !== id;
+            });
+            this.setState({ cropsList })
+
+          })
+      }
 
     columns = [
         {
-          key: "id",
-          text: "ID",
-          cell: (record, index) => {
-            return index + 1;
-          }
-        },
-        {
-          key: "name",
-          text: "NAME",
-          cell: (record, index) => {
-            return record.crop.name;
-          }
-        },
-        {
-          key: "type",
-          text: "TYPE",
-          cell: (record, index) => {
-            if(record.crop!=null){
-            return record.crop.cropType.name;
+            key: "id",
+            text: "ID",
+            cell: (record, index) => {
+                return index + 1;
             }
-            return "";
-          }
         },
         {
-          key: "id",
-          text: "ACTION",
-          cell: (record, index) => {
-            return (
-              <Fragment>
-                <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRole(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
-              </Fragment>
-            )
-          }
+            key: "name",
+            text: "NAME",
+            cell: (record, index) => {
+                return record.crop.name;
+            }
+        },
+        {
+            key: "type",
+            text: "TYPE",
+            cell: (record, index) => {
+                if (record.crop != null) {
+                    return record.crop.cropType.name;
+                }
+                return "";
+            }
+        },
+        {
+            key: "id",
+            text: "ACTION",
+            cell: (record, index) => {
+                return (
+                    <Fragment>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                    </Fragment>
+                )
+            }
         }
-      ]
+    ]
 
-      config = {
+    config = {
         page_size: 10,
         length_menu: [10, 25, 50],
         show_filter: true,
@@ -165,12 +237,12 @@ class AmcosDetails extends Component {
         pagination: 'advance',
         filename: "Contact List",
         button: {
-    
+
         },
         language: {
-          loading_text: "Please be patient while data loads..."
+            loading_text: "Please be patient while data loads..."
         }
-      }
+    }
 
     render() {
         return (
@@ -181,11 +253,54 @@ class AmcosDetails extends Component {
                         <small>Showing all amcos details.</small>
                     </div>
                     <div className="flex-row d-block d-md-flex">
+                        {this.state.activeTab == '1' && <div>
+                            <span className="btn badge-success mr-2 px-4" onClick={() => this.EditAmcos(this.state.amcosId)}> <i className="icon-pencil mr-2"  ></i>Edit Amcos</span>
+                            <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.AlertDeleteItem(this.state.amcosId)}> <i className="fa fa-trash mr-2"></i>Delete Amcos </span>
+                        </div>
+                        }
 
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditAmcos(this.state.amcosId)}> <i className="icon-pencil mr-2"  ></i>Edit Amcos</span>
-                        <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.AlertDeleteItem(this.state.amcosId)}> <i className="fa fa-trash mr-2"></i>Delete Amcos </span>
+                        {this.state.activeTab == '2' && <div>
+                            <span className="btn mr-2 px-4" style={this.AddActionButtonStyle} onClick={() => this.AddAmcosCropMode()}> <i className="fa fa-plus mr-2"  ></i>Add Crop</span>
 
+                        </div>
+                        }
+
+                        {this.state.activeTab == '3' && <div>
+                            <span className="btn mr-2 px-4" style={this.AddActionButtonStyle} onClick={() => this.AddAmcosCropMode()}> <i className="fa fa-plus mr-2"  ></i>Add Pembejeo</span>
+
+                        </div>
+                        }
                         <Button onClick={this.ViewAmcosList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Amcos</Button>
+
+                        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+                            <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Crop" : "Edit Crop"}</ModalHeader>
+                            <form onSubmit={this.handleSubmit}>
+                                <ModalBody>
+
+                                    <div className="form-group">
+                                        <label htmlFor="exampleFormControlSelect1">Crop : </label>
+                                        <select className="form-control" id="exampleFormControlSelect1" name="cropId"
+                                            onChange={this.handleChange}
+                                            value={this.state.cropId}
+                                        >
+                                            <option value="0">Select type</option>
+                                            {this.state.crops.map(row => (
+                                                <option key={row.id} value={row.id} >
+                                                    {row.name}
+                                                </option>
+                                            ))}
+
+                                        </select>
+                                    </div>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
+                                        Save
+                                    </button>
+                                </ModalFooter>
+                            </form>
+                        </Modal>
+
                     </div>
                 </div>
                 <Container fluid>
@@ -263,19 +378,19 @@ class AmcosDetails extends Component {
                                                         <th>Region </th>
                                                         <td>{this.state.amcos.region.name}</td>
 
-                                                        
+
                                                     </tr>
                                                     <tr>
-                                                    <th>District</th>
+                                                        <th>District</th>
                                                         <td>{this.state.amcos.district.name}</td>
                                                     </tr>
 
                                                     <tr>
-                                                    <th>Ward </th>
+                                                        <th>Ward </th>
                                                         <td>{this.state.amcos.ward.name}</td>
                                                     </tr>
                                                     <tr>
-                                                       
+
 
                                                         <th>Village</th>
                                                         <td>{this.state.amcos.village.name}</td>
@@ -291,18 +406,8 @@ class AmcosDetails extends Component {
                             <TabPane tabId="2">
 
                                 <Col xl="12">
-                                <Card>
-                                    
-                                        <CardHeader>
-                                        <h4 className="text-center mt-2">Amcos Crops</h4>
-                                        <hr/>
-                                        <div className="text-left">
-                                        <Button onClick={this.ViewAmcosList} style={this.AddActionButtonStyle} className="btn-pill-right">Add Amcos Crop</Button>
-                                        </div>
-                                      
-                                        </CardHeader>
+                                    <Card>
                                         <CardBody>
-
                                             <ReactDatatable
                                                 extraButtons={this.extraButtons}
                                                 config={this.config}
@@ -313,9 +418,6 @@ class AmcosDetails extends Component {
                                         </CardBody>
                                     </Card>
                                 </Col>
-
-
-
                             </TabPane>
 
 
