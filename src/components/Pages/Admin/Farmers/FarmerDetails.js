@@ -459,22 +459,21 @@ class FarmerDetails extends Component {
 
                             <TabPane tabId="4">
 
-                                <Col xl="12">
-                                    <div>
-                                        <div className="card">
-                                            <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">Transactions</h4>
-                                            </div>
-                                            <hr className="my-0" />
-                                            <div className="card-body mt-2 py-1">
-                                                <div className="px-md-3 px-2">
-                                                    <div className="px-2 text-center">
-                                                    </div>
-                                                </div>
-                                            </div>
+                            <Col xl="12">
+                                    <Card>
+                                        <CardHeader>
+                                        </CardHeader>
+                                        <CardBody>
 
-                                        </div>
-                                    </div>
+                                            <ReactDatatable
+                                                extraButtons={this.extraButtons}
+                                                config={this.config}
+                                                records={this.state.harvestsList}
+                                                columns={this.columns}
+                                                loading={this.state.loading}
+                                            />
+                                        </CardBody>
+                                    </Card>
                                 </Col>
                             </TabPane>
 
