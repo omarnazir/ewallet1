@@ -18,30 +18,33 @@ class ManagePembejeo extends Component {
     loading:true,
     editedCropType:{
       id:0,
-      name:""
+      name:"",
+      type:"",
     },
     cropType:{
-      name:""
+      name:"",
+      type:""
     }
   };
 
   initialState={
     cropType:{
       name:"",
-      description:"",
       type:""
     }
   }
 
   componentDidMount(){
-//    this.getAllCropTypes();
+   this.getAllCropTypes();
+
 this.setState({loading:false});
 }
 getAllCropTypes(){
-  CropsTypeService.getAllCropTypes().then(res => {
-      this.setState({loading:false})
+  axios.get("/pembejeo")
+  .then(res => {
+      this.setState({ loading: false })
       this.setState({ crops:res.data })
-     
+
   })
 }
 
@@ -61,9 +64,9 @@ EditRole(row) {
   const editedCropType={
     id:row.id,
     name:row.name,
-    description:row.description,
     type:row.type
    }
+   console.log(editedCropType)
    this.setState({editedCropType})
    this.setState({ mode: false })
    this.toggleModal();
@@ -71,7 +74,7 @@ EditRole(row) {
 
 
  DeleteRole(id) {
-  axios.delete("/crop-types/" + id)
+  axios.delete("/pembejeo/" + id)
     .then(res => {
       const response = res.data;
       const crops = this.state.crops.filter((item) => {
@@ -99,14 +102,14 @@ handleSubmit = event => {
   this.toggleModal();
   if (this.state.mode) {
     console.log("Add mode")
-    axios.post("/crop-types",this.state.cropType ).then(res => {
+    axios.post("/pembejeo",this.state.cropType ).then(res => {
       console.log(res.data);
       this.getAllCropTypes();
       this.setState({cropType:this.initialState.cropType})
     })
   } else {
     console.log("Edit mode")
-    axios.put("/crop-types",this.state.editedCropType).then(res => {
+    axios.put("/pembejeo",this.state.editedCropType).then(res => {
       console.log(res.data);
       this.getAllCropTypes();
 
@@ -125,6 +128,10 @@ handleSubmit = event => {
     {
       key: "name",
       text: "NAME"
+    },
+    {
+      key: "type",
+      text: "TYPE"
     },
     {
       key: "id",
@@ -183,6 +190,17 @@ handleSubmit = event => {
                     value={this.state.mode? this.state.cropType.name:this.state.editedCropType.name}
                      onChange={this.handleChange} type="text" required></input>
                   </FormGroup>
+                  <div className="form-group">
+                    <label htmlFor="exampleFormControlSelect1">Type : </label>
+                    <select className="form-control" id="exampleFormControlSelect1" name="type"
+                      onChange={this.handleChange}
+                      value={this.state.mode? this.state.cropType.type:this.state.editedCropType.type}
+                    >
+                      <option value="-1">Select type</option>
+                      <option value="Service">Service</option>
+                      <option value="Product">Product</option>
+                    </select>
+                  </div>
                 </ModalBody>
                 <ModalFooter>
                   <button className="btn btn-sm btn-success mr-3  px-5" type="submit">

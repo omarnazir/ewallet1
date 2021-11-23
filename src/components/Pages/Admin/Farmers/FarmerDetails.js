@@ -464,7 +464,6 @@ class FarmerDetails extends Component {
                                         <CardHeader>
                                         </CardHeader>
                                         <CardBody>
-
                                             <ReactDatatable
                                                 extraButtons={this.extraButtons}
                                                 config={this.config}

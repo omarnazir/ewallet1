@@ -595,17 +595,14 @@ class AddFarmer extends Component {
 
                                     <Col md={4}>
                                         <FormGroup>
-                                            <Label>Hamlet <span className="red">*</span></Label>
+                                            <Label>Hamlet</Label>
                                             <Input
                                                 placeholder="Write Hamlet ..."
                                                 type="text"
                                                 name="hamlet"
-                                                invalid={this.hasError('addFarmerForm', 'hamlet', 'required')}
                                                 onChange={this.validateOnChange}
-                                                data-validate='["required"]'
                                                 value={this.state.addFarmerForm.hamlet}
                                             />
-                                            <span className="invalid-feedback">Hamlet is required</span>
                                         </FormGroup>
                                     </Col>
                                 </Row>
