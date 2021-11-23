@@ -39,6 +39,7 @@ class AmcosDetails extends Component {
         loading: true,
         cropsList: [],
         crops: [],
+        pembejeoList:[],
         cropId:0,
     };
 
@@ -73,6 +74,15 @@ class AmcosDetails extends Component {
             this.setState({ loading: false })
             console.log("Amcos Crops" +res.data)
             this.setState({ cropsList: res.data })
+
+        })
+    }
+
+    getAllPembejeoByAmcos(id){
+        axios.get("/amcos-pembejeo/" + id + "/pembejeo").then(res => {
+            this.setState({ loading: false })
+            console.log("Pembejeo Crops" +res.data)
+            this.setState({ pembejeoList: res.data })
 
         })
     }
@@ -139,6 +149,7 @@ class AmcosDetails extends Component {
                 this.setState({ amcos: { ...this.state.amcos, region: res.data.village.ward.district.region } })
             })
         this.getAllCropsByAmcos(state.id);
+        this.getAllPembejeoByAmcos(state.id)
         this.getAllCrops();
 
     }
@@ -423,18 +434,18 @@ class AmcosDetails extends Component {
 
                             <TabPane tabId="3">
 
-
-                                <Col xl="12">
-                                    <div>
-                                        <div className="card">
-                                            <div className="card-header px-0">
-                                                <h4 className="text-center mt-2">Pembejeo</h4>
-                                            </div>
-                                            <hr className="my-0" />
-
-
-                                        </div>
-                                    </div>
+                            <Col xl="12">
+                                    <Card>
+                                        <CardBody>
+                                            <ReactDatatable
+                                                extraButtons={this.extraButtons}
+                                                config={this.config}
+                                                records={this.state.pembejeoList}
+                                                columns={this.columns}
+                                                loading={this.state.loading}
+                                            />
+                                        </CardBody>
+                                    </Card>
                                 </Col>
 
 
