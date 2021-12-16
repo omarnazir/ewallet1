@@ -1,9 +1,8 @@
 import axios from "./axios"
 export class FarmersService {
     //Admin 
-    getAllFarmers(){
-        return axios.get("/farmers")
-
+    async getAllFarmers(){
+        return await axios.get("/farmers/full")
     }
 }
 export default new FarmersService();

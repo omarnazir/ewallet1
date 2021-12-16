@@ -177,7 +177,7 @@ class ManageAmcos extends Component {
             key: "location",
             text: "LOCATION",
             cell:(record,index)=>{
-                return record.village.ward.district.region.name+","+ record.village.ward.district.name+","+record.village.ward.name+","+record.village.name;
+                return record.village.ward.district.region.name+", "+ record.village.ward.district.name+", "+record.village.ward.name+", "+record.village.name;
             }
         },
         {

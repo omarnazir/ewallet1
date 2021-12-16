@@ -2,46 +2,76 @@ import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
-import Moment from 'moment'
+import Moment from 'moment';
 import ReactDatatable from '@ashvin27/react-datatable';
+import { ExportReactCSV } from "../../../Common/ReactCSV";
 import { AuthService, FarmersService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
+import axios from "../../../../services/axios";
 
 class AllFarmers extends Component {
   state = {
     farmersList: [],
+    farmersReport: [],
     loading: true
   };
 
   componentDidMount() {
     const isAuthenticated = AuthService.isAuthenticated();
     if (!isAuthenticated) {
-      this.setState({ redirect: "/login" })
+      this.setState({ redirect: "/login" });
     }
 
     FarmersService.getAllFarmers().then(res => {
-      this.setState({ loading: false })
-      this.setState({ farmersList: res.data })
-    })
+      this.setState({ loading: false });
+      this.setState({ farmersList: res.data });
+    });
+
+
   }
+
+
+  onGenerateReportClick = () => {
+    FarmersService.getAllFarmers().then(res => {
+      let farmersReportData = res.data.map(farmer => {
+        console.log(farmer);
+        farmer.amcos = farmer.amcos.name;
+        farmer.district = farmer.district.name;
+        farmer.region = farmer.region.name;
+        farmer.mainCrop = farmer.mainCrop.name;
+        farmer.secondaryCrop = farmer.secondaryCrop.name;
+        farmer.village = farmer.village.name;
+        farmer.ward = farmer.ward.name;
+
+        return farmer;
+      });
+
+      this.setState({ farmersReport: farmersReportData });
+    });
+  };
+
+
+
+
+  reportFilename = `FARMER_${new Date().toLocaleTimeString()}.csv`;
 
   formatDate = (date) => {
-    return Moment(date).format('lll')
-  }
+    return Moment(date).format('lll');
+  };
 
   ViewCustomerDetails = (row) => {
-    return this.props.history.push('/admin-farmer-details/' + row.id, row)
-  }
+    return this.props.history.push('/admin-farmer-details/' + row.id, row);
+  };
 
-  AddFarmer=()=>{
+  AddFarmer = () => {
     return this.props.history.push("/admin-add-farmer");
-  }
+  };
 
 
   AddActionButtonStyle = {
     color: 'white',
     background: "#003366"
-  }
+  };
 
   config = {
     page_size: 10,
@@ -58,13 +88,13 @@ class AllFarmers extends Component {
     language: {
       loading_text: "Please be patient while data loads..."
     }
-  }
+  };
 
   ucFirst = (str) => {
     if (!str) return str;
     if (str.trim() == "undefined") return "";
     return str[0].toUpperCase() + str.slice(1);
-  }
+  };
 
 
 
@@ -86,21 +116,21 @@ class AllFarmers extends Component {
         // const lastName=record.surname;
         // return (record.firstName +" "+record.middleName+" "+record.surname)
         // return this.ucFirst(firstName)+" "+this.ucFirst(middleName)+" "+this.ucFirst(lastName);
-        return this.ucFirst(record.firstName)
+        return this.ucFirst(record.firstName);
       }
     },
     {
       key: "middleName",
       text: "MIDDLE NAME",
       cell: (record, index) => {
-        return this.ucFirst(record.middleName)
+        return this.ucFirst(record.middleName);
       }
     },
     {
       key: "surname",
       text: "LAST NAME",
       cell: (record, index) => {
-        return this.ucFirst(record.surname)
+        return this.ucFirst(record.surname);
       }
     },
     {
@@ -123,7 +153,12 @@ class AllFarmers extends Component {
       key: "mainCrop",
       text: "MAIN CROP",
       cell: (record, index) => {
-        return (record.mainCrop.name)
+
+        try {
+          return (record.mainCrop.name);
+        } catch (error) {
+          return 'N/A';
+        }
       }
     },
     {
@@ -131,7 +166,7 @@ class AllFarmers extends Component {
       text: "DATE REGISTERED",
       sortable: true,
       cell: (record, index) => {
-        return (this.formatDate(record.registrationDate))
+        return (this.formatDate(record.registrationDate));
       }
     },
     {
@@ -158,7 +193,7 @@ class AllFarmers extends Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to={this.state.redirect} />
+      return <Redirect to={this.state.redirect} />;
     }
     return (
       <ContentWrapper>
@@ -171,6 +206,13 @@ class AllFarmers extends Component {
             <Button onClick={this.AddFarmer} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
               Register Farmer </Button>
+
+              <span onClick={this.onGenerateReportClick} >
+                <ExportReactCSV csvData={this.state.farmersReport} fileName={this.reportFilename} />
+
+              </span>
+
+            
           </div>
         </div>
         <Container fluid>
