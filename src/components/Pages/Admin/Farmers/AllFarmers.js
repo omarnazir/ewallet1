@@ -13,7 +13,7 @@ class AllFarmers extends Component {
     farmersList: [],
     farmersReport: [],
     loading: true,
-    trackId: null
+    trackId: null,
   };
 
   componentDidMount() {
@@ -230,32 +230,46 @@ class AllFarmers extends Component {
             </span>
           </div>
         </div>
-        {/* <div className="">
+        <div className="">
+          <div>
+            <label>Search Options</label>
+            <select className="form-control col-6" >
+              <option value="none" >Search Options</option>
+              <option value="date" >Date created</option>
+              <option value="phone">Phone Number</option>
+              <option value="amcos">AMCOS</option>
+              <option value="member">Member ID</option>
+              <option value="all">View all Options</option>
+            </select>
+          </div>
           <form className="my-3">
             <div className="form-row">
-              <div className="col">
+              <div className="col-2 date">
                 <label>From</label>
                 <input type="date" className="form-control" placeholder="Start Date"/>
               </div>
-              <div className="col">
+              <div className="col-2 date">
                 <label>To</label>
                 <input type="date" className="form-control" placeholder="End Date"/>
               </div>
-              <div className="col">
-                <input type="text" className="form-control" placeholder="End Date"/>
+              <div className="col-2 phone">
+                <label>Phone Number</label>
+                <input type="text" className="form-control" placeholder="Enter Phone Number"/>
               </div>
-              <div className="col">
-                <input type="text" className="form-control" placeholder="End Date"/>
+              <div className="col-2 amcos">
+                <label>AMCOS Name</label>
+                <input type="text" className="form-control" placeholder="Enter AMCOS Name"/>
               </div>
-              <div className="col">
-                <input type="text" className="form-control" placeholder="End Date"/>
+              <div className="col-2 member">
+                <label>Member Id</label>
+                <input type="text" className="form-control" placeholder="Enter Member ID"/>
               </div>
-              <div className="col">
-                <input type="submit" className="btn btn-success" placeholder="End Date"/>
+              <div className="col-2 d-flex align-items-end">
+                <input type="submit" className="btn btn-success form-control" value="Search Farmer" />
               </div>
             </div>
           </form>
-        </div> */}
+        </div>
         <Container fluid>
           <Card>
             <CardHeader>

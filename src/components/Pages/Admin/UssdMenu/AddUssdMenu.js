@@ -286,6 +286,7 @@ class AddUssdMenu extends Component {
                                                 <option value="msisdn">MSISDN</option>
                                                 <option value="amcos">AMCOS</option>
                                                 <option value="crop">CROP</option>
+                                                <option value="order">ORDER</option>
                                             </select>
                                             <span className="text-danger">{this.state.loadyByError}</span>
 
