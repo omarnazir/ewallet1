@@ -27,10 +27,10 @@ class AllFarmers extends Component {
     };
 
     FarmersService.getAllFarmers(data).then(res => {
-      console.log(res.data)
+      console.log(res.data);
       this.setState({ loading: false });
       this.setState({ farmersList: res.data.results });
-      this.setState({ trackId: res.data.trackId })
+      this.setState({ trackId: res.data.trackId });
     });
 
 
@@ -49,22 +49,22 @@ class AllFarmers extends Component {
       this.setState({ trackId: res.data.trackId });
       this.setState({ farmersList: res.data.results });
     });
-  }
+  };
 
 
   onGenerateReportClick = () => {
     let farmersReportData = this.state.farmersList.map(farmer => {
-        console.log(farmer);
-        farmer.amcos = farmer.amcos.name;
-        farmer.district = farmer.district.name;
-        farmer.region = farmer.region.name;
-        farmer.mainCrop = farmer.mainCrop.name;
-        farmer.secondaryCrop = farmer.secondaryCrop.name;
-        farmer.village = farmer.village.name;
-        farmer.ward = farmer.ward.name;
+      console.log(farmer);
+      farmer.amcos = farmer.amcos.name;
+      farmer.district = farmer.district.name;
+      farmer.region = farmer.region.name;
+      farmer.mainCrop = farmer.mainCrop.name;
+      farmer.secondaryCrop = farmer.secondaryCrop.name;
+      farmer.village = farmer.village.name;
+      farmer.ward = farmer.ward.name;
 
-        return farmer;
-      });
+      return farmer;
+    });
 
     this.setState({ farmersReport: farmersReportData });
   };
@@ -225,16 +225,42 @@ class AllFarmers extends Component {
             <Button onClick={this.AddFarmer} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
               Register Farmer </Button>
-              <span onClick={this.onGenerateReportClick} >
-                <ExportReactCSV csvData={this.state.farmersReport} fileName={this.reportFilename} />
-              </span>            
+            <span onClick={this.onGenerateReportClick} >
+              <ExportReactCSV csvData={this.state.farmersReport} fileName={this.reportFilename} />
+            </span>
           </div>
         </div>
+        {/* <div className="">
+          <form className="my-3">
+            <div className="form-row">
+              <div className="col">
+                <label>From</label>
+                <input type="date" className="form-control" placeholder="Start Date"/>
+              </div>
+              <div className="col">
+                <label>To</label>
+                <input type="date" className="form-control" placeholder="End Date"/>
+              </div>
+              <div className="col">
+                <input type="text" className="form-control" placeholder="End Date"/>
+              </div>
+              <div className="col">
+                <input type="text" className="form-control" placeholder="End Date"/>
+              </div>
+              <div className="col">
+                <input type="text" className="form-control" placeholder="End Date"/>
+              </div>
+              <div className="col">
+                <input type="submit" className="btn btn-success" placeholder="End Date"/>
+              </div>
+            </div>
+          </form>
+        </div> */}
         <Container fluid>
           <Card>
             <CardHeader>
               <div className="d-flex flex-row justify-content-end">
-              <button onClick={() => this.loadMoreData(this.state.trackId)} className="btn btn-success" >Load More Data</button>
+                <button onClick={() => this.loadMoreData(this.state.trackId)} className="btn btn-success" >Load More Data</button>
               </div>
             </CardHeader>
             <CardBody>
