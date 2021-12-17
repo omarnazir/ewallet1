@@ -55,14 +55,13 @@ AddActionButtonStyle={
 DisableUser=(row)=>{
   console.log(row.id)
 
-  axios.post("/users/disable/"+row.id)
+  axios.put("/users/disable/"+row.id)
   .then(res => {
     const response = res.data;
   
     console.log(response);
   })
     this.GetAllUser();
-
 }
 
 
@@ -77,7 +76,7 @@ formatDate = (date) => {
 
 EnableUser=(row)=>{
   console.log(row.id)
-  axios.post("/users/enable/"+row.id)
+  axios.put("/users/enable/"+row.id)
   .then(res => {
     const response = res.data;
     console.log(response);
@@ -86,7 +85,7 @@ EnableUser=(row)=>{
 }
 
 deleteCurrentUser(row){
-  axios.post("/users/delete/"+ row.id).then(res => {
+  axios.post("/users/"+ row.id).then(res => {
       console.log(res);
       this.showSweetAlert('success','User deleted Sucessfully')
       this.GetAllUser();
@@ -157,7 +156,7 @@ cell: (record, index) => {
      return (
        <Fragment>
           <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-          <span className="btn badge-danger px-4 mr-2" onClick={()=>this.DisableUser(record)}> <i className="fa fa-power-off mr-2"></i>Disable</span>
+          <span className="btn badge-warning px-4 mr-2" onClick={()=>this.DisableUser(record)}> <i className="fa fa-power-off mr-2"></i>Disable</span>
           <span className="btn badge-danger  px-4" onClick={()=>this.deleteCurrentUser(record)}> <i className="icon-trash mr-2"></i>Delete</span>
        </Fragment>
      )
@@ -165,7 +164,7 @@ cell: (record, index) => {
      return ( 
        <Fragment>
     <span className="btn badge-success mr-2 px-4"onClick={()=>this.EditUser(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-     <span className="btn badge-success  px-4 mr-2" onClick={()=>this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
+     <span className="btn badge-primary  px-4 mr-2" onClick={()=>this.EnableUser(record)}> <i className="fa fa-power-off mr-2"></i>Enable</span>
      <span className="btn badge-danger  px-4" onClick={()=>this.deleteCurrentUser(record)}> <i className="icon-trash mr-2"></i>Delete</span>
        </Fragment>
      )}

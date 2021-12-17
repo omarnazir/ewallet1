@@ -82,12 +82,16 @@ class EditAdminUser extends Component {
             .then(res => {
                 const user = res.data;
 
+                console.log(user)
+                console.log(res.data)
+                console.log(user.name)
+
                 // [form.name]: {
                 //     ...this.state[form.name],
                 //     [input.name]: value,
 
                 // this.setState({formRegister:{...this.state.formRegister,}})
-                this.setState({ ...this.state.formRegister, fullname: user.name })
+                // this.setState({ ...this.state.formRegister, fullname: user.name })
               
                 // this.setState({
                 //     passwordReset:Object.assign({},this.state.passwordReset,{
@@ -97,30 +101,26 @@ class EditAdminUser extends Component {
 
                 this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
-                        fullname: user.name,
+                        fullname: state.name,
                     }),
                 });
                 this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
-                        email: user.email,
+                        email: state.email,
                     }),
                 });
                 this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
-                        msisdn: user.msisdn,
+                        msisdn: state.msisdn,
                     }),
                 });
                 this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
-                        username: user.username,
+                        username: state.username,
                     }),
                 }); this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
-                        status: user.status,
-                    }),
-                }); this.setState({
-                    formRegister: Object.assign({}, this.state.formRegister, {
-                        monthlysmslimit: user.userMonthlySmsLimit,
+                        status: state.status,
                     }),
                 });
 
@@ -254,7 +254,6 @@ class EditAdminUser extends Component {
                 "id":this.state.formRegister.id,
                 "name": this.state.formRegister.fullname,
                 "username": this.state.formRegister.username,
-                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit,
                 "email":this.state.formRegister.email,
                 "msisdn":this.state.formRegister.msisdn
             }
@@ -485,21 +484,6 @@ class EditAdminUser extends Component {
                                                         data-validate='["required"]'
                                                         value={this.state.formRegister.status} />
                                                     {this.hasError('formRegister', 'status', 'required') && <span className="invalid-feedback">Field must be valid status</span>}
-                                                </div>
-                                            </div>
-
-                                            <div className="col-md-6">
-                                                <div className="form-group">
-                                                    <label className="col-form-label">Monthly SMS Limit * :</label>
-                                                    <Input type="number"
-                                                        name="monthlysmslimit"
-                                                        invalid={this.hasError('formRegister', 'monthlysmslimit', 'required')}
-                                                        onChange={this.validateOnChange}
-                                                        data-validate='["required"]'
-                                                        value={this.state.formRegister.monthlysmslimit} />
-                                                    <span className="invalid-feedback">Field is required for otp</span>
-                                                    <br/>
-                                                    <span className="invalid-feedback">Enter All Zeros as placeholder</span>
                                                 </div>
                                             </div>
 

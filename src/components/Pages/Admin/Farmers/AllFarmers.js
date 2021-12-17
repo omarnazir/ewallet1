@@ -7,13 +7,13 @@ import ReactDatatable from '@ashvin27/react-datatable';
 import { ExportReactCSV } from "../../../Common/ReactCSV";
 import { AuthService, FarmersService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
-import axios from "../../../../services/axios";
 
 class AllFarmers extends Component {
   state = {
     farmersList: [],
     farmersReport: [],
-    loading: true
+    loading: true,
+    trackId: null
   };
 
   componentDidMount() {
@@ -22,18 +22,38 @@ class AllFarmers extends Component {
       this.setState({ redirect: "/login" });
     }
 
-    FarmersService.getAllFarmers().then(res => {
+    let data = {
+      "limit": ""
+    };
+
+    FarmersService.getAllFarmers(data).then(res => {
+      console.log(res.data)
       this.setState({ loading: false });
-      this.setState({ farmersList: res.data });
+      this.setState({ farmersList: res.data.results });
+      this.setState({ trackId: res.data.trackId })
     });
 
 
   }
 
+  loadMoreData = trackId => {
+    this.setState({ loading: true });
+    const data = {
+      trackId
+    };
+
+    console.log(data);
+
+    FarmersService.getAllFarmers(data).then(res => {
+      this.setState({ loading: false });
+      this.setState({ trackId: res.data.trackId });
+      this.setState({ farmersList: res.data.results });
+    });
+  }
+
 
   onGenerateReportClick = () => {
-    FarmersService.getAllFarmers().then(res => {
-      let farmersReportData = res.data.map(farmer => {
+    let farmersReportData = this.state.farmersList.map(farmer => {
         console.log(farmer);
         farmer.amcos = farmer.amcos.name;
         farmer.district = farmer.district.name;
@@ -46,8 +66,7 @@ class AllFarmers extends Component {
         return farmer;
       });
 
-      this.setState({ farmersReport: farmersReportData });
-    });
+    this.setState({ farmersReport: farmersReportData });
   };
 
 
@@ -74,8 +93,8 @@ class AllFarmers extends Component {
   };
 
   config = {
-    page_size: 10,
-    length_menu: [10, 25, 50],
+    page_size: 25,
+    length_menu: [25, 50, 100],
     show_filter: true,
     show_pagination: true,
     pagination: 'advance',
@@ -206,18 +225,17 @@ class AllFarmers extends Component {
             <Button onClick={this.AddFarmer} style={this.AddActionButtonStyle} className="btn-pill-right">
               <i className="fa fa-plus mr-2"></i>
               Register Farmer </Button>
-
               <span onClick={this.onGenerateReportClick} >
                 <ExportReactCSV csvData={this.state.farmersReport} fileName={this.reportFilename} />
-
-              </span>
-
-            
+              </span>            
           </div>
         </div>
         <Container fluid>
           <Card>
             <CardHeader>
+              <div className="d-flex flex-row justify-content-end">
+              <button onClick={() => this.loadMoreData(this.state.trackId)} className="btn btn-success" >Load More Data</button>
+              </div>
             </CardHeader>
             <CardBody>
 
@@ -227,7 +245,6 @@ class AllFarmers extends Component {
                 records={this.state.farmersList}
                 columns={this.columns}
                 loading={this.state.loading}
-
               />
             </CardBody>
           </Card>
