@@ -14,6 +14,12 @@ class AllFarmers extends Component {
     farmersReport: [],
     loading: true,
     trackId: null,
+    formSearch: {
+      startDate: "",
+      endDate: "",
+      msisdn: "",
+      amcos: ""
+    }
   };
 
   componentDidMount() {
@@ -34,6 +40,16 @@ class AllFarmers extends Component {
     });
 
 
+  }
+
+  searchFromFarmers = () => {
+    let data = {...this.state.formSearch}
+
+    FarmersService.getAllFarmers(data).then(res=>{
+      this.setState({loading:false})
+      this.setState({farmersList:res.data.results})
+      this.setState({trackId: res.data.trackId})
+    })
   }
 
   loadMoreData = trackId => {
@@ -231,7 +247,7 @@ class AllFarmers extends Component {
           </div>
         </div>
         <div className="">
-          <div>
+          {/* <div>
             <label>Search Options</label>
             <select className="form-control col-6" >
               <option value="none" >Search Options</option>
@@ -241,7 +257,7 @@ class AllFarmers extends Component {
               <option value="member">Member ID</option>
               <option value="all">View all Options</option>
             </select>
-          </div>
+          </div> */}
           <form className="my-3">
             <div className="form-row">
               <div className="col-2 date">
