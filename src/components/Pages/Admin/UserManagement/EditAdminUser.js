@@ -33,9 +33,9 @@ class EditAdminUser extends Component {
             fullname: "",
             username: "",
             msisdn: "",
-            monthlysmslimit: 0,
             status: "",
             email:"",
+            accountExpiration: ""
         },
         passwordReset: {
             userId: "",
@@ -64,7 +64,7 @@ class EditAdminUser extends Component {
             url = "roles/customer-admin";
         }
         else {
-            url = "roles/user";
+            url = "roles";
         }
         this.setState({...this.state.passwordReset,userId:state.id})
         this.setState({id:state.id})
@@ -121,6 +121,10 @@ class EditAdminUser extends Component {
                 }); this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
                         status: state.status,
+                    }),
+                }); this.setState({
+                    formRegister: Object.assign({}, this.state.formRegister, {
+                        accountExpiration: state.accountExpiration,
                     }),
                 });
 
@@ -255,7 +259,8 @@ class EditAdminUser extends Component {
                 "name": this.state.formRegister.fullname,
                 "username": this.state.formRegister.username,
                 "email":this.state.formRegister.email,
-                "msisdn":this.state.formRegister.msisdn
+                "msisdn": this.state.formRegister.msisdn,
+                "accountExpiration": new Date(this.state.formRegister.accountExpiration).toLocaleDateString('en-CA') + " 00:00:00"
             }
 
             const UserRoles = [];
@@ -264,14 +269,15 @@ class EditAdminUser extends Component {
                 UserRoles.push(newItem)
             });
 
-            const data = { user: User, role_ids: UserRoles }
+            const data = { id: User.id, user: User, role_ids: UserRoles }
             console.log(data)
 
 
-            axios.put("users/admin", data).then(res => {
-                console.log(res);
+            axios.put("users/admin/edit", data).then(res => {
                 console.log(res.data);
                 this.ViewUserPage();
+            }).catch(err => {
+                console.log((err))
             })
         }
     }
@@ -487,6 +493,23 @@ class EditAdminUser extends Component {
                                                 </div>
                                             </div>
 
+                                            <div className="col-md-6">
+                                                <div className="form-group">
+                                                    <label className="col-form-label">Account Expiration *</label>
+                                                    <Input 
+                                                        name="accountExpiration"
+                                                        type="date"
+                                                        invalid={this.hasError('formRegister', 'accountExpiration', 'required')}
+                                                        onChange={this.validateOnChange}
+                                                        data-validate='["required"]'
+                                                        value={this.state.formRegister.accountExpiration}
+                                                    />
+                                                    <span className="invalid-feedback">Account expiration is required</span>
+                                                  
+
+                                                </div>
+                                            </div>
+
                                         </div>
                                        
                                      
@@ -503,7 +526,7 @@ class EditAdminUser extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {/* {this.state.roles.map(row => (
+                                                    {this.state.roles.map(row => (
                                                         <tr key={row.id}>
                                                             <td>{index += 1}</td>
                                                             <td>{row.name}</td>
@@ -514,7 +537,7 @@ class EditAdminUser extends Component {
                                                                     Delete</span>
                                                             </td>
                                                         </tr>
-                                                    ))} */}
+                                                    ))}
 
                                                 </tbody>
                                             </table>

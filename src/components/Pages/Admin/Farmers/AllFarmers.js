@@ -38,17 +38,26 @@ class AllFarmers extends Component {
       this.setState({ farmersList: res.data.results });
       this.setState({ trackId: res.data.trackId });
     });
+  }
 
-
+  handleOnChange = (e) => {
+    e.preventDefault();
+    this.setState({ formSearch: { ...this.state.formSearch, [e.target.name]: e.target.value } });
+    console.log(this.state.formSearch);
   }
 
   searchFromFarmers = () => {
+    this.setState({loading:true})
     let data = {...this.state.formSearch}
+
+    console.log(data)
 
     FarmersService.getAllFarmers(data).then(res=>{
       this.setState({loading:false})
       this.setState({farmersList:res.data.results})
       this.setState({trackId: res.data.trackId})
+
+      console.log(res.data.results)
     })
   }
 
@@ -262,26 +271,26 @@ class AllFarmers extends Component {
             <div className="form-row">
               <div className="col-2 date">
                 <label>From</label>
-                <input type="date" className="form-control" placeholder="Start Date"/>
+                <input onChange={this.handleOnChange} type="date" name="startDate" className="form-control" placeholder="Start Date" />
               </div>
               <div className="col-2 date">
                 <label>To</label>
-                <input type="date" className="form-control" placeholder="End Date"/>
+                <input onChange={this.handleOnChange} type="date" name="endDate" className="form-control" placeholder="End Date" />
               </div>
               <div className="col-2 phone">
                 <label>Phone Number</label>
-                <input type="text" className="form-control" placeholder="Enter Phone Number"/>
+                <input onChange={this.handleOnChange} type="text" name="msisdn" className="form-control" placeholder="Enter Phone Number" />
               </div>
               <div className="col-2 amcos">
                 <label>AMCOS Name</label>
-                <input type="text" className="form-control" placeholder="Enter AMCOS Name"/>
+                <input onChange={this.handleOnChange} type="text" name="amcos" className="form-control" placeholder="Enter AMCOS Name" />
               </div>
-              <div className="col-2 member">
+              <div className="col-2 memberid">
                 <label>Member Id</label>
-                <input type="text" className="form-control" placeholder="Enter Member ID"/>
+                <input onChange={this.handleOnChange} type="text" name="member" className="form-control" placeholder="Enter Member ID" />
               </div>
               <div className="col-2 d-flex align-items-end">
-                <input type="submit" className="btn btn-success form-control" value="Search Farmer" />
+                <input onClick={this.searchFromFarmers} className="btn btn-success form-control" value="Search Farmer" />
               </div>
             </div>
           </form>

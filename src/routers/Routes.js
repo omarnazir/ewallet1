@@ -78,6 +78,9 @@ import UssdDetails from '../components/Pages/Admin/UssdMenu/UssdDetails';
 import AddUssdMenuData from '../components/Pages/Admin/UssdMenu/AddUssdMenuData';
 import EditUssdMenuData from '../components/Pages/Admin/UssdMenu/EditUssdMenuData';
 
+import ManageShops from '../components/Pages/Admin/Shop/ShopLists';
+import ManageOrders from '../components/Pages/Admin/Orders/OrderList';
+
 
 const waitFor = Tag => props => <Tag {...props} />;
 
@@ -144,6 +147,8 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-add-registar" component={waitFor(AddRegistar)} />
                                     <Route path="/admin-edit-registar" component={waitFor(EditRegistar)} />
                                     <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
+                                    <Route path="/admin-manage-shops" component={waitFor(ManageShops)} />
+                                    <Route path="/admin-manage-orders" component={waitFor(ManageOrders)} />
                                     
                                    {/* System Setup */}
                                    <Route path="/admin-crops" component={waitFor(ManageCrop)}/>

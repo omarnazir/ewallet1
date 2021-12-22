@@ -100,9 +100,9 @@ class AmcosDetails extends Component {
 
     AlertDeleteItem(id) {
         DeleteAlert().then((willDelete) => {
+            console.log(willDelete)
             if (willDelete) {
                 this.DeleteAmcos(id);
-
             }
         })
     }
@@ -114,7 +114,10 @@ class AmcosDetails extends Component {
     DeleteAmcos(id) {
         axios.delete("/amcos/" + id)
             .then(res => {
+
+                console.log(res)
                 this.ViewAmcosList()
+
                 SuccessAlert("Deleted Amcos Successfully")
             }).catch(err => {
                 SuccessAlert("Please delete Amcos references first ", "info")
@@ -181,7 +184,7 @@ class AmcosDetails extends Component {
     }
 
 
-    AlertDeleteItem(id){
+    AlertDeleteItemCrop(id){
         DeleteAlert().then((willDelete)=>{
           if(willDelete){
             this.DeleteAmcosCrop(id);
@@ -233,7 +236,7 @@ class AmcosDetails extends Component {
             cell: (record, index) => {
                 return (
                     <Fragment>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItemCrop(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
                     </Fragment>
                 )
             }

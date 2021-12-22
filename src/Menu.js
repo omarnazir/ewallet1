@@ -65,6 +65,17 @@ const Menu = [
             },
         ]
     },
+
+    {
+        name: 'Shops',
+        icon: 'fa fa-person-booth',
+        path: '/admin-manage-shops'
+    },
+    {
+        name: 'Input Orders',
+        icon: 'fa fa-shopping-cart',
+        path: '/admin-manage-orders'
+    },
     {
         name: 'System Setup',
         icon: 'fas fa-wrench',
@@ -151,22 +162,22 @@ const Menu = [
                 translate: 'sidebar.nav.setup.CROPS',
                 path: '/admin-manage-roles'
             },
-            {
-                name: 'Mobile Operators',
-                icon: "icon-arrow-right",
-                translate: 'Crop Prices',
-                path: '/admin-mobile-operators'
-            },
-            {
-                name:"Manage SMSC",
-                path:"/admin-manage-smsc",
-                icon:"icon-arrow-right"
-            },
-            {
-                name:"Manage Mail",
-                path:"/admin-manage-mail",
-                icon:"icon-arrow-right"
-            }
+            // {
+            //     name: 'Mobile Operators',
+            //     icon: "icon-arrow-right",
+            //     translate: 'Crop Prices',
+            //     path: '/admin-mobile-operators'
+            // },
+            // {
+            //     name:"Manage SMSC",
+            //     path:"/admin-manage-smsc",
+            //     icon:"icon-arrow-right"
+            // },
+            // {
+            //     name:"Manage Mail",
+            //     path:"/admin-manage-mail",
+            //     icon:"icon-arrow-right"
+            // }
         ]
     },
     {

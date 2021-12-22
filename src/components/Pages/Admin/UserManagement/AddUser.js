@@ -50,6 +50,8 @@ class AddUser extends Component {
                 const response = res.data;
                 this.setState({ rolesList: response })
             })
+
+        console.log(this.state.rolesList)
     }
     validateOnChange = event => {
         const input = event.target;
@@ -142,7 +144,6 @@ class AddUser extends Component {
                 "password": this.state.formRegister.password,
                 "name": this.state.formRegister.fullname,
                 "msisdn": this.state.formRegister.phonenumber,
-                "userMonthlySmsLimit": this.state.formRegister.monthlysmslimit,
                 "accountExpiration":accountExpiration
             }
 

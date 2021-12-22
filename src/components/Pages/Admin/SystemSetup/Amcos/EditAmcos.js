@@ -185,8 +185,12 @@ class EditAmcos extends Component {
                 "name": this.state.amcosName,
                 "mcosId": this.state.mcosId,
                 "villageId": this.state.villageId,
-                "registrarId": this.state.registrarId
+                "registrarId": +this.state.registrarId
             }
+            console.log(amcos)
+            console.log(amcos);console.log(amcos)
+            console.log(amcos);console.log(amcos)
+            console.log(amcos);console.log(amcos)
             console.log(amcos);
             
             axios.put("/amcos", amcos).then(res => {
