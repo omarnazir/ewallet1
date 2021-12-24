@@ -255,7 +255,6 @@ class EditAdminUser extends Component {
         
         if (!hasError) {
             const User = {
-                "id":this.state.formRegister.id,
                 "name": this.state.formRegister.fullname,
                 "username": this.state.formRegister.username,
                 "email":this.state.formRegister.email,
@@ -269,7 +268,11 @@ class EditAdminUser extends Component {
                 UserRoles.push(newItem)
             });
 
-            const data = { id: User.id, user: User, role_ids: UserRoles }
+
+
+            let data = { id: User.id, user: User, role_ids: UserRoles };
+            console.log(data)
+
             console.log(data)
 
 

@@ -2,42 +2,45 @@ import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 
 import { Container, Card, CardHeader, CardBody, CardTitle, Button } from "reactstrap";
-import Moment from 'moment'
+import Moment from 'moment';
 import ReactDatatable from '@ashvin27/react-datatable';
 import { AuthService, FarmersService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
+import axios from "../../../../services/axios";
 
 class AdminWallet extends Component {
   state = {
-    farmersList: []
+    transactionList: []
   };
 
   componentDidMount() {
     const isAuthenticated = AuthService.isAuthenticated();
     if (!isAuthenticated) {
-      this.setState({ redirect: "/login" })
+      this.setState({ redirect: "/login" });
     }
 
-    // FarmersService.getAllFarmers().then(res => {
-    //   this.setState({ farmersList: res.data })
-    // })
+    axios.post("/transactions", {}).then(res => {
+      this.setState({ transactionList: res.data.results });
+    });
   }
 
   formatDate = (date) => {
-    return Moment(date).format('lll')
-  }
+    return Moment(date).format('lll');
+  };
 
-  ViewCustomerDetails = (row) => {
-    console.log(row.id)
-    return this.props.history.push('/admin-customers-details/' + row.id, row)
-  }
+  ViewMakePaymentPage = () => {
+    return this.props.history.push('/admin-make-payment');
+  };
 
+  ViewApprovePaymentPage = () => {
+    return this.props.history.push('/admin-approve-payments');
+  }
 
 
   AddActionButtonStyle = {
     color: 'white',
     background: "#003366"
-  }
+  };
 
   config = {
     page_size: 10,
@@ -52,7 +55,7 @@ class AdminWallet extends Component {
     language: {
       loading_text: "Please be patient while data loads..."
     }
-  }
+  };
 
 
 
@@ -67,15 +70,18 @@ class AdminWallet extends Component {
       }
     },
     {
-      key: "firstName",
+      key: "amount",
       text: "AMOUNT"
     },
     {
-      key: "middleName",
-      text: "TYPE"
+      key: "crop",
+      text: "CROP",
+      cell: (record, i) => {
+        return record.farmerOutput.crop.name;
+      }
     },
     {
-      key: "surname",
+      key: "createdAt",
       text: "TRANSACTION DATE"
     },
     {
@@ -83,48 +89,50 @@ class AdminWallet extends Component {
       text: "CREATED BY",
     },
     {
-      key: "approved",
+      key: "approvedBy",
       text: "APPROVED BY",
+      cell: (record, i) => {
+        return record.paymentBatch.approvedBy;
+      }
     },
     {
       key: "msisdn",
-      text: "AMCOS",
-    }, 
-    // {
-    //   key: "createdAt",
-    //   text: "DATE PAID",
-    //   sortable: true,
-    //   cell: (record, index) => {
-    //     return (this.formatDate(record.createdAt))
-    //   }
-    // },
+      text: "PHONE NUMBER",
+    },
     {
-      key: "id",
-      text: "ACTION",
-      cell: (record, index) => {
-        return (
-          <Button style={{
-            color: 'white',
-            background: "#003366"
-          }} className="btn btn-success"
-            onClick={() => {
-              this.ViewCustomerDetails(record);
-            }}
-          >
-            <i className="fa fa-eye"></i>
-          </Button>
-        );
+      key: "paymentBatch",
+      text: "PAYMENT BATCH",
+      cell: (record, i) => {
+        return record.paymentBatch.name;
       }
-    }
+    },
+    // {
+    //   key: "id",
+    //   text: "ACTION",
+    //   cell: (record, index) => {
+    //     return (
+    //       <Button style={{
+    //         color: 'white',
+    //         background: "#003366"
+    //       }} className="btn btn-success"
+    //         onClick={() => {
+    //           this.ViewTransactionDetails(record);
+    //         }}
+    //       >
+    //         <i className="fa fa-eye"></i>
+    //       </Button>
+    //     );
+    //   }
+    // }
 
   ];
 
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to={this.state.redirect} />
+      return <Redirect to={this.state.redirect} />;
     }
-    let index = 0
+    let index = 0;
 
     return (
       <ContentWrapper>
@@ -133,7 +141,9 @@ class AdminWallet extends Component {
             MPESA Wallet
             <small>Manage payments.</small>
           </div>
-          <div className="flex-row">
+          <div className="flex-row d-block d-md-flex">
+            <span className="btn badge-success mr-2 px-4" onClick={this.ViewMakePaymentPage} >Make Payment</span>
+            <span className="btn badge-success mr-2 px-4" onClick={this.ViewApprovePaymentPage} >Approve Payment</span>
           </div>
         </div>
         <Container fluid>
@@ -145,7 +155,7 @@ class AdminWallet extends Component {
               <ReactDatatable
                 extraButtons={this.extraButtons}
                 config={this.config}
-                records={this.state.farmersList}
+                records={this.state.transactionList}
                 columns={this.columns}
 
               />

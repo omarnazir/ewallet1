@@ -106,6 +106,11 @@ class ManageOrders extends Component {
 //   }
 
 
+ViewTransaction = (id) => {
+  this.props.history.push('/input-order-details/'+id)
+}
+
+
   handleChange = event => {
     if (this.state.mode) {
       this.setState({
@@ -185,25 +190,31 @@ class ManageOrders extends Component {
         
       },
     {
-      key: "id",
-      text: "ACTION",
+      key: "status",
+      text: "STATUS",
       cell: (record, index) => {
           if (record.status=="DECLINED") {
-            return <button disabled className="btn badge-danger mr-2 px-4" onClick={() => this.ApproveOrder(record.id)}>Declined</button>
+            return <span disabled className="badge badge-pill badge-danger">Declined</span>
           }
 
           if (record.status=="APPROVED") {
-            return <button disabled className="btn badge-success mr-2 px-4" onClick={() => this.ApproveOrder(record.id)}>APPROVED</button>
+            return <span disabled className="badge badge-pill badge-success">APPROVED</span>
           }
           if (record.status=="DELIVERED") {
-            return <button disabled className="btn badge-primary mr-2 px-4" onClick={() => this.ApproveOrder(record.id)}>DELIVERED</button>
+            return <span disabled className="badge badge-pill badge-primary">DELIVERED</span>
           }
+          return <span className="badge badge-pill badge-secondary" >PENDING</span>
+      }
+
+    },
+    {
+      key: "id",
+      text: "ACTION",
+      cell: (record, index) => {
         return (
           <Fragment>
-            <span className="btn badge-success mr-2 px-4" onClick={() => this.ApproveOrder(record.id)}>Confirm</span>
-            <span className="btn bg-danger-dark  px-4" onClick={() => this.DeclineOrder(record.id)}>Decline</span>
+            <span className="btn badge-success mr-2" style={{ color: 'white', 'background': 'rgb(0, 51, 102) none repeat scroll 0% 0%' }} onClick={() => this.ViewTransaction(record.orderNumber)}><i className="fa fa-eye" ></i></span>
           </Fragment>
-
         )
       }
     }

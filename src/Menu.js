@@ -82,12 +82,12 @@ const Menu = [
         path: '/admin-manage-registars',
         translate: 'sidebar.nav.SETUP',
         submenu: [
-            {
-                name: 'Agricultural Inputs',
-                icon: "icon-arrow-right",
-                translate: 'sidebar.nav.setup.INPUTS',
-                path: '/admin-agricultural-inputs'
-            },
+            // {
+            //     name: 'Agricultural Inputs',
+            //     icon: "icon-arrow-right",
+            //     translate: 'sidebar.nav.setup.INPUTS',
+            //     path: '/admin-agricultural-inputs'
+            // },
             {
                 name: 'Advisory Services',
                 icon: "icon-arrow-right",

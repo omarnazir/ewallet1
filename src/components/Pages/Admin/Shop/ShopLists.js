@@ -60,10 +60,14 @@ class ManageShops extends Component {
     return this.props.history.push('admin-manage-shops')
   }
 
+  ViewShopDetails = (id) => {
+    console.log(id)
+    return this.props.history.push("/admin-shop-details/"+id);
+  }
+
   GetAmcosByVillage = (id) => {
     axios.get('/amcos').then(res => {
       this.setState({ amcosList: res.data });
-      console.log(this.state.amcosList);
     });
   };
 
@@ -95,7 +99,7 @@ class ManageShops extends Component {
     const editedShop = {
       id: row.id,
       name: row.name,
-      cropType
+      // cropType
     };
     this.setState({ editedShop });
     this.setState({ mode: false });
@@ -183,8 +187,8 @@ class ManageShops extends Component {
       cell: (record, index) => {
         return (
           <Fragment>
-            <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRole(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-            <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            <span className="btn badge-success mr-2 px-4" onClick={()=>this.ViewShopDetails(record.id)}> <i className="fa fa-eye"  ></i></span>
+            {/* <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span> */}
           </Fragment>
         );
       }

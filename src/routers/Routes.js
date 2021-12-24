@@ -80,6 +80,10 @@ import EditUssdMenuData from '../components/Pages/Admin/UssdMenu/EditUssdMenuDat
 
 import ManageShops from '../components/Pages/Admin/Shop/ShopLists';
 import ManageOrders from '../components/Pages/Admin/Orders/OrderList';
+import ManageOrderDetails from '../components/Pages/Admin/Orders/OrderDetails';
+import MakePayement from '../components/Pages/Admin/Wallet/MakePayment';
+import ManageShopDetails from '../components/Pages/Admin/Shop/ShopDetails';
+import PaymentBatches from '../components/Pages/Admin/Wallet/PaymentBatches';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -149,6 +153,15 @@ const Routes = ({ location }) => {
                                     <Route path="/admin-manage-users" component={waitFor(UsersManagement)} />
                                     <Route path="/admin-manage-shops" component={waitFor(ManageShops)} />
                                     <Route path="/admin-manage-orders" component={waitFor(ManageOrders)} />
+                                    <Route path="/admin-shop-details/:id" component={waitFor(ManageShopDetails)} />
+
+                                    <Route path="/admin-approve-payments" component={waitFor(PaymentBatches)} />
+
+
+                                    {/* Mpesa Wallet */}
+                                    <Route path="/admin-make-payment" component={waitFor(MakePayement)} />
+
+                                    <Route path="/admin-manage-order" component={waitFor(ManageOrderDetails)} />
                                     
                                    {/* System Setup */}
                                    <Route path="/admin-crops" component={waitFor(ManageCrop)}/>
