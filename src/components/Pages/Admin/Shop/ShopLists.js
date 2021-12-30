@@ -23,7 +23,7 @@ class ManageShops extends Component {
     editedShop: {
       id: 0,
       name: "",
-      msisdn: 0
+      msisdn: 0,
     },
     shop: {
       name: "",
@@ -74,10 +74,13 @@ class ManageShops extends Component {
   HandleOnSelect = (e) => {
     e.preventDefault();
     let newList = [];
-    let amcosNames =[]
 
-    amcosNames.push(e.target.options[e.target.selectedIndex].text)
-    this.setState({ amcos: newList });
+    let selectedName = e.target.options[e.target.selectedIndex].text
+    let selectedID = e.target.value
+
+    let amcosNames = [...this.state.amcosNames, selectedName]
+    let amcosIds = [...this.state.amcos, selectedID]
+    this.setState({ amcos: amcosIds });
     this.setState({amcosNames: amcosNames})
     console.log(this.state.amcos);
   };

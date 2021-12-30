@@ -37,12 +37,17 @@ class ManageShopDetails extends Component {
             msisdn: "",
             amcos: []
         },
+        amcosList: [],
+        amcos: [],
+        amcosNames: [],
         loading: true,
         shopList: [],
         shops: [],
         shopOrProvider: 0,
-        shopDetails: [],
-        pembejeoList: {}
+        shopDetails: {},
+        pembejeoList: {},
+        mode2: false,
+        id: ""
     };
 
     // initialState = {
@@ -52,11 +57,7 @@ class ManageShopDetails extends Component {
     //     }
     // };
 
-
-
-
     componentDidMount() {
-
         const state = this.props.history.location;
         if (state == undefined) {
             return this.props.history.push('/admin-manage-shops');
@@ -64,10 +65,61 @@ class ManageShopDetails extends Component {
 
         console.log(state.pathname.substring(20));
 
+        this.setState({ id: state.pathname.substring(20) });
+
+        axios.get("shop-or-provider/shop/" + state.pathname.substring(20)).then(res => {
+            console.log(res.data)
+            this.setState({
+                editedShop: Object.assign({}, this.state.editedShop, {
+                    id: res.data.shop.id,
+                }),
+            });
+            this.setState({
+                editedShop: Object.assign({}, this.state.editedShop, {
+                    name: res.data.shop.name,
+                }),
+            });
+            this.setState({
+                editedShop: Object.assign({}, this.state.editedShop, {
+                    msisdn: res.data.shop.msisdn,
+                }),
+            });
+            this.setState({
+                editedShop: Object.assign({}, this.state.editedShop, {
+                    amcos: res.data.amcos,
+                }),
+            });
+            console.log(this.state.editedShop)
+        });
+
         this.setState({ shopOrProvider: +state.pathname.substring(20) });
         this.getAllPembejeoByShop(+state.pathname.substring(20));
         this.getShopDetails(+state.pathname.substring(20));
+        this.GetAmcosByVillage()
+
+
     }
+
+    HandleOnSelect = (e) => {
+        e.preventDefault();
+        let newList = [];
+    
+        let selectedName = e.target.options[e.target.selectedIndex].text
+        let selectedID = e.target.value
+    
+        let amcosNames = [...this.state.amcosNames, selectedName]
+        let amcosIds = [...this.state.amcos, selectedID]
+        this.setState({ amcos: amcosIds });
+        this.setState({amcosNames: amcosNames})
+        console.log(this.state.amcos);
+      };
+
+
+    GetAmcosByVillage = () => {
+        axios.get('/amcos').then(res => {
+          this.setState({ amcosList: res.data });
+        });
+      };
 
 
     toggleModal = () => {
@@ -76,9 +128,20 @@ class ManageShopDetails extends Component {
         });
     };
 
+    toggleModal2 = () => {
+        this.setState({
+            modal2: !this.state.modal2
+        });
+    };
+
     AddAgriInputMode = () => {
         this.setState({ mode: true });
         this.toggleModal();
+    };
+
+    EditShopMode = () => {
+        this.setState({ mode2: true });
+        this.toggleModal2();
     };
 
     toggleTab = tab => {
@@ -103,15 +166,14 @@ class ManageShopDetails extends Component {
             this.setState({ loading: false });
             console.log(res.data[0]);
             this.setState({ pembejeoList: res.data });
-
             console.log(this.state.pembejeoList);
         });
     }
 
     getShopDetails(id) {
         axios.get("shop-or-provider/shop/" + id).then(res => {
-            console.log(res.data)
-            this.setState({ shopDetails: res.data });
+            console.log(res.data.shop);
+            this.setState({ shopDetails: res.data.shop });
         });
     }
 
@@ -123,7 +185,7 @@ class ManageShopDetails extends Component {
         DeleteAlert().then((willDelete) => {
             console.log(willDelete);
             if (willDelete) {
-                this.DeleteAmcos(id);
+                this.DeleteShop(id);
             }
         });
     }
@@ -136,12 +198,25 @@ class ManageShopDetails extends Component {
         });
     };
 
+    handleEditChange = event => {
+        // this.setState({ [event.target.name]: event.target.value });
+        this.setState({
+            editedShop: Object.assign({},
+                this.state.editedShop, { [event.target.name]: event.target.value })
+        });
+    };
+
     DeleteShop(id) {
-        axios.delete("/amcos/" + id)
+        let body = {
+            "id": +id
+        }
+
+        console.log(body)
+        axios.delete("/shop-or-provider/delete", body)
             .then(res => {
 
                 console.log(res);
-                this.ViewAmcosList();
+                this.ViewShopsList();
 
                 SuccessAlert("Deleted shop Successfully");
             }).catch(err => {
@@ -156,6 +231,10 @@ class ManageShopDetails extends Component {
         });
     };
 
+    ViewShopsList = () => {
+        return this.props.history.push("/admin-manage-shops");
+    };
+
 
     AddActionButtonStyle = {
         color: 'white',
@@ -165,9 +244,7 @@ class ManageShopDetails extends Component {
         return Moment(date).format('lll');
     };
 
-    EditShop = (id) => {
-        return this.props.history.push('/admin-edit-amcos/' + id, id);
-    };
+
 
     handleSubmit = event => {
         event.preventDefault();
@@ -191,8 +268,19 @@ class ManageShopDetails extends Component {
         };
         axios.post("/pembejeo", data).then(res => {
             console.log(res.data);
+            this.getAllPembejeoByShop(shopOrProvider);
         }).catch(err => {
             console.log(err);
+        });
+    };
+
+
+    SubmitEditShop = () => {
+        let body = {
+           ...this.state.editedShop
+        };
+        axios.put("/shop-or-provider/update", body).then(res => {
+            console.log(res.data);
         });
     };
 
@@ -207,7 +295,7 @@ class ManageShopDetails extends Component {
     }
 
     DeletePembejeo(id) {
-        axios.delete("farmer-inputs/delete", {id: id})
+        axios.delete("/pembejeo/" + id)
             .then(res => {
                 const pembejeoList = this.state.pembejeoList.filter((item) => {
                     return item.id !== id;
@@ -215,6 +303,8 @@ class ManageShopDetails extends Component {
                 this.setState({ pembejeoList });
             });
     }
+
+
 
     columns = [
         {
@@ -237,17 +327,17 @@ class ManageShopDetails extends Component {
             key: "type",
             text: "TYPE",
         },
-        // {
-        //     key: "id",
-        //     text: "ACTION",
-        //     cell: (record, index) => {
-        //         return (
-        //             <Fragment>
-        //                 <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeletePembejeo(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
-        //             </Fragment>
-        //         );
-        //     }
-        // }
+        {
+            key: "id",
+            text: "ACTION",
+            cell: (record, index) => {
+                return (
+                    <Fragment>
+                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeletePembejeo(record.id)}> <i className="fa fa-trash mr-2"></i></span>
+                    </Fragment>
+                );
+            }
+        }
     ];
 
     config = {
@@ -275,8 +365,8 @@ class ManageShopDetails extends Component {
                     </div>
                     <div className="flex-row d-block d-md-flex">
                         {this.state.activeTab == '1' && <div>
-                            {/* <span className="btn badge-success mr-2 px-4" onClick={() => this.EditShop(this.state.shopId)}> <i className="icon-pencil mr-2"  ></i>Edit Shop</span> */}
-                            {/* <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.AlertDeleteItem(this.state.shopId)}> <i className="fa fa-trash mr-2"></i>Delete Shop </span> */}
+                            <span className="btn badge-success mr-2 px-4" onClick={() => this.EditShopMode()}> <i className="icon-pencil mr-2"  ></i>Edit Shop</span>
+                            <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.AlertDeleteItem(this.state.editedShop.id)}> <i className="fa fa-trash mr-2"></i>Delete Shop </span>
                         </div>
                         }
 
@@ -287,6 +377,8 @@ class ManageShopDetails extends Component {
 
 
                         <Button onClick={this.ViewShopsList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Shops</Button>
+
+
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
                             <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Agricultural Input" : "Edit Agricultural Input"}</ModalHeader>
@@ -302,7 +394,7 @@ class ManageShopDetails extends Component {
                                         <label htmlFor="exampleFormControlSelect1">Type : </label>
                                         <select className="form-control" id="exampleFormControlSelect1" name="type"
                                             onChange={this.handleChange}
-                                            value={this.state.mode ? this.state.pembejeo.name : this.state.editedShop.name}
+                                            value={this.state.mode ? this.state.pembejeo.type : this.state.editedShop.type}
                                         >
                                             <option value="-1">Select type</option>
                                             <option value="Service">Service</option>
@@ -318,6 +410,57 @@ class ManageShopDetails extends Component {
                                 </ModalBody>
                                 <ModalFooter>
                                     <button onClick={this.AddPembejeo} className="btn btn-sm btn-success mr-3 px-5" type="submit">
+                                        Save
+                                    </button>
+                                </ModalFooter>
+                            </form>
+                        </Modal>
+
+                        <Modal isOpen={this.state.modal2} toggle={this.toggleModal2}>
+                            <ModalHeader toggle={this.toggleModal2}>{this.state.mode2 ? "Add Shop" : "Edit Shop"}</ModalHeader>
+                            <form>
+                                <ModalBody>
+                                    <div className="form-group">
+                                        <label>Name :</label>
+                                        <input className="form-control" name="name" onChange={this.handleEditChange}
+                                            value={this.state.editedShop.name}
+                                            type="text" required></input>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Phone :</label>
+                                        <input className="form-control" name="msisdn" onChange={this.handleEditChange}
+                                            value={this.state.editedShop.msisdn}
+                                            type="tel" required></input>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Amcos :</label>
+                                        <select name="amcosIDs" onChange={this.HandleOnSelect} className="form-control">
+                                            <option>Select AMCOS</option>
+                                            {
+                                                this.state.amcosList.map(row => {
+                                                    { console.log(row); }
+                                                    return <option value={row.id}>{row.name}</option>;
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <h5>Selected AMCOS</h5>
+                                        <ul class="list-group">
+
+
+
+                                            {this.state.amcosNames.map((row, i) => {
+                                                return <li class="list-group-item">{i + 1}. {row}</li>;
+                                            })}
+                                        </ul>
+                                    </div>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <button className="btn btn-sm btn-success mr-3  px-5" onClick={this.SubmitEditShop}>
                                         Save
                                     </button>
                                 </ModalFooter>

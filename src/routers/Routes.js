@@ -161,7 +161,7 @@ const Routes = ({ location }) => {
                                     {/* Mpesa Wallet */}
                                     <Route path="/admin-make-payment" component={waitFor(MakePayement)} />
 
-                                    <Route path="/admin-manage-order" component={waitFor(ManageOrderDetails)} />
+                                    <Route path="/admin-manage-order/:id" component={waitFor(ManageOrderDetails)} />
                                     
                                    {/* System Setup */}
                                    <Route path="/admin-crops" component={waitFor(ManageCrop)}/>

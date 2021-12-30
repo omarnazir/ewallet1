@@ -26,27 +26,21 @@ class OrderDetails extends Component {
         loading: true,
         order: {
             id: 0,
-            firstName: "",
-            middleName: "",
-            surname: "",
-            sex: "",
-            idNumber: "",
-            dateOfBirth: "",
-            msisdn: "",
-            mainCrop: {},
-            secondaryCrop: {},
-            ward: {},
-            village: {},
-            amcos: {},
-            farmSize: 0,
+            firstname: "",
+            lastname: "",
+            shop: "",
+            quantity: "",
+            orderNumber: "",
+            description: "",
+            unitPrice: "",
+            unitPrice: 0,
             farmingType: "",
             farmingMethod: "",
-            registrationDate: Date.now(),
-            hamlet: "",
-            registrarName: "",
-
-            district: {},
-            region: {}
+            input: "",
+            district: "",
+            region: "",
+            amcos: "",
+            idNumber: "",
         }
 
     };
@@ -69,39 +63,37 @@ class OrderDetails extends Component {
     componentDidMount() {
 
         const state = this.props.history.location;
-        console.log(state);
-        console.log(state);
+        let on = state.pathname.substring(20);
 
         if (state == undefined) {
-            return this.props.history.push('/admin-manage-orders/');
+            return this.props.history.push('/admin-manage-orders');
         }
 
         this.setState({ farmerId: state.orderName });
-        axios.get("/farmer-input-order/order-details/2021122221")
+        axios.get("/farmer-input-order/order-details/" + on)
             .then(res => {
+                res.data.map(orders => {
+                    console.log(orders);
+                    this.setState({ order: { ...this.state.order, id: orders.id } });
+                    this.setState({ order: { ...this.state.order, quantity: orders.quantity } });
+                    this.setState({ order: { ...this.state.order, description: orders.description } });
+                    this.setState({ order: { ...this.state.order, status: orders.status } });
+                    this.setState({ order: { ...this.state.order, shop: orders.input.shopOrProvider.name } });
+                    this.setState({ order: { ...this.state.order, unitPrice: orders.input.price } });
+                    this.setState({ order: { ...this.state.order, firstname: orders.farmerInputOrder.farmer.firstName } });
+                    this.setState({ order: { ...this.state.order, middlename: orders.farmerInputOrder.farmer.middleName } });
+                    this.setState({ order: { ...this.state.order, orderNumber: orders.farmerInputOrder.orderNumber } });
+                    this.setState({ order: { ...this.state.order, lastname: orders.farmerInputOrder.farmer.surname } });
+                    this.setState({ order: { ...this.state.order, msisdn: orders.farmerInputOrder.farmer.msisdn } });
+                    this.setState({ order: { ...this.state.order, region: orders.farmerInputOrder.regionName } });
+                    this.setState({ order: { ...this.state.order, district: orders.farmerInputOrder.district.name } });
+                    this.setState({ order: { ...this.state.order, ward: orders.ward } });
+                    this.setState({ order: { ...this.state.order, amcos: orders.farmerInputOrder.farmer.amcos.name } });
+                    this.setState({ order: { ...this.state.order, input: orders.input.name } });
+                    this.setState({ order: { ...this.state.order, idNumber: orders.farmerInputOrder.idNumber } });
+                });
+                
 
-                this.setState({ order: { ...this.state.order, id: res.data.id } });
-                this.setState({ order: { ...this.state.order, firstName: res.data.firstName } });
-                this.setState({ order: { ...this.state.order, middleName: res.data.middleName } });
-                this.setState({ order: { ...this.state.order, surname: res.data.surname } });
-                this.setState({ order: { ...this.state.order, sex: res.data.sex } });
-                this.setState({ order: { ...this.state.order, idNumber: res.data.idNumber } });
-                this.setState({ order: { ...this.state.order, dateOfBirth: res.data.dateOfBirth } });
-                this.setState({ order: { ...this.state.order, msisdn: res.data.msisdn } });
-                this.setState({ order: { ...this.state.order, mainCrop: res.data.mainCrop } });
-                this.setState({ order: { ...this.state.order, secondaryCrop: res.data.secondaryCrop } });
-                this.setState({ order: { ...this.state.order, ward: res.data.ward } });
-                this.setState({ order: { ...this.state.order, district: res.data.ward.district } });
-                this.setState({ order: { ...this.state.order, region: res.data.ward.district.region } });
-                this.setState({ order: { ...this.state.order, village: res.data.village } });
-                this.setState({ order: { ...this.state.order, amcos: res.data.amcos } });
-                this.setState({ order: { ...this.state.order, hamlet: res.data.hamlet } });
-
-                this.setState({ order: { ...this.state.order, farmSize: res.data.farmSize } });
-                this.setState({ order: { ...this.state.order, farmingType: res.data.farmingType } });
-                this.setState({ order: { ...this.state.order, farmingMethod: res.data.farmingMethod } });
-                this.setState({ order: { ...this.state.order, registrationDate: res.data.registrationDate } });
-                this.setState({ order: { ...this.state.order, registrarName: res.data.registrarName } });
             }).catch(err => {
                 console.log(err);
             });
@@ -146,10 +138,29 @@ class OrderDetails extends Component {
 
 
     getFarmerFullName = () => {
-        const firstName = this.ucFirst(this.state.order.firstName);
-        const middleName = this.state.order.middleName == undefined ? " " : this.ucFirst(this.state.order.middleName);
-        const lastName = this.ucFirst(this.state.order.surname);
+        const firstName = this.ucFirst(this.state.order.firstname);
+        const middleName = this.state.order.middlename == undefined ? " " : this.ucFirst(this.state.order.middlename);
+        const lastName = this.ucFirst(this.state.order.lastname);
         return firstName + " " + middleName + " " + lastName;
+    };
+
+
+    ApproveOrder = (id) => {
+        let body = {
+            id: String(id)
+        };
+        axios.put("/farmer-input-order/approve", body).then(res => {
+            return this.props.history.push("/admin-manage-orders");
+        });
+    };
+
+    DeclineOrder = (id) => {
+        let body = {
+            id: String(id)
+        };
+        axios.put("/farmer-input-order/decline", body).then(res => {
+            return this.props.history.push("/admin-manage-orders");
+        });
     };
 
     config = {
@@ -214,6 +225,7 @@ class OrderDetails extends Component {
         },
         {
             key: "status",
+
             text: "STATUS",
             cell: (record, index) => {
 
@@ -239,12 +251,17 @@ class OrderDetails extends Component {
             <ContentWrapper>
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
-                        Order Details : {this.getFarmerFullName()}
+                        Order Details : {this.state.order.status}
                         <small>Showing all order details.</small>
                     </div>
                     <div className="flex-row d-block d-md-flex">
-                        <span className="btn badge-success mr-2 px-4" onClick={() => this.EditFarmer(this.state.orderId)}>Approve</span>
-                        <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.DeleteRole(record.id)}>Reject </span>
+                        {
+                            this.state.order.status == "NOT_APPROVED" ? <span className="btn badge-success mr-2 px-4" onClick={() => this.ApproveOrder(this.state.order.id)}>Approve</span>  : ""
+                            
+                        }{
+                            this.state.order.status == "NOT_APPROVED" ? 
+                            <span className="btn bg-danger-dark mr-2 px-4" onClick={() => this.DeclineOrder(this.state.order.id)}>Decline</span>  :""
+                        }
 
                         <Button onClick={this.ViewOrderList} style={this.AddActionButtonStyle} className="btn-pill-right">Go Back</Button>
                     </div>
@@ -270,18 +287,18 @@ class OrderDetails extends Component {
                                                             {/* <td>{this.state.firstName + " " + this.state.surname}</td> */}
                                                             <td>{this.getFarmerFullName()}</td>
 
-                                                            <th>Sex</th>
-                                                            <td>{this.state.order.sex}</td>
+                                                            <th>Address</th>
+                                                            <td>{ }</td>
                                                         </tr>
 
                                                         <tr>
 
-                                                            <th>Date of Birth (Age)</th>
-                                                            <td>{this.state.order.dateOfBirth}</td>
+                                                            <th>ID Number</th>
+                                                            <td>{this.state.order.idNumber}</td>
 
 
-                                                            <th>Age (Years)</th>
-                                                            <td>{calculateAge(this.state.order.dateOfBirth)}</td>
+                                                            <th>AMCOS</th>
+                                                            <td>{this.state.order.amcos}</td>
                                                         </tr>
 
                                                         <tr>
@@ -290,90 +307,29 @@ class OrderDetails extends Component {
                                                         </tr>
 
                                                         <tr>
-                                                            <th colSpan={4} className="text-uppercase"><span className="fa fa-id-card mr-2"></span> Membership Information</th>
+                                                            <th colSpan={4} className="text-uppercase"><span className="fa fa-id-card mr-2"></span> Order Information</th>
                                                         </tr>
 
                                                         <tr>
-                                                            <th>MemberID</th>
-                                                            <td>{this.state.order.memberID}</td>
+                                                            <th>Order Number</th>
+                                                            <td>{this.state.order.orderNumber}</td>
 
-                                                            <th>AMCOS</th>
-                                                            <td>{this.state.order.amcos.name}</td>
+                                                            <th>Inputs</th>
+                                                            <td>{this.state.order.input}</td>
+
+                                                            <th>Quantity</th>
+                                                            <td>{this.state.order.quantity}</td>
                                                         </tr>
 
                                                         <tr>
-                                                            <th>Hamlet (Kitongoji)</th>
-                                                            <td>{this.state.order.hamlet}</td>
+                                                            <th>Unit Price</th>
+                                                            <td>{this.state.order.unitPrice}</td>
 
-                                                            <th></th>
-                                                            <td></td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th colSpan={4} className="text-uppercase"><span className="fa fa-leaf mr-2"></span> Farm Information</th>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th>Location</th>
-                                                            <td colSpan={3}>
-                                                                {this.state.order.region.name}{", "}
-                                                                {this.state.order.district.name}{", "}
-                                                                {this.state.order.ward.name}{", "}
-                                                                {this.state.order.village.name}
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th>Farm Size</th>
-                                                            <td>{this.state.order.farmSize}</td>
-
-                                                            <th>Type of Farming</th>
-                                                            <td>{this.state.order.farmingType}</td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th>Equipment used</th>
-                                                            <td>{this.state.order.farmingMethod}</td>
-
-                                                            <th>Planting season</th>
-                                                            <td>{this.state.order.season}</td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th>Latitude</th>
-                                                            <td>{this.state.latitude}</td>
-
-                                                            <th>Longitude</th>
-                                                            <td>{this.state.longitude}</td>
+                                                            <th>Shop</th>
+                                                            <td>{this.state.order.shop}</td>
                                                         </tr>
 
 
-
-                                                        <tr>
-                                                            <th colSpan={4} className="text-uppercase"><span className="fa fa-snowflake mr-2"></span> Crops Information</th>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th>Main Crop</th>
-                                                            <td>{this.state.order.mainCrop.name}</td>
-
-                                                            <th>Secondary Crops</th>
-                                                            <td>{this.state.order.secondaryCrop.name}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th colSpan={4} className="text-uppercase"><span className="fa fa-user mr-2"></span> Registrar Information</th>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th colSpan={2}>Full Name</th>
-                                                            <td colSpan={2}>{this.state.order.registrarName}</td>
-
-
-                                                        </tr>
-                                                        {/* <tr>
-                                                                    <th colSpan={2}>Role </th>
-                                                                    <td colSpan={2}>{this.state.order.secondaryCrop.name}</td>
-                                                                </tr> */}
                                                     </tbody>
                                                 </Table>
                                             </div>

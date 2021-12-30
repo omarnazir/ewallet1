@@ -86,9 +86,10 @@ class MakePayement extends Component {
         e.preventDefault();
         let batch = [];
         this.state.harvests.forEach(harvest => {
-            let b = { "harvestId": harvest.id, "amount": harvest.cropsValue };
+            let b = { "harvestId": harvest.id, "amount": + parseFloat(harvest.cropsValue) };
             console.log(b);
             return batch.push(b);
+
         });
 
         console.log(batch);
@@ -99,12 +100,13 @@ class MakePayement extends Component {
 
         console.log(data);
 
-        axios.post("farmer-harvests/initiate-payment", { data }).then(res => {
+        axios.post("/farmer-harvests/initiate-payment", { data }).then(res => {
             console.log(res.data);
             SuccessAlert("Malipo yameanzishwa kamilifu");
             sessionStorage.clear();
         }).catch(err => {
-            console.log(err);
+            console.log(err.message);
+            console.log(err.response);
         });
     };
 
@@ -139,19 +141,6 @@ class MakePayement extends Component {
 
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
-    };
-
-    onSubmit = e => {
-        e.preventDefault();
-        console.log("clicked");
-        let data = {};
-        this.getHarvestByAmcosAndCrop(data);
-    };
-
-    toggleModal = () => {
-        this.setState({
-            modal: !this.state.modal
-        });
     };
 
     handleComplexChange = event => {
@@ -236,7 +225,8 @@ class MakePayement extends Component {
                 </div>
                 <Container fluid>
 
-                    <form className="mb-3" onSubmit={this.onSubmit} name="formAddRegistrar">
+                    <form className="mb-3" name="formSearchHarvest">
+                        <h3>Lipa Mavuno </h3>
                         <Card className="card-default">
                             <CardBody>
                                 <Row>
@@ -337,7 +327,7 @@ class MakePayement extends Component {
                                 </Row>
                             </CardBody>
                             <Row>
-                                <h4 style={{ margin: "auto" }}>Harvest List</h4>
+                                <h4 style={{ margin: "auto" }}>Orodha ya mavuno</h4>
                                 <table style={{ margin: "auto", width: "95%" }} class="table table-striped">
 
                                     <thead>

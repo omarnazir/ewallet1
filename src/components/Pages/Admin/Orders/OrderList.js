@@ -107,7 +107,7 @@ class ManageOrders extends Component {
 
 
 ViewTransaction = (id) => {
-  this.props.history.push('/input-order-details/'+id)
+  this.props.history.push('/admin-manage-order/'+id)
 }
 
 
@@ -203,7 +203,9 @@ ViewTransaction = (id) => {
           if (record.status=="DELIVERED") {
             return <span disabled className="badge badge-pill badge-primary">DELIVERED</span>
           }
-          return <span className="badge badge-pill badge-secondary" >PENDING</span>
+          if(record.status=='NOT_APPROVED'){
+            return <span className="badge badge-pill badge-secondary" >PENDING</span>
+          }
       }
 
     },
