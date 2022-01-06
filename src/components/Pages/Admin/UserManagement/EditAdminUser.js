@@ -266,7 +266,6 @@ class EditAdminUser extends Component {
             const User = {
                 "name": this.state.formRegister.fullname,
                 "username": this.state.formRegister.username,
-                "email":this.state.formRegister.email,
                 "msisdn": this.state.formRegister.msisdn,
                 "accountExpiration": new Date(this.state.formRegister.accountExpiration).toLocaleDateString('en-CA') + " 00:00:00"
             }
