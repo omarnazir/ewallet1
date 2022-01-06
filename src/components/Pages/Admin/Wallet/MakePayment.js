@@ -86,7 +86,7 @@ class MakePayement extends Component {
         e.preventDefault();
         let batch = [];
         this.state.harvests.forEach(harvest => {
-            let b = { "harvestId": harvest.id, "amount": + parseFloat(harvest.cropsValue) };
+            let b = { "harvestId": +harvest.id, "amount": parseFloat(harvest.cropsValue) };
             console.log(b);
             return batch.push(b);
 

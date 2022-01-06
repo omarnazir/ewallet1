@@ -17,6 +17,7 @@ import { calculateAge } from '../../../../utils/AgeCalculator';
 import NumberFormat from 'react-number-format';
 import ReactDatatable from '@ashvin27/react-datatable';
 import { HarvestsService } from '../../../../services';
+import { SuccessAlert, DeleteAlert } from "../../../Common/AppAlerts";
 
 
 class OrderDetails extends Component {
@@ -70,7 +71,18 @@ class OrderDetails extends Component {
         }
 
         this.setState({ farmerId: state.orderName });
-        axios.get("/farmer-input-order/order-details/" + on)
+
+        this.GetOrderDetails(on);
+
+        // HarvestsService.getAllHarvetByFarmer(state.id).then(res => {
+        //     this.setState({ loading: false })
+        //     this.setState({ harvestsList: res.data })
+        // })
+
+    }
+
+    GetOrderDetails = (order) => {
+        axios.get("/farmer-input-order/order-details/" + order)
             .then(res => {
                 res.data.map(orders => {
                     console.log(orders);
@@ -86,7 +98,7 @@ class OrderDetails extends Component {
                     this.setState({ order: { ...this.state.order, lastname: orders.farmerInputOrder.farmer.surname } });
                     this.setState({ order: { ...this.state.order, msisdn: orders.farmerInputOrder.farmer.msisdn } });
                     this.setState({ order: { ...this.state.order, region: orders.farmerInputOrder.regionName } });
-                    this.setState({ order: { ...this.state.order, district: orders.farmerInputOrder.district.name } });
+                    // this.setState({ order: { ...this.state.order, district: orders.farmerInputOrder.district.name } });
                     this.setState({ order: { ...this.state.order, ward: orders.ward } });
                     this.setState({ order: { ...this.state.order, amcos: orders.farmerInputOrder.farmer.amcos.name } });
                     this.setState({ order: { ...this.state.order, input: orders.input.name } });
@@ -97,11 +109,6 @@ class OrderDetails extends Component {
             }).catch(err => {
                 console.log(err);
             });
-        // HarvestsService.getAllHarvetByFarmer(state.id).then(res => {
-        //     this.setState({ loading: false })
-        //     this.setState({ harvestsList: res.data })
-        // })
-
     }
 
     AddActionButtonStyle = {
@@ -150,7 +157,9 @@ class OrderDetails extends Component {
             id: String(id)
         };
         axios.put("/farmer-input-order/approve", body).then(res => {
-            return this.props.history.push("/admin-manage-orders");
+            // alert(res.data.message)
+            SuccessAlert(res.data.message, "info");
+            this.GetOrderDetails(this.state.order.orderNumber)
         });
     };
 
@@ -159,7 +168,8 @@ class OrderDetails extends Component {
             id: String(id)
         };
         axios.put("/farmer-input-order/decline", body).then(res => {
-            return this.props.history.push("/admin-manage-orders");
+            console.log(res.data);
+            this.GetOrderDetails(this.state.order.orderNumber)
         });
     };
 

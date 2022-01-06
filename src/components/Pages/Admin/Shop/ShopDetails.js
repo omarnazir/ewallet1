@@ -31,6 +31,12 @@ class ManageShopDetails extends Component {
             type: "",
             price: ""
         },
+        editedPembejeo: {
+            id: 0,
+            name: "",
+            type: "",
+            price: ""
+        },
         editedShop: {
             id: 0,
             name: "",
@@ -45,7 +51,9 @@ class ManageShopDetails extends Component {
         shops: [],
         shopOrProvider: 0,
         shopDetails: {},
+        shopAmcos: [],
         pembejeoList: {},
+        mode: true,
         mode2: false,
         id: ""
     };
@@ -69,6 +77,13 @@ class ManageShopDetails extends Component {
 
         axios.get("shop-or-provider/shop/" + state.pathname.substring(20)).then(res => {
             console.log(res.data)
+            let amcosName = res.data.amcos.map((row) => {
+                return row.amcos.name;
+            });
+            let amcosID = res.data.amcos.map(row => {
+                return row.amcos.id;
+            })
+
             this.setState({
                 editedShop: Object.assign({}, this.state.editedShop, {
                     id: res.data.shop.id,
@@ -86,10 +101,20 @@ class ManageShopDetails extends Component {
             });
             this.setState({
                 editedShop: Object.assign({}, this.state.editedShop, {
-                    amcos: res.data.amcos,
+                    amcos: amcosID,
                 }),
             });
-            console.log(this.state.editedShop)
+
+            this.setState({
+                amcosNames: amcosName
+            });
+
+            this.setState({
+                amcosIds: amcosID
+            });
+
+
+            console.log(this.state.amcosNames)
         });
 
         this.setState({ shopOrProvider: +state.pathname.substring(20) });
@@ -139,6 +164,15 @@ class ManageShopDetails extends Component {
         this.toggleModal();
     };
 
+    // EditAgriculturalInputMode = (id) => {
+    //     this.setState({ mode: false });
+    //     this.state.pembejeoList.filter(pembejeo => {
+    //         console.log(pembejeo)
+    //         return pembejeo.id === id;
+    //     });
+    //     this.toggleModal();
+    // }
+
     EditShopMode = () => {
         this.setState({ mode2: true });
         this.toggleModal2();
@@ -174,8 +208,10 @@ class ManageShopDetails extends Component {
         axios.get("shop-or-provider/shop/" + id).then(res => {
             console.log(res.data.shop);
             this.setState({ shopDetails: res.data.shop });
+            this.setState({ shopAmcos: res.data.amcos })
         });
     }
+
 
     ViewAmcosList = () => {
         return this.props.history.push("/admin-manage-amcos");
@@ -208,19 +244,16 @@ class ManageShopDetails extends Component {
 
     DeleteShop(id) {
         let body = {
-            "id": +id
+            "id": this.state.editedShop.id
         }
 
         console.log(body)
-        axios.delete("/shop-or-provider/delete", body)
+        axios.delete("/shop-or-provider/delete/" + body.id)
             .then(res => {
-
-                console.log(res);
                 this.ViewShopsList();
-
                 SuccessAlert("Deleted shop Successfully");
             }).catch(err => {
-                SuccessAlert("Please delete shop references first ", "info");
+                SuccessAlert("Delete action failed due to an error", "info");
             });
     }
 
@@ -268,19 +301,32 @@ class ManageShopDetails extends Component {
         };
         axios.post("/pembejeo", data).then(res => {
             console.log(res.data);
-            this.getAllPembejeoByShop(shopOrProvider);
+            this.getAllPembejeoByShop(this.state.editedShop.id);
         }).catch(err => {
             console.log(err);
         });
+
+        if (!this.state.mode) {
+
+        }
     };
 
 
-    SubmitEditShop = () => {
+    SubmitEditShop = (e) => {
+        e.preventDefault()
         let body = {
-           ...this.state.editedShop
+            id: this.state.editedShop.id,
+            name: this.state.editedShop.name,
+            msisdn: this.state.editedShop.msisdn,
+            amcosIDs: this.state.editedShop.amcos
         };
         axios.put("/shop-or-provider/update", body).then(res => {
             console.log(res.data);
+            SuccessAlert("Shop " + body.name + " saved");
+            this.setState({
+                modal2: !this.state.modal2
+            });
+            this.getShopDetails(this.state.editedShop.id)
         });
     };
 
@@ -289,7 +335,7 @@ class ManageShopDetails extends Component {
         DeleteAlert().then((willDelete) => {
             if (willDelete) {
                 this.DeletePembejeo(id);
-                SuccessAlert("Deleted Amcos Crop Successfully");
+                SuccessAlert("Deleted Successfully");
             }
         });
     }
@@ -333,7 +379,8 @@ class ManageShopDetails extends Component {
             cell: (record, index) => {
                 return (
                     <Fragment>
-                        <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeletePembejeo(record.id)}> <i className="fa fa-trash mr-2"></i></span>
+                        {/* <span className="btn bg-success  mr-4" onClick={() => this.EditAgriculturalInputMode(record.id)}> <i className="icon-pencil mr-2"></i></span> */}
+                        <span className="btn bg-danger-dark " onClick={() => this.AlertDeletePembejeo(record.id)}> <i className="fa fa-trash"></i></span>
                     </Fragment>
                 );
             }
@@ -375,10 +422,7 @@ class ManageShopDetails extends Component {
                         </div>
                         }
 
-
                         <Button onClick={this.ViewShopsList} style={this.AddActionButtonStyle} className="btn-pill-right">View All Shops</Button>
-
-
 
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
                             <ModalHeader toggle={this.toggleModal}>{this.state.mode ? "Add Agricultural Input" : "Edit Agricultural Input"}</ModalHeader>
@@ -394,7 +438,7 @@ class ManageShopDetails extends Component {
                                         <label htmlFor="exampleFormControlSelect1">Type : </label>
                                         <select className="form-control" id="exampleFormControlSelect1" name="type"
                                             onChange={this.handleChange}
-                                            value={this.state.mode ? this.state.pembejeo.type : this.state.editedShop.type}
+                                            value={this.state.mode ? this.state.pembejeo.type : this.state.editedPembejeo.type}
                                         >
                                             <option value="-1">Select type</option>
                                             <option value="Service">Service</option>
@@ -404,7 +448,7 @@ class ManageShopDetails extends Component {
                                     <FormGroup>
                                         <label>Price :</label>
                                         <input className="form-control" name="price"
-                                            value={this.state.mode ? this.state.pembejeo.price : this.state.editedShop.name}
+                                            value={this.state.mode ? this.state.pembejeo.price : this.state.editedPembejeo.name}
                                             onChange={this.handleChange} type="tel" required />
                                     </FormGroup>
                                 </ModalBody>
@@ -450,9 +494,6 @@ class ManageShopDetails extends Component {
                                     <div>
                                         <h5>Selected AMCOS</h5>
                                         <ul class="list-group">
-
-
-
                                             {this.state.amcosNames.map((row, i) => {
                                                 return <li class="list-group-item">{i + 1}. {row}</li>;
                                             })}
@@ -506,7 +547,10 @@ class ManageShopDetails extends Component {
                                             <th>Phone Number</th> : {this.state.shopDetails.msisdn}<td></td>
                                         </tr>
                                         <tr>
-                                            <th>AMCOS</th> : <td></td>
+                                            <th>AMCOS</th> : {this.state.shopAmcos.map(row => {
+                                                console.log(row);
+                                                return `${row.amcos.name}, `;
+                                            })} <td></td>
                                         </tr>
                                     </table>
                                 </CardBody>

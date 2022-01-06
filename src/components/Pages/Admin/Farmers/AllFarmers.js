@@ -7,6 +7,7 @@ import ReactDatatable from '@ashvin27/react-datatable';
 import { ExportReactCSV } from "../../../Common/ReactCSV";
 import { AuthService, FarmersService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
+import axios from "../../../../services/axios";
 
 class AllFarmers extends Component {
   state = {
@@ -19,7 +20,11 @@ class AllFarmers extends Component {
       endDate: "",
       msisdn: "",
       amcos: ""
-    }
+    },
+    amcosList: [],
+    mcuList: [],
+    mcuId: 0,
+    amcosId: 0
   };
 
   componentDidMount() {
@@ -32,12 +37,40 @@ class AllFarmers extends Component {
       "limit": ""
     };
 
+    this.GetAllMCU()
+
+
+
     FarmersService.getAllFarmers(data).then(res => {
       console.log(res.data);
       this.setState({ loading: false });
       this.setState({ farmersList: res.data.results });
       this.setState({ trackId: res.data.trackId });
     });
+  }
+
+  GetAllMCU = () => {
+    axios.get('/mcos').then(res => {
+      this.setState({ mcuList: res.data });
+    });
+  };
+
+  GetMCUAmcos = (id) => {
+    axios.get('/amcos/mcos/' + id).then(res => {
+      this.setState({ amcosList: res.data });
+    });
+  };
+
+  handleOnComplexChange = (e) => {
+    e.preventDefault();
+    if ([e.target.name] == "mcos") {
+      this.GetMCUAmcos(e.target.value);
+      this.setState({ amcosId: 0 });
+    }
+
+    if ([e.target.name] == "amcos") {
+      this.setState({ amcosId: e.target.value });
+    }
   }
 
   handleOnChange = (e) => {
@@ -48,7 +81,13 @@ class AllFarmers extends Component {
 
   searchFromFarmers = () => {
     this.setState({loading:true})
-    let data = {...this.state.formSearch}
+    // let data = {...this.state.formSearch}
+
+    let data = {
+      startDate: this.state.formSearch.startDate,
+      endDate: this.state.formSearch.endDate,
+      amcos: +this.state.amcosId
+    }
 
     console.log(data)
 
@@ -278,17 +317,32 @@ class AllFarmers extends Component {
                 <input onChange={this.handleOnChange} type="date" name="endDate" className="form-control" placeholder="End Date" />
               </div>
               <div className="col-2 phone">
-                <label>Phone Number</label>
-                <input onChange={this.handleOnChange} type="text" name="msisdn" className="form-control" placeholder="Enter Phone Number" />
+                <label>MCU</label>
+                <select className="form-control" name="mcos" onChange={this.handleOnComplexChange}>
+                  <option>--Select MCU--</option>
+                  {
+                    this.state.mcuList.map(row => {
+                      return (
+                        <option value={row.id}>{row.name}</option>
+                      );
+                    })
+                  }
+                </select>
               </div>
               <div className="col-2 amcos">
-                <label>AMCOS Name</label>
-                <input onChange={this.handleOnChange} type="text" name="amcos" className="form-control" placeholder="Enter AMCOS Name" />
+                <label>AMCOS</label>
+                <select className="form-control" name="amcos" onChange={this.handleOnComplexChange}>
+                  <option>--Select AMCOS--</option>
+                  {
+                    this.state.amcosList.map(row => {
+                      return (
+                        <option value={row.id}>{row.name}</option>
+                      );
+                    })
+                  }
+                </select>
               </div>
-              <div className="col-2 memberid">
-                <label>Member Id</label>
-                <input onChange={this.handleOnChange} type="text" name="member" className="form-control" placeholder="Enter Member ID" />
-              </div>
+
               <div className="col-2 d-flex align-items-end">
                 <input onClick={this.searchFromFarmers} className="btn btn-success form-control" value="Search Farmer" />
               </div>
