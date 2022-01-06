@@ -97,7 +97,6 @@ class AddUser extends Component {
         const role = this.state.rolesList.find(item => item.id == id);
         const selectedRoleList = this.state.selectedRoleList.filter(row => row.id != role.id)
         this.setState({ selectedRoleList })
-
     }
     handleChange = event => {
         console.log("am hree")

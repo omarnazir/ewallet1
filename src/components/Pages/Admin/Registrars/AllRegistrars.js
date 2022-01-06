@@ -7,6 +7,7 @@ import ReactDatatable from '@ashvin27/react-datatable';
 import { AuthService, FarmersService,RegistarService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
 import axios from '../../../../services/axios';
+import { SuccessAlert, DeleteAlert } from "../../../Common/AppAlerts";
 
 class AllRegistars extends Component {
   state = {
@@ -42,6 +43,16 @@ class AllRegistars extends Component {
 
   DeleteRegistar=(id)=>{
     axios.delete("/registars/" + id).then(res =>this.getAllRegistars());
+  }
+
+
+  AlertDeleteRegistrar = (id) => {
+    DeleteAlert().then((willDelete) => {
+      if (willDelete) {
+          this.DeleteRegistar(id);
+          SuccessAlert("Deleted Successfully");
+      }
+  });
   }
 
   AddActionButtonStyle = {
@@ -118,7 +129,7 @@ class AllRegistars extends Component {
           return (
             <Fragment>
               <span className="btn badge-success mr-2 px-4" onClick={() => this.EditRegistrar(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-              <span className="btn bg-danger-dark  px-4" onClick={() => this.DeleteRegistar(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+              <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteRegistrar(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
             </Fragment>
           )
         }

@@ -247,7 +247,6 @@ class ManageShopDetails extends Component {
             "id": this.state.editedShop.id
         }
 
-        console.log(body)
         axios.delete("/shop-or-provider/delete/" + body.id)
             .then(res => {
                 this.ViewShopsList();
@@ -318,7 +317,7 @@ class ManageShopDetails extends Component {
             id: this.state.editedShop.id,
             name: this.state.editedShop.name,
             msisdn: this.state.editedShop.msisdn,
-            amcosIDs: this.state.editedShop.amcos
+            amcosIDs: this.state.amcos
         };
         axios.put("/shop-or-provider/update", body).then(res => {
             console.log(res.data);
@@ -357,7 +356,6 @@ class ManageShopDetails extends Component {
             key: "id",
             text: "ID",
             cell: (record, index) => {
-                console.log(record);
                 return index + 1;
             }
         },
@@ -484,7 +482,6 @@ class ManageShopDetails extends Component {
                                             <option>Select AMCOS</option>
                                             {
                                                 this.state.amcosList.map(row => {
-                                                    { console.log(row); }
                                                     return <option value={row.id}>{row.name}</option>;
                                                 })
                                             }
@@ -492,12 +489,16 @@ class ManageShopDetails extends Component {
                                     </div>
 
                                     <div>
-                                        <h5>Selected AMCOS</h5>
-                                        <ul class="list-group">
+                                        <table className="">
+                                            <h5>Selected AMCOS</h5>
                                             {this.state.amcosNames.map((row, i) => {
-                                                return <li class="list-group-item">{i + 1}. {row}</li>;
+                                                return <tr>
+                                                    <td>{i + 1}</td>
+                                                    <td>{row}</td>
+                                                </tr>
+
                                             })}
-                                        </ul>
+                                        </table>
                                     </div>
                                 </ModalBody>
                                 <ModalFooter>
@@ -548,7 +549,6 @@ class ManageShopDetails extends Component {
                                         </tr>
                                         <tr>
                                             <th>AMCOS</th> : {this.state.shopAmcos.map(row => {
-                                                console.log(row);
                                                 return `${row.amcos.name}, `;
                                             })} <td></td>
                                         </tr>

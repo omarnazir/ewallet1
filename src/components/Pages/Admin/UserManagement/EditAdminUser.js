@@ -208,24 +208,33 @@ class EditAdminUser extends Component {
     handlePasswordReset=e=>{
         e.preventDefault()
         this.togglePasswordModal();
-        console.log("am here password reset")
-        console.log(this.state.passwordReset.newPassword);
-        console.log(this.state.passwordReset.newPassword2)
-        console.log(this.state.user.id)
         const userId=this.state.user.id;
-        
-        const data = {...this.state.passwordReset,userId:userId }
+
+        var today = new Date();
+        var numberOfDaysToAdd = 90;
+        var extime = today.setDate(today.getDate() + numberOfDaysToAdd);
+
+        const data = {
+            password: this.state.passwordReset.newPassword,
+            userId: userId,
+            expirationTime: extime 
+        }
         console.log(data)
-        axios.post("/users/admin-password-reset", data).then(res => {
-            console.log(res);
-            console.log(res.data);
-            if(res.data.status=="success"){
-                this.showSweetAlert('success', 'Password Updated Sucessfully')
-                this.ViewUserPage();
-            }else{
-                this.showSweetAlert('info', 'Password Mismatch')
-            } 
-        })        
+        if (this.state.passwordReset.newPassword == this.state.passwordReset.newPassword2) {
+            axios.put("/users/change-password", data).then(res => {
+                console.log(res);
+                console.log(res.data);
+                if (res.data.status == "success") {
+                    this.showSweetAlert('success', 'Password Updated Sucessfully');
+                    this.ViewUserPage();
+                } else {
+                    this.showSweetAlert('info', res.data.message);
+                }
+            }) 
+        } else {
+            this.showSweetAlert('info', "Password do not match");
+
+        }     
     }
 
     deleteCurrentUser(){

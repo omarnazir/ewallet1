@@ -86,12 +86,13 @@ EnableUser=(row)=>{
 }
 
 deleteCurrentUser(row){
-  axios.delete("/users/"+ row.id).then(res => {
+  axios.delete("/users/delete/"+ row.id).then(res => {
       console.log(res);
       this.showSweetAlert('success','User deleted Sucessfully')
       this.GetAllUser();
   })
 }
+
 
 AlertDeleteItem(row) {
   DeleteAlert().then((willDelete) => {
