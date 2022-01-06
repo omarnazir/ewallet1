@@ -142,8 +142,8 @@ class AdminWallet extends Component {
             <small>Manage payments.</small>
           </div>
           <div className="flex-row d-block d-md-flex">
-            <span className="btn badge-success mr-2 px-4" onClick={this.ViewMakePaymentPage} >Make Payment</span>
-            <span className="btn badge-success mr-2 px-4" onClick={this.ViewApprovePaymentPage} >Approve Payment</span>
+            {/* <span className="btn badge-success mr-2 px-4" onClick={this.ViewMakePaymentPage} >Make Payment</span>
+            <span className="btn badge-success mr-2 px-4" onClick={this.ViewApprovePaymentPage} >Approve Payment</span> */}
           </div>
         </div>
         <Container fluid>
