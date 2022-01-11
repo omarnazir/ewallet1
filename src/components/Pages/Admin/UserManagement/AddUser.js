@@ -17,7 +17,7 @@ import {
 import $ from "jquery";
 
 import FormValidator from '../../../Common/FormValidator';
-import axios from '../../../../services/axios'
+import axios from '../../../../services/axios';
 import Moment from "moment";
 
 class AddUser extends Component {
@@ -33,29 +33,48 @@ class AddUser extends Component {
             phonenumber: "",
             monthlysmslimit: 0,
             settings: false,
-            accountExpiration:""
-
+            accountExpiration: "",
+            userTypeId: 0
         },
         rolesList: [],
         description: "",
         selectedRoleList: [],
         role: "",
         roleId: 0,
-        roleDescription: ""
-    }
+        roleDescription: "",
+        userTypeList: []
+    };
 
     componentDidMount() {
         axios.get("/roles")
             .then(res => {
                 const response = res.data;
-                this.setState({ rolesList: response })
-            })
+                this.setState({ rolesList: response });
+            });
+        this.GetAllUserTypes();
 
-        console.log(this.state.rolesList)
     }
+
+
+
+    GetAllUserTypes = () => {
+        axios.get("/manage-roles/user-types").then(res => {
+            const userTypeList = res.data;
+            this.setState({ userTypeList });
+        });
+    };
+
+    userTypeChange = (event) => {
+        this.setState({
+            formRegister: Object.assign({},
+                this.state.formRegister, { [event.target.name]: event.target.value })
+        });
+        console.log(this.state.formRegister.userTypeId);
+    };
+
     validateOnChange = event => {
         const input = event.target;
-        const form = input.form
+        const form = input.form;
         const value = input.type === 'checkbox' ? input.checked : input.value;
 
         const result = FormValidator.validate(input);
@@ -72,49 +91,49 @@ class AddUser extends Component {
                 }
             });
         }
-    }
+    };
 
     handleSubmit = event => {
         this.toggleModal();
-        event.preventDefault()
+        event.preventDefault();
 
-        console.log(event.target.value)
+        console.log(event.target.value);
         const roleId = this.state.roleId;
         const role = this.state.rolesList.find(item => item.id == roleId);
         const found = this.state.selectedRoleList.find((row) => row.id == roleId);
 
         if (found == undefined) {
-            const selectedRoleList = [...this.state.selectedRoleList, role]
-            this.setState({ selectedRoleList })
+            const selectedRoleList = [...this.state.selectedRoleList, role];
+            this.setState({ selectedRoleList });
         }
-        console.log(this.state.roleId)
-        console.log(this.state.role)
-        console.log(this.state.description)
+        console.log(this.state.roleId);
+        console.log(this.state.role);
+        console.log(this.state.description);
 
-    }
+    };
 
     DeleteUserRole = (id) => {
         const role = this.state.rolesList.find(item => item.id == id);
-        const selectedRoleList = this.state.selectedRoleList.filter(row => row.id != role.id)
-        this.setState({ selectedRoleList })
-    }
+        const selectedRoleList = this.state.selectedRoleList.filter(row => row.id != role.id);
+        this.setState({ selectedRoleList });
+    };
     handleChange = event => {
-        console.log("am hree")
+        console.log("am hree");
         this.setState({ [event.target.name]: event.target.value });
-    }
+    };
     formatDate = (date) => {
         //07/19/2021 10:49:10
         // YYYY-MM-DD HH:mm:ss
-        return Moment(date).format('MM/DD/YYYY HH:mm:ss')
-      }
+        return Moment(date).format('MM/DD/YYYY HH:mm:ss');
+    };
 
 
     onSubmit = e => {
-        e.preventDefault()
+        e.preventDefault();
         const form = e.target;
-        const inputs = [...form.elements].filter(i => ['INPUT', 'SELECT'].includes(i.nodeName))
+        const inputs = [...form.elements].filter(i => ['INPUT', 'SELECT'].includes(i.nodeName));
 
-        const { errors, hasError } = FormValidator.bulkValidate(inputs)
+        const { errors, hasError } = FormValidator.bulkValidate(inputs);
 
         this.setState({
             [form.name]: {
@@ -123,57 +142,59 @@ class AddUser extends Component {
             }
         });
 
-        console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
+        console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!');
 
-        console.log(this.state.selectedRoleList)
+        console.log(this.state.selectedRoleList);
 
 
         const UserRoles = [];
         this.state.selectedRoleList.forEach(item => {
-            const newItem = { role_id: item.id }
-            UserRoles.push(newItem)
+            const newItem = { role_id: item.id };
+            UserRoles.push(newItem);
         });
 
 
         if (!hasError) {
-            const accountExpiration=this.formatDate(this.state.formRegister.accountExpiration);
+            const accountExpiration = this.formatDate(this.state.formRegister.accountExpiration);
             const User = {
                 "username": this.state.formRegister.username,
                 "email": this.state.formRegister.email,
                 "password": this.state.formRegister.password,
                 "name": this.state.formRegister.fullname,
                 "msisdn": this.state.formRegister.phonenumber,
-                "accountExpiration":accountExpiration
-            }
+                "accountExpiration": accountExpiration,
+            };
 
-            console.log(this.formatDate(this.state.formRegister.accountExpiration))
-            console.log(User)
+            console.log(this.formatDate(this.state.formRegister.accountExpiration));
+            console.log(User);
 
-            const data = { user:User,role_ids:UserRoles }
-            console.log(data)
+            const data = { "user": User, "userTypeId": +this.state.formRegister.userTypeId };
+            console.log(data);
 
 
             axios.post("users/admin", data).then(res => {
                 console.log(res);
                 console.log(res.data);
                 this.ViewUserPage();
+            }).catch(err=> {
+                console.log(err)
             })
         }
-    }
+    };
 
     toggleModal = () => {
         this.setState({
             modal: !this.state.modal
         });
-    }
+    };
 
     handleSmsTemplateChange = event => {
-        const templateId = event.target.value
+        const templateId = event.target.value;
         const template = this.state.rolesList.find(item => item.id == templateId);
-        this.setState({ role: template.name })
-        this.setState({ description: template.description })
-        this.setState({ roleId: template.id })
-    }
+        this.setState({ role: template.name });
+        this.setState({ description: template.description });
+        this.setState({ roleId: template.id });
+    };
 
 
     /* Simplify error check */
@@ -181,17 +202,17 @@ class AddUser extends Component {
         return this.state[formName] &&
             this.state[formName].errors &&
             this.state[formName].errors[inputName] &&
-            this.state[formName].errors[inputName][method]
-    }
+            this.state[formName].errors[inputName][method];
+    };
 
     ViewAllAdminUsers = () => {
-        return this.props.history.push('/admin-manage-users')
-    }
+        return this.props.history.push('/admin-manage-users');
+    };
 
     AddActionButtonStyle = {
         color: 'white',
         background: "#003366"
-    }
+    };
 
     ViewUserPage = () => {
         return this.props.history.push("/admin-manage-users");
@@ -204,7 +225,7 @@ class AddUser extends Component {
                 <div className="content-heading">
                     <div className="mr-auto flex-row">
                         Create Admin User
-                     <small>Adding a new user.</small>
+                        <small>Adding a new user.</small>
                     </div>
                     <div className="flex-row">
                         <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2"><span className="fa fa-key mr-2"></span> Add Role</Button>
@@ -240,7 +261,7 @@ class AddUser extends Component {
                                 <ModalFooter>
                                     <button className="btn btn-sm btn-success mr-3  px-5" type="submit">
                                         Add Role
-                    </button>
+                                    </button>
                                 </ModalFooter>
                             </form>
                         </Modal>
@@ -355,8 +376,33 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
+                                                    <label className="col-form-label">User Role *</label>
+                                                    <select
+                                                        name="userTypeId"
+                                                        type="text"
+                                                        className="form-control"
+                                                        invalid={this.hasError('formRegister', 'userTypeId', 'required')}
+                                                        onChange={this.userTypeChange}
+                                                        data-validate='["required"]'
+                                                        value={this.state.formRegister.userTypeId}
+                                                    >
+                                                        <option>--Select user role--</option>
+                                                        {
+                                                            this.state.userTypeList.map(row => {
+                                                                return <option value={row.id}>{row.name}</option>;
+                                                            })
+                                                        }
+                                                    </select>
+                                                    <span className="invalid-feedback">Role name is required</span>
+
+
+                                                </div>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <div className="form-group">
                                                     <label className="col-form-label">Account Expiration *</label>
-                                                    <Input 
+                                                    <Input
                                                         name="accountExpiration"
                                                         type="date"
                                                         invalid={this.hasError('formRegister', 'accountExpiration', 'required')}
@@ -365,11 +411,11 @@ class AddUser extends Component {
                                                         value={this.state.formRegister.accountExpiration}
                                                     />
                                                     <span className="invalid-feedback">Account expiration is required</span>
-                                                  
+
 
                                                 </div>
                                             </div>
-                                            </div>
+                                        </div>
 
                                         {/* <input className="form-control" name="scheduledTime" type="datetime-local" onChange={this.handleChangeDate}></input> */}
 
@@ -392,7 +438,7 @@ class AddUser extends Component {
                                                         <td>
                                                             <span className="btn bg-danger-dark" onClick={() => this.DeleteUserRole(row.id)}>
                                                                 <i className="icon-trash mr-2"></i>
-                                                                     Delete</span>
+                                                                Delete</span>
                                                         </td>
                                                     </tr>
                                                 ))}

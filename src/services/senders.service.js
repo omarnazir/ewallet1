@@ -45,8 +45,8 @@ export class SenderIdService {
 
     
     logout() {
-        const id=window.localStorage.getItem("userId");
-        return axios.get("/auth/logout/"+id).then(res => {
+        // const id=window.localStorage.getItem("userId");
+        return axios.get("/users/logout").then(res => {
             if (res.data) {
                 window.localStorage.removeItem("token");
                 window.localStorage.removeItem("user");

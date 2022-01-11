@@ -84,6 +84,7 @@ import ManageOrderDetails from '../components/Pages/Admin/Orders/OrderDetails';
 import MakePayement from '../components/Pages/Admin/Wallet/MakePayment';
 import ManageShopDetails from '../components/Pages/Admin/Shop/ShopDetails';
 import PaymentBatches from '../components/Pages/Admin/Wallet/PaymentBatches';
+import ManageUserType from '../components/Pages/Admin/Settings/ManageUserTypes';
 
 
 const waitFor = Tag => props => <Tag {...props} />;
@@ -192,6 +193,7 @@ const Routes = ({ location }) => {
                                    {/* System Settings */}
                                    <Route path="/admin-manage-mail" component={waitFor(ManageEmail)}/>
                                     <Route path="/admin-manage-roles" component={waitFor(ManageRole)}/>
+                                    <Route path="/admin-manage-usertypes" component={waitFor(ManageUserType)} />
                                     <Route path="/admin-manage-smsc" component={waitFor(ManageSmsc)}/>
                                     {/* <Route path="/admin-sms-log" component={waitFor(SmsLogs)} /> */}
                                     <Route path="/admin-mobile-operators" component={waitFor(MobileOperator)} />

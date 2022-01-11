@@ -162,12 +162,12 @@ const Menu = [
                 translate: 'sidebar.nav.setup.CROPS',
                 path: '/admin-manage-roles'
             },
-            // {
-            //     name: 'Mobile Operators',
-            //     icon: "icon-arrow-right",
-            //     translate: 'Crop Prices',
-            //     path: '/admin-mobile-operators'
-            // },
+            {
+                name: 'Manage user types',
+                icon: "icon-arrow-right",
+                translate: 'Crop Prices',
+                path: '/admin-manage-usertypes'
+            },
             // {
             //     name:"Manage SMSC",
             //     path:"/admin-manage-smsc",

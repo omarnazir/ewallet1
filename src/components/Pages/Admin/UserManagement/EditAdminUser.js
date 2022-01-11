@@ -18,25 +18,26 @@ import {
     Row, Col, Input, CardFooter, CustomInput
 } from "reactstrap";
 import $ from "jquery";
-import Swal from "sweetalert2"
-const MySwal = withReactContent(Swal)
-import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2";
+const MySwal = withReactContent(Swal);
+import withReactContent from 'sweetalert2-react-content';
 import FormValidator from '../../../Common/FormValidator';
-import axios from '../../../../services/axios'
+import axios from '../../../../services/axios';
 
 class EditAdminUser extends Component {
 
 
     state = {
         formRegister: {
-            id:0,
+            id: 0,
             fullname: "",
             username: "",
             msisdn: "",
             status: "",
-            email:"",
-            accountExpiration: ""
+            email: "",
+            accountExpiration: "",
         },
+        userTypeFk: 0,
         passwordReset: {
             userId: "",
             newPassword: "",
@@ -47,61 +48,51 @@ class EditAdminUser extends Component {
         roles: [],
         rolesList: [],
         passwordModal: false,
-        id:0
-    }
+        id: 0
+    };
     componentDidMount() {
         const { state } = this.props.history.location;
-        console.log(state)
+        // console.log(state)
         if (state == undefined) {
             return this.props.history.push('/admin-customers-list/')
         }
 
-        let url = "";
-        if (state.roleName == "ADMIN") {
-            url = "/roles";
-        }
-        else if (state.roleName == "CUSTOMER_ADMIN") {
-            url = "roles/customer-admin";
-        }
-        else {
-            url = "roles";
-        }
-        this.setState({...this.state.passwordReset,userId:state.id})
-        this.setState({id:state.id})
-        axios.get(url)
-            .then(res => {
-                const response = res.data;
-                this.setState({ rolesList: response })
-            })
-            this.setState({
-                formRegister: Object.assign({}, this.state.formRegister, {
-                    id: state.id,
-                }),
-            });
+        // let url = "";
+        // if (state.roleName == "ADMIN") {
+        //     url = "/roles";
+        // }
+        // else if (state.roleName == "CUSTOMER_ADMIN") {
+        //     url = "roles/customer-admin";
+        // }
+        // else {
+        //     url = "roles";
+        // }
+        this.setState({ ...this.state.passwordReset, userId: state.id });
+        // this.setState({id:state.id})
+
+        this.setState({
+            formRegister: Object.assign({}, this.state.formRegister, {
+                // id: state.id,
+            }),
+        });
         axios.get("/users/" + state.id)
             .then(res => {
                 const user = res.data;
 
-                console.log(user)
-                console.log(res.data)
-                console.log(user.name)
+                console.log(user);
+                console.log(res.data);
+                console.log(user.name);
 
-                // [form.name]: {
-                //     ...this.state[form.name],
-                //     [input.name]: value,
-
-                // this.setState({formRegister:{...this.state.formRegister,}})
-                // this.setState({ ...this.state.formRegister, fullname: user.name })
-              
-                // this.setState({
-                //     passwordReset:Object.assign({},this.state.passwordReset,{
-                //         userId:user.id
-                //     })
-                // })
+                this.setState({userTypeFk: user.userType.id})
 
                 this.setState({
                     formRegister: Object.assign({}, this.state.formRegister, {
                         fullname: state.name,
+                    }),
+                });
+                this.setState({
+                    formRegister: Object.assign({}, this.state.formRegister, {
+                        id: state.id,
                     }),
                 });
                 this.setState({
@@ -129,13 +120,22 @@ class EditAdminUser extends Component {
                 });
 
                 const roles = res.data.roles;
-                this.setState({ roles })
-                this.setState({ user })
-            })
+                this.setState({ roles });
+                this.setState({ user });
+            });
     }
+
+    GetRolesByUserType = (userType) => {
+        axios.get("/manage-roles/roles/"+userType.id)
+            .then(res => {
+                const response = res.data;
+                this.setState({ rolesList: response });
+            });
+    };
+
     validateOnChange = event => {
         const input = event.target;
-        const form = input.form
+        const form = input.form;
         const value = input.type === 'checkbox' ? input.checked : input.value;
 
         const result = FormValidator.validate(input);
@@ -152,7 +152,7 @@ class EditAdminUser extends Component {
                 }
             });
         }
-    }
+    };
 
 
     ViewUserPage = () => {
@@ -163,38 +163,38 @@ class EditAdminUser extends Component {
         this.setState({
             passwordReset: Object.assign({},
                 this.state.passwordReset, { [event.target.name]: event.target.value })
-        })
-    }
+        });
+    };
 
     handleSmsTemplateChange = event => {
-        const templateId = event.target.value
+        const templateId = event.target.value;
         const template = this.state.rolesList.find(item => item.id == templateId);
-        this.setState({ role: template.name })
-        this.setState({ description: template.description })
-        this.setState({ roleId: template.id })
-    }
+        this.setState({ role: template.name });
+        this.setState({ description: template.description });
+        this.setState({ roleId: template.id });
+    };
 
 
     handleSubmit = event => {
         this.toggleModal();
-        event.preventDefault()
+        event.preventDefault();
 
-        console.log(event.target.value)
+        console.log(event.target.value);
         const roleId = this.state.roleId;
         const role = this.state.rolesList.find(item => item.id == roleId);
         const found = this.state.roles.find((row) => row.id == roleId);
 
         if (found == undefined) {
-            const selectedRoleList = [...this.state.roles, role]
-            this.setState({ roles: selectedRoleList })
+            const selectedRoleList = [...this.state.roles, role];
+            this.setState({ roles: selectedRoleList });
         }
-        console.log(this.state.roleId)
-        console.log(this.state.role)
-        console.log(this.state.description)
+        console.log(this.state.roleId);
+        console.log(this.state.role);
+        console.log(this.state.description);
 
-    }
+    };
 
-    showSweetAlert(icon,title) {
+    showSweetAlert(icon, title) {
         return MySwal.fire({
             position: 'center',
             icon: icon,
@@ -202,13 +202,13 @@ class EditAdminUser extends Component {
             text: "",
             showConfirmButton: false,
             timer: 2000
-        })
+        });
     }
 
-    handlePasswordReset=e=>{
-        e.preventDefault()
+    handlePasswordReset = e => {
+        e.preventDefault();
         this.togglePasswordModal();
-        const userId=this.state.user.id;
+        const userId = this.state.user.id;
 
         var today = new Date();
         var numberOfDaysToAdd = 90;
@@ -217,9 +217,9 @@ class EditAdminUser extends Component {
         const data = {
             password: this.state.passwordReset.newPassword,
             userId: userId,
-            expirationTime: extime 
-        }
-        console.log(data)
+            expirationTime: extime
+        };
+        console.log(data);
         if (this.state.passwordReset.newPassword == this.state.passwordReset.newPassword2) {
             axios.put("/users/change-password", data).then(res => {
                 console.log(res);
@@ -230,28 +230,28 @@ class EditAdminUser extends Component {
                 } else {
                     this.showSweetAlert('info', res.data.message);
                 }
-            }) 
+            });
         } else {
             this.showSweetAlert('info', "Password do not match");
 
-        }     
-    }
+        }
+    };
 
-    deleteCurrentUser(){
-        const userId=this.state.id;
-        axios.post("users/delete/"+ userId).then(res => {
+    deleteCurrentUser() {
+        const userId = this.state.id;
+        axios.post("users/delete/" + userId).then(res => {
             console.log(res);
-            this.showSweetAlert('success','User deleted Sucessfully')
+            this.showSweetAlert('success', 'User deleted Sucessfully');
             this.ViewUserPage();
-        })
+        });
     }
 
     onSubmit = e => {
-        e.preventDefault()
+        e.preventDefault();
         const form = e.target;
-        const inputs = [...form.elements].filter(i => ['INPUT', 'SELECT'].includes(i.nodeName))
+        const inputs = [...form.elements].filter(i => ['INPUT', 'SELECT'].includes(i.nodeName));
 
-        const { errors, hasError } = FormValidator.bulkValidate(inputs)
+        const { errors, hasError } = FormValidator.bulkValidate(inputs);
 
         this.setState({
             [form.name]: {
@@ -260,78 +260,79 @@ class EditAdminUser extends Component {
             }
         });
 
-        console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
-        
+        console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!');
+
         if (!hasError) {
             const User = {
+                "id": this.state.formRegister.id,
                 "name": this.state.formRegister.fullname,
-                "username": this.state.formRegister.username,
+                // "username": this.state.formRegister.username,
                 "msisdn": this.state.formRegister.msisdn,
                 "accountExpiration": new Date(this.state.formRegister.accountExpiration).toLocaleDateString('en-CA') + " 00:00:00"
-            }
+            };
 
-            const UserRoles = [];
-            this.state.roles.forEach(item => {
-                const newItem = { role_id: item.id }
-                UserRoles.push(newItem)
-            });
+            // const UserRoles = [];
+            // this.state.roles.forEach(item => {
+            //     const newItem = { role_id: item.id };
+            //     UserRoles.push(newItem);
+            // });
 
 
 
-            let data = { id: User.id, user: User, role_ids: UserRoles };
-            console.log(data)
+            let data = { id: User.id, user: User };
+            console.log(data);
 
-            console.log(data)
+            console.log(data);
 
 
             axios.put("users/admin/edit", data).then(res => {
                 console.log(res.data);
                 this.ViewUserPage();
             }).catch(err => {
-                console.log((err))
-            })
+                console.log((err));
+            });
         }
-    }
+    };
 
     hasError = (formName, inputName, method) => {
         return this.state[formName] &&
             this.state[formName].errors &&
             this.state[formName].errors[inputName] &&
-            this.state[formName].errors[inputName][method]
-    }
+            this.state[formName].errors[inputName][method];
+    };
 
 
     toggleModal = () => {
         this.setState({
             modal: !this.state.modal
         });
-    }
+    };
 
     togglePasswordModal = () => {
         this.setState({
             passwordModal: !this.state.passwordModal
         });
-    }
+    };
 
     ViewAllAdminUsers = () => {
-        return this.props.history.push('/admin-manage-users')
-    }
+        return this.props.history.push('/admin-manage-users');
+    };
 
     AddActionButtonStyle = {
         color: 'white',
         background: "#003366"
-    }
-    DeleteActionButtonStyle={
+    };
+    DeleteActionButtonStyle = {
         color: 'white',
-        background: "#ec2121" 
-    }
+        background: "#ec2121"
+    };
 
     DeleteUserRole = (id) => {
         const role = this.state.roles.find(item => item.id == id);
-        const selectedRoleList = this.state.roles.filter(row => row.id != role.id)
-        this.setState({ roles: selectedRoleList })
+        const selectedRoleList = this.state.roles.filter(row => row.id != role.id);
+        this.setState({ roles: selectedRoleList });
 
-    }
+    };
 
     render() {
         let index = 0;
@@ -343,12 +344,12 @@ class EditAdminUser extends Component {
                         <small>Updating user details</small>
                     </div>
                     <div className="flex-row">
-                    {/* <Button onClick={this.deleteCurrentUser}  style={this.DeleteActionButtonStyle}   className="btn-pill-right mr-2">Delete Account</Button> */}
+                        {/* <Button onClick={this.deleteCurrentUser}  style={this.DeleteActionButtonStyle}   className="btn-pill-right mr-2">Delete Account</Button> */}
                         <Button onClick={this.togglePasswordModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Password Reset</Button>
-                        <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add Role</Button>
+                        {/* <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">Add Role</Button> */}
                         <Button onClick={this.ViewAllAdminUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
 
-                        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+                        {/* <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
                             <ModalHeader toggle={this.toggleModal}>Add Role : </ModalHeader>
                             <form onSubmit={this.handleSubmit}>
                                 <ModalBody>
@@ -382,7 +383,7 @@ class EditAdminUser extends Component {
                                     </button>
                                 </ModalFooter>
                             </form>
-                        </Modal>
+                        </Modal> */}
 
 
                         <Modal isOpen={this.state.passwordModal} toggle={this.togglePasswordModal}>
@@ -444,7 +445,7 @@ class EditAdminUser extends Component {
                                                     <label className="col-form-label">Username *:</label>
                                                     <Input type="text"
                                                         name="username"
-
+                                                        disabled
                                                         invalid={this.hasError('formRegister', 'username', 'required')}
                                                         onChange={this.validateOnChange}
                                                         data-validate='["required"]'
@@ -485,10 +486,10 @@ class EditAdminUser extends Component {
                                                         <span className="invalid-feedback">Valid phone number is required</span>}
                                                 </div>
                                             </div>
-                                            
-                                        </div> 
 
-                          
+                                        </div>
+
+
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
@@ -507,7 +508,7 @@ class EditAdminUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Account Expiration *</label>
-                                                    <Input 
+                                                    <Input
                                                         name="accountExpiration"
                                                         type="date"
                                                         invalid={this.hasError('formRegister', 'accountExpiration', 'required')}
@@ -516,18 +517,18 @@ class EditAdminUser extends Component {
                                                         value={this.state.formRegister.accountExpiration}
                                                     />
                                                     <span className="invalid-feedback">Account expiration is required</span>
-                                                  
+
 
                                                 </div>
                                             </div>
 
                                         </div>
-                                       
-                                     
+
+
                                         <div className="row">
 
                                             {/* <h4 className="text-center"><strong>User Roles</strong></h4> */}
-                                            <table className="table table-striped my-4 w-100">
+                                            {/* <table className="table table-striped my-4 w-100">
                                                 <thead>
                                                     <tr>
                                                         <th data-priority="1">ID</th>
@@ -551,7 +552,7 @@ class EditAdminUser extends Component {
                                                     ))}
 
                                                 </tbody>
-                                            </table>
+                                            </table> */}
 
 
                                         </div>

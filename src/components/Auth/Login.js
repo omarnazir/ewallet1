@@ -83,7 +83,7 @@ class Login extends Component {
                      this.ViewTokenPage();
                     */
                    
-                    const roles=res.user.roles;
+                    const roles=res.roles;
                     if (roles == null || !Array.isArray(roles)) {
                         this.setState({redirect: '/login'});
                         
@@ -97,7 +97,7 @@ class Login extends Component {
                            
                         }
                     }
-                    window.location.reload();
+                    // window.location.reload();
 
                 }, (err) => {
                     if(err.response !=undefined){

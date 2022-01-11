@@ -15,9 +15,9 @@ class AuthService {
                 window.localStorage.setItem('user', res.data.user)
                 window.localStorage.setItem('userId',res.data.user.id)
                 window.localStorage.setItem('username', JSON.stringify(res.data.user.username));
-                window.localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
-                console.log(res.data.user.roles)
-                window.localStorage.setItem('user_plain_roles', res.data.user.roles)
+                window.localStorage.setItem('user_roles', JSON.stringify(res.data.roles));
+                console.log(res.data.roles)
+                window.localStorage.setItem('user_plain_roles', res.data.roles)
             }
             return res.data;
         })
@@ -50,10 +50,12 @@ class AuthService {
                 window.localStorage.setItem('user', res.data.user)
                 window.localStorage.setItem('userId',res.data.user.id)
                 window.localStorage.setItem('username', JSON.stringify(res.data.user.username));
-                window.localStorage.setItem('user_roles', JSON.stringify(res.data.user.roles))
+                window.localStorage.setItem('user_roles', JSON.stringify(res.data.roles))
                 console.log(res.data.user.roles)
-                window.localStorage.setItem('user_plain_roles', res.data.user.roles)
+                window.localStorage.setItem('user_plain_roles', res.data.roles)
             }
+
+            console.log(res.data)
             return res.data;
         })
     }
@@ -133,7 +135,7 @@ class AuthService {
 
     logout() {
         const id=window.localStorage.getItem("userId");
-        return axios.get(API_URL +"/auth/logout/"+id).then(res => {
+        return axios.get(API_URL +"/users/logout").then(res => {
             if (res.data) {
                 window.localStorage.removeItem("token");
                 window.localStorage.removeItem("user");
