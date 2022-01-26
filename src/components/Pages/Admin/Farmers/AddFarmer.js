@@ -257,6 +257,8 @@ class AddFarmer extends Component {
         background: "#003366"
     }
 
+
+
     render() {
         return (
             <ContentWrapper>

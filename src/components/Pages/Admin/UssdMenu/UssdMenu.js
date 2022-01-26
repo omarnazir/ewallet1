@@ -55,14 +55,17 @@ class UssdMenu extends Component {
   DeleteMenu=(id)=>{
     axios.delete("/ussd-menus/" +id)
     .then(res => {
-      const ussdMenuList = this.state.ussdMenuList.filter((item) => {
-        return item.id !== id;
+     const ussdMenuList = this.state.ussdMenuList.filter((item) => {
+        
+        return item.id !== id
+    
+        
     });
     this.setState({ ussdMenuList });
   })
   }
 
-
+  
 
   AddActionButtonStyle = {
     color: 'white',
@@ -125,9 +128,10 @@ class UssdMenu extends Component {
       cell: (record, index) => {
         return (
           <Fragment>
+          <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={() => this.ViewUsedDetails(record)}> <i className="fa fa-eye mr-2"></i>View</span>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
             <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
-            <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={() => this.ViewUsedDetails(record)}> <i className="fa fa-eye mr-2"></i>View</span>
+            
           </Fragment>
         )
       }

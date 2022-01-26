@@ -20,6 +20,8 @@ import "./Vendor";
 // Application Styles
 import './styles/bootstrap.scss';
 import './styles/app.scss'
+import './style/registerfamer.css';
+
 
 class App extends Component {
 
