@@ -14,6 +14,8 @@ class UssdMenu extends Component {
     loading:true
   };
 
+  
+
   componentDidMount() {
     const isAuthenticated = AuthService.isAuthenticated();
     if (!isAuthenticated) {
@@ -58,7 +60,12 @@ class UssdMenu extends Component {
      const ussdMenuList = this.state.ussdMenuList.filter((item) => {
         
         return item.id !== id
-    
+
+        //for handling duplicate value
+      /*  if(item.id===id){
+          window.alert('You have already added this....');
+          return;
+        }*/
         
     });
     this.setState({ ussdMenuList });
@@ -128,7 +135,7 @@ class UssdMenu extends Component {
       cell: (record, index) => {
         return (
           <Fragment>
-          <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={() => this.ViewUsedDetails(record)}> <i className="fa fa-eye mr-2"></i>View</span>
+          <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={( ) => this.ViewUsedDetails(record)}> <i className="fa fa-eye mr-2"></i>View</span>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
             <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
             
@@ -136,9 +143,7 @@ class UssdMenu extends Component {
         )
       }
     }
-
   ];
-
 
   render() {
     if (this.state.redirect) {
