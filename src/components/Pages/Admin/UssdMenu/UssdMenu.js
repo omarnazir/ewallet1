@@ -48,7 +48,7 @@ class UssdMenu extends Component {
 
   EditUssdMenu=(row)=>{
     return this.props.history.push('/admin-edit-ussdmenu/' + row.id, row.id)
-  }
+  } 
 
   AddUssdMenu=()=>{
     return this.props.history.push("/admin-add-ussdmenu");
@@ -61,12 +61,7 @@ class UssdMenu extends Component {
         
         return item.id !== id
 
-        //for handling duplicate value
-      /*  if(item.id===id){
-          window.alert('You have already added this....');
-          return;
-        }*/
-        
+      
     });
     this.setState({ ussdMenuList });
   })
@@ -84,10 +79,10 @@ class UssdMenu extends Component {
     length_menu: [10, 25, 50],
     show_filter: true,
     show_pagination: true,
-    pagination: 'advance',
     filename: "Contact List",
     button: {
 
+    
     },
     language: {
       loading_text: "Please be patient while data loads..."
@@ -138,7 +133,6 @@ class UssdMenu extends Component {
           <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={( ) => this.ViewUsedDetails(record)}> <i className="fa fa-eye mr-2"></i>View</span>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
             <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
-            
           </Fragment>
         )
       }

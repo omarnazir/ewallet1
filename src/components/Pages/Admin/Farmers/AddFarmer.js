@@ -1,3 +1,4 @@
+/** 
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import { Link, Redirect } from 'react-router-dom';
@@ -239,8 +240,9 @@ class AddFarmer extends Component {
         });
     }
 
-
+*/
     /* Simplify error check */
+    /* 
     hasError = (formName, inputName, method) => {
         return this.state[formName] &&
             this.state[formName].errors &&
@@ -651,6 +653,7 @@ class AddFarmer extends Component {
                                     <div className="ml-auto">
                                         <button className="btn btn-danger px-5 mr-2" onClick={this.ViewAllFarmers}>Cancel</button>
                                         <button type="submit" style={this.AddActionButtonStyle} className="btn btn-primary px-5">Save</button>
+                                        
                                     </div>
                                 </div>
                             </CardFooter>
@@ -663,3 +666,4 @@ class AddFarmer extends Component {
 }
 
 export default AddFarmer;
+*/ 

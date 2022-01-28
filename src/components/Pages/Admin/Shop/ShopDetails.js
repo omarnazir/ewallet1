@@ -378,6 +378,7 @@ class ManageShopDetails extends Component {
                 return (
                     <Fragment>
                         {/* <span className="btn bg-success  mr-4" onClick={() => this.EditAgriculturalInputMode(record.id)}> <i className="icon-pencil mr-2"></i></span> */}
+                        <span className="btn bg-danger-dark " onClick={() => this.AlertDeletePembejeo(record.id)}> <i className="fa fa-trash">Delete Pembejeo</i></span>
                         <span className="btn bg-danger-dark " onClick={() => this.AlertDeletePembejeo(record.id)}> <i className="fa fa-trash"></i></span>
                     </Fragment>
                 );

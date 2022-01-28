@@ -601,7 +601,8 @@ class EditFarmer extends Component {
 
                                 <Row className="mt-3">
                                     <Col md={12}>
-                                        <h5 className="text-uppercase font-weight-600">Membership Information</h5>
+                                        <h5 className="text-uppercase font-weight-600">Membership Information </h5>
+                        
                                     </Col>
                                 </Row>
 

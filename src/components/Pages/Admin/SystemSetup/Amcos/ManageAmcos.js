@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ContentWrapper from "../../../../Layout/ContentWrapper";
 import axios from "../../../../../services/axios";
+
 import {
     Container, Card, CardHeader, CardBody, CardTitle, Button, Modal,
     ModalHeader,
@@ -228,6 +229,7 @@ class ManageAmcos extends Component {
                         AMCOS
                         <small>Manage Amcos.</small>
                     </div>
+    
                     <div className="flex-row">
                         <Button onClick={this.AddAmcos} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">
                             <i className="fa fa-plus mr-2"></i>

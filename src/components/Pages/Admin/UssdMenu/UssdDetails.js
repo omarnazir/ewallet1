@@ -7,6 +7,7 @@ import ReactDatatable from '@ashvin27/react-datatable';
 import { AuthService, UssdMenuService } from '../../../../services';
 import { Redirect } from 'react-router-dom';
 import axios from '../../../../services/axios'
+import { SuccessAlert, DeleteAlert } from "../../../Common/AppAlerts";
 
 class UssdDetails extends Component {
   state = {
@@ -74,6 +75,16 @@ class UssdDetails extends Component {
       });
       this.setState({ ussdMenuList });
   })
+  }
+
+
+  AlertDeleteUssdMenu = (id) => {
+    DeleteAlert().then(willDelete=>{
+      if(willDelete){
+        this.DeleteMenu(id)
+        SuccessAlert("Successfully Deleted")
+      }
+    })
   }
 
 
@@ -147,7 +158,7 @@ class UssdDetails extends Component {
         return (
           <Fragment>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-            <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.AlertDeleteUssdMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
           </Fragment>
         )
       }

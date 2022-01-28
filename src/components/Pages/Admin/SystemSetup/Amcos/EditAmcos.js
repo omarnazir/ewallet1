@@ -93,6 +93,8 @@ class EditAmcos extends Component {
         axios.get("/regions").then(res => { this.setState({ regions: res.data }) })
     }
 
+ 
+
     getAllDistrictsByRegion(id) {
         axios.get("/regions/" + id + "/districts").then(res => { this.setState({ districts: res.data }) })
     }

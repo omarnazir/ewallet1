@@ -31,9 +31,14 @@ class AddAmcos extends Component {
         amcos: [],
         crops: [],
         registrars: [],
-        mcos: []
+        mcos: [],
+        //Added this 
+        searchString: "",
+        filtered: []
+
 
     }
+     
 
     componentDidMount() {
         this.getAllRegions();
@@ -312,6 +317,7 @@ class AddAmcos extends Component {
                                 <div className="ml-auto">
                                     <button className="btn btn-danger px-5 mr-2" onClick={this.ViewAllAmcos}>Cancel</button>
                                     <button type="submit" style={this.AddActionButtonStyle} className="btn btn-primary px-5">Save</button>
+                                                                       
                                 </div>
                             </div>
                         </CardFooter>

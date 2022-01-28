@@ -94,7 +94,7 @@ class TwofaToken extends Component {
                     // const redirect=AuthService.getRedirectPath();
                     // this.setState({redirect});
 
-                    window.location.reload();
+                            window.location.reload();
                 }, (err) => {
                     console.log(err.response.data.message);
                     this.setState({ loginHasError: true })
