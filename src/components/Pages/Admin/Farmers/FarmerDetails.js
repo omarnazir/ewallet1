@@ -44,6 +44,7 @@ class FarmerDetails extends Component {
             registrationDate: Date.now(),
             hamlet: "",
             registrarName:"",
+            memberID: "",
 
             district: {},
             region: {}
@@ -99,6 +100,7 @@ class FarmerDetails extends Component {
                 this.setState({ farmer: { ...this.state.farmer, farmingMethod: res.data.farmingMethod } })
                 this.setState({ farmer: { ...this.state.farmer, registrationDate: res.data.registrationDate } })
                 this.setState({farmer:{...this.state.farmer,registrarName:res.data.registrarName}})
+                this.setState({farmer: {...this.state.farmer, memberID: res.data.memberID}})
             })
         HarvestsService.getAllHarvetByFarmer(state.id).then(res => {
             this.setState({ loading: false })
