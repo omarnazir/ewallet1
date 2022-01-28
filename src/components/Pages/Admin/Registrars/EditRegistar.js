@@ -244,7 +244,7 @@ class EditRegistar extends Component {
                                         <div className="form-group">
                                             <label>Phone <span className="red">*</span> </label>
 
-                                            <Input type="number"
+                                            <Input type="text"
                                                 placeholder="Write phone ..."
                                                 name="msisdn"
                                                 invalid={this.hasError('formAddRegistrar', 'msisdn', 'minlen')}

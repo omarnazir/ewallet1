@@ -218,7 +218,7 @@ config = {
                     <label>Phone Number :</label>
                     <input className="form-control" name="phoneNumber"
                      value={this.state.addContactListNumbers.phoneNumber}
-                     onChange={this.handleChange} type="number" required></input>
+                     onChange={this.handleChange}type="text" required></input>
                   </FormGroup>
 
                   <FormGroup>

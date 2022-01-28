@@ -429,7 +429,7 @@ class EditSelfManage extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Monthly SMS Limit * :</label>
-                                                    <Input type="number"
+                                                    <Input type="text"
                                                         name="monthlysmslimit"
                                                         invalid={this.hasError('formRegister', 'monthlysmslimit', 'required')}
                                                         onChange={this.validateOnChange}

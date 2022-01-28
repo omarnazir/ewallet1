@@ -143,7 +143,7 @@ class PurchaseSms extends Component {
                                         </div>
                                         <FormGroup>
                                             <label>Enter Vodacom phone number:</label>
-                                            <input className="form-control" name="phoneNumber" type="number" required onChange={this.handleChange} ></input>
+                                            <input className="form-control" name="phoneNumber" type="text" required onChange={this.handleChange} ></input>
                                         </FormGroup>
 
                                         <h6>After entering the number check out your phone to continue</h6>

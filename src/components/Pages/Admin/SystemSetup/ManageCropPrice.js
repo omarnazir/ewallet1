@@ -264,7 +264,7 @@ class ManageCropPrice extends Component {
                                         <label>Price /Unit :</label>
                                         <input className="form-control" name="unitPrice"
                                             value={this.state.mode ? this.state.cropPrice.unitPrice : this.state.editedCropPrice.unitPrice}
-                                            onChange={this.handleChange} type="number" required></input>
+                                            onChange={this.handleChange} type="text" required></input>
                                     </FormGroup>
                                  
                                 </ModalBody>

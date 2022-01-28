@@ -366,7 +366,7 @@ class AddFarmer extends Component {
                                     <Col md={4}>
                                         <FormGroup>
                                             <Label>Phone <span className="red">*</span></Label>
-                                            <Input type="number"
+                                            <Input type="text"
                                                 placeholder="Write phone number..."
                                                 name="msisdn"
                                                 invalid={this.hasError('addFarmerForm', 'msisdn', 'minlen')}
@@ -396,7 +396,7 @@ class AddFarmer extends Component {
                                         <FormGroup>
                                             <Label>ID Number <span className="red">*</span></Label>
 
-                                            <Input type="number"
+                                            <Input type="text"
                                                 placeholder="Write Id number..."
                                                 name="idNumber"
                                                 invalid={this.hasError('addFarmerForm', 'idNumber', 'minlen')}
@@ -483,7 +483,7 @@ class AddFarmer extends Component {
                                         <FormGroup>
                                             <Label>Farm Size <span className="red">*</span></Label>
 
-                                            <Input type="number"
+                                            <Input type="text"
                                                 placeholder="Write farm size..."
                                                 name="farmSize"
                                                 invalid={this.hasError('addFarmerForm', 'farmSize', 'minlen')}

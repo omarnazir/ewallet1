@@ -467,7 +467,7 @@ class EditAdminUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Phone Number * :</label>
-                                                    <Input type="number"
+                                                    <Input type="text"
                                                         name="msisdn"
                                                         invalid={this.hasError('formRegister', 'msisdn', 'minlen')}
                                                         onChange={this.validateOnChange}
