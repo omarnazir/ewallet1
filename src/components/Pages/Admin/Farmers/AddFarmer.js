@@ -1,4 +1,4 @@
-/** 
+/*
 import React, { Component } from "react";
 import ContentWrapper from "../../../Layout/ContentWrapper";
 import { Link, Redirect } from 'react-router-dom';
@@ -240,9 +240,9 @@ class AddFarmer extends Component {
         });
     }
 
-*/
+    */
     /* Simplify error check */
-    /* 
+    /*
     hasError = (formName, inputName, method) => {
         return this.state[formName] &&
             this.state[formName].errors &&
@@ -666,4 +666,4 @@ class AddFarmer extends Component {
 }
 
 export default AddFarmer;
-*/ 
+*/
