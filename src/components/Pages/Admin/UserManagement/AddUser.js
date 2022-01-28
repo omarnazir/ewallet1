@@ -228,7 +228,7 @@ class AddUser extends Component {
                         <small>Adding a new user.</small>
                     </div>
                     <div className="flex-row">
-                        <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2"><span className="fa fa-key mr-2"></span> Add Role</Button>
+                        {/* <Button onClick={this.toggleModal} style={this.AddActionButtonStyle} className="btn-pill-right mr-2"><span className="fa fa-key mr-2"></span> Add Role</Button> */}
                         <Button onClick={this.ViewAllAdminUsers} style={this.AddActionButtonStyle} className="btn-pill-right mr-2">View All Users</Button>
                         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
                             <ModalHeader toggle={this.toggleModal}>Add Role : </ModalHeader>
@@ -322,7 +322,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Phone Number * :</label>
-                                                    <Input type="number"
+                                                    <Input type="text"
                                                         name="phonenumber"
                                                         invalid={this.hasError('formRegister', 'phonenumber', 'minlen')}
                                                         onChange={this.validateOnChange}
@@ -419,7 +419,7 @@ class AddUser extends Component {
 
                                         {/* <input className="form-control" name="scheduledTime" type="datetime-local" onChange={this.handleChangeDate}></input> */}
 
-
+{/* 
                                         <table className="table table-striped my-4 w-100">
                                             <thead>
                                                 <tr>
@@ -444,7 +444,7 @@ class AddUser extends Component {
                                                 ))}
 
                                             </tbody>
-                                        </table>
+                                        </table> */}
 
 
                                     </CardBody>

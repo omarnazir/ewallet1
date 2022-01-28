@@ -192,7 +192,7 @@ class AddUssdMenuData extends Component {
                                             <Label>Priority <span className="red">*</span></Label>
                                             <input className="form-control"
                                                 name="priority"
-                                                type="number"
+                                                type="text"
                                                 placeholder="Write Priority level..."
                                                 onChange={this.handleOnChange}
                                                 value={this.state.priority} />

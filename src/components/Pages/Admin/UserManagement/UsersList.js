@@ -134,8 +134,11 @@ columns = [
     text: "USERNAME"
 },
 {
-  key: "roleName",
-  text: "ROLE"
+  key: "userType",
+  text: "USER TYPE",
+  cell: (record, i)=>{
+    // return record.userType.name
+  }
 },
   {
     key: "isActive",

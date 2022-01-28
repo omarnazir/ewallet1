@@ -164,7 +164,7 @@ class TwofaToken extends Component {
                                 <form className="mb-3" name="formLogin" onSubmit={this.onSubmit}>
                                     <div className="form-group">
                                         <div className="input-group with-focus">
-                                            <Input type="number"
+                                            <Input type="text"
                                                 name="token"
                                                 className="border-right-0"
                                                 placeholder="Token"

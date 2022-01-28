@@ -81,7 +81,7 @@ class EditAdminUser extends Component {
 
                 console.log(user);
                 console.log(res.data);
-                console.log(user.name);
+                console.log(user.userType);
 
                 this.setState({userTypeFk: user.userType.id})
 
@@ -264,22 +264,14 @@ class EditAdminUser extends Component {
 
         if (!hasError) {
             const User = {
-                "id": this.state.formRegister.id,
+
                 "name": this.state.formRegister.fullname,
-                // "username": this.state.formRegister.username,
+                "email": this.state.formRegister.email,
                 "msisdn": this.state.formRegister.msisdn,
                 "accountExpiration": new Date(this.state.formRegister.accountExpiration).toLocaleDateString('en-CA') + " 00:00:00"
             };
 
-            // const UserRoles = [];
-            // this.state.roles.forEach(item => {
-            //     const newItem = { role_id: item.id };
-            //     UserRoles.push(newItem);
-            // });
-
-
-
-            let data = { id: User.id, user: User };
+            let data = { id: this.state.formRegister.id, user: User, userTypeId: this.state.userTypeFk };
             console.log(data);
 
             console.log(data);
@@ -475,7 +467,7 @@ class EditAdminUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Phone Number * :</label>
-                                                    <Input type="number"
+                                                    <Input type="text"
                                                         name="msisdn"
                                                         invalid={this.hasError('formRegister', 'msisdn', 'minlen')}
                                                         onChange={this.validateOnChange}

@@ -358,7 +358,7 @@ class EditNormalUserPage extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Phone Number * :</label>
-                                                    <Input type="number"
+                                                    <Input type="text"
                                                         name="phonenumber"
                                                         invalid={this.hasError('formUpdate', 'phonenumber', 'minlen')}
                                                         onChange={this.validateOnChange}
@@ -425,7 +425,7 @@ class EditNormalUserPage extends Component {
                                                 <div className="form-group">
                                                     <label className="col-form-label">Monthly SMS Limit * :</label>
 
-                                                    <Input type="number"
+                                                    <Input type="text"
                                                         name="monthlysmslimit"
                                                         invalid={this.hasError('formUpdate', 'monthlysmslimit', 'required')}
                                                         onChange={this.validateOnChange}

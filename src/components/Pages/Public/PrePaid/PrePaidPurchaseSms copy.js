@@ -133,11 +133,11 @@ class PurchaseSms extends Component {
                                     <form onSubmit={this.handleSubmit}>
                                         <FormGroup>
                                             <label>Enter amount (TShs):</label>
-                                            <input className="form-control" name="amount" type="number" required onChange={this.handleOnAmountChange} ></input>
+                                            <input className="form-control" name="amount"type="text" required onChange={this.handleOnAmountChange} ></input>
                                         </FormGroup>
                                         <FormGroup>
                                             <label>Number of SMS:</label>
-                                            <input className="form-control" name="smsCount" type="number" required disabled 
+                                            <input className="form-control" name="smsCount" type="text" required disabled 
                                             value={this.state.smsCount}
                                             ></input>
                                         </FormGroup>
@@ -154,7 +154,7 @@ class PurchaseSms extends Component {
                                         </div>
                                         <FormGroup>
                                             <label>Enter Vodacom phone number:</label>
-                                            <input className="form-control" name="phoneNumber" type="number" required onChange={this.handleChange} ></input>
+                                            <input className="form-control" name="phoneNumber" type="text" required onChange={this.handleChange} ></input>
                                         </FormGroup>
 
                                         <h6>After entering the number check out your phone to continue</h6>

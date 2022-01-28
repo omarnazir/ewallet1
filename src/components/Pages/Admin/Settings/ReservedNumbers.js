@@ -179,7 +179,7 @@ class ReservedNumbers extends Component {
                                         <label>Phone number :</label>
                                         <input className="form-control" name="number"
                                             value={this.state.mode ? this.state.Number.number : this.state.editedNumber.number}
-                                            onChange={this.handleChange} type="number" required></input>
+                                            onChange={this.handleChange} type="text" required></input>
                                     </FormGroup>
                                 </ModalBody>
                                 <ModalFooter>

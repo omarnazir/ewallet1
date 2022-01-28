@@ -326,7 +326,7 @@ class EditUssdMenu extends Component {
                                             <Label>Page Level <span className="red">*</span></Label>
                                             <input className="form-control"
                                                 name="priority"
-                                                type="number"
+                                                type="text"
                                                 placeholder="Write page level..."
                                                 onChange={this.handleOnChange}
                                                 value={this.state.priority} />

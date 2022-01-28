@@ -343,7 +343,7 @@ class EditSingleUserPage extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Phone Number * :</label>
-                                                    <Input type="number"
+                                                    <Input type="text"
                                                         name="phonenumber"
                                                         invalid={this.hasError('formUpdate', 'phonenumber', 'minlen')}
                                                         onChange={this.validateOnChange}

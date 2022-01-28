@@ -184,7 +184,7 @@ class AddNormalUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Phone Number * :</label>
-                                                    <Input type="number"
+                                                    <Input type="text"
                                                         name="phonenumber"
                                                         invalid={this.hasError('formRegister', 'phonenumber', 'minlen')}
                                                         onChange={this.validateOnChange}
@@ -236,7 +236,7 @@ class AddNormalUser extends Component {
                                             <div className="col-md-12">
                                                 <div className="form-group">
                                                     <label className="col-form-label">Monthly SMS Limit * :</label>
-                                                    <Input type="number"
+                                                    <Input type="text"
                                                         name="monthlysmslimit"
                                                         invalid={this.hasError('formRegister', 'monthlysmslimit', 'required')}
                                                         onChange={this.validateOnChange}
