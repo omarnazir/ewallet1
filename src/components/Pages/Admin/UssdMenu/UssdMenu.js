@@ -132,7 +132,7 @@ class UssdMenu extends Component {
           <Fragment>
           <span className="btn px-4" style={{ color:'white',background:'#003366' }} onClick={( ) => this.ViewUsedDetails(record)}> <i className="fa fa-eye mr-2"></i>View</span>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-            <span className="btn bg-danger-dark mr-2  px-4" onClick={() => this.DeleteMenu(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span>
+            <span className="btn bg-danger-dark mr-2  px-4" onClick={() => { if (window.confirm('Are you sure you wish to delete this?')) this.DeleteMenu(record.id)}}> <i className="fa fa-trash mr-2"></i>Delete</span>
           </Fragment>
         )
       }

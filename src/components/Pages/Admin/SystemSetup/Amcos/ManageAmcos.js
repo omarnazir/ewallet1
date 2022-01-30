@@ -15,28 +15,37 @@ import { CropsService,CropsTypeService } from "../../../../../services";
 
 class ManageAmcos extends Component {
     state = {
+
         crops: [],
         modal: false,
         mode: true,
         loading: true,
+        //adding searching..
+        searching: "",
+        filtered: json,
+
         editedCrop: {
             id: 0,
             name: "",
             cropType: 0
         },
+
+        
         crop: {
-            name: "",
-            cropType: 0
+           // name: "",
+           // cropType: 0
         },
+
         cropTypeList: []
     };
 
     initialState = {
         crop: {
-            name: "",
-            cropType: 0
+           // name: "",
+           // cropType: 0
         }
     }
+        
 
     componentDidMount() {
         this.getAllMCUS();
@@ -152,6 +161,7 @@ class ManageAmcos extends Component {
         {
             key: "id",
             text: "ID",
+
             cell: (record, index) => {
                 return index + 1;
             }

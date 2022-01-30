@@ -32,8 +32,8 @@ class AddAmcos extends Component {
         crops: [],
         registrars: [],
         mcos: [],
+
         //Added this 
-        searchString: "",
         filtered: []
 
 
@@ -82,7 +82,6 @@ class AddAmcos extends Component {
             this.setState({ districtId: 0 });
             this.setState({ wardId: 0 });
             this.setState({ villageId: 0 });
-
             this.setState({ regionId: event.target.value });
 
         }

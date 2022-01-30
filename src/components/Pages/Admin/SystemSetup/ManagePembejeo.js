@@ -100,6 +100,7 @@ EditRole(row) {
 handleSubmit = event => {
   event.preventDefault();
   this.toggleModal();
+
   if (this.state.mode) {
     console.log("Add mode")
     axios.post("/pembejeo",this.state.cropType ).then(res => {
@@ -107,6 +108,7 @@ handleSubmit = event => {
       this.getAllCropTypes();
       this.setState({cropType:this.initialState.cropType})
     })
+    
   } else {
     console.log("Edit mode")
     axios.put("/pembejeo",this.state.editedCropType).then(res => {
