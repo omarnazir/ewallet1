@@ -192,7 +192,7 @@ class ManageShops extends Component {
           <Fragment>
             <span className="btn badge-success mr-2 px-4" onClick={()=>this.ViewShopDetails(record.id)}> <i className="fa fa-eye"  ></i></span>
             <span className="btn badge-success mr-2 px-4" onClick={() => this.EditUssdMenu(record)}> <i className="icon-pencil mr-2"  ></i>Edit</span>
-         {/* <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span> */}
+         { <span className="btn bg-danger-dark  px-4" onClick={() => this.AlertDeleteItem(record.id)}> <i className="fa fa-trash mr-2"></i>Delete</span> *npm }
           </Fragment>
         );
       }
